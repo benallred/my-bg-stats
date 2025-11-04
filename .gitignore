@@ -1,0 +1,17 @@
+# Source data files (private)
+BGStatsExport.json
+collection.csv
+
+# Node modules for preprocessing script
+scripts/node_modules/
+scripts/package-lock.json
+
+# Temporary files
+tmp/
+
+# Claude settings
+.claude/settings.local.json
+
+# OS files
+.DS_Store
+Thumbs.db

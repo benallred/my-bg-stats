@@ -1,0 +1,12 @@
+{
+  "name": "bg-stats-preprocessor",
+  "version": "1.0.0",
+  "description": "Data preprocessing script for board game statistics",
+  "main": "process-data.js",
+  "scripts": {
+    "process": "node process-data.js"
+  },
+  "dependencies": {
+    "csv-parse": "^5.5.3"
+  }
+}

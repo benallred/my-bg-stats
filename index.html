@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Board Game Stats</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>My Board Game Stats</h1>
+        <div class="year-filter">
+            <label for="year-select">Filter by year:</label>
+            <select id="year-select">
+                <option value="all">All Time</option>
+                <!-- Years will be populated by JavaScript -->
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <section class="stats-grid">
+            <!-- H-Index Stats -->
+            <div class="stat-card clickable" id="traditional-h-index" data-stat="traditional-h-index">
+                <h3>Traditional H-Index</h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">All play entries counted</p>
+            </div>
+
+            <div class="stat-card clickable" id="play-session-h-index" data-stat="play-session-h-index">
+                <h3>Play Session H-Index</h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Unique game sessions per day</p>
+            </div>
+
+            <!-- Collection Stats -->
+            <div class="stat-card clickable" id="total-bgg-entries" data-stat="total-bgg-entries">
+                <h3><span class="stat-label">Total BGG Entries</span></h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Includes expansions & expandalones</p>
+            </div>
+
+            <div class="stat-card clickable" id="total-games-owned" data-stat="total-games-owned">
+                <h3><span class="stat-label">Total Games Owned</span></h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Base games only</p>
+            </div>
+
+            <div class="stat-card clickable" id="total-expansions" data-stat="total-expansions">
+                <h3>Total Expansions</h3>
+                <div class="stat-value">--</div>
+                <div class="stat-substats">
+                    <div class="substat">
+                        <span class="substat-label">Expandalones:</span>
+                        <span class="substat-value" id="expandalones-count">--</span>
+                    </div>
+                    <div class="substat">
+                        <span class="substat-label">Expansion-only:</span>
+                        <span class="substat-value" id="expansion-only-count">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Play Stats -->
+            <div class="stat-card" id="total-plays">
+                <h3>Total Plays Logged</h3>
+                <div class="stat-value">--</div>
+            </div>
+
+            <div class="stat-card" id="total-days-played">
+                <h3>Total Days Played</h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Unique dates with plays</p>
+            </div>
+
+            <div class="stat-card clickable" id="total-games-played" data-stat="total-games-played">
+                <h3>Total Games Played</h3>
+                <div class="stat-value">--</div>
+                <div class="stat-substats" id="new-to-me-container" style="display: none;">
+                    <div class="substat">
+                        <span class="substat-label">New-to-me:</span>
+                        <span class="substat-value" id="new-to-me-count">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milestone Stats -->
+            <div class="stat-card clickable" id="fives" data-stat="fives">
+                <h3>Fives</h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Games with 5+ plays</p>
+            </div>
+
+            <div class="stat-card clickable" id="dimes" data-stat="dimes">
+                <h3>Dimes</h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Games with 10+ plays</p>
+            </div>
+
+            <div class="stat-card clickable" id="quarters" data-stat="quarters">
+                <h3>Quarters</h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Games with 25+ plays</p>
+            </div>
+
+            <div class="stat-card clickable" id="centuries" data-stat="centuries">
+                <h3>Centuries</h3>
+                <div class="stat-value">--</div>
+                <p class="stat-description">Games with 100+ plays</p>
+            </div>
+        </section>
+
+        <!-- Detail Section (shown when stat is clicked) -->
+        <section id="detail-section" class="detail-section" style="display: none;">
+            <div class="detail-header">
+                <h2 id="detail-title"></h2>
+                <button id="close-detail" class="close-btn">&times;</button>
+            </div>
+            <div id="detail-content" class="detail-content">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Unknown Acquisition Dates (shown when filtering by year) -->
+        <section id="unknown-dates-section" class="info-section" style="display: none;">
+            <h3>Games with Unknown Acquisition Dates</h3>
+            <div id="unknown-dates-content">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Generated from BG Stats export and BoardGameGeek collection</p>
+        <p id="last-updated"></p>
+    </footer>
+
+    <!-- Load Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.com/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+
+    <!-- Load our scripts -->
+    <script src="stats.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
