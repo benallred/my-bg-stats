@@ -251,10 +251,36 @@ function getPlayMilestones(games, plays, year = null) {
 /**
  * Get games with unknown acquisition dates
  * @param {Array} games - Array of game objects
+ * @param {number|null} year - Optional year filter (for plays in that year)
  * @returns {Array} games without acquisition dates
  */
-function getGamesWithUnknownAcquisitionDate(games) {
+function getGamesWithUnknownAcquisitionDate(games, year = null) {
   return games.filter(game => !game.acquisitionDate);
+}
+
+/**
+ * Get owned games that have never been played
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter (for acquisitions in that year)
+ * @returns {Array} games with zero plays
+ */
+function getOwnedGamesNeverPlayed(games, plays, year = null) {
+  // Get set of all played game IDs
+  const playedGameIds = new Set(plays.map(play => play.gameId));
+
+  // Filter for owned games with no plays
+  return games.filter(game => {
+    // Must not have been played
+    if (playedGameIds.has(game.id)) return false;
+
+    // If year filter is active, only show games acquired that year
+    if (year) {
+      return game.acquisitionDate && game.acquisitionDate.startsWith(year.toString());
+    }
+
+    return true;
+  });
 }
 
 /**

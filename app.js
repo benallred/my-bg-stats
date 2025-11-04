@@ -60,6 +60,7 @@ function setupYearFilter() {
         currentYear = e.target.value === 'all' ? null : parseInt(e.target.value);
         updateAllStats();
         closeDetailSection();
+        closeDiagnosticDetail();
     });
 }
 
@@ -71,7 +72,7 @@ function updateAllStats() {
     updateCollectionStats();
     updatePlayStats();
     updateMilestoneStats();
-    updateUnknownDatesSection();
+    updateDiagnosticsSection();
 }
 
 /**
@@ -157,38 +158,26 @@ function updateMilestoneStats() {
 }
 
 /**
- * Update unknown acquisition dates section
+ * Update diagnostics section
  */
-function updateUnknownDatesSection() {
-    const section = document.getElementById('unknown-dates-section');
+function updateDiagnosticsSection() {
+    // Update unknown acquisition dates card
+    const unknownGames = getGamesWithUnknownAcquisitionDate(gameData.games, currentYear);
+    const unknownCard = document.querySelector('[data-stat="unknown-acquisition-dates"]');
+    unknownCard.querySelector('.stat-value').textContent = unknownGames.length;
 
-    if (currentYear) {
-        const unknownGames = getGamesWithUnknownAcquisitionDate(gameData.games);
-        if (unknownGames.length > 0) {
-            section.style.display = 'block';
-            const content = document.getElementById('unknown-dates-content');
-            const list = document.createElement('ul');
-            unknownGames.forEach(game => {
-                const li = document.createElement('li');
-                li.textContent = `${game.name} (BGG: ${game.bggId})`;
-                list.appendChild(li);
-            });
-            content.innerHTML = '';
-            content.appendChild(list);
-        } else {
-            section.style.display = 'none';
-        }
-    } else {
-        section.style.display = 'none';
-    }
+    // Update never played games card
+    const neverPlayedGames = getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear);
+    const neverPlayedCard = document.querySelector('[data-stat="never-played"]');
+    neverPlayedCard.querySelector('.stat-value').textContent = neverPlayedGames.length;
 }
 
 /**
  * Setup event listeners for clickable stat cards
  */
 function setupEventListeners() {
+    // Main stat cards
     const clickableCards = document.querySelectorAll('.stat-card.clickable');
-
     clickableCards.forEach(card => {
         card.addEventListener('click', () => {
             const statType = card.dataset.stat;
@@ -196,7 +185,23 @@ function setupEventListeners() {
         });
     });
 
+    // Diagnostic cards
+    const diagnosticCards = document.querySelectorAll('.diagnostic-card.clickable');
+    diagnosticCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const statType = card.dataset.stat;
+            showDiagnosticDetail(statType);
+        });
+    });
+
+    // Detail section close button
     document.getElementById('close-detail').addEventListener('click', closeDetailSection);
+
+    // Diagnostic detail section close button
+    document.getElementById('close-diagnostic-detail').addEventListener('click', closeDiagnosticDetail);
+
+    // Diagnostics toggle button
+    setupDiagnosticsToggle();
 }
 
 /**
@@ -477,6 +482,71 @@ function createGameTable(container, games, columns) {
     `;
 
     container.appendChild(table);
+}
+
+/**
+ * Show diagnostic detail section
+ */
+function showDiagnosticDetail(statType) {
+    const detailSection = document.getElementById('diagnostic-detail-section');
+    const detailTitle = document.getElementById('diagnostic-detail-title');
+    const detailContent = document.getElementById('diagnostic-detail-content');
+
+    // Clear previous content
+    detailContent.innerHTML = '';
+
+    // Set title and content based on stat type
+    switch (statType) {
+        case 'unknown-acquisition-dates':
+            detailTitle.textContent = 'Games with Unknown Acquisition Dates';
+            const unknownGames = getGamesWithUnknownAcquisitionDate(gameData.games, currentYear);
+            createGameTable(detailContent, unknownGames, ['Name', 'Type', 'Year']);
+            break;
+        case 'never-played':
+            detailTitle.textContent = currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games';
+            const neverPlayedGames = getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear);
+            createGameTable(detailContent, neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
+            break;
+    }
+
+    // Show section
+    detailSection.style.display = 'block';
+}
+
+/**
+ * Close diagnostic detail section
+ */
+function closeDiagnosticDetail() {
+    const detailSection = document.getElementById('diagnostic-detail-section');
+    detailSection.style.display = 'none';
+}
+
+/**
+ * Setup diagnostics section toggle functionality
+ */
+function setupDiagnosticsToggle() {
+    const header = document.getElementById('diagnostics-header');
+    const content = document.getElementById('diagnostics-content');
+
+    // Load saved state from localStorage
+    const isCollapsed = localStorage.getItem('diagnosticsCollapsed') === 'true';
+
+    if (isCollapsed) {
+        content.classList.add('collapsed');
+    }
+
+    // Toggle on click
+    header.addEventListener('click', () => {
+        const isCurrentlyCollapsed = content.classList.contains('collapsed');
+
+        if (isCurrentlyCollapsed) {
+            content.classList.remove('collapsed');
+            localStorage.setItem('diagnosticsCollapsed', 'false');
+        } else {
+            content.classList.add('collapsed');
+            localStorage.setItem('diagnosticsCollapsed', 'true');
+        }
+    });
 }
 
 /**

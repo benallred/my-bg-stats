@@ -121,11 +121,36 @@
             </div>
         </section>
 
-        <!-- Unknown Acquisition Dates (shown when filtering by year) -->
-        <section id="unknown-dates-section" class="info-section" style="display: none;">
-            <h3>Games with Unknown Acquisition Dates</h3>
-            <div id="unknown-dates-content">
-                <!-- Content will be populated by JavaScript -->
+        <!-- Diagnostics Section (always visible, collapsible) -->
+        <section id="diagnostics-section" class="diagnostics-section">
+            <div class="diagnostics-header" id="diagnostics-header">
+                <h2>Diagnostics</h2>
+            </div>
+            <div id="diagnostics-content" class="diagnostics-content">
+                <div class="diagnostics-grid">
+                    <div class="diagnostic-card clickable" data-stat="unknown-acquisition-dates">
+                        <h3>Unknown Acquisition Dates</h3>
+                        <div class="stat-value">--</div>
+                        <p class="stat-description">Games missing acquisition date</p>
+                    </div>
+
+                    <div class="diagnostic-card clickable" data-stat="never-played">
+                        <h3>Never Played</h3>
+                        <div class="stat-value">--</div>
+                        <p class="stat-description">Owned games with zero plays</p>
+                    </div>
+                </div>
+
+                <!-- Diagnostic Detail Section -->
+                <section id="diagnostic-detail-section" class="diagnostic-detail-section" style="display: none;">
+                    <div class="detail-header">
+                        <h3 id="diagnostic-detail-title"></h3>
+                        <button id="close-diagnostic-detail" class="close-btn">&times;</button>
+                    </div>
+                    <div id="diagnostic-detail-content" class="detail-content">
+                        <!-- Content will be populated by JavaScript -->
+                    </div>
+                </section>
             </div>
         </section>
     </main>

@@ -313,3 +313,136 @@ footer p {
 .empty-state p {
     font-size: 1.1rem;
 }
+
+/* Diagnostics Section */
+.diagnostics-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 2rem;
+    transition: width 0.3s ease-out;
+}
+
+.diagnostics-section:has(.diagnostics-content.collapsed) {
+    width: fit-content;
+}
+
+.diagnostics-section:has(.diagnostics-content.collapsed) .diagnostics-header {
+    justify-content: flex-start;
+    margin-bottom: 0;
+}
+
+.diagnostics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    user-select: none;
+    padding: 0.25rem;
+    margin: -0.25rem;
+    margin-bottom: 0.75rem;
+    border-radius: 4px;
+    transition: background 0.2s, margin 0.3s ease-out;
+}
+
+.diagnostics-header:hover {
+    background: rgba(108, 117, 125, 0.05);
+}
+
+.diagnostics-header h2 {
+    color: #6c757d;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.diagnostics-content {
+    overflow: hidden;
+}
+
+.diagnostics-content.collapsed {
+    display: none;
+}
+
+.diagnostics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    max-width: 800px;
+}
+
+.diagnostic-card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.diagnostic-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.diagnostic-card.clickable {
+    cursor: pointer;
+}
+
+.diagnostic-card.clickable:hover {
+    border-color: #adb5bd;
+}
+
+.diagnostic-card h3 {
+    color: #495057;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.diagnostic-card .stat-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.diagnostic-card .stat-description {
+    font-size: 0.85rem;
+    color: #868e96;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .diagnostics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .diagnostic-card .stat-value {
+        font-size: 1.75rem;
+    }
+}
+
+/* Diagnostic Detail Section */
+.diagnostic-detail-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #dee2e6;
+    animation: slideIn 0.3s ease-out;
+}
+
+.diagnostic-detail-section .detail-header h3 {
+    color: #495057;
+    font-size: 1.1rem;
+}
+
+.diagnostic-detail-section table {
+    font-size: 0.9rem;
+}
+
+.diagnostic-detail-section table th,
+.diagnostic-detail-section table td {
+    padding: 0.5rem 0.75rem;
+}
