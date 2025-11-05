@@ -150,7 +150,3 @@ The GitHub Pages site will automatically update within a few minutes.
 - **Charts**: Chart.js (loaded via CDN)
 - **Data Processing**: Node.js with csv-parse
 - **Hosting**: GitHub Pages
-
-## License
-
-Personal project - data and code are private to the repository owner.
