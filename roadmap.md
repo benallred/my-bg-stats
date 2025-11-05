@@ -8,4 +8,3 @@
 - Clicking an already-open card should close its details panel
 - Fix expandalones count showing 0
 - Update AGENTS.md to clarify "base game" terminology always excludes both expansions and expandalones
-- Push to GitHub and set up GitHub Pages
