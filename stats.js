@@ -271,6 +271,9 @@ function getOwnedGamesNeverPlayed(games, plays, year = null) {
 
   // Filter for owned games with no plays
   return games.filter(game => {
+    // Must be a base game (exclude expansions and expandalones)
+    if (!game.isBaseGame || game.isExpandalone) return false;
+
     // Must not have been played
     if (playedGameIds.has(game.id)) return false;
 
