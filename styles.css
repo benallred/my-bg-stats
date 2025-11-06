@@ -65,6 +65,30 @@ header h1 {
     margin-bottom: 2rem;
 }
 
+/* Stat Sections */
+.stat-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.section-heading {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+}
+
+.section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
 /* Stat Cards */
 .stat-card {
     background: white;
@@ -280,6 +304,19 @@ footer p {
 
     .stats-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .stat-section {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-heading {
+        font-size: 1.1rem;
+    }
+
+    .section-grid {
         gap: 1rem;
     }
 
