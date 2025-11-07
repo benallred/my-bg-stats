@@ -26,3 +26,5 @@
    - **Records & Comparisons:** Personal records broken (all-time highs achieved this year), personal records set (all-time lows achieved this year), this year vs last year (plays, unique games, hours with % changes), speed gaming day (most games in shortest time), variety day (most unique games in one day), average play duration for the year, average rating of games played, weekend vs weekday play percentage
    - When viewing current year, show stats through latest logged play date only (no projections)
 12. Optimize expandalone tag lookup in process-data.js: Find expandalone tag ID once before the game loop instead of searching the tags array for every game (lines 30-32)
+13. Improve copy display names: When only one copy is shown in a list, don't show "(Copy X)". When multiple copies of the same game are shown, use versionName from BGStatsExport in parentheses. If versionName is missing, use placeholder "no version set".
+14. Remove collection.csv dependency from process-data: Eliminate need for collection.csv by handling acquisition dates and expandalone classification directly from BGStatsExport.json
