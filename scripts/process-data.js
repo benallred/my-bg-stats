@@ -28,7 +28,7 @@ const gamesMap = new Map();
 bgStatsData.games.forEach(game => {
   // Check if game has expandalone tag
   const isExpandalone = game.tags?.some(tag =>
-    bgStatsData.tags.find(t => t.id === tag && t.name.toLowerCase() === 'expandalone')
+    bgStatsData.tags.find(t => t.id === tag.tagRefId && t.name.toLowerCase() === 'expandalone')
   ) || false;
 
   // Get acquisition date and ownership status from copies metadata
@@ -73,14 +73,32 @@ bgStatsData.games.forEach(game => {
     });
   }
 
+  // Enforce mutually exclusive classification
+  // Priority: expandalone > base game > expansion
+  let finalIsBaseGame = false;
+  let finalIsExpansion = false;
+  let finalIsExpandalone = false;
+
+  if (isExpandalone) {
+    // Has expandalone tag - classify as expandalone
+    finalIsExpandalone = true;
+  } else if (game.isBaseGame === 1) {
+    // Is base game (with or without expansion flag) - classify as base game
+    finalIsBaseGame = true;
+  } else if (game.isExpansion === 1) {
+    // Pure expansion only
+    finalIsExpansion = true;
+  }
+  // If none are set, all remain false (unknown type)
+
   gamesMap.set(game.id, {
     id: game.id,
     name: game.name,
     bggId: game.bggId,
     year: game.bggYear || null,
-    isBaseGame: game.isBaseGame === 1,
-    isExpansion: game.isExpansion === 1,
-    isExpandalone: isExpandalone,
+    isBaseGame: finalIsBaseGame,
+    isExpansion: finalIsExpansion,
+    isExpandalone: finalIsExpandalone,
     acquisitionDate: acquisitionDate,
     statusOwned: statusOwned,
     copies: copies,
@@ -160,10 +178,11 @@ console.log('\n=== Processing Complete ===');
 console.log(`Total games: ${games.length}`);
 console.log(`Games currently owned: ${games.filter(g => g.statusOwned).length}`);
 console.log(`Total plays: ${plays.length}`);
-console.log(`Base games: ${games.filter(g => g.isBaseGame && !g.isExpandalone).length}`);
-console.log(`  - Owned: ${games.filter(g => g.isBaseGame && !g.isExpandalone && g.statusOwned).length}`);
+console.log(`Base games: ${games.filter(g => g.isBaseGame).length}`);
+console.log(`  - Owned: ${games.filter(g => g.isBaseGame && g.statusOwned).length}`);
+console.log(`Expandalones: ${games.filter(g => g.isExpandalone).length}`);
+console.log(`  - Owned: ${games.filter(g => g.isExpandalone && g.statusOwned).length}`);
 console.log(`Expansions: ${games.filter(g => g.isExpansion).length}`);
-console.log(`  - Expandalones: ${games.filter(g => g.isExpandalone).length}`);
-console.log(`  - Expansion-only: ${games.filter(g => g.isExpansion && !g.isExpandalone).length}`);
+console.log(`  - Owned: ${games.filter(g => g.isExpansion && g.statusOwned).length}`);
 console.log(`Games with unknown acquisition date: ${games.filter(g => !g.acquisitionDate).length}`);
 console.log(`\nOutput written to: ${OUTPUT_FILE}`);

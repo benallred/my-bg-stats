@@ -401,7 +401,7 @@ function showBGGEntries(container) {
                 const copy = entry.copy;
                 const copyNumber = entry.copyNumber;
                 const name = game.name + (copyNumber ? ` (Copy ${copyNumber})` : '');
-                const type = game.isBaseGame && !game.isExpandalone ? 'Base Game' :
+                const type = game.isBaseGame ? 'Base Game' :
                             game.isExpandalone ? 'Expandalone' :
                             game.isExpansion ? 'Expansion' : 'Unknown';
                 const acquisitionDate = copy ? (copy.acquisitionDate || 'Unknown') : (game.acquisitionDate || 'Unknown');
@@ -424,7 +424,7 @@ function showBGGEntries(container) {
  */
 function showGamesOwned(container) {
     const games = gameData.games.filter(game => {
-        if (!game.isBaseGame || game.isExpandalone) return false;
+        if (!game.isBaseGame) return false;
         if (currentYear) {
             // Check if ANY copy was acquired in the target year
             if (game.copies && game.copies.length > 0) {
@@ -446,7 +446,8 @@ function showGamesOwned(container) {
  */
 function showExpansions(container) {
     const expansions = gameData.games.filter(game => {
-        if (!game.isExpansion) return false;
+        // Include both expansions and expandalones
+        if (!game.isExpansion && !game.isExpandalone) return false;
         if (currentYear) {
             // Check if ANY copy was acquired in the target year
             if (game.copies && game.copies.length > 0) {
@@ -456,7 +457,7 @@ function showExpansions(container) {
             }
             return game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString());
         }
-        // No year: only show currently owned expansions
+        // No year: only show currently owned expansions/expandalones
         return game.statusOwned === true;
     });
 
@@ -564,9 +565,9 @@ function createGameTable(container, games, columns, filterYear = null) {
                     cells.push(`<td>${game.name}</td>`);
                     break;
                 case 'Type':
-                    let type = '';
-                    if (game.isBaseGame) type = 'Base Game';
-                    if (game.isExpansion) type = game.isExpandalone ? 'Expandalone' : 'Expansion';
+                    const type = game.isBaseGame ? 'Base Game' :
+                                game.isExpandalone ? 'Expandalone' :
+                                game.isExpansion ? 'Expansion' : 'Unknown';
                     cells.push(`<td>${type}</td>`);
                     break;
                 case 'Year':

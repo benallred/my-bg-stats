@@ -126,7 +126,7 @@ function getTotalBGGEntries(games, year = null) {
  */
 function getTotalGamesOwned(games, year = null) {
   return games.filter(game => {
-    if (!game.isBaseGame || game.isExpandalone) return false;
+    if (!game.isBaseGame) return false;
     if (year) {
       // Year selected: count games acquired in that year (regardless of current ownership)
       // Check if ANY copy was acquired in the target year
@@ -149,6 +149,7 @@ function getTotalGamesOwned(games, year = null) {
  * @returns {Object} { total, expandalones, expansionOnly }
  */
 function getTotalExpansions(games, year = null) {
+  // Get all expansions (pure expansions only, not expandalones)
   const expansions = games.filter(game => {
     if (!game.isExpansion) return false;
     if (year) {
@@ -165,10 +166,27 @@ function getTotalExpansions(games, year = null) {
     return game.statusOwned === true;
   });
 
+  // Get expandalones separately (they are mutually exclusive with expansions)
+  const expandalones = games.filter(game => {
+    if (!game.isExpandalone) return false;
+    if (year) {
+      // Year selected: count expandalones acquired in that year (regardless of current ownership)
+      // Check if ANY copy was acquired in the target year
+      if (game.copies && game.copies.length > 0) {
+        return game.copies.some(copy =>
+          copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
+        );
+      }
+      return game.acquisitionDate && game.acquisitionDate.startsWith(year.toString());
+    }
+    // No year: count only currently owned expandalones
+    return game.statusOwned === true;
+  });
+
   return {
-    total: expansions.length,
-    expandalones: expansions.filter(g => g.isExpandalone).length,
-    expansionOnly: expansions.filter(g => !g.isExpandalone).length
+    total: expansions.length + expandalones.length,
+    expandalones: expandalones.length,
+    expansionOnly: expansions.length
   };
 }
 
@@ -317,7 +335,7 @@ function getOwnedGamesNeverPlayed(games, plays, year = null) {
   // Filter for owned games with no plays
   return games.filter(game => {
     // Must be a base game (exclude expansions and expandalones)
-    if (!game.isBaseGame || game.isExpandalone) return false;
+    if (!game.isBaseGame) return false;
 
     // Must not have been played
     if (playedGameIds.has(game.id)) return false;
