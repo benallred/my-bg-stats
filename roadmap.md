@@ -23,3 +23,5 @@
    - When viewing current year, show stats through latest logged play date only (no projections)
 8. Optimize expandalone tag lookup in process-data.js: Find expandalone tag ID once before the game loop instead of searching the tags array for every game (lines 30-32)
 9. Improve copy display names: When only one copy is shown in a list, don't show "(Copy X)". When multiple copies of the same game are shown, use versionName from BGStatsExport in parentheses. If versionName is missing, use placeholder "no version set".
+10. Add hour h-index statistic: New stat card showing h-index based on play time (hours) rather than play count - "x games played x hours each". Year-filterable. Handle plays with no duration data consistently with item 6 approach. Depends on item 6.
+11. Add info icons to h-index cards: Display clickable info icon on all h-index stat cards (session, play count, and hour h-index). On click, show modal with metric definition and concrete example. Modal dismisses when tapped/clicked outside.
