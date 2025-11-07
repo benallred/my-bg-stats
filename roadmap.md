@@ -23,4 +23,3 @@
    - When viewing current year, show stats through latest logged play date only (no projections)
 8. Optimize expandalone tag lookup in process-data.js: Find expandalone tag ID once before the game loop instead of searching the tags array for every game (lines 30-32)
 9. Improve copy display names: When only one copy is shown in a list, don't show "(Copy X)". When multiple copies of the same game are shown, use versionName from BGStatsExport in parentheses. If versionName is missing, use placeholder "no version set".
-10. Remove collection.csv dependency from process-data: Eliminate need for collection.csv by handling acquisition dates and expandalone classification directly from BGStatsExport.json

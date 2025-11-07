@@ -990,7 +990,7 @@
       "isExpandalone": false,
       "copies": [
         {
-          "acquisitionDate": "2023-11-25",
+          "acquisitionDate": "2016-08-01",
           "statusOwned": true
         },
         {
@@ -1566,7 +1566,7 @@
       "isExpandalone": false,
       "copies": [
         {
-          "acquisitionDate": "2004-12-01",
+          "acquisitionDate": "2018-06-01",
           "statusOwned": true
         },
         {
@@ -5098,7 +5098,7 @@
       "isExpandalone": false,
       "copies": [
         {
-          "acquisitionDate": "2023-05-04",
+          "acquisitionDate": "2021-06-20",
           "statusOwned": true
         },
         {
@@ -5454,7 +5454,7 @@
       "isExpandalone": false,
       "copies": [
         {
-          "acquisitionDate": "2007-12-25",
+          "acquisitionDate": "2023-11-25",
           "statusOwned": false
         },
         {
@@ -8691,7 +8691,7 @@
       "isExpandalone": false,
       "copies": [
         {
-          "acquisitionDate": "2023-11-25",
+          "acquisitionDate": "2007-12-25",
           "statusOwned": true
         },
         {
@@ -16860,5 +16860,5 @@
       "date": "2021-09-27"
     }
   ],
-  "generatedAt": "2025-11-07T07:24:00.332Z"
+  "generatedAt": "2025-11-07T07:36:42.825Z"
 }

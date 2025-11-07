@@ -1,25 +1,13 @@
 # Data Preprocessing Script
 
-This script processes the BG Stats export and BoardGameGeek collection CSV to generate a minimal, privacy-focused JSON file for the website.
-
-## Setup
-
-1. Install dependencies:
-   ```bash
-   cd scripts
-   npm install
-   ```
+This script processes the BG Stats export to generate a minimal, privacy-focused JSON file for the website.
 
 ## Usage
 
-1. Ensure `BGStatsExport.json` and `collection.csv` are in the project root
+1. Ensure `BGStatsExport.json` is in the project root
 2. Run the script:
    ```bash
-   npm run process
-   ```
-   Or directly:
-   ```bash
-   node process-data.js
+   node scripts/process-data.js
    ```
 
 3. The script will generate `data.json` in the project root

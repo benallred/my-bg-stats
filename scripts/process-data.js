@@ -1,10 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const { parse } = require('csv-parse/sync');
 
 // File paths
 const BG_STATS_FILE = path.join(__dirname, '..', 'BGStatsExport.json');
-const COLLECTION_CSV_FILE = path.join(__dirname, '..', 'collection.csv');
 const OUTPUT_FILE = path.join(__dirname, '..', 'data.json');
 
 console.log('Starting data preprocessing...');
@@ -12,14 +10,6 @@ console.log('Starting data preprocessing...');
 // Read BG Stats JSON
 console.log('Reading BGStatsExport.json...');
 const bgStatsData = JSON.parse(fs.readFileSync(BG_STATS_FILE, 'utf-8'));
-
-// Read collection CSV
-console.log('Reading collection.csv...');
-const collectionCsv = fs.readFileSync(COLLECTION_CSV_FILE, 'utf-8');
-const collectionRecords = parse(collectionCsv, {
-  columns: true,
-  skip_empty_lines: true
-});
 
 // Build games map from BG Stats
 console.log('Processing games...');
@@ -85,28 +75,6 @@ bgStatsData.games.forEach(game => {
     playCount: 0,
     uniquePlayDays: new Set()
   });
-});
-
-// Merge acquisition dates from CSV (CSV takes precedence if both exist)
-console.log('Merging collection CSV data...');
-collectionRecords.forEach(record => {
-  const bggId = parseInt(record.objectid);
-
-  // Find matching game by BGG ID
-  for (let [gameId, game] of gamesMap.entries()) {
-    if (game.bggId === bggId) {
-      // Update acquisition date in first copy if available in CSV
-      if (record.acquisitiondate && record.acquisitiondate.trim() && game.copies.length > 0) {
-        game.copies[0].acquisitionDate = record.acquisitiondate.trim();
-      }
-
-      // Update expandalone flag based on CSV privatecomment or tags
-      if (record.privatecomment && record.privatecomment.toLowerCase().includes('expandalone')) {
-        game.isExpandalone = true;
-      }
-      break;
-    }
-  }
 });
 
 // Process plays (only store date and game reference)

@@ -6,7 +6,6 @@ A GitHub Pages site that displays statistics and visualizations from my board ga
 
 This site processes data from:
 - **BG Stats** app export (BGStatsExport.json)
-- **BoardGameGeek** collection CSV export (collection.csv)
 
 And displays interactive statistics including:
 - Traditional and Play Session H-Indexes
@@ -29,7 +28,6 @@ my-bg-stats/
 ├── stats.js            # Statistics calculations
 ├── data.json           # Generated data (committed)
 ├── BGStatsExport.json  # Source data (gitignored)
-├── collection.csv      # Source data (gitignored)
 └── .gitignore
 ```
 
@@ -37,16 +35,13 @@ my-bg-stats/
 
 ### 1. Process Source Data
 
-Place your source files in the project root:
+Place your source file in the project root:
 - `BGStatsExport.json` - Export from BG Stats app
-- `collection.csv` - Export from BoardGameGeek collection
 
-Install dependencies and run the preprocessing script:
+Run the preprocessing script:
 
 ```bash
-cd scripts
-npm install
-npm run process
+node scripts/process-data.js
 ```
 
 This generates `data.json` with only the necessary, non-private data.
@@ -128,12 +123,11 @@ The preprocessing script ensures that private data is NOT included in the public
 
 To update the statistics with new plays or collection changes:
 
-1. Export fresh data from BG Stats and BoardGameGeek
-2. Replace `BGStatsExport.json` and `collection.csv` in the project root
+1. Export fresh data from BG Stats
+2. Replace `BGStatsExport.json` in the project root
 3. Run the preprocessing script:
    ```bash
-   cd scripts
-   npm run process
+   node scripts/process-data.js
    ```
 4. Commit and push the updated `data.json`:
    ```bash
@@ -148,5 +142,5 @@ The GitHub Pages site will automatically update within a few minutes.
 
 - **Frontend**: Vanilla HTML, CSS, JavaScript
 - **Charts**: Chart.js (loaded via CDN)
-- **Data Processing**: Node.js with csv-parse
+- **Data Processing**: Node.js
 - **Hosting**: GitHub Pages
