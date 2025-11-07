@@ -111,6 +111,12 @@ header h1 {
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
+.stat-card.active {
+    background-color: #e3f2fd;
+    border: 2px solid #3498db;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
 .stat-card h3 {
     color: #2c3e50;
     font-size: 1.1rem;
@@ -430,6 +436,12 @@ footer p {
 
 .diagnostic-card.clickable:hover {
     border-color: #adb5bd;
+}
+
+.diagnostic-card.active {
+    background-color: #e9ecef;
+    border: 2px solid #6c757d;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
 }
 
 .diagnostic-card h3 {

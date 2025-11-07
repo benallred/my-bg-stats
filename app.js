@@ -221,6 +221,17 @@ function showDetailSection(statType) {
     const detailTitle = document.getElementById('detail-title');
     const detailContent = document.getElementById('detail-content');
 
+    // Remove active class from all stat cards
+    document.querySelectorAll('.stat-card.clickable').forEach(card => {
+        card.classList.remove('active');
+    });
+
+    // Add active class to the clicked card
+    const clickedCard = document.querySelector(`.stat-card[data-stat="${statType}"]`);
+    if (clickedCard) {
+        clickedCard.classList.add('active');
+    }
+
     // Clear previous content
     detailContent.innerHTML = '';
 
@@ -282,6 +293,11 @@ function showDetailSection(statType) {
 function closeDetailSection() {
     document.getElementById('detail-section').style.display = 'none';
     currentlyOpenStatType = null;
+
+    // Remove active class from all stat cards
+    document.querySelectorAll('.stat-card.clickable').forEach(card => {
+        card.classList.remove('active');
+    });
 }
 
 /**
@@ -591,6 +607,17 @@ function showDiagnosticDetail(statType) {
     const detailTitle = document.getElementById('diagnostic-detail-title');
     const detailContent = document.getElementById('diagnostic-detail-content');
 
+    // Remove active class from all diagnostic cards
+    document.querySelectorAll('.diagnostic-card.clickable').forEach(card => {
+        card.classList.remove('active');
+    });
+
+    // Add active class to the clicked card
+    const clickedCard = document.querySelector(`.diagnostic-card[data-stat="${statType}"]`);
+    if (clickedCard) {
+        clickedCard.classList.add('active');
+    }
+
     // Clear previous content
     detailContent.innerHTML = '';
 
@@ -618,6 +645,11 @@ function showDiagnosticDetail(statType) {
 function closeDiagnosticDetail() {
     const detailSection = document.getElementById('diagnostic-detail-section');
     detailSection.style.display = 'none';
+
+    // Remove active class from all diagnostic cards
+    document.querySelectorAll('.diagnostic-card.clickable').forEach(card => {
+        card.classList.remove('active');
+    });
 }
 
 /**
