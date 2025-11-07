@@ -6,6 +6,7 @@
 // Global data
 let gameData = null;
 let currentYear = null;
+let currentlyOpenStatType = null;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -184,7 +185,12 @@ function setupEventListeners() {
     clickableCards.forEach(card => {
         card.addEventListener('click', () => {
             const statType = card.dataset.stat;
-            showDetailSection(statType);
+            // Toggle: if clicking the already-open card, close it
+            if (statType === currentlyOpenStatType) {
+                closeDetailSection();
+            } else {
+                showDetailSection(statType);
+            }
         });
     });
 
@@ -265,6 +271,9 @@ function showDetailSection(statType) {
     // Show section
     detailSection.style.display = 'block';
     detailSection.scrollIntoView({ behavior: 'smooth' });
+
+    // Track currently open stat
+    currentlyOpenStatType = statType;
 }
 
 /**
@@ -272,6 +281,7 @@ function showDetailSection(statType) {
  */
 function closeDetailSection() {
     document.getElementById('detail-section').style.display = 'none';
+    currentlyOpenStatType = null;
 }
 
 /**
