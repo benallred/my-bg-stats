@@ -4,6 +4,29 @@
  */
 
 /**
+ * Helper: Check if a game is currently owned
+ * @param {Object} game - Game object
+ * @returns {boolean} true if any copy is currently owned
+ */
+function isGameOwned(game) {
+  if (!game.copies || game.copies.length === 0) return false;
+  return game.copies.some(copy => copy.statusOwned === true);
+}
+
+/**
+ * Helper: Check if a game was acquired in a specific year
+ * @param {Object} game - Game object
+ * @param {number} year - Year to check
+ * @returns {boolean} true if any copy was acquired in the year
+ */
+function wasGameAcquiredInYear(game, year) {
+  if (!game.copies || game.copies.length === 0) return false;
+  return game.copies.some(copy =>
+    copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
+  );
+}
+
+/**
  * Calculate traditional h-index (counts all play entries)
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
@@ -101,17 +124,6 @@ function getTotalBGGEntries(games, year = null) {
           }
         }
       });
-    } else {
-      // No copies array - fall back to checking game-level ownership
-      if (year) {
-        if (game.acquisitionDate && game.acquisitionDate.startsWith(year.toString())) {
-          totalCopies++;
-        }
-      } else {
-        if (game.statusOwned === true) {
-          totalCopies++;
-        }
-      }
     }
   });
 
@@ -129,16 +141,10 @@ function getTotalGamesOwned(games, year = null) {
     if (!game.isBaseGame) return false;
     if (year) {
       // Year selected: count games acquired in that year (regardless of current ownership)
-      // Check if ANY copy was acquired in the target year
-      if (game.copies && game.copies.length > 0) {
-        return game.copies.some(copy =>
-          copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
-        );
-      }
-      return game.acquisitionDate && game.acquisitionDate.startsWith(year.toString());
+      return wasGameAcquiredInYear(game, year);
     }
     // No year: count only currently owned games
-    return game.statusOwned === true;
+    return isGameOwned(game);
   }).length;
 }
 
@@ -154,16 +160,10 @@ function getTotalExpansions(games, year = null) {
     if (!game.isExpansion) return false;
     if (year) {
       // Year selected: count expansions acquired in that year (regardless of current ownership)
-      // Check if ANY copy was acquired in the target year
-      if (game.copies && game.copies.length > 0) {
-        return game.copies.some(copy =>
-          copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
-        );
-      }
-      return game.acquisitionDate && game.acquisitionDate.startsWith(year.toString());
+      return wasGameAcquiredInYear(game, year);
     }
     // No year: count only currently owned expansions
-    return game.statusOwned === true;
+    return isGameOwned(game);
   });
 
   // Get expandalones separately (they are mutually exclusive with expansions)
@@ -171,16 +171,10 @@ function getTotalExpansions(games, year = null) {
     if (!game.isExpandalone) return false;
     if (year) {
       // Year selected: count expandalones acquired in that year (regardless of current ownership)
-      // Check if ANY copy was acquired in the target year
-      if (game.copies && game.copies.length > 0) {
-        return game.copies.some(copy =>
-          copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
-        );
-      }
-      return game.acquisitionDate && game.acquisitionDate.startsWith(year.toString());
+      return wasGameAcquiredInYear(game, year);
     }
     // No year: count only currently owned expandalones
-    return game.statusOwned === true;
+    return isGameOwned(game);
   });
 
   return {
@@ -318,7 +312,15 @@ function getPlayMilestones(games, plays, year = null) {
  * @returns {Array} games without acquisition dates
  */
 function getGamesWithUnknownAcquisitionDate(games, year = null) {
-  return games.filter(game => !game.acquisitionDate && game.statusOwned === true);
+  return games.filter(game => {
+    if (!game.copies || game.copies.length === 0) return false;
+
+    // Check if any owned copy has unknown acquisition date
+    const ownedCopies = game.copies.filter(copy => copy.statusOwned === true);
+    if (ownedCopies.length === 0) return false;
+
+    return ownedCopies.some(copy => !copy.acquisitionDate);
+  });
 }
 
 /**
@@ -342,11 +344,11 @@ function getOwnedGamesNeverPlayed(games, plays, year = null) {
 
     // If year filter is active, only show games acquired that year
     if (year) {
-      return game.acquisitionDate && game.acquisitionDate.startsWith(year.toString());
+      return wasGameAcquiredInYear(game, year);
     }
 
     // No year: only show currently owned games
-    return game.statusOwned === true;
+    return isGameOwned(game);
   });
 }
 

@@ -31,29 +31,11 @@ bgStatsData.games.forEach(game => {
     bgStatsData.tags.find(t => t.id === tag.tagRefId && t.name.toLowerCase() === 'expandalone')
   ) || false;
 
-  // Get acquisition date and ownership status from copies metadata
-  let acquisitionDate = null;
-  let statusOwned = false;
+  // Extract copies metadata
   const copies = [];
 
   if (game.copies && game.copies.length > 0) {
-    // Check if ANY copy is currently owned
-    statusOwned = game.copies.some(copy => copy.statusOwned === true);
-
-    // Get acquisition date from first copy (for backward compatibility)
-    const copy = game.copies[0];
-    if (copy.metaData) {
-      try {
-        const metadata = JSON.parse(copy.metaData);
-        if (metadata.AcquisitionDate) {
-          acquisitionDate = metadata.AcquisitionDate; // Already in YYYY-MM-DD format
-        }
-      } catch (e) {
-        // Invalid JSON in metaData, skip
-      }
-    }
-
-    // Store copies array for counting owned copies in BGG Entries stat
+    // Store copies array with acquisition date and ownership status
     game.copies.forEach(copy => {
       let copyAcquisitionDate = null;
       if (copy.metaData) {
@@ -99,8 +81,6 @@ bgStatsData.games.forEach(game => {
     isBaseGame: finalIsBaseGame,
     isExpansion: finalIsExpansion,
     isExpandalone: finalIsExpandalone,
-    acquisitionDate: acquisitionDate,
-    statusOwned: statusOwned,
     copies: copies,
     playCount: 0,
     uniquePlayDays: new Set()
@@ -115,9 +95,9 @@ collectionRecords.forEach(record => {
   // Find matching game by BGG ID
   for (let [gameId, game] of gamesMap.entries()) {
     if (game.bggId === bggId) {
-      // Update acquisition date if available in CSV
-      if (record.acquisitiondate && record.acquisitiondate.trim()) {
-        game.acquisitionDate = record.acquisitiondate.trim();
+      // Update acquisition date in first copy if available in CSV
+      if (record.acquisitiondate && record.acquisitiondate.trim() && game.copies.length > 0) {
+        game.copies[0].acquisitionDate = record.acquisitiondate.trim();
       }
 
       // Update expandalone flag based on CSV privatecomment or tags
@@ -173,16 +153,28 @@ const outputData = {
 console.log('Writing data.json...');
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(outputData, null, 2));
 
+// Helper functions for statistics
+function isGameOwned(game) {
+  return game.copies && game.copies.length > 0 && game.copies.some(copy => copy.statusOwned === true);
+}
+
+function hasUnknownAcquisitionDate(game) {
+  if (!game.copies || game.copies.length === 0) return false;
+  const ownedCopies = game.copies.filter(copy => copy.statusOwned === true);
+  if (ownedCopies.length === 0) return false;
+  return ownedCopies.some(copy => !copy.acquisitionDate);
+}
+
 // Print statistics
 console.log('\n=== Processing Complete ===');
 console.log(`Total games: ${games.length}`);
-console.log(`Games currently owned: ${games.filter(g => g.statusOwned).length}`);
+console.log(`Games currently owned: ${games.filter(isGameOwned).length}`);
 console.log(`Total plays: ${plays.length}`);
 console.log(`Base games: ${games.filter(g => g.isBaseGame).length}`);
-console.log(`  - Owned: ${games.filter(g => g.isBaseGame && g.statusOwned).length}`);
+console.log(`  - Owned: ${games.filter(g => g.isBaseGame && isGameOwned(g)).length}`);
 console.log(`Expandalones: ${games.filter(g => g.isExpandalone).length}`);
-console.log(`  - Owned: ${games.filter(g => g.isExpandalone && g.statusOwned).length}`);
+console.log(`  - Owned: ${games.filter(g => g.isExpandalone && isGameOwned(g)).length}`);
 console.log(`Expansions: ${games.filter(g => g.isExpansion).length}`);
-console.log(`  - Owned: ${games.filter(g => g.isExpansion && g.statusOwned).length}`);
-console.log(`Games with unknown acquisition date: ${games.filter(g => !g.acquisitionDate).length}`);
+console.log(`  - Owned: ${games.filter(g => g.isExpansion && isGameOwned(g)).length}`);
+console.log(`Games with unknown acquisition date: ${games.filter(hasUnknownAcquisitionDate).length}`);
 console.log(`\nOutput written to: ${OUTPUT_FILE}`);

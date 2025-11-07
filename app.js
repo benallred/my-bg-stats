@@ -3,6 +3,47 @@
  * Handles data loading, UI updates, and user interactions
  */
 
+/**
+ * Helper: Check if a game is currently owned
+ * @param {Object} game - Game object
+ * @returns {boolean} true if any copy is currently owned
+ */
+function isGameOwned(game) {
+  if (!game.copies || game.copies.length === 0) return false;
+  return game.copies.some(copy => copy.statusOwned === true);
+}
+
+/**
+ * Helper: Get acquisition date for a game (from first owned or first copy)
+ * @param {Object} game - Game object
+ * @returns {string|null} acquisition date in YYYY-MM-DD format or null
+ */
+function getGameAcquisitionDate(game) {
+  if (!game.copies || game.copies.length === 0) return null;
+
+  // Prefer first owned copy, fallback to first copy
+  const ownedCopy = game.copies.find(copy => copy.statusOwned === true);
+  if (ownedCopy) {
+    return ownedCopy.acquisitionDate || null;
+  }
+
+  // If no owned copies, return first copy's date
+  return game.copies[0]?.acquisitionDate || null;
+}
+
+/**
+ * Helper: Check if a game was acquired in a specific year
+ * @param {Object} game - Game object
+ * @param {number} year - Year to check
+ * @returns {boolean} true if any copy was acquired in the year
+ */
+function wasGameAcquiredInYear(game, year) {
+  if (!game.copies || game.copies.length === 0) return false;
+  return game.copies.some(copy =>
+    copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
+  );
+}
+
 // Global data
 let gameData = null;
 let currentYear = null;
@@ -372,17 +413,6 @@ function showBGGEntries(container) {
                     }
                 }
             });
-        } else {
-            // No copies array - fall back to game-level filter
-            if (currentYear) {
-                if (game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString())) {
-                    entries.push({ game, copy: null, copyNumber: null });
-                }
-            } else {
-                if (game.statusOwned === true) {
-                    entries.push({ game, copy: null, copyNumber: null });
-                }
-            }
         }
     });
 
@@ -404,7 +434,7 @@ function showBGGEntries(container) {
                 const type = game.isBaseGame ? 'Base Game' :
                             game.isExpandalone ? 'Expandalone' :
                             game.isExpansion ? 'Expansion' : 'Unknown';
-                const acquisitionDate = copy ? (copy.acquisitionDate || 'Unknown') : (game.acquisitionDate || 'Unknown');
+                const acquisitionDate = copy ? (copy.acquisitionDate || 'Unknown') : 'Unknown';
 
                 return `
                     <tr>
@@ -427,15 +457,10 @@ function showGamesOwned(container) {
         if (!game.isBaseGame) return false;
         if (currentYear) {
             // Check if ANY copy was acquired in the target year
-            if (game.copies && game.copies.length > 0) {
-                return game.copies.some(copy =>
-                    copy.acquisitionDate && copy.acquisitionDate.startsWith(currentYear.toString())
-                );
-            }
-            return game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString());
+            return wasGameAcquiredInYear(game, currentYear);
         }
         // No year: only show currently owned games
-        return game.statusOwned === true;
+        return isGameOwned(game);
     });
 
     createGameTable(container, games, ['Name', 'Year', 'Acquisition Date', 'Plays'], currentYear);
@@ -450,15 +475,10 @@ function showExpansions(container) {
         if (!game.isExpansion && !game.isExpandalone) return false;
         if (currentYear) {
             // Check if ANY copy was acquired in the target year
-            if (game.copies && game.copies.length > 0) {
-                return game.copies.some(copy =>
-                    copy.acquisitionDate && copy.acquisitionDate.startsWith(currentYear.toString())
-                );
-            }
-            return game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString());
+            return wasGameAcquiredInYear(game, currentYear);
         }
         // No year: only show currently owned expansions/expandalones
-        return game.statusOwned === true;
+        return isGameOwned(game);
     });
 
     const table = document.createElement('table');
@@ -475,7 +495,7 @@ function showExpansions(container) {
                 <tr>
                     <td>${game.name}</td>
                     <td>${game.isExpandalone ? 'Expandalone' : 'Expansion'}</td>
-                    <td>${game.acquisitionDate || 'Unknown'}</td>
+                    <td>${getGameAcquisitionDate(game) || 'Unknown'}</td>
                 </tr>
             `).join('')}
         </tbody>
@@ -574,7 +594,7 @@ function createGameTable(container, games, columns, filterYear = null) {
                     cells.push(`<td>${game.year || 'N/A'}</td>`);
                     break;
                 case 'Acquisition Date':
-                    let acqDate = game.acquisitionDate || 'Unknown';
+                    let acqDate = getGameAcquisitionDate(game) || 'Unknown';
                     // If year filter is active and game has copies, show the matching copy's date
                     if (filterYear && game.copies && game.copies.length > 0) {
                         const matchingCopy = game.copies.find(copy =>
