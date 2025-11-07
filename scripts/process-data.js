@@ -31,13 +31,46 @@ bgStatsData.games.forEach(game => {
     bgStatsData.tags.find(t => t.id === tag && t.name.toLowerCase() === 'expandalone')
   ) || false;
 
-  // Get acquisition date from copies metadata
+  // Get acquisition date and ownership status from copies metadata
   let acquisitionDate = null;
+  let statusOwned = false;
+  const copies = [];
+
   if (game.copies && game.copies.length > 0) {
+    // Check if ANY copy is currently owned
+    statusOwned = game.copies.some(copy => copy.statusOwned === true);
+
+    // Get acquisition date from first copy (for backward compatibility)
     const copy = game.copies[0];
-    if (copy.acquisitionDate) {
-      acquisitionDate = copy.acquisitionDate.split(' ')[0]; // Just the date part
+    if (copy.metaData) {
+      try {
+        const metadata = JSON.parse(copy.metaData);
+        if (metadata.AcquisitionDate) {
+          acquisitionDate = metadata.AcquisitionDate; // Already in YYYY-MM-DD format
+        }
+      } catch (e) {
+        // Invalid JSON in metaData, skip
+      }
     }
+
+    // Store copies array for counting owned copies in BGG Entries stat
+    game.copies.forEach(copy => {
+      let copyAcquisitionDate = null;
+      if (copy.metaData) {
+        try {
+          const metadata = JSON.parse(copy.metaData);
+          if (metadata.AcquisitionDate) {
+            copyAcquisitionDate = metadata.AcquisitionDate; // Already in YYYY-MM-DD format
+          }
+        } catch (e) {
+          // Invalid JSON in metaData, skip
+        }
+      }
+      copies.push({
+        acquisitionDate: copyAcquisitionDate,
+        statusOwned: copy.statusOwned === true
+      });
+    });
   }
 
   gamesMap.set(game.id, {
@@ -49,6 +82,8 @@ bgStatsData.games.forEach(game => {
     isExpansion: game.isExpansion === 1,
     isExpandalone: isExpandalone,
     acquisitionDate: acquisitionDate,
+    statusOwned: statusOwned,
+    copies: copies,
     playCount: 0,
     uniquePlayDays: new Set()
   });
@@ -123,8 +158,10 @@ fs.writeFileSync(OUTPUT_FILE, JSON.stringify(outputData, null, 2));
 // Print statistics
 console.log('\n=== Processing Complete ===');
 console.log(`Total games: ${games.length}`);
+console.log(`Games currently owned: ${games.filter(g => g.statusOwned).length}`);
 console.log(`Total plays: ${plays.length}`);
 console.log(`Base games: ${games.filter(g => g.isBaseGame && !g.isExpandalone).length}`);
+console.log(`  - Owned: ${games.filter(g => g.isBaseGame && !g.isExpandalone && g.statusOwned).length}`);
 console.log(`Expansions: ${games.filter(g => g.isExpansion).length}`);
 console.log(`  - Expandalones: ${games.filter(g => g.isExpandalone).length}`);
 console.log(`  - Expansion-only: ${games.filter(g => g.isExpansion && !g.isExpandalone).length}`);

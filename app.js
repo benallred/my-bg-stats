@@ -95,13 +95,16 @@ function updateCollectionStats() {
     // Update labels based on year filter
     const gamesOwnedLabel = document.querySelector('#total-games-owned .stat-label');
     const bggEntriesLabel = document.querySelector('#total-bgg-entries .stat-label');
+    const expansionsLabel = document.querySelector('#total-expansions .stat-label');
 
     if (currentYear) {
         gamesOwnedLabel.textContent = 'Total Games Acquired';
         bggEntriesLabel.textContent = 'Total BGG Entries Acquired';
+        expansionsLabel.textContent = 'Total Expansions Acquired';
     } else {
         gamesOwnedLabel.textContent = 'Total Games Owned';
-        bggEntriesLabel.textContent = 'Total BGG Entries';
+        bggEntriesLabel.textContent = 'Total BGG Entries Owned';
+        expansionsLabel.textContent = 'Total Expansions Owned';
     }
 
     // Total BGG Entries
@@ -312,14 +315,76 @@ function showHIndexBreakdown(container, usePlaySessions) {
  * Show BGG entries table
  */
 function showBGGEntries(container) {
-    const games = gameData.games.filter(game => {
-        if (currentYear) {
-            return game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString());
+    // Build list of all owned copies (may include multiple copies of same game)
+    const entries = [];
+
+    gameData.games.forEach(game => {
+        if (game.copies && game.copies.length > 0) {
+            // Show each copy that matches the filter
+            game.copies.forEach((copy, index) => {
+                if (currentYear) {
+                    if (copy.acquisitionDate && copy.acquisitionDate.startsWith(currentYear.toString())) {
+                        entries.push({
+                            game,
+                            copy,
+                            copyNumber: game.copies.length > 1 ? index + 1 : null
+                        });
+                    }
+                } else {
+                    if (copy.statusOwned === true) {
+                        entries.push({
+                            game,
+                            copy,
+                            copyNumber: game.copies.length > 1 ? index + 1 : null
+                        });
+                    }
+                }
+            });
+        } else {
+            // No copies array - fall back to game-level filter
+            if (currentYear) {
+                if (game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString())) {
+                    entries.push({ game, copy: null, copyNumber: null });
+                }
+            } else {
+                if (game.statusOwned === true) {
+                    entries.push({ game, copy: null, copyNumber: null });
+                }
+            }
         }
-        return true;
     });
 
-    createGameTable(container, games, ['Name', 'Type', 'Acquisition Date']);
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Acquisition Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${entries.map(entry => {
+                const game = entry.game;
+                const copy = entry.copy;
+                const copyNumber = entry.copyNumber;
+                const name = game.name + (copyNumber ? ` (Copy ${copyNumber})` : '');
+                const type = game.isBaseGame && !game.isExpandalone ? 'Base Game' :
+                            game.isExpandalone ? 'Expandalone' :
+                            game.isExpansion ? 'Expansion' : 'Unknown';
+                const acquisitionDate = copy ? (copy.acquisitionDate || 'Unknown') : (game.acquisitionDate || 'Unknown');
+
+                return `
+                    <tr>
+                        <td>${name}</td>
+                        <td>${type}</td>
+                        <td>${acquisitionDate}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
 }
 
 /**
@@ -329,12 +394,19 @@ function showGamesOwned(container) {
     const games = gameData.games.filter(game => {
         if (!game.isBaseGame || game.isExpandalone) return false;
         if (currentYear) {
+            // Check if ANY copy was acquired in the target year
+            if (game.copies && game.copies.length > 0) {
+                return game.copies.some(copy =>
+                    copy.acquisitionDate && copy.acquisitionDate.startsWith(currentYear.toString())
+                );
+            }
             return game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString());
         }
-        return true;
+        // No year: only show currently owned games
+        return game.statusOwned === true;
     });
 
-    createGameTable(container, games, ['Name', 'Year', 'Acquisition Date', 'Plays']);
+    createGameTable(container, games, ['Name', 'Year', 'Acquisition Date', 'Plays'], currentYear);
 }
 
 /**
@@ -344,9 +416,16 @@ function showExpansions(container) {
     const expansions = gameData.games.filter(game => {
         if (!game.isExpansion) return false;
         if (currentYear) {
+            // Check if ANY copy was acquired in the target year
+            if (game.copies && game.copies.length > 0) {
+                return game.copies.some(copy =>
+                    copy.acquisitionDate && copy.acquisitionDate.startsWith(currentYear.toString())
+                );
+            }
             return game.acquisitionDate && game.acquisitionDate.startsWith(currentYear.toString());
         }
-        return true;
+        // No year: only show currently owned expansions
+        return game.statusOwned === true;
     });
 
     const table = document.createElement('table');
@@ -440,7 +519,7 @@ function showMilestoneGames(container, milestone) {
 /**
  * Helper function to create a game table
  */
-function createGameTable(container, games, columns) {
+function createGameTable(container, games, columns, filterYear = null) {
     const table = document.createElement('table');
 
     const headerRow = columns.map(col => `<th>${col}</th>`).join('');
@@ -462,7 +541,17 @@ function createGameTable(container, games, columns) {
                     cells.push(`<td>${game.year || 'N/A'}</td>`);
                     break;
                 case 'Acquisition Date':
-                    cells.push(`<td>${game.acquisitionDate || 'Unknown'}</td>`);
+                    let acqDate = game.acquisitionDate || 'Unknown';
+                    // If year filter is active and game has copies, show the matching copy's date
+                    if (filterYear && game.copies && game.copies.length > 0) {
+                        const matchingCopy = game.copies.find(copy =>
+                            copy.acquisitionDate && copy.acquisitionDate.startsWith(filterYear.toString())
+                        );
+                        if (matchingCopy) {
+                            acqDate = matchingCopy.acquisitionDate;
+                        }
+                    }
+                    cells.push(`<td>${acqDate}</td>`);
                     break;
                 case 'Plays':
                     cells.push(`<td>${game.playCount}</td>`);
