@@ -7,6 +7,7 @@
 let gameData = null;
 let currentYear = null;
 let currentlyOpenStatType = null;
+let currentlyOpenDiagnosticType = null;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -199,7 +200,12 @@ function setupEventListeners() {
     diagnosticCards.forEach(card => {
         card.addEventListener('click', () => {
             const statType = card.dataset.stat;
-            showDiagnosticDetail(statType);
+            // Toggle: if clicking the already-open card, close it
+            if (statType === currentlyOpenDiagnosticType) {
+                closeDiagnosticDetail();
+            } else {
+                showDiagnosticDetail(statType);
+            }
         });
     });
 
@@ -637,6 +643,9 @@ function showDiagnosticDetail(statType) {
 
     // Show section
     detailSection.style.display = 'block';
+
+    // Track currently open diagnostic
+    currentlyOpenDiagnosticType = statType;
 }
 
 /**
@@ -645,6 +654,7 @@ function showDiagnosticDetail(statType) {
 function closeDiagnosticDetail() {
     const detailSection = document.getElementById('diagnostic-detail-section');
     detailSection.style.display = 'none';
+    currentlyOpenDiagnosticType = null;
 
     // Remove active class from all diagnostic cards
     document.querySelectorAll('.diagnostic-card.clickable').forEach(card => {

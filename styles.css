@@ -403,7 +403,7 @@ footer p {
 }
 
 .diagnostics-content {
-    overflow: hidden;
+    overflow: visible;
 }
 
 .diagnostics-content.collapsed {
@@ -415,13 +415,14 @@ footer p {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
     max-width: 800px;
+    padding: 2px 0;
 }
 
 .diagnostic-card {
     background: white;
     padding: 1.25rem;
     border-radius: 6px;
-    border: 1px solid #dee2e6;
+    border: 2px solid #dee2e6;
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
@@ -440,7 +441,7 @@ footer p {
 
 .diagnostic-card.active {
     background-color: #e9ecef;
-    border: 2px solid #6c757d;
+    border-color: #6c757d;
     box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
 }
 
