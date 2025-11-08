@@ -254,6 +254,23 @@ function updatePlayStats() {
     } else {
         newToMeContainer.style.display = 'none';
     }
+
+    // Total Play Time
+    updatePlayTimeStats();
+}
+
+/**
+ * Update play time statistics
+ */
+function updatePlayTimeStats() {
+    const playTimeData = getTotalPlayTime(gameData.plays, currentYear);
+    const hours = playTimeData.totalHours.toFixed(1);
+    const days = (playTimeData.totalHours / 24).toFixed(1);
+
+    // Add tilde prefix if any durations are estimated
+    const prefix = playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
+    document.querySelector('#total-play-time .stat-value').textContent = `${prefix}${hours} hours`;
+    document.getElementById('play-time-days').textContent = `${prefix}${days}`;
 }
 
 /**
@@ -372,6 +389,10 @@ function showDetailSection(statType) {
         case 'total-games-played':
             detailTitle.textContent = currentYear ? `Games Played in ${currentYear}` : 'All Games Played';
             showGamesPlayed(detailContent);
+            break;
+        case 'total-play-time':
+            detailTitle.textContent = currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game';
+            showPlayTimeBreakdown(detailContent);
             break;
         case 'fives':
             detailTitle.textContent = 'Fives (5+ Plays)';
@@ -629,6 +650,50 @@ function showMilestoneGames(container, milestone) {
                     <td>${item.count}</td>
                 </tr>
             `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show play time breakdown by game
+ */
+function showPlayTimeBreakdown(container) {
+    const breakdown = getPlayTimeByGame(gameData.games, gameData.plays, currentYear);
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Time Played</th>
+                <th>Play Count</th>
+                <th>Data Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${breakdown.map(item => {
+                const hours = item.totalHours.toFixed(1);
+                let dataSource = '';
+                if (item.actualCount > 0 && item.estimatedCount > 0) {
+                    dataSource = `${item.actualCount} actual, ${item.estimatedCount} estimated`;
+                } else if (item.actualCount > 0) {
+                    dataSource = `${item.actualCount} actual`;
+                } else if (item.estimatedCount > 0) {
+                    dataSource = `${item.estimatedCount} estimated`;
+                } else {
+                    dataSource = 'No duration data';
+                }
+
+                return `
+                    <tr>
+                        <td>${item.game.name}</td>
+                        <td>${hours} hours</td>
+                        <td>${item.playCount}</td>
+                        <td>${dataSource}</td>
+                    </tr>
+                `;
+            }).join('')}
         </tbody>
     `;
     container.appendChild(table);

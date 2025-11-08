@@ -460,3 +460,100 @@ function getHIndexBreakdown(games, plays, year = null, usePlaySessions = false) 
 
   return breakdown;
 }
+
+/**
+ * Get total play time statistics
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter
+ * @returns {Object} { totalMinutes, totalHours, playsWithActualDuration, playsWithEstimatedDuration, playsSkipped, totalPlays }
+ */
+function getTotalPlayTime(plays, year = null) {
+  let totalMinutes = 0;
+  let playsWithActualDuration = 0;
+  let playsWithEstimatedDuration = 0;
+  let playsSkipped = 0;
+  let totalPlays = 0;
+
+  plays.forEach(play => {
+    if (year && !play.date.startsWith(year.toString())) return;
+
+    totalPlays++;
+
+    if (play.durationMin > 0) {
+      totalMinutes += play.durationMin;
+      if (play.durationEstimated) {
+        playsWithEstimatedDuration++;
+      } else {
+        playsWithActualDuration++;
+      }
+    } else {
+      playsSkipped++;
+    }
+  });
+
+  return {
+    totalMinutes,
+    totalHours: totalMinutes / 60,
+    playsWithActualDuration,
+    playsWithEstimatedDuration,
+    playsSkipped,
+    totalPlays
+  };
+}
+
+/**
+ * Get play time breakdown by game
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter
+ * @returns {Array} Array of {game, totalMinutes, totalHours, playCount, actualCount, estimatedCount} sorted by totalMinutes descending
+ */
+function getPlayTimeByGame(games, plays, year = null) {
+  const gameTimeMap = new Map();
+
+  plays.forEach(play => {
+    if (year && !play.date.startsWith(year.toString())) return;
+
+    if (!gameTimeMap.has(play.gameId)) {
+      gameTimeMap.set(play.gameId, {
+        totalMinutes: 0,
+        playCount: 0,
+        actualCount: 0,
+        estimatedCount: 0
+      });
+    }
+
+    const gameTime = gameTimeMap.get(play.gameId);
+    gameTime.playCount++;
+
+    if (play.durationMin > 0) {
+      gameTime.totalMinutes += play.durationMin;
+      if (play.durationEstimated) {
+        gameTime.estimatedCount++;
+      } else {
+        gameTime.actualCount++;
+      }
+    }
+  });
+
+  // Convert to array with game objects
+  const breakdown = [];
+  gameTimeMap.forEach((timeData, gameId) => {
+    const game = games.find(g => g.id === gameId);
+    if (game) {
+      breakdown.push({
+        game,
+        totalMinutes: timeData.totalMinutes,
+        totalHours: timeData.totalMinutes / 60,
+        playCount: timeData.playCount,
+        actualCount: timeData.actualCount,
+        estimatedCount: timeData.estimatedCount
+      });
+    }
+  });
+
+  // Sort by total minutes descending
+  breakdown.sort((a, b) => b.totalMinutes - a.totalMinutes);
+
+  return breakdown;
+}

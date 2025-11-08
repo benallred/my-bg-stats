@@ -78,17 +78,76 @@ bgStatsData.games.forEach(game => {
   });
 });
 
-// Process plays (only store date and game reference)
+// First pass: Collect durations per game to calculate medians
+console.log('Calculating median play times per game...');
+const gameDurationsMap = new Map();
+
+bgStatsData.plays.forEach(play => {
+  const gameId = play.gameRefId;
+  const duration = play.durationMin || 0;
+
+  if (duration > 0) {
+    if (!gameDurationsMap.has(gameId)) {
+      gameDurationsMap.set(gameId, []);
+    }
+    gameDurationsMap.get(gameId).push(duration);
+  }
+});
+
+// Calculate median for each game
+gameDurationsMap.forEach((durations, gameId) => {
+  if (gamesMap.has(gameId)) {
+    const sorted = durations.slice().sort((a, b) => a - b);
+    let median = null;
+
+    if (sorted.length > 0) {
+      const mid = Math.floor(sorted.length / 2);
+      if (sorted.length % 2 === 0) {
+        // Even number: average of two middle values
+        median = (sorted[mid - 1] + sorted[mid]) / 2;
+      } else {
+        // Odd number: middle value
+        median = sorted[mid];
+      }
+    }
+
+    gamesMap.get(gameId).medianPlayTimeMinutes = median;
+  }
+});
+
+// Ensure all games have medianPlayTimeMinutes property (null if no data)
+gamesMap.forEach(game => {
+  if (!game.hasOwnProperty('medianPlayTimeMinutes')) {
+    game.medianPlayTimeMinutes = null;
+  }
+});
+
+// Process plays (store date, game reference, and duration data)
 console.log('Processing plays...');
 const plays = [];
 
 bgStatsData.plays.forEach(play => {
   const gameId = play.gameRefId;
   const playDate = play.playDate.split(' ')[0]; // Just the date part (YYYY-MM-DD)
+  const originalDuration = play.durationMin || 0;
+
+  let finalDuration = originalDuration;
+  let isEstimated = false;
+
+  // If duration is missing (0), use game's median
+  if (originalDuration === 0 && gamesMap.has(gameId)) {
+    const gameMedian = gamesMap.get(gameId).medianPlayTimeMinutes;
+    if (gameMedian !== null) {
+      finalDuration = gameMedian;
+      isEstimated = true;
+    }
+  }
 
   plays.push({
     gameId: gameId,
-    date: playDate
+    date: playDate,
+    durationMin: finalDuration,
+    durationEstimated: isEstimated
   });
 
   // Update game play statistics
