@@ -353,17 +353,64 @@ function getOwnedGamesNeverPlayed(games, plays, year = null) {
 }
 
 /**
- * Get all available years from plays
- * @param {Array} plays - Array of play objects
+ * Get all acquisition years from game copies
+ * @param {Array} games - Array of game objects
  * @returns {Array} sorted array of years
  */
-function getAvailableYears(plays) {
+function getAllAcquisitionYears(games) {
   const years = new Set();
-  plays.forEach(play => {
-    const year = parseInt(play.date.substring(0, 4));
-    years.add(year);
+  games.forEach(game => {
+    if (game.copies && game.copies.length > 0) {
+      game.copies.forEach(copy => {
+        if (copy.acquisitionDate) {
+          const year = parseInt(copy.acquisitionDate.substring(0, 4));
+          years.add(year);
+        }
+      });
+    }
   });
   return Array.from(years).sort((a, b) => b - a); // Most recent first
+}
+
+/**
+ * Get all available years from plays and acquisitions with metadata
+ * @param {Array} plays - Array of play objects
+ * @param {Array} games - Array of game objects
+ * @returns {Array} sorted array of year objects with metadata {year, hasPlays, isPreLogging}
+ */
+function getAvailableYears(plays, games = null) {
+  const playYears = new Set();
+  plays.forEach(play => {
+    const year = parseInt(play.date.substring(0, 4));
+    playYears.add(year);
+  });
+
+  // Determine first play year (pre-logging boundary)
+  const firstPlayYear = plays.length > 0
+    ? Math.min(...Array.from(playYears))
+    : null;
+
+  // Build comprehensive year list
+  const yearMap = new Map();
+
+  // Add play years
+  playYears.forEach(year => {
+    yearMap.set(year, { year, hasPlays: true, isPreLogging: false });
+  });
+
+  // Add acquisition years if games provided
+  if (games) {
+    const acquisitionYears = getAllAcquisitionYears(games);
+    acquisitionYears.forEach(year => {
+      if (!yearMap.has(year)) {
+        const isPreLogging = firstPlayYear !== null && year < firstPlayYear;
+        yearMap.set(year, { year, hasPlays: false, isPreLogging });
+      }
+    });
+  }
+
+  // Convert to array and sort (most recent first)
+  return Array.from(yearMap.values()).sort((a, b) => b.year - a.year);
 }
 
 /**

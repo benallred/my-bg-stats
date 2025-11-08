@@ -90,14 +90,35 @@ async function loadData() {
  */
 function setupYearFilter() {
     const yearSelect = document.getElementById('year-select');
-    const years = getAvailableYears(gameData.plays);
+    const yearData = getAvailableYears(gameData.plays, gameData.games);
 
-    years.forEach(year => {
+    // Group years by pre/post-logging
+    const preLoggingYears = yearData.filter(y => y.isPreLogging);
+    const postLoggingYears = yearData.filter(y => !y.isPreLogging);
+
+    // Add post-logging years (most recent first)
+    postLoggingYears.forEach(yearObj => {
         const option = document.createElement('option');
-        option.value = year;
-        option.textContent = year;
+        option.value = yearObj.year;
+        option.textContent = yearObj.year;
         yearSelect.appendChild(option);
     });
+
+    // Add separator if there are pre-logging years
+    if (preLoggingYears.length > 0) {
+        const separator = document.createElement('option');
+        separator.disabled = true;
+        separator.textContent = '─────────────────';
+        yearSelect.appendChild(separator);
+
+        // Add pre-logging years (most recent first)
+        preLoggingYears.forEach(yearObj => {
+            const option = document.createElement('option');
+            option.value = yearObj.year;
+            option.textContent = yearObj.year;
+            yearSelect.appendChild(option);
+        });
+    }
 
     yearSelect.addEventListener('change', (e) => {
         currentYear = e.target.value === 'all' ? null : parseInt(e.target.value);
