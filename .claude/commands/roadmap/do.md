@@ -37,11 +37,20 @@ You are helping the user select and work on a roadmap item.
    - Implement the roadmap item according to the plan
    - Follow all project conventions and guidelines
 
-5. **Validate and update roadmap (REQUIRED before committing):**
+5. **Validate and update roadmap (REQUIRED before review):**
    - Review the completed work against the roadmap item description
    - Verify all aspects of the item have been addressed
-   - **IMPORTANT: If complete, you MUST remove the completed item from roadmap.md and renumber all remaining items before creating the commit**
-   - Include the roadmap.md update in the same commit as the implementation
+   - **IMPORTANT: If complete, you MUST remove the completed item from roadmap.md and renumber all remaining items**
    - If not fully complete, discuss with user what remains
+
+6. **Review changes with user (REQUIRED before committing):**
+   - Run `git status` to show all modified files
+   - Run `git diff` to show all changes
+   - Ask user to review the changes
+   - Wait for explicit user approval before proceeding to commit
+
+7. **Commit changes (only after user approval):**
+   - Include the roadmap.md update in the same commit as the implementation
+   - Create commit following project commit message guidelines
 
 Remember: Do not use git worktrees in this repo. Work directly on the current branch.
