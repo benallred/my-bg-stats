@@ -49,6 +49,7 @@ let gameData = null;
 let currentYear = null;
 let currentlyOpenStatType = null;
 let currentlyOpenDiagnosticType = null;
+let yearDataCache = null;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -90,11 +91,11 @@ async function loadData() {
  */
 function setupYearFilter() {
     const yearSelect = document.getElementById('year-select');
-    const yearData = getAvailableYears(gameData.plays, gameData.games);
+    yearDataCache = getAvailableYears(gameData.plays, gameData.games);
 
     // Group years by pre/post-logging
-    const preLoggingYears = yearData.filter(y => y.isPreLogging);
-    const postLoggingYears = yearData.filter(y => !y.isPreLogging);
+    const preLoggingYears = yearDataCache.filter(y => y.isPreLogging);
+    const postLoggingYears = yearDataCache.filter(y => !y.isPreLogging);
 
     // Add post-logging years (most recent first)
     postLoggingYears.forEach(yearObj => {
@@ -122,10 +123,32 @@ function setupYearFilter() {
 
     yearSelect.addEventListener('change', (e) => {
         currentYear = e.target.value === 'all' ? null : parseInt(e.target.value);
+        updateYearInfoBadge();
         updateAllStats();
         closeDetailSection();
         closeDiagnosticDetail();
     });
+}
+
+/**
+ * Update year info badge visibility and text
+ */
+function updateYearInfoBadge() {
+    const yearInfoBadge = document.getElementById('year-info-badge');
+
+    if (!yearInfoBadge || !yearDataCache || !currentYear) {
+        yearInfoBadge.style.display = 'none';
+        return;
+    }
+
+    const yearInfo = yearDataCache.find(y => y.year === currentYear);
+
+    if (yearInfo && yearInfo.isPreLogging) {
+        yearInfoBadge.textContent = 'ⓘ Pre-logging era (acquisition data only)';
+        yearInfoBadge.style.display = 'inline-flex';
+    } else {
+        yearInfoBadge.style.display = 'none';
+    }
 }
 
 /**
