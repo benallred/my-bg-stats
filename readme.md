@@ -141,6 +141,5 @@ The GitHub Pages site will automatically update within a few minutes.
 ## Technology Stack
 
 - **Frontend**: Vanilla HTML, CSS, JavaScript
-- **Charts**: Chart.js (loaded via CDN)
 - **Data Processing**: Node.js
 - **Hosting**: GitHub Pages
