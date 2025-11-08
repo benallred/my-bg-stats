@@ -109,7 +109,7 @@ function setupYearFilter() {
     if (preLoggingYears.length > 0) {
         const separator = document.createElement('option');
         separator.disabled = true;
-        separator.textContent = '─────────────────';
+        separator.textContent = '─────────';
         yearSelect.appendChild(separator);
 
         // Add pre-logging years (most recent first)
