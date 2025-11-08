@@ -124,6 +124,7 @@ function setupYearFilter() {
     yearSelect.addEventListener('change', (e) => {
         currentYear = e.target.value === 'all' ? null : parseInt(e.target.value);
         updateYearInfoBadge();
+        updateSectionVisibility();
         updateAllStats();
         closeDetailSection();
         closeDiagnosticDetail();
@@ -149,6 +150,26 @@ function updateYearInfoBadge() {
     } else {
         yearInfoBadge.style.display = 'none';
     }
+}
+
+/**
+ * Update section visibility based on year type
+ */
+function updateSectionVisibility() {
+    const hIndexSection = document.getElementById('h-index-section');
+    const playStatsSection = document.getElementById('play-statistics-section');
+    const milestoneSection = document.getElementById('milestone-section');
+
+    // Check if current year is pre-logging
+    const isPreLogging = currentYear && yearDataCache
+        && yearDataCache.find(y => y.year === currentYear)?.isPreLogging;
+
+    // Hide play-related sections in pre-logging years
+    const displayValue = isPreLogging ? 'none' : 'block';
+
+    if (hIndexSection) hIndexSection.style.display = displayValue;
+    if (playStatsSection) playStatsSection.style.display = displayValue;
+    if (milestoneSection) milestoneSection.style.display = displayValue;
 }
 
 /**
