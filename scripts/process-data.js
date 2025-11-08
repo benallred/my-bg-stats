@@ -15,11 +15,12 @@ const bgStatsData = JSON.parse(fs.readFileSync(BG_STATS_FILE, 'utf-8'));
 console.log('Processing games...');
 const gamesMap = new Map();
 
+// Find expandalone tag ID once for efficient lookup
+const expandaloneTagId = bgStatsData.tags.find(t => t.name.toLowerCase() === 'expandalone')?.id;
+
 bgStatsData.games.forEach(game => {
   // Check if game has expandalone tag
-  const isExpandalone = game.tags?.some(tag =>
-    bgStatsData.tags.find(t => t.id === tag.tagRefId && t.name.toLowerCase() === 'expandalone')
-  ) || false;
+  const isExpandalone = expandaloneTagId && game.tags?.some(tag => tag.tagRefId === expandaloneTagId) || false;
 
   // Extract copies metadata
   const copies = [];
