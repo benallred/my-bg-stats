@@ -144,7 +144,7 @@ function updateYearInfoBadge() {
     const yearInfo = yearDataCache.find(y => y.year === currentYear);
 
     if (yearInfo && yearInfo.isPreLogging) {
-        yearInfoBadge.textContent = 'ⓘ Pre-logging era (acquisition data only)';
+        yearInfoBadge.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="margin-right: 0.25rem; vertical-align: text-bottom;"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="8" y="12" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">i</text></svg>Pre-logging era (acquisition data only)';
         yearInfoBadge.style.display = 'inline-flex';
     } else {
         yearInfoBadge.style.display = 'none';
