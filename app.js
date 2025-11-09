@@ -50,6 +50,7 @@ let currentYear = null;
 let currentlyOpenStatType = null;
 let currentlyOpenDiagnosticType = null;
 let yearDataCache = null;
+let isLoadingFromPermalink = false;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -59,6 +60,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Setup year filter
         setupYearFilter();
+
+        // Check for permalink parameters and restore state
+        loadFromPermalink();
 
         // Update all stats
         updateAllStats();
@@ -126,8 +130,12 @@ function setupYearFilter() {
         updateYearInfoBadge();
         updateSectionVisibility();
         updateAllStats();
-        closeDetailSection();
-        closeDiagnosticDetail();
+
+        // Only close sections if not loading from permalink
+        if (!isLoadingFromPermalink) {
+            closeDetailSection();
+            closeDiagnosticDetail();
+        }
     });
 }
 
@@ -337,6 +345,10 @@ function setupEventListeners() {
 
     // Diagnostic detail section close button
     document.getElementById('close-diagnostic-detail').addEventListener('click', closeDiagnosticDetail);
+
+    // Permalink buttons
+    document.getElementById('permalink-btn').addEventListener('click', () => copyPermalink(false));
+    document.getElementById('diagnostic-permalink-btn').addEventListener('click', () => copyPermalink(true));
 
     // Diagnostics toggle button
     setupDiagnosticsToggle();
@@ -839,6 +851,100 @@ function setupDiagnosticsToggle() {
             localStorage.setItem('diagnosticsCollapsed', 'true');
         }
     });
+}
+
+/**
+ * Load state from URL parameters (permalink)
+ */
+function loadFromPermalink() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const yearParam = urlParams.get('year');
+    const statParam = urlParams.get('stat');
+
+    if (!statParam) {
+        return; // No permalink parameters
+    }
+
+    isLoadingFromPermalink = true;
+
+    // Set year if specified
+    if (yearParam) {
+        const year = parseInt(yearParam);
+        const yearSelect = document.getElementById('year-select');
+        if (yearSelect) {
+            yearSelect.value = year.toString();
+            currentYear = year;
+            updateYearInfoBadge();
+            updateSectionVisibility();
+        }
+    }
+
+    // Open the specified stat after a short delay to ensure stats are loaded
+    setTimeout(() => {
+        // Check if it's a diagnostic stat
+        const isDiagnostic = statParam === 'unknown-acquisition-dates' || statParam === 'never-played';
+
+        if (isDiagnostic) {
+            showDiagnosticDetail(statParam);
+        } else {
+            showDetailSection(statParam);
+        }
+
+        isLoadingFromPermalink = false;
+    }, 100);
+}
+
+/**
+ * Generate permalink for current state
+ */
+function generatePermalink(isDiagnostic = false) {
+    const url = new URL(window.location.href);
+    url.search = ''; // Clear existing parameters
+
+    const params = new URLSearchParams();
+
+    // Add year parameter if a specific year is selected
+    if (currentYear) {
+        params.set('year', currentYear.toString());
+    }
+
+    // Add stat parameter
+    const statType = isDiagnostic ? currentlyOpenDiagnosticType : currentlyOpenStatType;
+    if (statType) {
+        params.set('stat', statType);
+    }
+
+    url.search = params.toString();
+    return url.toString();
+}
+
+/**
+ * Copy permalink to clipboard
+ */
+async function copyPermalink(isDiagnostic = false) {
+    const permalink = generatePermalink(isDiagnostic);
+    const buttonId = isDiagnostic ? 'diagnostic-permalink-btn' : 'permalink-btn';
+    const button = document.getElementById(buttonId);
+
+    try {
+        await navigator.clipboard.writeText(permalink);
+
+        // Visual feedback: change button to show success
+        if (button) {
+            const originalContent = button.textContent;
+            button.textContent = '✓';
+            button.classList.add('copied');
+
+            // Reset after 2 seconds
+            setTimeout(() => {
+                button.textContent = originalContent;
+                button.classList.remove('copied');
+            }, 2000);
+        }
+    } catch (err) {
+        console.error('Failed to copy permalink:', err);
+        alert('Failed to copy permalink to clipboard');
+    }
 }
 
 /**
