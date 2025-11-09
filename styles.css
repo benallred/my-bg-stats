@@ -291,6 +291,10 @@ table td {
     border-bottom: 1px solid #e9ecef;
 }
 
+table tbody tr:nth-child(even) {
+    background: #f8fbff;
+}
+
 table tbody tr:hover {
     background: #f8f9fa;
 }
