@@ -2451,6 +2451,24 @@
       "typicalPlayTimeMinutes": 40
     },
     {
+      "id": 578,
+      "name": "DONUTS",
+      "bggId": 341358,
+      "year": 2023,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "copies": [
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        }
+      ],
+      "playCount": 5,
+      "uniquePlayDays": 3,
+      "typicalPlayTimeMinutes": 8
+    },
+    {
       "id": 355,
       "name": "Dr. Eureka",
       "bggId": 181345,
@@ -3987,9 +4005,9 @@
           "statusOwned": true
         }
       ],
-      "playCount": 15,
-      "uniquePlayDays": 15,
-      "typicalPlayTimeMinutes": 75
+      "playCount": 16,
+      "uniquePlayDays": 16,
+      "typicalPlayTimeMinutes": 77
     },
     {
       "id": 537,
@@ -4571,8 +4589,8 @@
           "statusOwned": true
         }
       ],
-      "playCount": 21,
-      "uniquePlayDays": 11,
+      "playCount": 23,
+      "uniquePlayDays": 12,
       "typicalPlayTimeMinutes": 7
     },
     {
@@ -5163,6 +5181,24 @@
       "typicalPlayTimeMinutes": null
     },
     {
+      "id": 580,
+      "name": "Monumental Duel: Espionage",
+      "bggId": 420522,
+      "year": 2024,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "copies": [
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 562,
       "name": "Monumental Duel: Exploration",
       "bggId": 420517,
@@ -5179,6 +5215,24 @@
       "playCount": 1,
       "uniquePlayDays": 1,
       "typicalPlayTimeMinutes": 121
+    },
+    {
+      "id": 581,
+      "name": "Monumental Duel: Trade",
+      "bggId": 420523,
+      "year": 2024,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "copies": [
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 66,
@@ -5756,9 +5810,9 @@
           "statusOwned": true
         }
       ],
-      "playCount": 6,
-      "uniquePlayDays": 6,
-      "typicalPlayTimeMinutes": 35.5
+      "playCount": 7,
+      "uniquePlayDays": 7,
+      "typicalPlayTimeMinutes": 37
     },
     {
       "id": 315,
@@ -7109,6 +7163,40 @@
       "typicalPlayTimeMinutes": 11
     },
     {
+      "id": 579,
+      "name": "Similo",
+      "bggId": 268620,
+      "year": 2019,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "copies": [
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        },
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        },
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        },
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        },
+        {
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true
+        }
+      ],
+      "playCount": 10,
+      "uniquePlayDays": 2,
+      "typicalPlayTimeMinutes": 8
+    },
+    {
       "id": 337,
       "name": "Skip-Bo",
       "bggId": 1269,
@@ -7279,9 +7367,9 @@
           "statusOwned": true
         }
       ],
-      "playCount": 6,
-      "uniquePlayDays": 6,
-      "typicalPlayTimeMinutes": 38
+      "playCount": 7,
+      "uniquePlayDays": 7,
+      "typicalPlayTimeMinutes": 37
     },
     {
       "id": 299,
@@ -8587,9 +8675,9 @@
           "statusOwned": true
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": 53
+      "playCount": 2,
+      "uniquePlayDays": 2,
+      "typicalPlayTimeMinutes": 75
     },
     {
       "id": 320,
@@ -10092,6 +10180,132 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 578,
+      "date": "2025-11-06",
+      "durationMin": 11,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-02",
+      "durationMin": 8,
+      "durationEstimated": true
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-02",
+      "durationMin": 7,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-02",
+      "durationMin": 6,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-02",
+      "durationMin": 5,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 578,
+      "date": "2025-11-02",
+      "durationMin": 4,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 578,
+      "date": "2025-11-02",
+      "durationMin": 5,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 536,
+      "date": "2025-11-02",
+      "durationMin": 97,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 578,
+      "date": "2025-11-01",
+      "durationMin": 10,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 578,
+      "date": "2025-11-01",
+      "durationMin": 8,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-01",
+      "durationMin": 10,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-01",
+      "durationMin": 6,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-01",
+      "durationMin": 9,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-01",
+      "durationMin": 11,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-01",
+      "durationMin": 11,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "date": "2025-11-01",
+      "durationMin": 8,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 488,
+      "date": "2025-10-31",
+      "durationMin": 79,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 494,
+      "date": "2025-10-26",
+      "durationMin": 7,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 494,
+      "date": "2025-10-26",
+      "durationMin": 5,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 449,
+      "date": "2025-10-26",
+      "durationMin": 40,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 22,
+      "date": "2025-10-25",
+      "durationMin": 37,
+      "durationEstimated": false
+    },
     {
       "gameId": 508,
       "date": "2025-10-24",
@@ -21109,5 +21323,5 @@
       "durationEstimated": true
     }
   ],
-  "generatedAt": "2025-11-09T02:49:20.023Z"
+  "generatedAt": "2025-11-09T09:03:27.072Z"
 }
