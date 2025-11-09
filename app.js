@@ -145,6 +145,7 @@ function setupYearFilter() {
 
             // Check if currently open stat is play-related (unavailable in pre-logging years)
             const playRelatedStats = [
+                'hour-h-index',
                 'traditional-h-index',
                 'play-session-h-index',
                 'total-plays',
@@ -223,6 +224,7 @@ function updateSectionVisibility() {
 function updateAllStats() {
     // Calculate all stats once and cache them
     statsCache = {
+        hourHIndex: calculateHourHIndex(gameData.plays, currentYear),
         traditionalHIndex: calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear),
         playSessionHIndex: calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear),
         totalBGGEntries: getTotalBGGEntries(gameData.games, currentYear),
@@ -246,6 +248,9 @@ function updateAllStats() {
  * Update H-Index statistics
  */
 function updateHIndexStats() {
+    // Hour H-Index
+    document.querySelector('#hour-h-index .stat-value').textContent = statsCache.hourHIndex;
+
     // Traditional H-Index
     document.querySelector('#traditional-h-index .stat-value').textContent = statsCache.traditionalHIndex;
 
@@ -469,6 +474,11 @@ function showDetailSection(statType) {
     const yearSuffix = currentYear ? ` (${currentYear})` : ' (All Time)';
 
     switch (statType) {
+        case 'hour-h-index':
+            detailTitle.textContent = `Hour H-Index Breakdown${yearSuffix}`;
+            populateStatSummary(detailStatSummary, statsCache.hourHIndex);
+            showHIndexBreakdown(detailContent, 'hours', statsCache.hourHIndex);
+            break;
         case 'traditional-h-index':
             detailTitle.textContent = `Traditional H-Index Breakdown${yearSuffix}`;
             populateStatSummary(detailStatSummary, statsCache.traditionalHIndex);
@@ -599,8 +609,18 @@ function closeDetailSection() {
 /**
  * Show H-Index breakdown table
  */
-function showHIndexBreakdown(container, usePlaySessions, hIndex) {
-    const breakdown = getHIndexBreakdown(gameData.games, gameData.plays, currentYear, usePlaySessions);
+function showHIndexBreakdown(container, mode, hIndex) {
+    let breakdown, columnHeader, valueKey;
+
+    if (mode === 'hours') {
+        breakdown = getHourHIndexBreakdown(gameData.games, gameData.plays, currentYear);
+        columnHeader = 'Hours';
+        valueKey = 'hours';
+    } else {
+        breakdown = getHIndexBreakdown(gameData.games, gameData.plays, currentYear, mode);
+        columnHeader = mode ? 'Days Played' : 'Play Count';
+        valueKey = 'count';
+    }
 
     const table = document.createElement('table');
     table.className = 'h-index-table';
@@ -609,19 +629,21 @@ function showHIndexBreakdown(container, usePlaySessions, hIndex) {
             <tr>
                 <th>Rank</th>
                 <th>Game</th>
-                <th>${usePlaySessions ? 'Days Played' : 'Play Count'}</th>
+                <th>${columnHeader}</th>
                 <th>Contributes to H-Index?</th>
             </tr>
         </thead>
         <tbody>
             ${breakdown.map((item, index) => {
                 const rank = index + 1;
-                const contributesToHIndex = rank <= item.count && rank <= hIndex;
+                const value = item[valueKey];
+                const contributesToHIndex = rank <= value && rank <= hIndex;
+                const displayValue = mode === 'hours' ? value.toFixed(1) : value;
                 return `
                     <tr${contributesToHIndex ? ' class="h-index-contributor"' : ''}>
                         <td>${rank}</td>
                         <td>${item.game.name}</td>
-                        <td>${item.count}</td>
+                        <td>${displayValue}</td>
                         <td>${contributesToHIndex ? '✓' : ''}</td>
                     </tr>
                 `;

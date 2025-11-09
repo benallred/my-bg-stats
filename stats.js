@@ -27,6 +27,23 @@ function wasGameAcquiredInYear(game, year) {
 }
 
 /**
+ * Helper: Calculate h-index from sorted values
+ * @param {Array} sortedValues - Array of values sorted in descending order
+ * @returns {number} h-index value
+ */
+function calculateHIndexFromSortedValues(sortedValues) {
+  let hIndex = 0;
+  for (let i = 0; i < sortedValues.length; i++) {
+    if (sortedValues[i] >= i + 1) {
+      hIndex = i + 1;
+    } else {
+      break;
+    }
+  }
+  return hIndex;
+}
+
+/**
  * Calculate traditional h-index (counts all play entries)
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
@@ -47,17 +64,7 @@ function calculateTraditionalHIndex(games, plays, year = null) {
   // Get sorted counts
   const counts = Array.from(playCountsPerGame.values()).sort((a, b) => b - a);
 
-  // Calculate h-index
-  let hIndex = 0;
-  for (let i = 0; i < counts.length; i++) {
-    if (counts[i] >= i + 1) {
-      hIndex = i + 1;
-    } else {
-      break;
-    }
-  }
-
-  return hIndex;
+  return calculateHIndexFromSortedValues(counts);
 }
 
 /**
@@ -85,17 +92,32 @@ function calculatePlaySessionHIndex(games, plays, year = null) {
     .map(dateSet => dateSet.size)
     .sort((a, b) => b - a);
 
-  // Calculate h-index
-  let hIndex = 0;
-  for (let i = 0; i < counts.length; i++) {
-    if (counts[i] >= i + 1) {
-      hIndex = i + 1;
-    } else {
-      break;
-    }
-  }
+  return calculateHIndexFromSortedValues(counts);
+}
 
-  return hIndex;
+/**
+ * Calculate hour h-index (total hours played per game)
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter
+ * @returns {number} h-index value
+ */
+function calculateHourHIndex(plays, year = null) {
+  // Sum minutes per game
+  const minutesPerGame = new Map();
+
+  plays.forEach(play => {
+    if (year && !play.date.startsWith(year.toString())) return;
+
+    const total = minutesPerGame.get(play.gameId) || 0;
+    minutesPerGame.set(play.gameId, total + play.durationMin);
+  });
+
+  // Convert to hours and sort
+  const hours = Array.from(minutesPerGame.values())
+    .map(min => min / 60)
+    .sort((a, b) => b - a);
+
+  return calculateHIndexFromSortedValues(hours);
 }
 
 /**
@@ -457,6 +479,38 @@ function getHIndexBreakdown(games, plays, year = null, usePlaySessions = false) 
 
   // Sort by count descending
   breakdown.sort((a, b) => b.count - a.count);
+
+  return breakdown;
+}
+
+/**
+ * Get detailed hour h-index breakdown (games contributing to hour h-index)
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter
+ * @returns {Array} Array of {game, hours} sorted by hours descending
+ */
+function getHourHIndexBreakdown(games, plays, year = null) {
+  const minutesPerGame = new Map();
+
+  // Sum minutes per game
+  plays.forEach(play => {
+    if (year && !play.date.startsWith(year.toString())) return;
+    const total = minutesPerGame.get(play.gameId) || 0;
+    minutesPerGame.set(play.gameId, total + play.durationMin);
+  });
+
+  // Convert to array with game objects and hours
+  const breakdown = [];
+  minutesPerGame.forEach((minutes, gameId) => {
+    const game = games.find(g => g.id === gameId);
+    if (game) {
+      breakdown.push({ game, hours: minutes / 60 });
+    }
+  });
+
+  // Sort by hours descending
+  breakdown.sort((a, b) => b.hours - a.hours);
 
   return breakdown;
 }
