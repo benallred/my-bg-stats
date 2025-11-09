@@ -541,7 +541,7 @@ function showDetailSection(statType) {
     // Show section
     detailSection.style.display = 'block';
 
-    // Calculate scroll position to show detail section below full-height header
+    // Calculate scroll position to show detail section optimally
     requestAnimationFrame(() => {
         // First, scroll to top to reset header to full height
         const wasScrolled = window.pageYOffset > 0;
@@ -553,17 +553,24 @@ function showDetailSection(statType) {
 
         // Now get the position with full header
         requestAnimationFrame(() => {
-            const rect = detailSection.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const elementTop = rect.top + scrollTop;
+            const detailSectionRect = detailSection.getBoundingClientRect();
+            const sectionStyles = getComputedStyle(detailSection);
+            const marginBottom = parseFloat(sectionStyles.marginBottom);
 
-            // Get actual current header height (should be full height now)
-            const header = document.querySelector('header');
-            const headerHeight = header.offsetHeight;
+            // Position the visual bottom of the section at the viewport bottom
+            // The visual bottom excludes the margin-bottom
+            const targetBottom = detailSectionRect.bottom - marginBottom;
+            const viewportHeight = window.innerHeight;
 
-            // Scroll to position element below the header
+            // If bottom is already visible, don't scroll
+            if (targetBottom <= viewportHeight) {
+                return;
+            }
+
+            // Otherwise, scroll just enough to bring the bottom into view
+            const scrollAmount = targetBottom - viewportHeight;
             window.scrollTo({
-                top: elementTop - headerHeight,
+                top: window.pageYOffset + scrollAmount,
                 behavior: 'smooth'
             });
         });
