@@ -30,15 +30,35 @@ header h1 {
     margin-bottom: 1rem;
 }
 
+/* Layout container for title and year filter when sticky */
+header.sticky-scrolled {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+}
+
+header.sticky-scrolled h1 {
+    flex-shrink: 0;
+    margin-bottom: 0 !important;
+}
+
+header.sticky-scrolled .year-filter {
+    flex-shrink: 0;
+}
+
 .year-filter {
     display: flex;
     align-items: baseline;
     gap: 1rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .year-filter label {
     font-weight: 600;
     color: #555;
+    white-space: nowrap;
 }
 
 #year-select {
@@ -411,11 +431,6 @@ footer p {
 
     header h1 {
         font-size: 1.5rem;
-    }
-
-    .year-filter {
-        flex-direction: column;
-        align-items: flex-start;
     }
 
     .stats-grid {

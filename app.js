@@ -1151,7 +1151,6 @@ function updateFooter() {
 function setupStickyHeader() {
     const header = document.querySelector('header');
     const h1 = header.querySelector('h1');
-    const yearFilter = header.querySelector('.year-filter');
 
     // Capture initial values
     let initialHeight = 0;
@@ -1180,17 +1179,11 @@ function setupStickyHeader() {
         h1.style.marginBottom = `${h1MarginBottom}rem`;
         h1.style.fontSize = `${h1FontSize}rem`;
 
-        // Handle year filter position
+        // Handle sticky state class
         if (scrollProgress >= 1) {
-            yearFilter.style.position = 'absolute';
-            yearFilter.style.top = '50%';
-            yearFilter.style.left = '20rem';
-            yearFilter.style.transform = 'translateY(-50%)';
+            header.classList.add('sticky-scrolled');
         } else {
-            yearFilter.style.position = '';
-            yearFilter.style.top = '';
-            yearFilter.style.left = '';
-            yearFilter.style.transform = '';
+            header.classList.remove('sticky-scrolled');
         }
 
         // Update CSS variable for detail header sticky positioning
