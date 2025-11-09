@@ -838,11 +838,11 @@ function showPlayTimeBreakdown(container) {
                 const hours = item.totalHours.toFixed(1);
                 let dataSource = '';
                 if (item.actualCount > 0 && item.estimatedCount > 0) {
-                    dataSource = `${item.actualCount} actual, ${item.estimatedCount} estimated`;
+                    dataSource = `${item.actualCount}&nbsp;actual, ${item.estimatedCount}&nbsp;estimated`;
                 } else if (item.actualCount > 0) {
-                    dataSource = `${item.actualCount} actual`;
+                    dataSource = `${item.actualCount}&nbsp;actual`;
                 } else if (item.estimatedCount > 0) {
-                    dataSource = `${item.estimatedCount} estimated`;
+                    dataSource = `${item.estimatedCount}&nbsp;estimated`;
                 } else {
                     dataSource = 'No duration data';
                 }
