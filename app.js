@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Setup event listeners
         setupEventListeners();
 
+        // Setup sticky header
+        setupStickyHeader();
+
         // Update footer
         updateFooter();
     } catch (error) {
@@ -982,4 +985,54 @@ function updateFooter() {
         document.getElementById('last-updated').textContent =
             `Last updated: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
     }
+}
+
+/**
+ * Setup sticky header that compacts on scroll
+ */
+function setupStickyHeader() {
+    const header = document.querySelector('header');
+    const h1 = header.querySelector('h1');
+    const yearFilter = header.querySelector('.year-filter');
+
+    // Capture initial values
+    let initialHeight = 0;
+    requestAnimationFrame(() => {
+        initialHeight = header.offsetHeight;
+    });
+
+    window.addEventListener('scroll', () => {
+        if (initialHeight === 0) return;
+
+        const scrollY = window.scrollY;
+        const scrollProgress = Math.min(scrollY / initialHeight, 1); // 0 to 1
+
+        // Calculate values based on scroll progress
+        const padding = 2 - (scrollProgress * 1); // 2rem to 1rem
+        const h1MarginBottom = 1 - scrollProgress; // 1rem to 0
+        const h1FontSize = 2 - (scrollProgress * 0.5); // 2rem to 1.5rem (default is 2rem via browser)
+        const shadowBlur = 2 + (scrollProgress * 2); // 2px to 4px
+        const shadowAlpha = 0.1 + (scrollProgress * 0.05); // 0.1 to 0.15
+
+        // Apply styles directly
+        header.style.paddingTop = `${padding}rem`;
+        header.style.paddingBottom = `${padding}rem`;
+        header.style.boxShadow = `0 ${shadowBlur}px ${shadowBlur * 2}px rgba(0,0,0,${shadowAlpha})`;
+
+        h1.style.marginBottom = `${h1MarginBottom}rem`;
+        h1.style.fontSize = `${h1FontSize}rem`;
+
+        // Handle year filter position
+        if (scrollProgress >= 1) {
+            yearFilter.style.position = 'absolute';
+            yearFilter.style.top = '50%';
+            yearFilter.style.left = '20rem';
+            yearFilter.style.transform = 'translateY(-50%)';
+        } else {
+            yearFilter.style.position = '';
+            yearFilter.style.top = '';
+            yearFilter.style.left = '';
+            yearFilter.style.transform = '';
+        }
+    }, { passive: true });
 }
