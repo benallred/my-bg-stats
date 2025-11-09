@@ -184,6 +184,7 @@ header h1 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 2rem;
     animation: slideIn 0.3s ease-out;
+    scroll-margin-top: 8rem; /* Account for sticky header height */
 }
 
 @keyframes slideIn {
@@ -203,6 +204,12 @@ header h1 {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #3498db;
+    position: sticky;
+    top: var(--main-header-height, 5rem); /* Position below main header */
+    background: white;
+    z-index: 90;
+    padding-top: 1rem;
+    margin-top: -1rem;
 }
 
 .detail-header-top {

@@ -1139,5 +1139,9 @@ function setupStickyHeader() {
             yearFilter.style.left = '';
             yearFilter.style.transform = '';
         }
+
+        // Update CSS variable for detail header sticky positioning
+        const currentHeaderHeight = header.offsetHeight;
+        document.documentElement.style.setProperty('--main-header-height', `${currentHeaderHeight}px`);
     }, { passive: true });
 }
