@@ -136,6 +136,9 @@ function setupYearFilter() {
             closeDetailSection();
             closeDiagnosticDetail();
         }
+
+        // Update URL when year changes
+        updateURL();
     });
 }
 
@@ -430,6 +433,9 @@ function showDetailSection(statType) {
 
     // Track currently open stat
     currentlyOpenStatType = statType;
+
+    // Update URL when stat changes
+    updateURL();
 }
 
 /**
@@ -443,6 +449,9 @@ function closeDetailSection() {
     document.querySelectorAll('.stat-card.clickable').forEach(card => {
         card.classList.remove('active');
     });
+
+    // Update URL when detail is closed
+    updateURL();
 }
 
 /**
@@ -809,6 +818,9 @@ function showDiagnosticDetail(statType) {
 
     // Track currently open diagnostic
     currentlyOpenDiagnosticType = statType;
+
+    // Update URL when diagnostic changes
+    updateURL();
 }
 
 /**
@@ -823,6 +835,9 @@ function closeDiagnosticDetail() {
     document.querySelectorAll('.diagnostic-card.clickable').forEach(card => {
         card.classList.remove('active');
     });
+
+    // Update URL when diagnostic is closed
+    updateURL();
 }
 
 /**
@@ -895,34 +910,10 @@ function loadFromPermalink() {
 }
 
 /**
- * Generate permalink for current state
- */
-function generatePermalink(isDiagnostic = false) {
-    const url = new URL(window.location.href);
-    url.search = ''; // Clear existing parameters
-
-    const params = new URLSearchParams();
-
-    // Add year parameter if a specific year is selected
-    if (currentYear) {
-        params.set('year', currentYear.toString());
-    }
-
-    // Add stat parameter
-    const statType = isDiagnostic ? currentlyOpenDiagnosticType : currentlyOpenStatType;
-    if (statType) {
-        params.set('stat', statType);
-    }
-
-    url.search = params.toString();
-    return url.toString();
-}
-
-/**
  * Copy permalink to clipboard
  */
 async function copyPermalink(isDiagnostic = false) {
-    const permalink = generatePermalink(isDiagnostic);
+    const permalink = window.location.href;
     const buttonId = isDiagnostic ? 'diagnostic-permalink-btn' : 'permalink-btn';
     const button = document.getElementById(buttonId);
 
@@ -945,6 +936,35 @@ async function copyPermalink(isDiagnostic = false) {
         console.error('Failed to copy permalink:', err);
         alert('Failed to copy permalink to clipboard');
     }
+}
+
+/**
+ * Update URL to reflect current state
+ */
+function updateURL() {
+    // Skip URL updates during permalink loading
+    if (isLoadingFromPermalink) {
+        return;
+    }
+
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams();
+
+    // Add year parameter if a specific year is selected
+    if (currentYear) {
+        params.set('year', currentYear.toString());
+    }
+
+    // Add stat parameter if a section is open
+    if (currentlyOpenStatType) {
+        params.set('stat', currentlyOpenStatType);
+    } else if (currentlyOpenDiagnosticType) {
+        params.set('stat', currentlyOpenDiagnosticType);
+    }
+
+    // Update the URL without reloading the page
+    const newURL = params.toString() ? `${url.pathname}?${params.toString()}` : url.pathname;
+    window.history.replaceState({}, '', newURL);
 }
 
 /**
