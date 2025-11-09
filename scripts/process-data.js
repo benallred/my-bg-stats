@@ -115,10 +115,24 @@ gameDurationsMap.forEach((durations, gameId) => {
   }
 });
 
-// Ensure all games have typicalPlayTimeMinutes property (null if no data)
+// Ensure all games have typicalPlayTimeMinutes property (null if no data yet)
 gamesMap.forEach(game => {
   if (!game.hasOwnProperty('typicalPlayTimeMinutes')) {
     game.typicalPlayTimeMinutes = null;
+  }
+});
+
+// Count plays per game to identify games that need 30-minute default
+const gamePlayCounts = new Map();
+bgStatsData.plays.forEach(play => {
+  const gameId = play.gameRefId;
+  gamePlayCounts.set(gameId, (gamePlayCounts.get(gameId) || 0) + 1);
+});
+
+// Apply 30-minute default to games with plays but no duration data
+gamesMap.forEach(game => {
+  if (game.typicalPlayTimeMinutes === null && gamePlayCounts.has(game.id)) {
+    game.typicalPlayTimeMinutes = 30;
   }
 });
 

@@ -1614,7 +1614,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 83,
@@ -2806,7 +2806,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 514,
@@ -4769,7 +4769,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 41,
@@ -6730,7 +6730,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 43,
@@ -6748,7 +6748,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 2,
@@ -8128,7 +8128,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 140,
@@ -8705,7 +8705,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 125,
@@ -12165,8 +12165,8 @@
     {
       "gameId": 511,
       "date": "2025-03-15",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 223,
@@ -19611,20 +19611,20 @@
     {
       "gameId": 344,
       "date": "2022-03-26",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 345,
       "date": "2022-03-26",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 345,
       "date": "2022-03-26",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 339,
@@ -20883,32 +20883,32 @@
     {
       "gameId": 63,
       "date": "2021-10-29",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 63,
       "date": "2021-10-29",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 63,
       "date": "2021-10-29",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 353,
       "date": "2021-10-29",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 354,
       "date": "2021-10-29",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 173,
@@ -21093,8 +21093,8 @@
     {
       "gameId": 43,
       "date": "2021-09-28",
-      "durationMin": 0,
-      "durationEstimated": false
+      "durationMin": 30,
+      "durationEstimated": true
     },
     {
       "gameId": 100,
@@ -21109,5 +21109,5 @@
       "durationEstimated": true
     }
   ],
-  "generatedAt": "2025-11-09T02:39:03.093Z"
+  "generatedAt": "2025-11-09T02:49:20.023Z"
 }
