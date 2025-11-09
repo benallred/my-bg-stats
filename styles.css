@@ -370,6 +370,10 @@ table td {
     border-bottom: 1px solid #e9ecef;
 }
 
+table td.no-wrap {
+    white-space: nowrap;
+}
+
 table tbody tr:nth-child(even) {
     background: #f8fbff;
 }

@@ -827,10 +827,8 @@ function showPlayTimeBreakdown(container) {
                 <th>Game</th>
                 <th>Time Played</th>
                 <th>Play Count</th>
-                <th>Min Play Time</th>
-                <th>Max Play Time</th>
-                <th>Median Play Time</th>
-                <th>Avg Play Time</th>
+                <th>Min/Max Play Time</th>
+                <th>Median/Avg Play Time</th>
                 <th>Play Durations</th>
             </tr>
         </thead>
@@ -859,15 +857,16 @@ function showPlayTimeBreakdown(container) {
                     return `${mins}m`;
                 };
 
+                const minMax = `${formatMinutes(item.minMinutes)}<br>${formatMinutes(item.maxMinutes)}`;
+                const medianAvg = `${formatMinutes(item.medianMinutes)}<br>${formatMinutes(item.avgMinutes)}`;
+
                 return `
                     <tr>
                         <td>${item.game.name}</td>
                         <td>${hours} hours</td>
                         <td>${item.playCount}</td>
-                        <td>${formatMinutes(item.minMinutes)}</td>
-                        <td>${formatMinutes(item.maxMinutes)}</td>
-                        <td>${formatMinutes(item.medianMinutes)}</td>
-                        <td>${formatMinutes(item.avgMinutes)}</td>
+                        <td class="no-wrap">${minMax}</td>
+                        <td class="no-wrap">${medianAvg}</td>
                         <td>${dataSource}</td>
                     </tr>
                 `;
