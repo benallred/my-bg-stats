@@ -32,7 +32,7 @@ header h1 {
 
 .year-filter {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 1rem;
 }
 
@@ -199,11 +199,53 @@ header h1 {
 
 .detail-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #3498db;
+}
+
+.detail-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.detail-stat-summary {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.detail-stat-main {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3498db;
+}
+
+.detail-stat-substats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.detail-substat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.detail-substat-label {
+    color: #666;
+}
+
+.detail-substat-value {
+    font-weight: 600;
+    color: #2c3e50;
 }
 
 .detail-header h2 {

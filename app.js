@@ -361,12 +361,59 @@ function setupEventListeners() {
 }
 
 /**
+ * Helper function to populate stat summary in detail header
+ */
+function populateStatSummary(summaryElement, mainValue, substats = []) {
+    if (!mainValue && (!substats || substats.length === 0)) {
+        summaryElement.style.display = 'none';
+        return;
+    }
+
+    summaryElement.innerHTML = '';
+    summaryElement.style.display = 'flex';
+
+    // Add main stat value
+    if (mainValue) {
+        const mainDiv = document.createElement('div');
+        mainDiv.className = 'detail-stat-main';
+        mainDiv.textContent = mainValue;
+        summaryElement.appendChild(mainDiv);
+    }
+
+    // Add substats if present
+    if (substats && substats.length > 0) {
+        const substatsDiv = document.createElement('div');
+        substatsDiv.className = 'detail-stat-substats';
+
+        substats.forEach(substat => {
+            const substatDiv = document.createElement('div');
+            substatDiv.className = 'detail-substat';
+
+            const label = document.createElement('span');
+            label.className = 'detail-substat-label';
+            label.textContent = substat.label;
+
+            const value = document.createElement('span');
+            value.className = 'detail-substat-value';
+            value.textContent = substat.value;
+
+            substatDiv.appendChild(label);
+            substatDiv.appendChild(value);
+            substatsDiv.appendChild(substatDiv);
+        });
+
+        summaryElement.appendChild(substatsDiv);
+    }
+}
+
+/**
  * Show detail section for a specific stat
  */
 function showDetailSection(statType) {
     const detailSection = document.getElementById('detail-section');
     const detailTitle = document.getElementById('detail-title');
     const detailContent = document.getElementById('detail-content');
+    const detailStatSummary = document.getElementById('detail-stat-summary');
 
     // Remove active class from all stat cards
     document.querySelectorAll('.stat-card.clickable').forEach(card => {
@@ -381,6 +428,8 @@ function showDetailSection(statType) {
 
     // Clear previous content
     detailContent.innerHTML = '';
+    detailStatSummary.innerHTML = '';
+    detailStatSummary.style.display = 'none';
 
     // Set title and content based on stat type
     const yearSuffix = currentYear ? ` (${currentYear})` : ' (All Time)';
@@ -388,46 +437,80 @@ function showDetailSection(statType) {
     switch (statType) {
         case 'traditional-h-index':
             detailTitle.textContent = `Traditional H-Index Breakdown${yearSuffix}`;
+            const traditionalHIndex = calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear);
+            populateStatSummary(detailStatSummary, traditionalHIndex);
             showHIndexBreakdown(detailContent, false);
             break;
         case 'play-session-h-index':
             detailTitle.textContent = `Play Session H-Index Breakdown${yearSuffix}`;
+            const playSessionHIndex = calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear);
+            populateStatSummary(detailStatSummary, playSessionHIndex);
             showHIndexBreakdown(detailContent, true);
             break;
         case 'total-bgg-entries':
             detailTitle.textContent = currentYear ? `BGG Entries Acquired in ${currentYear}` : 'BGG Entries (All Time)';
+            const totalBGGEntries = getTotalBGGEntries(gameData.games, currentYear);
+            populateStatSummary(detailStatSummary, totalBGGEntries);
             showBGGEntries(detailContent);
             break;
         case 'total-games-owned':
             detailTitle.textContent = currentYear ? `Games Acquired in ${currentYear}` : 'Games Owned (All Time)';
+            const totalGamesOwned = getTotalGamesOwned(gameData.games, currentYear);
+            populateStatSummary(detailStatSummary, totalGamesOwned);
             showGamesOwned(detailContent);
             break;
         case 'total-expansions':
             detailTitle.textContent = currentYear ? `Expansions Acquired in ${currentYear}` : 'Expansions (All Time)';
+            const expansionsData = getTotalExpansions(gameData.games, currentYear);
+            populateStatSummary(detailStatSummary, expansionsData.total, [
+                { label: 'Expandalones:', value: expansionsData.expandalones },
+                { label: 'Expansion-only:', value: expansionsData.expansionOnly }
+            ]);
             showExpansions(detailContent);
             break;
         case 'total-games-played':
             detailTitle.textContent = currentYear ? `Games Played in ${currentYear}` : 'Games Played (All Time)';
+            const gamesPlayedData = getTotalGamesPlayed(gameData.games, gameData.plays, currentYear);
+            const gamesPlayedSubstats = [];
+            if (currentYear && gamesPlayedData.newToMe !== null) {
+                gamesPlayedSubstats.push({ label: 'New-to-me:', value: gamesPlayedData.newToMe });
+            }
+            populateStatSummary(detailStatSummary, gamesPlayedData.total, gamesPlayedSubstats);
             showGamesPlayed(detailContent);
             break;
         case 'total-play-time':
             detailTitle.textContent = currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game (All Time)';
+            const playTimeData = getTotalPlayTime(gameData.plays, currentYear);
+            const hours = playTimeData.totalHours.toFixed(1);
+            const days = (playTimeData.totalHours / 24).toFixed(1);
+            const prefix = playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
+            populateStatSummary(detailStatSummary, `${prefix}${hours} hours`, [
+                { label: 'In days:', value: `${prefix}${days}` }
+            ]);
             showPlayTimeBreakdown(detailContent);
             break;
         case 'fives':
             detailTitle.textContent = `Fives (5+ Plays)${yearSuffix}`;
+            const fivesData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
+            populateStatSummary(detailStatSummary, fivesData.fives.length);
             showMilestoneGames(detailContent, 'fives');
             break;
         case 'dimes':
             detailTitle.textContent = `Dimes (10+ Plays)${yearSuffix}`;
+            const dimesData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
+            populateStatSummary(detailStatSummary, dimesData.dimes.length);
             showMilestoneGames(detailContent, 'dimes');
             break;
         case 'quarters':
             detailTitle.textContent = `Quarters (25+ Plays)${yearSuffix}`;
+            const quartersData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
+            populateStatSummary(detailStatSummary, quartersData.quarters.length);
             showMilestoneGames(detailContent, 'quarters');
             break;
         case 'centuries':
             detailTitle.textContent = `Centuries (100+ Plays)${yearSuffix}`;
+            const centuriesData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
+            populateStatSummary(detailStatSummary, centuriesData.centuries.length);
             showMilestoneGames(detailContent, 'centuries');
             break;
     }
@@ -789,6 +872,7 @@ function showDiagnosticDetail(statType) {
     const detailSection = document.getElementById('diagnostic-detail-section');
     const detailTitle = document.getElementById('diagnostic-detail-title');
     const detailContent = document.getElementById('diagnostic-detail-content');
+    const detailStatSummary = document.getElementById('diagnostic-stat-summary');
 
     // Remove active class from all diagnostic cards
     document.querySelectorAll('.diagnostic-card.clickable').forEach(card => {
@@ -803,17 +887,21 @@ function showDiagnosticDetail(statType) {
 
     // Clear previous content
     detailContent.innerHTML = '';
+    detailStatSummary.innerHTML = '';
+    detailStatSummary.style.display = 'none';
 
     // Set title and content based on stat type
     switch (statType) {
         case 'unknown-acquisition-dates':
             detailTitle.textContent = 'Games with Unknown Acquisition Dates';
             const unknownGames = getGamesWithUnknownAcquisitionDate(gameData.games, currentYear);
+            populateStatSummary(detailStatSummary, unknownGames.length);
             createGameTable(detailContent, unknownGames, ['Name', 'Type', 'Year']);
             break;
         case 'never-played':
             detailTitle.textContent = currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games (All Time)';
             const neverPlayedGames = getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear);
+            populateStatSummary(detailStatSummary, neverPlayedGames.length);
             createGameTable(detailContent, neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
             break;
     }

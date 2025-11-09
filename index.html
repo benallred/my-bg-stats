@@ -143,10 +143,15 @@
         <!-- Detail Section (shown when stat is clicked) -->
         <section id="detail-section" class="detail-section" style="display: none;">
             <div class="detail-header">
-                <h2 id="detail-title"></h2>
-                <div class="detail-header-buttons">
-                    <button id="permalink-btn" class="permalink-btn" title="Copy permalink to clipboard">🔗</button>
-                    <button id="close-detail" class="close-btn">&times;</button>
+                <div class="detail-header-top">
+                    <h2 id="detail-title"></h2>
+                    <div class="detail-header-buttons">
+                        <button id="permalink-btn" class="permalink-btn" title="Copy permalink to clipboard">🔗</button>
+                        <button id="close-detail" class="close-btn">&times;</button>
+                    </div>
+                </div>
+                <div id="detail-stat-summary" class="detail-stat-summary" style="display: none;">
+                    <!-- Stat summary will be populated by JavaScript -->
                 </div>
             </div>
             <div id="detail-content" class="detail-content">
@@ -177,10 +182,15 @@
                 <!-- Diagnostic Detail Section -->
                 <section id="diagnostic-detail-section" class="diagnostic-detail-section" style="display: none;">
                     <div class="detail-header">
-                        <h3 id="diagnostic-detail-title"></h3>
-                        <div class="detail-header-buttons">
-                            <button id="diagnostic-permalink-btn" class="permalink-btn" title="Copy permalink to clipboard">🔗</button>
-                            <button id="close-diagnostic-detail" class="close-btn">&times;</button>
+                        <div class="detail-header-top">
+                            <h3 id="diagnostic-detail-title"></h3>
+                            <div class="detail-header-buttons">
+                                <button id="diagnostic-permalink-btn" class="permalink-btn" title="Copy permalink to clipboard">🔗</button>
+                                <button id="close-diagnostic-detail" class="close-btn">&times;</button>
+                            </div>
+                        </div>
+                        <div id="diagnostic-stat-summary" class="detail-stat-summary" style="display: none;">
+                            <!-- Stat summary will be populated by JavaScript -->
                         </div>
                     </div>
                     <div id="diagnostic-detail-content" class="detail-content">
