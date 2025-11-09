@@ -380,49 +380,51 @@ function showDetailSection(statType) {
     detailContent.innerHTML = '';
 
     // Set title and content based on stat type
+    const yearSuffix = currentYear ? ` (${currentYear})` : ' (All Time)';
+
     switch (statType) {
         case 'traditional-h-index':
-            detailTitle.textContent = 'Traditional H-Index Breakdown';
+            detailTitle.textContent = `Traditional H-Index Breakdown${yearSuffix}`;
             showHIndexBreakdown(detailContent, false);
             break;
         case 'play-session-h-index':
-            detailTitle.textContent = 'Play Session H-Index Breakdown';
+            detailTitle.textContent = `Play Session H-Index Breakdown${yearSuffix}`;
             showHIndexBreakdown(detailContent, true);
             break;
         case 'total-bgg-entries':
-            detailTitle.textContent = currentYear ? `BGG Entries Acquired in ${currentYear}` : 'All BGG Entries';
+            detailTitle.textContent = currentYear ? `BGG Entries Acquired in ${currentYear}` : 'BGG Entries (All Time)';
             showBGGEntries(detailContent);
             break;
         case 'total-games-owned':
-            detailTitle.textContent = currentYear ? `Games Acquired in ${currentYear}` : 'All Games Owned';
+            detailTitle.textContent = currentYear ? `Games Acquired in ${currentYear}` : 'Games Owned (All Time)';
             showGamesOwned(detailContent);
             break;
         case 'total-expansions':
-            detailTitle.textContent = currentYear ? `Expansions Acquired in ${currentYear}` : 'All Expansions';
+            detailTitle.textContent = currentYear ? `Expansions Acquired in ${currentYear}` : 'Expansions (All Time)';
             showExpansions(detailContent);
             break;
         case 'total-games-played':
-            detailTitle.textContent = currentYear ? `Games Played in ${currentYear}` : 'All Games Played';
+            detailTitle.textContent = currentYear ? `Games Played in ${currentYear}` : 'Games Played (All Time)';
             showGamesPlayed(detailContent);
             break;
         case 'total-play-time':
-            detailTitle.textContent = currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game';
+            detailTitle.textContent = currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game (All Time)';
             showPlayTimeBreakdown(detailContent);
             break;
         case 'fives':
-            detailTitle.textContent = 'Fives (5+ Plays)';
+            detailTitle.textContent = `Fives (5+ Plays)${yearSuffix}`;
             showMilestoneGames(detailContent, 'fives');
             break;
         case 'dimes':
-            detailTitle.textContent = 'Dimes (10+ Plays)';
+            detailTitle.textContent = `Dimes (10+ Plays)${yearSuffix}`;
             showMilestoneGames(detailContent, 'dimes');
             break;
         case 'quarters':
-            detailTitle.textContent = 'Quarters (25+ Plays)';
+            detailTitle.textContent = `Quarters (25+ Plays)${yearSuffix}`;
             showMilestoneGames(detailContent, 'quarters');
             break;
         case 'centuries':
-            detailTitle.textContent = 'Centuries (100+ Plays)';
+            detailTitle.textContent = `Centuries (100+ Plays)${yearSuffix}`;
             showMilestoneGames(detailContent, 'centuries');
             break;
     }
@@ -807,7 +809,7 @@ function showDiagnosticDetail(statType) {
             createGameTable(detailContent, unknownGames, ['Name', 'Type', 'Year']);
             break;
         case 'never-played':
-            detailTitle.textContent = currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games';
+            detailTitle.textContent = currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games (All Time)';
             const neverPlayedGames = getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear);
             createGameTable(detailContent, neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
             break;
