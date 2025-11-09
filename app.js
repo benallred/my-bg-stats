@@ -139,8 +139,36 @@ function setupYearFilter() {
 
         // Only close sections if not loading from permalink
         if (!isLoadingFromPermalink) {
-            closeDetailSection();
-            closeDiagnosticDetail();
+            // Determine if the new year is pre-logging
+            const isNewYearPreLogging = currentYear && yearDataCache
+                && yearDataCache.find(y => y.year === currentYear)?.isPreLogging;
+
+            // Check if currently open stat is play-related (unavailable in pre-logging years)
+            const playRelatedStats = [
+                'traditional-h-index',
+                'play-session-h-index',
+                'total-plays',
+                'total-days-played',
+                'total-games-played',
+                'total-play-time',
+                'fives',
+                'dimes',
+                'quarters',
+                'centuries'
+            ];
+
+            // Close detail section only if it's a play-related stat and year is pre-logging
+            if (currentlyOpenStatType && isNewYearPreLogging && playRelatedStats.includes(currentlyOpenStatType)) {
+                closeDetailSection();
+            } else if (currentlyOpenStatType) {
+                // Refresh the detail section with updated data for the new year
+                showDetailSection(currentlyOpenStatType);
+            }
+
+            // Refresh diagnostic detail section if open
+            if (currentlyOpenDiagnosticType) {
+                showDiagnosticDetail(currentlyOpenDiagnosticType);
+            }
         }
 
         // Update URL when year changes
