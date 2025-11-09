@@ -876,7 +876,7 @@ function loadFromPermalink() {
     const yearParam = urlParams.get('year');
     const statParam = urlParams.get('stat');
 
-    if (!statParam) {
+    if (!yearParam && !statParam) {
         return; // No permalink parameters
     }
 
@@ -895,18 +895,22 @@ function loadFromPermalink() {
     }
 
     // Open the specified stat after a short delay to ensure stats are loaded
-    setTimeout(() => {
-        // Check if it's a diagnostic stat
-        const isDiagnostic = statParam === 'unknown-acquisition-dates' || statParam === 'never-played';
+    if (statParam) {
+        setTimeout(() => {
+            // Check if it's a diagnostic stat
+            const isDiagnostic = statParam === 'unknown-acquisition-dates' || statParam === 'never-played';
 
-        if (isDiagnostic) {
-            showDiagnosticDetail(statParam);
-        } else {
-            showDetailSection(statParam);
-        }
+            if (isDiagnostic) {
+                showDiagnosticDetail(statParam);
+            } else {
+                showDetailSection(statParam);
+            }
 
+            isLoadingFromPermalink = false;
+        }, 100);
+    } else {
         isLoadingFromPermalink = false;
-    }, 100);
+    }
 }
 
 /**
