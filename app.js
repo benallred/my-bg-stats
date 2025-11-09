@@ -603,6 +603,7 @@ function showHIndexBreakdown(container, usePlaySessions, hIndex) {
     const breakdown = getHIndexBreakdown(gameData.games, gameData.plays, currentYear, usePlaySessions);
 
     const table = document.createElement('table');
+    table.className = 'h-index-table';
     table.innerHTML = `
         <thead>
             <tr>
@@ -617,7 +618,7 @@ function showHIndexBreakdown(container, usePlaySessions, hIndex) {
                 const rank = index + 1;
                 const contributesToHIndex = rank <= item.count && rank <= hIndex;
                 return `
-                    <tr style="${contributesToHIndex ? 'background-color: #e3f2fd;' : ''}">
+                    <tr${contributesToHIndex ? ' class="h-index-contributor"' : ''}>
                         <td>${rank}</td>
                         <td>${item.game.name}</td>
                         <td>${item.count}</td>

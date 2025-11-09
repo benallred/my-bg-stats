@@ -374,6 +374,78 @@ table td.no-wrap {
     white-space: nowrap;
 }
 
+table th:first-child,
+table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+}
+
+table th:first-child {
+    background: #f8f9fa;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+}
+
+table td:first-child {
+    background: white;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+}
+
+table tbody tr:nth-child(even) td:first-child {
+    background: #f8fbff;
+}
+
+table tbody tr:hover td:first-child {
+    background: #f8f9fa;
+}
+
+/* H-Index tables: make second column (Game) sticky instead of first (Rank) */
+table.h-index-table th:first-child,
+table.h-index-table td:first-child {
+    position: static;
+    background: inherit;
+    box-shadow: none;
+}
+
+table.h-index-table th:nth-child(2),
+table.h-index-table td:nth-child(2) {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+}
+
+table.h-index-table th:nth-child(2) {
+    background: #f8f9fa;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+}
+
+table.h-index-table td:nth-child(2) {
+    background: inherit;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+}
+
+table.h-index-table tbody tr:nth-child(even) td:nth-child(2) {
+    background: #f8fbff;
+}
+
+table.h-index-table tbody tr:hover td:nth-child(2) {
+    background: #f8f9fa;
+}
+
+/* H-Index contributing rows */
+table.h-index-table tbody tr.h-index-contributor {
+    background: #e3f2fd;
+}
+
+table.h-index-table tbody tr.h-index-contributor:nth-child(even) {
+    background: #d1e7f8;
+}
+
+table.h-index-table tbody tr.h-index-contributor td:first-child,
+table.h-index-table tbody tr.h-index-contributor td:nth-child(2) {
+    background: inherit;
+}
+
 table tbody tr:nth-child(even) {
     background: #f8fbff;
 }
