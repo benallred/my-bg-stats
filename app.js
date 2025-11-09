@@ -691,7 +691,7 @@ function showPlayTimeBreakdown(container) {
                 <th>Game</th>
                 <th>Time Played</th>
                 <th>Play Count</th>
-                <th>Data Source</th>
+                <th>Play Durations</th>
             </tr>
         </thead>
         <tbody>
