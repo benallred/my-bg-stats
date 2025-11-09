@@ -78,8 +78,8 @@ bgStatsData.games.forEach(game => {
   });
 });
 
-// First pass: Collect durations per game to calculate medians
-console.log('Calculating median play times per game...');
+// First pass: Collect durations per game to calculate typical play times
+console.log('Calculating typical play times per game...');
 const gameDurationsMap = new Map();
 
 bgStatsData.plays.forEach(play => {
@@ -111,14 +111,14 @@ gameDurationsMap.forEach((durations, gameId) => {
       }
     }
 
-    gamesMap.get(gameId).medianPlayTimeMinutes = median;
+    gamesMap.get(gameId).typicalPlayTimeMinutes = median;
   }
 });
 
-// Ensure all games have medianPlayTimeMinutes property (null if no data)
+// Ensure all games have typicalPlayTimeMinutes property (null if no data)
 gamesMap.forEach(game => {
-  if (!game.hasOwnProperty('medianPlayTimeMinutes')) {
-    game.medianPlayTimeMinutes = null;
+  if (!game.hasOwnProperty('typicalPlayTimeMinutes')) {
+    game.typicalPlayTimeMinutes = null;
   }
 });
 
@@ -134,11 +134,11 @@ bgStatsData.plays.forEach(play => {
   let finalDuration = originalDuration;
   let isEstimated = false;
 
-  // If duration is missing (0), use game's median
+  // If duration is missing (0), use game's typical play time
   if (originalDuration === 0 && gamesMap.has(gameId)) {
-    const gameMedian = gamesMap.get(gameId).medianPlayTimeMinutes;
-    if (gameMedian !== null) {
-      finalDuration = gameMedian;
+    const gameTypicalTime = gamesMap.get(gameId).typicalPlayTimeMinutes;
+    if (gameTypicalTime !== null) {
+      finalDuration = gameTypicalTime;
       isEstimated = true;
     }
   }

@@ -11,7 +11,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 7
+      "typicalPlayTimeMinutes": 7
     },
     {
       "id": 554,
@@ -29,7 +29,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 47.5
+      "typicalPlayTimeMinutes": 47.5
     },
     {
       "id": 314,
@@ -42,7 +42,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 54
+      "typicalPlayTimeMinutes": 54
     },
     {
       "id": 100,
@@ -60,7 +60,7 @@
       ],
       "playCount": 25,
       "uniquePlayDays": 19,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 55,
@@ -78,7 +78,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 559,
@@ -96,7 +96,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 439,
@@ -114,7 +114,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 66
+      "typicalPlayTimeMinutes": 66
     },
     {
       "id": 551,
@@ -127,7 +127,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 28
+      "typicalPlayTimeMinutes": 28
     },
     {
       "id": 323,
@@ -140,7 +140,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 45
+      "typicalPlayTimeMinutes": 45
     },
     {
       "id": 499,
@@ -158,7 +158,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 14
+      "typicalPlayTimeMinutes": 14
     },
     {
       "id": 72,
@@ -176,7 +176,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 465,
@@ -194,7 +194,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 70
+      "typicalPlayTimeMinutes": 70
     },
     {
       "id": 470,
@@ -212,7 +212,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 475,
@@ -230,7 +230,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 204,
@@ -248,7 +248,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 187,
@@ -266,7 +266,7 @@
       ],
       "playCount": 14,
       "uniquePlayDays": 9,
-      "medianPlayTimeMinutes": 17
+      "typicalPlayTimeMinutes": 17
     },
     {
       "id": 307,
@@ -279,7 +279,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 8
+      "typicalPlayTimeMinutes": 8
     },
     {
       "id": 402,
@@ -292,7 +292,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 365,
@@ -310,7 +310,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 297,
@@ -328,7 +328,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 80
+      "typicalPlayTimeMinutes": 80
     },
     {
       "id": 168,
@@ -346,7 +346,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 215,
@@ -364,7 +364,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 485,
@@ -382,7 +382,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 278,
@@ -400,7 +400,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 138,
@@ -418,7 +418,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 143,
@@ -436,7 +436,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 218,
@@ -454,7 +454,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 275,
@@ -472,7 +472,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 199,
@@ -490,7 +490,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 220,
@@ -508,7 +508,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 142,
@@ -526,7 +526,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 141,
@@ -544,7 +544,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 134,
@@ -562,7 +562,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 136,
@@ -580,7 +580,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 304,
@@ -598,7 +598,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 276,
@@ -616,7 +616,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 283,
@@ -634,7 +634,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 279,
@@ -652,7 +652,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 280,
@@ -670,7 +670,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 287,
@@ -688,7 +688,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 288,
@@ -706,7 +706,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 284,
@@ -724,7 +724,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 119,
@@ -742,7 +742,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 116,
@@ -760,7 +760,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 124,
@@ -778,7 +778,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 123,
@@ -796,7 +796,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 266,
@@ -814,7 +814,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 265,
@@ -832,7 +832,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 263,
@@ -850,7 +850,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 270,
@@ -868,7 +868,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 286,
@@ -886,7 +886,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 295,
@@ -904,7 +904,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 296,
@@ -922,7 +922,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 290,
@@ -940,7 +940,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 293,
@@ -958,7 +958,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 352,
@@ -976,7 +976,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 26
+      "typicalPlayTimeMinutes": 26
     },
     {
       "id": 349,
@@ -994,7 +994,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 23
+      "typicalPlayTimeMinutes": 23
     },
     {
       "id": 351,
@@ -1007,7 +1007,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 65
+      "typicalPlayTimeMinutes": 65
     },
     {
       "id": 326,
@@ -1020,7 +1020,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 51
+      "typicalPlayTimeMinutes": 51
     },
     {
       "id": 490,
@@ -1038,7 +1038,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 114
+      "typicalPlayTimeMinutes": 114
     },
     {
       "id": 95,
@@ -1060,7 +1060,7 @@
       ],
       "playCount": 11,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 3
+      "typicalPlayTimeMinutes": 3
     },
     {
       "id": 507,
@@ -1078,7 +1078,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 3
+      "typicalPlayTimeMinutes": 3
     },
     {
       "id": 541,
@@ -1091,7 +1091,7 @@
       "copies": [],
       "playCount": 8,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 17
+      "typicalPlayTimeMinutes": 17
     },
     {
       "id": 253,
@@ -1109,7 +1109,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 193,
@@ -1127,7 +1127,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 7,
@@ -1145,7 +1145,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 504,
@@ -1163,7 +1163,7 @@
       ],
       "playCount": 18,
       "uniquePlayDays": 15,
-      "medianPlayTimeMinutes": 22
+      "typicalPlayTimeMinutes": 22
     },
     {
       "id": 232,
@@ -1181,7 +1181,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 35
+      "typicalPlayTimeMinutes": 35
     },
     {
       "id": 105,
@@ -1199,7 +1199,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 240
+      "typicalPlayTimeMinutes": 240
     },
     {
       "id": 513,
@@ -1217,7 +1217,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 170,
@@ -1235,7 +1235,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 148,
@@ -1253,7 +1253,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 177,
@@ -1271,7 +1271,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 137,
@@ -1289,7 +1289,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 71,
@@ -1307,7 +1307,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 318,
@@ -1320,7 +1320,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 195,
@@ -1338,7 +1338,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 67.5
+      "typicalPlayTimeMinutes": 67.5
     },
     {
       "id": 157,
@@ -1356,7 +1356,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 26,
@@ -1374,7 +1374,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 194,
@@ -1392,7 +1392,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 179,
@@ -1410,7 +1410,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 144,
@@ -1428,7 +1428,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 452,
@@ -1446,7 +1446,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 34
+      "typicalPlayTimeMinutes": 34
     },
     {
       "id": 547,
@@ -1459,7 +1459,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 45
+      "typicalPlayTimeMinutes": 45
     },
     {
       "id": 529,
@@ -1477,7 +1477,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 83
+      "typicalPlayTimeMinutes": 83
     },
     {
       "id": 533,
@@ -1490,7 +1490,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 527,
@@ -1508,7 +1508,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 546,
@@ -1521,7 +1521,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 530,
@@ -1539,7 +1539,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 532,
@@ -1552,7 +1552,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 528,
@@ -1570,7 +1570,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 545,
@@ -1583,7 +1583,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 531,
@@ -1601,7 +1601,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 353,
@@ -1614,7 +1614,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 83,
@@ -1632,7 +1632,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 120
+      "typicalPlayTimeMinutes": 120
     },
     {
       "id": 33,
@@ -1650,7 +1650,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 38
+      "typicalPlayTimeMinutes": 38
     },
     {
       "id": 342,
@@ -1676,7 +1676,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 348,
@@ -1694,7 +1694,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 55
+      "typicalPlayTimeMinutes": 55
     },
     {
       "id": 74,
@@ -1712,7 +1712,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 568,
@@ -1725,7 +1725,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 40
+      "typicalPlayTimeMinutes": 40
     },
     {
       "id": 311,
@@ -1738,7 +1738,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 162,
@@ -1756,7 +1756,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 36
+      "typicalPlayTimeMinutes": 36
     },
     {
       "id": 462,
@@ -1774,7 +1774,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 100
+      "typicalPlayTimeMinutes": 100
     },
     {
       "id": 308,
@@ -1787,7 +1787,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 322,
@@ -1800,7 +1800,7 @@
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 14
+      "typicalPlayTimeMinutes": 14
     },
     {
       "id": 37,
@@ -1818,7 +1818,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 36
+      "typicalPlayTimeMinutes": 36
     },
     {
       "id": 110,
@@ -1836,7 +1836,7 @@
       ],
       "playCount": 11,
       "uniquePlayDays": 11,
-      "medianPlayTimeMinutes": 142
+      "typicalPlayTimeMinutes": 142
     },
     {
       "id": 49,
@@ -1854,7 +1854,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 267,
@@ -1872,7 +1872,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 212,
@@ -1890,7 +1890,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 15,
@@ -1908,7 +1908,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 39,
@@ -1926,7 +1926,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 248,
@@ -1944,7 +1944,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 237,
@@ -1962,7 +1962,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 173,
@@ -1980,7 +1980,7 @@
       ],
       "playCount": 104,
       "uniquePlayDays": 50,
-      "medianPlayTimeMinutes": 8
+      "typicalPlayTimeMinutes": 8
     },
     {
       "id": 258,
@@ -1998,7 +1998,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 80,
@@ -2016,7 +2016,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 255,
@@ -2034,7 +2034,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 292,
@@ -2052,7 +2052,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 88,
@@ -2070,7 +2070,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 4,
@@ -2088,7 +2088,7 @@
       ],
       "playCount": 27,
       "uniquePlayDays": 19,
-      "medianPlayTimeMinutes": 18
+      "typicalPlayTimeMinutes": 18
     },
     {
       "id": 89,
@@ -2106,7 +2106,7 @@
       ],
       "playCount": 7,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 6
+      "typicalPlayTimeMinutes": 6
     },
     {
       "id": 20,
@@ -2124,7 +2124,7 @@
       ],
       "playCount": 28,
       "uniquePlayDays": 27,
-      "medianPlayTimeMinutes": 48
+      "typicalPlayTimeMinutes": 48
     },
     {
       "id": 52,
@@ -2142,7 +2142,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 252,
@@ -2160,7 +2160,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 78,
@@ -2178,7 +2178,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 159,
@@ -2196,7 +2196,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 84,
@@ -2214,7 +2214,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 421,
@@ -2232,7 +2232,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 46,
@@ -2250,7 +2250,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 129
+      "typicalPlayTimeMinutes": 129
     },
     {
       "id": 420,
@@ -2268,7 +2268,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 223,
@@ -2286,7 +2286,7 @@
       ],
       "playCount": 87,
       "uniquePlayDays": 64,
-      "medianPlayTimeMinutes": 44
+      "typicalPlayTimeMinutes": 44
     },
     {
       "id": 414,
@@ -2304,7 +2304,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 182,
@@ -2322,7 +2322,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 44,
@@ -2340,7 +2340,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 413,
@@ -2358,7 +2358,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 466,
@@ -2376,7 +2376,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 17,
@@ -2394,7 +2394,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 468,
@@ -2412,7 +2412,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 77,
@@ -2430,7 +2430,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 310,
@@ -2448,7 +2448,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 40
+      "typicalPlayTimeMinutes": 40
     },
     {
       "id": 355,
@@ -2466,7 +2466,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 13
+      "typicalPlayTimeMinutes": 13
     },
     {
       "id": 214,
@@ -2484,7 +2484,7 @@
       ],
       "playCount": 19,
       "uniquePlayDays": 19,
-      "medianPlayTimeMinutes": 27
+      "typicalPlayTimeMinutes": 27
     },
     {
       "id": 161,
@@ -2502,7 +2502,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 160,
@@ -2520,7 +2520,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 48,
@@ -2538,7 +2538,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 58
+      "typicalPlayTimeMinutes": 58
     },
     {
       "id": 117,
@@ -2556,7 +2556,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 228,
@@ -2574,7 +2574,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 329,
@@ -2587,7 +2587,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 250
+      "typicalPlayTimeMinutes": 250
     },
     {
       "id": 32,
@@ -2605,7 +2605,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 247,
@@ -2623,7 +2623,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 294,
@@ -2641,7 +2641,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 325,
@@ -2654,7 +2654,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 65
+      "typicalPlayTimeMinutes": 65
     },
     {
       "id": 557,
@@ -2672,7 +2672,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 12,
@@ -2690,7 +2690,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 39
+      "typicalPlayTimeMinutes": 39
     },
     {
       "id": 169,
@@ -2708,7 +2708,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 82,
@@ -2726,7 +2726,7 @@
       ],
       "playCount": 24,
       "uniquePlayDays": 24,
-      "medianPlayTimeMinutes": 37
+      "typicalPlayTimeMinutes": 37
     },
     {
       "id": 36,
@@ -2744,7 +2744,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 522,
@@ -2757,7 +2757,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 46
+      "typicalPlayTimeMinutes": 46
     },
     {
       "id": 350,
@@ -2770,7 +2770,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 15
+      "typicalPlayTimeMinutes": 15
     },
     {
       "id": 550,
@@ -2788,7 +2788,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 29
+      "typicalPlayTimeMinutes": 29
     },
     {
       "id": 511,
@@ -2806,7 +2806,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 514,
@@ -2824,7 +2824,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 455,
@@ -2842,7 +2842,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 476,
@@ -2860,7 +2860,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 262,
@@ -2878,7 +2878,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 37.5
+      "typicalPlayTimeMinutes": 37.5
     },
     {
       "id": 64,
@@ -2896,7 +2896,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 244,
@@ -2914,7 +2914,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 277,
@@ -2932,7 +2932,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 111,
@@ -2950,7 +2950,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 93,
@@ -2968,7 +2968,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 104,
@@ -2986,7 +2986,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 108,
@@ -3004,7 +3004,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 3,
@@ -3022,7 +3022,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 272,
@@ -3040,7 +3040,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 282,
@@ -3058,7 +3058,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 101,
@@ -3076,7 +3076,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 189,
@@ -3094,7 +3094,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 98,
@@ -3112,7 +3112,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 181,
@@ -3130,7 +3130,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 540,
@@ -3148,7 +3148,7 @@
       ],
       "playCount": 29,
       "uniquePlayDays": 23,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 147,
@@ -3166,7 +3166,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 33
+      "typicalPlayTimeMinutes": 33
     },
     {
       "id": 269,
@@ -3184,7 +3184,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 233,
@@ -3202,7 +3202,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 570,
@@ -3220,7 +3220,7 @@
       ],
       "playCount": 8,
       "uniquePlayDays": 8,
-      "medianPlayTimeMinutes": 31.5
+      "typicalPlayTimeMinutes": 31.5
     },
     {
       "id": 569,
@@ -3238,7 +3238,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 155,
@@ -3256,7 +3256,7 @@
       ],
       "playCount": 30,
       "uniquePlayDays": 23,
-      "medianPlayTimeMinutes": 8.5
+      "typicalPlayTimeMinutes": 8.5
     },
     {
       "id": 492,
@@ -3274,7 +3274,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 224,
@@ -3292,7 +3292,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 30
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 135,
@@ -3310,7 +3310,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 33
+      "typicalPlayTimeMinutes": 33
     },
     {
       "id": 405,
@@ -3328,7 +3328,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 481,
@@ -3346,7 +3346,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 10,
@@ -3364,7 +3364,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 33.5
+      "typicalPlayTimeMinutes": 33.5
     },
     {
       "id": 208,
@@ -3382,7 +3382,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 360,
@@ -3400,7 +3400,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 99,
@@ -3418,7 +3418,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 106,
@@ -3436,7 +3436,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 112,
@@ -3454,7 +3454,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 109,
@@ -3472,7 +3472,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 81,
@@ -3490,7 +3490,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 30,
@@ -3508,7 +3508,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 281,
@@ -3526,7 +3526,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 174,
@@ -3544,7 +3544,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 15
+      "typicalPlayTimeMinutes": 15
     },
     {
       "id": 11,
@@ -3562,7 +3562,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 59,
@@ -3580,7 +3580,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 13,
@@ -3598,7 +3598,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 339,
@@ -3611,7 +3611,7 @@
       "copies": [],
       "playCount": 7,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 230,
@@ -3629,7 +3629,7 @@
       ],
       "playCount": 10,
       "uniquePlayDays": 6,
-      "medianPlayTimeMinutes": 24
+      "typicalPlayTimeMinutes": 24
     },
     {
       "id": 47,
@@ -3647,7 +3647,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 495,
@@ -3665,7 +3665,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 46.5
+      "typicalPlayTimeMinutes": 46.5
     },
     {
       "id": 14,
@@ -3683,7 +3683,7 @@
       ],
       "playCount": 24,
       "uniquePlayDays": 23,
-      "medianPlayTimeMinutes": 23
+      "typicalPlayTimeMinutes": 23
     },
     {
       "id": 471,
@@ -3701,7 +3701,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 57,
@@ -3719,7 +3719,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 544,
@@ -3737,7 +3737,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 51
+      "typicalPlayTimeMinutes": 51
     },
     {
       "id": 367,
@@ -3755,7 +3755,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 55.5
+      "typicalPlayTimeMinutes": 55.5
     },
     {
       "id": 368,
@@ -3773,7 +3773,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 35,
@@ -3791,7 +3791,7 @@
       ],
       "playCount": 9,
       "uniquePlayDays": 9,
-      "medianPlayTimeMinutes": 13
+      "typicalPlayTimeMinutes": 13
     },
     {
       "id": 525,
@@ -3809,7 +3809,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 523,
@@ -3827,7 +3827,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 273,
@@ -3845,7 +3845,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 274,
@@ -3863,7 +3863,7 @@
       ],
       "playCount": 10,
       "uniquePlayDays": 8,
-      "medianPlayTimeMinutes": 31
+      "typicalPlayTimeMinutes": 31
     },
     {
       "id": 309,
@@ -3881,7 +3881,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 40
+      "typicalPlayTimeMinutes": 40
     },
     {
       "id": 227,
@@ -3899,7 +3899,7 @@
       ],
       "playCount": 12,
       "uniquePlayDays": 12,
-      "medianPlayTimeMinutes": 127.5
+      "typicalPlayTimeMinutes": 127.5
     },
     {
       "id": 151,
@@ -3917,7 +3917,7 @@
       ],
       "playCount": 17,
       "uniquePlayDays": 17,
-      "medianPlayTimeMinutes": 46
+      "typicalPlayTimeMinutes": 46
     },
     {
       "id": 94,
@@ -3935,7 +3935,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 156,
@@ -3953,7 +3953,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 501,
@@ -3971,7 +3971,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 488,
@@ -3989,7 +3989,7 @@
       ],
       "playCount": 15,
       "uniquePlayDays": 15,
-      "medianPlayTimeMinutes": 75
+      "typicalPlayTimeMinutes": 75
     },
     {
       "id": 537,
@@ -4007,7 +4007,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 411,
@@ -4025,7 +4025,7 @@
       ],
       "playCount": 12,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 4.5
+      "typicalPlayTimeMinutes": 4.5
     },
     {
       "id": 328,
@@ -4038,7 +4038,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 55
+      "typicalPlayTimeMinutes": 55
     },
     {
       "id": 58,
@@ -4056,7 +4056,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 289,
@@ -4074,7 +4074,7 @@
       ],
       "playCount": 61,
       "uniquePlayDays": 41,
-      "medianPlayTimeMinutes": 11
+      "typicalPlayTimeMinutes": 11
     },
     {
       "id": 235,
@@ -4092,7 +4092,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 40,
@@ -4110,7 +4110,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 256,
@@ -4128,7 +4128,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 543,
@@ -4146,7 +4146,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 43
+      "typicalPlayTimeMinutes": 43
     },
     {
       "id": 209,
@@ -4164,7 +4164,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 61
+      "typicalPlayTimeMinutes": 61
     },
     {
       "id": 186,
@@ -4182,7 +4182,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 87
+      "typicalPlayTimeMinutes": 87
     },
     {
       "id": 303,
@@ -4200,7 +4200,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 77
+      "typicalPlayTimeMinutes": 77
     },
     {
       "id": 268,
@@ -4218,7 +4218,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 89
+      "typicalPlayTimeMinutes": 89
     },
     {
       "id": 301,
@@ -4236,7 +4236,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 302,
@@ -4254,7 +4254,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 454,
@@ -4272,7 +4272,7 @@
       ],
       "playCount": 8,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 19.5
+      "typicalPlayTimeMinutes": 19.5
     },
     {
       "id": 563,
@@ -4290,7 +4290,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 76,
@@ -4308,7 +4308,7 @@
       ],
       "playCount": 22,
       "uniquePlayDays": 15,
-      "medianPlayTimeMinutes": 12.5
+      "typicalPlayTimeMinutes": 12.5
     },
     {
       "id": 264,
@@ -4326,7 +4326,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 37
+      "typicalPlayTimeMinutes": 37
     },
     {
       "id": 438,
@@ -4344,7 +4344,7 @@
       ],
       "playCount": 9,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 327,
@@ -4357,7 +4357,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 404,
@@ -4375,7 +4375,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 15
+      "typicalPlayTimeMinutes": 15
     },
     {
       "id": 133,
@@ -4393,7 +4393,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 12
+      "typicalPlayTimeMinutes": 12
     },
     {
       "id": 200,
@@ -4411,7 +4411,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 73,
@@ -4429,7 +4429,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 219,
@@ -4447,7 +4447,7 @@
       ],
       "playCount": 17,
       "uniquePlayDays": 17,
-      "medianPlayTimeMinutes": 33
+      "typicalPlayTimeMinutes": 33
     },
     {
       "id": 469,
@@ -4465,7 +4465,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 417,
@@ -4483,7 +4483,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 419,
@@ -4501,7 +4501,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 416,
@@ -4519,7 +4519,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 418,
@@ -4537,7 +4537,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 467,
@@ -4555,7 +4555,7 @@
       ],
       "playCount": 13,
       "uniquePlayDays": 12,
-      "medianPlayTimeMinutes": 12
+      "typicalPlayTimeMinutes": 12
     },
     {
       "id": 494,
@@ -4573,7 +4573,7 @@
       ],
       "playCount": 21,
       "uniquePlayDays": 11,
-      "medianPlayTimeMinutes": 7
+      "typicalPlayTimeMinutes": 7
     },
     {
       "id": 510,
@@ -4591,7 +4591,7 @@
       ],
       "playCount": 9,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 436,
@@ -4604,7 +4604,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 437,
@@ -4622,7 +4622,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 126,
@@ -4640,7 +4640,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 30
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 257,
@@ -4658,7 +4658,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 128,
@@ -4676,7 +4676,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 57
+      "typicalPlayTimeMinutes": 57
     },
     {
       "id": 114,
@@ -4694,7 +4694,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 115,
@@ -4712,7 +4712,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 441,
@@ -4725,7 +4725,7 @@
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 3
+      "typicalPlayTimeMinutes": 3
     },
     {
       "id": 334,
@@ -4738,7 +4738,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 132
+      "typicalPlayTimeMinutes": 132
     },
     {
       "id": 335,
@@ -4751,7 +4751,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 28
+      "typicalPlayTimeMinutes": 28
     },
     {
       "id": 63,
@@ -4769,7 +4769,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 41,
@@ -4787,7 +4787,7 @@
       ],
       "playCount": 53,
       "uniquePlayDays": 50,
-      "medianPlayTimeMinutes": 26
+      "typicalPlayTimeMinutes": 26
     },
     {
       "id": 69,
@@ -4805,7 +4805,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 14
+      "typicalPlayTimeMinutes": 14
     },
     {
       "id": 332,
@@ -4818,7 +4818,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 15
+      "typicalPlayTimeMinutes": 15
     },
     {
       "id": 457,
@@ -4836,7 +4836,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 70
+      "typicalPlayTimeMinutes": 70
     },
     {
       "id": 482,
@@ -4854,7 +4854,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 552,
@@ -4872,7 +4872,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 484,
@@ -4890,7 +4890,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 483,
@@ -4908,7 +4908,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 139,
@@ -4926,7 +4926,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 556,
@@ -4944,7 +4944,7 @@
       ],
       "playCount": 13,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 23
+      "typicalPlayTimeMinutes": 23
     },
     {
       "id": 27,
@@ -4962,7 +4962,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 240,
@@ -4980,7 +4980,7 @@
       ],
       "playCount": 7,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 28
+      "typicalPlayTimeMinutes": 28
     },
     {
       "id": 491,
@@ -4998,7 +4998,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 20.5
+      "typicalPlayTimeMinutes": 20.5
     },
     {
       "id": 178,
@@ -5016,7 +5016,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 49
+      "typicalPlayTimeMinutes": 49
     },
     {
       "id": 306,
@@ -5034,7 +5034,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 60,
@@ -5052,7 +5052,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 154,
@@ -5070,7 +5070,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 19
+      "typicalPlayTimeMinutes": 19
     },
     {
       "id": 184,
@@ -5088,7 +5088,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 83
+      "typicalPlayTimeMinutes": 83
     },
     {
       "id": 526,
@@ -5106,7 +5106,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 86
+      "typicalPlayTimeMinutes": 86
     },
     {
       "id": 542,
@@ -5124,7 +5124,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 520,
@@ -5142,7 +5142,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 521,
@@ -5160,7 +5160,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 562,
@@ -5178,7 +5178,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 121
+      "typicalPlayTimeMinutes": 121
     },
     {
       "id": 66,
@@ -5196,7 +5196,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 31,
@@ -5214,7 +5214,7 @@
       ],
       "playCount": 16,
       "uniquePlayDays": 16,
-      "medianPlayTimeMinutes": 43
+      "typicalPlayTimeMinutes": 43
     },
     {
       "id": 23,
@@ -5232,7 +5232,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 62
+      "typicalPlayTimeMinutes": 62
     },
     {
       "id": 5,
@@ -5250,7 +5250,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 242,
@@ -5268,7 +5268,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 61,
@@ -5286,7 +5286,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 54,
@@ -5304,7 +5304,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 185,
@@ -5322,7 +5322,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 188,
@@ -5340,7 +5340,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 45,
@@ -5358,7 +5358,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 68,
@@ -5376,7 +5376,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 6,
@@ -5394,7 +5394,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 477,
@@ -5416,7 +5416,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 90,
@@ -5434,7 +5434,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 146,
@@ -5452,7 +5452,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 198,
@@ -5470,7 +5470,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 229,
@@ -5488,7 +5488,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 461,
@@ -5506,7 +5506,7 @@
       ],
       "playCount": 7,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 54
+      "typicalPlayTimeMinutes": 54
     },
     {
       "id": 226,
@@ -5524,7 +5524,7 @@
       ],
       "playCount": 46,
       "uniquePlayDays": 25,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 70,
@@ -5542,7 +5542,7 @@
       ],
       "playCount": 20,
       "uniquePlayDays": 10,
-      "medianPlayTimeMinutes": 8
+      "typicalPlayTimeMinutes": 8
     },
     {
       "id": 430,
@@ -5560,7 +5560,7 @@
       ],
       "playCount": 13,
       "uniquePlayDays": 8,
-      "medianPlayTimeMinutes": 6
+      "typicalPlayTimeMinutes": 6
     },
     {
       "id": 38,
@@ -5578,7 +5578,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 15.5
+      "typicalPlayTimeMinutes": 15.5
     },
     {
       "id": 51,
@@ -5596,7 +5596,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 62,
@@ -5614,7 +5614,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 498,
@@ -5632,7 +5632,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 23
+      "typicalPlayTimeMinutes": 23
     },
     {
       "id": 210,
@@ -5650,7 +5650,7 @@
       ],
       "playCount": 9,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 4
+      "typicalPlayTimeMinutes": 4
     },
     {
       "id": 245,
@@ -5668,7 +5668,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 97,
@@ -5686,7 +5686,7 @@
       ],
       "playCount": 17,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 4
+      "typicalPlayTimeMinutes": 4
     },
     {
       "id": 412,
@@ -5704,7 +5704,7 @@
       ],
       "playCount": 10,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 62
+      "typicalPlayTimeMinutes": 62
     },
     {
       "id": 500,
@@ -5722,7 +5722,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 493,
@@ -5740,7 +5740,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 63
+      "typicalPlayTimeMinutes": 63
     },
     {
       "id": 449,
@@ -5758,7 +5758,7 @@
       ],
       "playCount": 6,
       "uniquePlayDays": 6,
-      "medianPlayTimeMinutes": 35.5
+      "typicalPlayTimeMinutes": 35.5
     },
     {
       "id": 315,
@@ -5771,7 +5771,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 431,
@@ -5793,7 +5793,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 46.5
+      "typicalPlayTimeMinutes": 46.5
     },
     {
       "id": 458,
@@ -5806,7 +5806,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 61
+      "typicalPlayTimeMinutes": 61
     },
     {
       "id": 426,
@@ -5824,7 +5824,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 92,
@@ -5842,7 +5842,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 313,
@@ -5855,7 +5855,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 119
+      "typicalPlayTimeMinutes": 119
     },
     {
       "id": 53,
@@ -5873,7 +5873,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 285,
@@ -5891,7 +5891,7 @@
       ],
       "playCount": 14,
       "uniquePlayDays": 13,
-      "medianPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 261,
@@ -5909,7 +5909,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 347,
@@ -5922,7 +5922,7 @@
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 114
+      "typicalPlayTimeMinutes": 114
     },
     {
       "id": 478,
@@ -5935,7 +5935,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 479,
@@ -5948,7 +5948,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 131,
@@ -5966,7 +5966,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 150,
@@ -5984,7 +5984,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 486,
@@ -6002,7 +6002,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 41
+      "typicalPlayTimeMinutes": 41
     },
     {
       "id": 487,
@@ -6020,7 +6020,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 291,
@@ -6038,7 +6038,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 78
+      "typicalPlayTimeMinutes": 78
     },
     {
       "id": 107,
@@ -6056,7 +6056,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 111
+      "typicalPlayTimeMinutes": 111
     },
     {
       "id": 118,
@@ -6074,7 +6074,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 385,
@@ -6092,7 +6092,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 399,
@@ -6110,7 +6110,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 397,
@@ -6128,7 +6128,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 394,
@@ -6146,7 +6146,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 375,
@@ -6164,7 +6164,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 380,
@@ -6182,7 +6182,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 382,
@@ -6200,7 +6200,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 362,
@@ -6218,7 +6218,7 @@
       ],
       "playCount": 7,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 65
+      "typicalPlayTimeMinutes": 65
     },
     {
       "id": 384,
@@ -6236,7 +6236,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 387,
@@ -6254,7 +6254,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 393,
@@ -6272,7 +6272,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 373,
@@ -6290,7 +6290,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 372,
@@ -6308,7 +6308,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 396,
@@ -6326,7 +6326,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 383,
@@ -6344,7 +6344,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 376,
@@ -6362,7 +6362,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 388,
@@ -6380,7 +6380,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 371,
@@ -6398,7 +6398,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 374,
@@ -6416,7 +6416,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 377,
@@ -6434,7 +6434,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 524,
@@ -6452,7 +6452,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 400,
@@ -6470,7 +6470,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 378,
@@ -6488,7 +6488,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 398,
@@ -6506,7 +6506,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 370,
@@ -6524,7 +6524,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 395,
@@ -6542,7 +6542,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 386,
@@ -6560,7 +6560,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 391,
@@ -6578,7 +6578,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 390,
@@ -6596,7 +6596,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 401,
@@ -6614,7 +6614,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 381,
@@ -6632,7 +6632,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 392,
@@ -6650,7 +6650,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 379,
@@ -6668,7 +6668,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 369,
@@ -6686,7 +6686,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 389,
@@ -6704,7 +6704,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 340,
@@ -6717,7 +6717,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 60
+      "typicalPlayTimeMinutes": 60
     },
     {
       "id": 344,
@@ -6730,7 +6730,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 43,
@@ -6748,7 +6748,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 2,
@@ -6766,7 +6766,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 51.5
+      "typicalPlayTimeMinutes": 51.5
     },
     {
       "id": 535,
@@ -6784,7 +6784,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 33.5
+      "typicalPlayTimeMinutes": 33.5
     },
     {
       "id": 165,
@@ -6802,7 +6802,7 @@
       ],
       "playCount": 6,
       "uniquePlayDays": 6,
-      "medianPlayTimeMinutes": 32
+      "typicalPlayTimeMinutes": 32
     },
     {
       "id": 459,
@@ -6815,7 +6815,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 15
+      "typicalPlayTimeMinutes": 15
     },
     {
       "id": 250,
@@ -6833,7 +6833,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 56
+      "typicalPlayTimeMinutes": 56
     },
     {
       "id": 406,
@@ -6851,7 +6851,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 36
+      "typicalPlayTimeMinutes": 36
     },
     {
       "id": 331,
@@ -6864,7 +6864,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 130
+      "typicalPlayTimeMinutes": 130
     },
     {
       "id": 410,
@@ -6882,7 +6882,7 @@
       ],
       "playCount": 10,
       "uniquePlayDays": 10,
-      "medianPlayTimeMinutes": 163
+      "typicalPlayTimeMinutes": 163
     },
     {
       "id": 422,
@@ -6900,7 +6900,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 424,
@@ -6918,7 +6918,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 425,
@@ -6936,7 +6936,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 427,
@@ -6954,7 +6954,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 176,
@@ -6972,7 +6972,7 @@
       ],
       "playCount": 6,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 13.5
+      "typicalPlayTimeMinutes": 13.5
     },
     {
       "id": 409,
@@ -6985,7 +6985,7 @@
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 33
+      "typicalPlayTimeMinutes": 33
     },
     {
       "id": 236,
@@ -7003,7 +7003,7 @@
       ],
       "playCount": 29,
       "uniquePlayDays": 25,
-      "medianPlayTimeMinutes": 53
+      "typicalPlayTimeMinutes": 53
     },
     {
       "id": 432,
@@ -7021,7 +7021,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 203,
@@ -7039,7 +7039,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 480,
@@ -7057,7 +7057,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 46.5
+      "typicalPlayTimeMinutes": 46.5
     },
     {
       "id": 16,
@@ -7075,7 +7075,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 8,
@@ -7093,7 +7093,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 321,
@@ -7106,7 +7106,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 11
+      "typicalPlayTimeMinutes": 11
     },
     {
       "id": 337,
@@ -7124,7 +7124,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 17
+      "typicalPlayTimeMinutes": 17
     },
     {
       "id": 338,
@@ -7137,7 +7137,7 @@
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 508,
@@ -7155,7 +7155,7 @@
       ],
       "playCount": 29,
       "uniquePlayDays": 24,
-      "medianPlayTimeMinutes": 77
+      "typicalPlayTimeMinutes": 77
     },
     {
       "id": 567,
@@ -7173,7 +7173,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 161
+      "typicalPlayTimeMinutes": 161
     },
     {
       "id": 565,
@@ -7191,7 +7191,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 566,
@@ -7209,7 +7209,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 364,
@@ -7227,7 +7227,7 @@
       ],
       "playCount": 16,
       "uniquePlayDays": 16,
-      "medianPlayTimeMinutes": 49.5
+      "typicalPlayTimeMinutes": 49.5
     },
     {
       "id": 440,
@@ -7245,7 +7245,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 158,
@@ -7263,7 +7263,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 36.5
+      "typicalPlayTimeMinutes": 36.5
     },
     {
       "id": 22,
@@ -7281,7 +7281,7 @@
       ],
       "playCount": 6,
       "uniquePlayDays": 6,
-      "medianPlayTimeMinutes": 38
+      "typicalPlayTimeMinutes": 38
     },
     {
       "id": 299,
@@ -7299,7 +7299,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 433,
@@ -7317,7 +7317,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 10
+      "typicalPlayTimeMinutes": 10
     },
     {
       "id": 403,
@@ -7330,7 +7330,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 28
+      "typicalPlayTimeMinutes": 28
     },
     {
       "id": 509,
@@ -7348,7 +7348,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 84.5
+      "typicalPlayTimeMinutes": 84.5
     },
     {
       "id": 538,
@@ -7366,7 +7366,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 512,
@@ -7384,7 +7384,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 260,
@@ -7402,7 +7402,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 120,
@@ -7420,7 +7420,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 129,
@@ -7438,7 +7438,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 60
+      "typicalPlayTimeMinutes": 60
     },
     {
       "id": 42,
@@ -7456,7 +7456,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 113,
@@ -7474,7 +7474,7 @@
       ],
       "playCount": 11,
       "uniquePlayDays": 11,
-      "medianPlayTimeMinutes": 23
+      "typicalPlayTimeMinutes": 23
     },
     {
       "id": 130,
@@ -7492,7 +7492,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 37
+      "typicalPlayTimeMinutes": 37
     },
     {
       "id": 145,
@@ -7510,7 +7510,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 42
+      "typicalPlayTimeMinutes": 42
     },
     {
       "id": 239,
@@ -7528,7 +7528,7 @@
       ],
       "playCount": 35,
       "uniquePlayDays": 35,
-      "medianPlayTimeMinutes": 51
+      "typicalPlayTimeMinutes": 51
     },
     {
       "id": 518,
@@ -7546,7 +7546,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 357,
@@ -7564,7 +7564,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 56,
@@ -7582,7 +7582,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 103,
@@ -7600,7 +7600,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 363,
@@ -7618,7 +7618,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 9
+      "typicalPlayTimeMinutes": 9
     },
     {
       "id": 222,
@@ -7636,7 +7636,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 28
+      "typicalPlayTimeMinutes": 28
     },
     {
       "id": 434,
@@ -7649,7 +7649,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 7
+      "typicalPlayTimeMinutes": 7
     },
     {
       "id": 206,
@@ -7667,7 +7667,7 @@
       ],
       "playCount": 10,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 38
+      "typicalPlayTimeMinutes": 38
     },
     {
       "id": 517,
@@ -7685,7 +7685,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 225,
@@ -7703,7 +7703,7 @@
       ],
       "playCount": 12,
       "uniquePlayDays": 12,
-      "medianPlayTimeMinutes": 46
+      "typicalPlayTimeMinutes": 46
     },
     {
       "id": 211,
@@ -7721,7 +7721,7 @@
       ],
       "playCount": 8,
       "uniquePlayDays": 8,
-      "medianPlayTimeMinutes": 24.5
+      "typicalPlayTimeMinutes": 24.5
     },
     {
       "id": 519,
@@ -7739,7 +7739,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 503,
@@ -7757,7 +7757,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 54.5
+      "typicalPlayTimeMinutes": 54.5
     },
     {
       "id": 175,
@@ -7775,7 +7775,7 @@
       ],
       "playCount": 11,
       "uniquePlayDays": 11,
-      "medianPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 201,
@@ -7793,7 +7793,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 202,
@@ -7811,7 +7811,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 213,
@@ -7829,7 +7829,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 28,
@@ -7847,7 +7847,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 207,
@@ -7865,7 +7865,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 14
+      "typicalPlayTimeMinutes": 14
     },
     {
       "id": 305,
@@ -7883,7 +7883,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 33
+      "typicalPlayTimeMinutes": 33
     },
     {
       "id": 555,
@@ -7901,7 +7901,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 22
+      "typicalPlayTimeMinutes": 22
     },
     {
       "id": 571,
@@ -7919,7 +7919,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 496,
@@ -7937,7 +7937,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 319,
@@ -7950,7 +7950,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 85,
@@ -7968,7 +7968,7 @@
       ],
       "playCount": 13,
       "uniquePlayDays": 13,
-      "medianPlayTimeMinutes": 98
+      "typicalPlayTimeMinutes": 98
     },
     {
       "id": 460,
@@ -7981,7 +7981,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 359,
@@ -7994,7 +7994,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 196,
@@ -8012,7 +8012,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 539,
@@ -8025,7 +8025,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 34,
@@ -8043,7 +8043,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 221,
@@ -8061,7 +8061,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 121,
@@ -8079,7 +8079,7 @@
       ],
       "playCount": 25,
       "uniquePlayDays": 22,
-      "medianPlayTimeMinutes": 36
+      "typicalPlayTimeMinutes": 36
     },
     {
       "id": 423,
@@ -8097,7 +8097,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 24,
@@ -8115,7 +8115,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 354,
@@ -8128,7 +8128,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 140,
@@ -8146,7 +8146,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 21
+      "typicalPlayTimeMinutes": 21
     },
     {
       "id": 217,
@@ -8164,7 +8164,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 164,
@@ -8182,7 +8182,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 560,
@@ -8195,7 +8195,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 153,
@@ -8213,7 +8213,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 561,
@@ -8226,7 +8226,7 @@
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 251,
@@ -8244,7 +8244,7 @@
       ],
       "playCount": 111,
       "uniquePlayDays": 37,
-      "medianPlayTimeMinutes": 7
+      "typicalPlayTimeMinutes": 7
     },
     {
       "id": 25,
@@ -8262,7 +8262,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 17
+      "typicalPlayTimeMinutes": 17
     },
     {
       "id": 497,
@@ -8280,7 +8280,7 @@
       ],
       "playCount": 6,
       "uniquePlayDays": 6,
-      "medianPlayTimeMinutes": 23.5
+      "typicalPlayTimeMinutes": 23.5
     },
     {
       "id": 317,
@@ -8293,7 +8293,7 @@
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 298,
@@ -8311,7 +8311,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 192,
@@ -8329,7 +8329,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 38
+      "typicalPlayTimeMinutes": 38
     },
     {
       "id": 91,
@@ -8347,7 +8347,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 190,
@@ -8365,7 +8365,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 316,
@@ -8378,7 +8378,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 74
+      "typicalPlayTimeMinutes": 74
     },
     {
       "id": 324,
@@ -8391,7 +8391,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 14
+      "typicalPlayTimeMinutes": 14
     },
     {
       "id": 75,
@@ -8409,7 +8409,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 18,
@@ -8427,7 +8427,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 79,
@@ -8445,7 +8445,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 254,
@@ -8463,7 +8463,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 75
+      "typicalPlayTimeMinutes": 75
     },
     {
       "id": 9,
@@ -8481,7 +8481,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 87,
@@ -8499,7 +8499,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 132,
@@ -8517,7 +8517,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 149,
@@ -8535,7 +8535,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 86,
@@ -8553,7 +8553,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 358,
@@ -8571,7 +8571,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 50
+      "typicalPlayTimeMinutes": 50
     },
     {
       "id": 536,
@@ -8589,7 +8589,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 53
+      "typicalPlayTimeMinutes": 53
     },
     {
       "id": 320,
@@ -8602,7 +8602,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 22
+      "typicalPlayTimeMinutes": 22
     },
     {
       "id": 65,
@@ -8620,7 +8620,7 @@
       ],
       "playCount": 32,
       "uniquePlayDays": 16,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 50,
@@ -8638,7 +8638,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 241,
@@ -8656,7 +8656,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 558,
@@ -8674,7 +8674,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 259,
@@ -8692,7 +8692,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 47
+      "typicalPlayTimeMinutes": 47
     },
     {
       "id": 345,
@@ -8705,7 +8705,7 @@
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 125,
@@ -8723,7 +8723,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 548,
@@ -8741,7 +8741,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 549,
@@ -8759,7 +8759,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 216,
@@ -8777,7 +8777,7 @@
       ],
       "playCount": 18,
       "uniquePlayDays": 16,
-      "medianPlayTimeMinutes": 18
+      "typicalPlayTimeMinutes": 18
     },
     {
       "id": 167,
@@ -8795,7 +8795,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 516,
@@ -8808,7 +8808,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 60
+      "typicalPlayTimeMinutes": 60
     },
     {
       "id": 312,
@@ -8821,7 +8821,7 @@
       "copies": [],
       "playCount": 11,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 125
+      "typicalPlayTimeMinutes": 125
     },
     {
       "id": 346,
@@ -8834,7 +8834,7 @@
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 13
+      "typicalPlayTimeMinutes": 13
     },
     {
       "id": 172,
@@ -8852,7 +8852,7 @@
       ],
       "playCount": 26,
       "uniquePlayDays": 11,
-      "medianPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 330,
@@ -8865,7 +8865,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 38
+      "typicalPlayTimeMinutes": 38
     },
     {
       "id": 361,
@@ -8883,7 +8883,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 534,
@@ -8901,7 +8901,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 13
+      "typicalPlayTimeMinutes": 13
     },
     {
       "id": 564,
@@ -8919,7 +8919,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 238,
@@ -8937,7 +8937,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 13.5
+      "typicalPlayTimeMinutes": 13.5
     },
     {
       "id": 573,
@@ -8955,7 +8955,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 576,
@@ -8973,7 +8973,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 127,
@@ -8991,7 +8991,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 271,
@@ -9009,7 +9009,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 60
+      "typicalPlayTimeMinutes": 60
     },
     {
       "id": 166,
@@ -9027,7 +9027,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 63
+      "typicalPlayTimeMinutes": 63
     },
     {
       "id": 574,
@@ -9045,7 +9045,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 575,
@@ -9063,7 +9063,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 231,
@@ -9081,7 +9081,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 90
+      "typicalPlayTimeMinutes": 90
     },
     {
       "id": 205,
@@ -9099,7 +9099,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 1,
@@ -9117,7 +9117,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 85
+      "typicalPlayTimeMinutes": 85
     },
     {
       "id": 356,
@@ -9135,7 +9135,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 577,
@@ -9153,7 +9153,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 122,
@@ -9171,7 +9171,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 77
+      "typicalPlayTimeMinutes": 77
     },
     {
       "id": 572,
@@ -9189,7 +9189,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 29,
@@ -9207,7 +9207,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 341,
@@ -9229,7 +9229,7 @@
       ],
       "playCount": 7,
       "uniquePlayDays": 5,
-      "medianPlayTimeMinutes": 8
+      "typicalPlayTimeMinutes": 8
     },
     {
       "id": 429,
@@ -9247,7 +9247,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 11
+      "typicalPlayTimeMinutes": 11
     },
     {
       "id": 428,
@@ -9265,7 +9265,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 4.5
+      "typicalPlayTimeMinutes": 4.5
     },
     {
       "id": 333,
@@ -9283,7 +9283,7 @@
       ],
       "playCount": 5,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 343,
@@ -9296,7 +9296,7 @@
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 90
+      "typicalPlayTimeMinutes": 90
     },
     {
       "id": 19,
@@ -9314,7 +9314,7 @@
       ],
       "playCount": 7,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 71
+      "typicalPlayTimeMinutes": 71
     },
     {
       "id": 300,
@@ -9332,7 +9332,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 197,
@@ -9350,7 +9350,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 92
+      "typicalPlayTimeMinutes": 92
     },
     {
       "id": 67,
@@ -9368,7 +9368,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 163,
@@ -9386,7 +9386,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 191,
@@ -9404,7 +9404,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 415,
@@ -9422,7 +9422,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 96,
@@ -9440,7 +9440,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 26
+      "typicalPlayTimeMinutes": 26
     },
     {
       "id": 243,
@@ -9458,7 +9458,7 @@
       ],
       "playCount": 16,
       "uniquePlayDays": 15,
-      "medianPlayTimeMinutes": 43.5
+      "typicalPlayTimeMinutes": 43.5
     },
     {
       "id": 463,
@@ -9476,7 +9476,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 408,
@@ -9494,7 +9494,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 407,
@@ -9512,7 +9512,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 464,
@@ -9530,7 +9530,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 456,
@@ -9548,7 +9548,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 81
+      "typicalPlayTimeMinutes": 81
     },
     {
       "id": 180,
@@ -9566,7 +9566,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 43
+      "typicalPlayTimeMinutes": 43
     },
     {
       "id": 246,
@@ -9584,7 +9584,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 183,
@@ -9602,7 +9602,7 @@
       ],
       "playCount": 10,
       "uniquePlayDays": 8,
-      "medianPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 366,
@@ -9620,7 +9620,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 21,
@@ -9638,7 +9638,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 336,
@@ -9656,7 +9656,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 31
+      "typicalPlayTimeMinutes": 31
     },
     {
       "id": 489,
@@ -9674,7 +9674,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 122
+      "typicalPlayTimeMinutes": 122
     },
     {
       "id": 553,
@@ -9692,7 +9692,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 502,
@@ -9710,7 +9710,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 234,
@@ -9728,7 +9728,7 @@
       ],
       "playCount": 8,
       "uniquePlayDays": 8,
-      "medianPlayTimeMinutes": 56
+      "typicalPlayTimeMinutes": 56
     },
     {
       "id": 102,
@@ -9746,7 +9746,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 435,
@@ -9764,7 +9764,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 23
+      "typicalPlayTimeMinutes": 23
     },
     {
       "id": 249,
@@ -9782,7 +9782,7 @@
       ],
       "playCount": 6,
       "uniquePlayDays": 6,
-      "medianPlayTimeMinutes": 58.5
+      "typicalPlayTimeMinutes": 58.5
     },
     {
       "id": 472,
@@ -9800,7 +9800,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 505,
@@ -9818,7 +9818,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 474,
@@ -9836,7 +9836,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 506,
@@ -9854,7 +9854,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 171,
@@ -9872,7 +9872,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 473,
@@ -9890,7 +9890,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 152,
@@ -9908,7 +9908,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 445,
@@ -9926,7 +9926,7 @@
       ],
       "playCount": 10,
       "uniquePlayDays": 9,
-      "medianPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 16
     },
     {
       "id": 443,
@@ -9944,7 +9944,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 442,
@@ -9962,7 +9962,7 @@
       ],
       "playCount": 1,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 5
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 451,
@@ -9980,7 +9980,7 @@
       ],
       "playCount": 3,
       "uniquePlayDays": 3,
-      "medianPlayTimeMinutes": 41
+      "typicalPlayTimeMinutes": 41
     },
     {
       "id": 448,
@@ -9998,7 +9998,7 @@
       ],
       "playCount": 4,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 50
+      "typicalPlayTimeMinutes": 50
     },
     {
       "id": 444,
@@ -10016,7 +10016,7 @@
       ],
       "playCount": 9,
       "uniquePlayDays": 4,
-      "medianPlayTimeMinutes": 15
+      "typicalPlayTimeMinutes": 15
     },
     {
       "id": 446,
@@ -10034,7 +10034,7 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "medianPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 450,
@@ -10052,7 +10052,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
-      "medianPlayTimeMinutes": 88.5
+      "typicalPlayTimeMinutes": 88.5
     },
     {
       "id": 447,
@@ -10070,7 +10070,7 @@
       ],
       "playCount": 9,
       "uniquePlayDays": 7,
-      "medianPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 453,
@@ -10088,7 +10088,7 @@
       ],
       "playCount": 2,
       "uniquePlayDays": 1,
-      "medianPlayTimeMinutes": 9
+      "typicalPlayTimeMinutes": 9
     }
   ],
   "plays": [
@@ -21109,5 +21109,5 @@
       "durationEstimated": true
     }
   ],
-  "generatedAt": "2025-11-08T20:23:00.948Z"
+  "generatedAt": "2025-11-09T02:39:03.093Z"
 }
