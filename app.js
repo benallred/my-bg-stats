@@ -543,15 +543,7 @@ function showDetailSection(statType) {
 
     // Calculate scroll position to show detail section optimally
     requestAnimationFrame(() => {
-        // First, scroll to top to reset header to full height
-        const wasScrolled = window.pageYOffset > 0;
-
-        if (wasScrolled) {
-            // Scroll to top instantly to get full header height
-            window.scrollTo({ top: 0, behavior: 'instant' });
-        }
-
-        // Now get the position with full header
+        // Wait another frame to ensure layout is complete
         requestAnimationFrame(() => {
             const detailSectionRect = detailSection.getBoundingClientRect();
             const sectionStyles = getComputedStyle(detailSection);
@@ -562,13 +554,15 @@ function showDetailSection(statType) {
             const targetBottom = detailSectionRect.bottom - marginBottom;
             const viewportHeight = window.innerHeight;
 
-            // If bottom is already visible, don't scroll
-            if (targetBottom <= viewportHeight) {
+            // Calculate how much to scroll to align bottom with viewport bottom
+            const scrollAmount = targetBottom - viewportHeight;
+
+            // Only skip scrolling if we're already at the exact position
+            if (Math.abs(scrollAmount) < 1) {
                 return;
             }
 
-            // Otherwise, scroll just enough to bring the bottom into view
-            const scrollAmount = targetBottom - viewportHeight;
+            // Scroll to position (can be positive to scroll down or negative to scroll up)
             window.scrollTo({
                 top: window.pageYOffset + scrollAmount,
                 behavior: 'smooth'
