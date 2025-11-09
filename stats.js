@@ -506,7 +506,7 @@ function getTotalPlayTime(plays, year = null) {
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
  * @param {number|null} year - Optional year filter
- * @returns {Array} Array of {game, totalMinutes, totalHours, playCount, actualCount, estimatedCount} sorted by totalMinutes descending
+ * @returns {Array} Array of {game, totalMinutes, totalHours, playCount, actualCount, estimatedCount, minMinutes, maxMinutes, medianMinutes, avgMinutes} sorted by totalMinutes descending. Min/max/median/avg are only calculated from plays with duration data.
  */
 function getPlayTimeByGame(games, plays, year = null) {
   const gameTimeMap = new Map();
@@ -519,7 +519,8 @@ function getPlayTimeByGame(games, plays, year = null) {
         totalMinutes: 0,
         playCount: 0,
         actualCount: 0,
-        estimatedCount: 0
+        estimatedCount: 0,
+        durations: []
       });
     }
 
@@ -528,6 +529,7 @@ function getPlayTimeByGame(games, plays, year = null) {
 
     if (play.durationMin > 0) {
       gameTime.totalMinutes += play.durationMin;
+      gameTime.durations.push(play.durationMin);
       if (play.durationEstimated) {
         gameTime.estimatedCount++;
       } else {
@@ -541,13 +543,38 @@ function getPlayTimeByGame(games, plays, year = null) {
   gameTimeMap.forEach((timeData, gameId) => {
     const game = games.find(g => g.id === gameId);
     if (game) {
+      // Calculate min, max, median, and average
+      let minMinutes = null;
+      let maxMinutes = null;
+      let medianMinutes = null;
+      let avgMinutes = null;
+
+      if (timeData.durations.length > 0) {
+        minMinutes = Math.min(...timeData.durations);
+        maxMinutes = Math.max(...timeData.durations);
+        avgMinutes = timeData.totalMinutes / timeData.durations.length;
+
+        // Calculate median
+        const sorted = [...timeData.durations].sort((a, b) => a - b);
+        const mid = Math.floor(sorted.length / 2);
+        if (sorted.length % 2 === 0) {
+          medianMinutes = (sorted[mid - 1] + sorted[mid]) / 2;
+        } else {
+          medianMinutes = sorted[mid];
+        }
+      }
+
       breakdown.push({
         game,
         totalMinutes: timeData.totalMinutes,
         totalHours: timeData.totalMinutes / 60,
         playCount: timeData.playCount,
         actualCount: timeData.actualCount,
-        estimatedCount: timeData.estimatedCount
+        estimatedCount: timeData.estimatedCount,
+        minMinutes,
+        maxMinutes,
+        medianMinutes,
+        avgMinutes
       });
     }
   });
