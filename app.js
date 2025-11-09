@@ -52,6 +52,9 @@ let currentlyOpenDiagnosticType = null;
 let yearDataCache = null;
 let isLoadingFromPermalink = false;
 
+// Cache for calculated statistics (refreshed when year changes)
+let statsCache = null;
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -190,6 +193,20 @@ function updateSectionVisibility() {
  * Update all statistics on the page
  */
 function updateAllStats() {
+    // Calculate all stats once and cache them
+    statsCache = {
+        traditionalHIndex: calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear),
+        playSessionHIndex: calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear),
+        totalBGGEntries: getTotalBGGEntries(gameData.games, currentYear),
+        totalGamesOwned: getTotalGamesOwned(gameData.games, currentYear),
+        expansionsData: getTotalExpansions(gameData.games, currentYear),
+        gamesPlayedData: getTotalGamesPlayed(gameData.games, gameData.plays, currentYear),
+        playTimeData: getTotalPlayTime(gameData.plays, currentYear),
+        milestones: getPlayMilestones(gameData.games, gameData.plays, currentYear),
+        unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
+        neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear)
+    };
+
     updateHIndexStats();
     updateCollectionStats();
     updatePlayStats();
@@ -202,12 +219,10 @@ function updateAllStats() {
  */
 function updateHIndexStats() {
     // Traditional H-Index
-    const traditionalHIndex = calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear);
-    document.querySelector('#traditional-h-index .stat-value').textContent = traditionalHIndex;
+    document.querySelector('#traditional-h-index .stat-value').textContent = statsCache.traditionalHIndex;
 
     // Play Session H-Index
-    const playSessionHIndex = calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear);
-    document.querySelector('#play-session-h-index .stat-value').textContent = playSessionHIndex;
+    document.querySelector('#play-session-h-index .stat-value').textContent = statsCache.playSessionHIndex;
 }
 
 /**
@@ -230,18 +245,15 @@ function updateCollectionStats() {
     }
 
     // Total BGG Entries
-    const totalBGGEntries = getTotalBGGEntries(gameData.games, currentYear);
-    document.querySelector('#total-bgg-entries .stat-value').textContent = totalBGGEntries;
+    document.querySelector('#total-bgg-entries .stat-value').textContent = statsCache.totalBGGEntries;
 
     // Total Games Owned
-    const totalGamesOwned = getTotalGamesOwned(gameData.games, currentYear);
-    document.querySelector('#total-games-owned .stat-value').textContent = totalGamesOwned;
+    document.querySelector('#total-games-owned .stat-value').textContent = statsCache.totalGamesOwned;
 
     // Total Expansions
-    const expansionsData = getTotalExpansions(gameData.games, currentYear);
-    document.querySelector('#total-expansions .stat-value').textContent = expansionsData.total;
-    document.getElementById('expandalones-count').textContent = expansionsData.expandalones;
-    document.getElementById('expansion-only-count').textContent = expansionsData.expansionOnly;
+    document.querySelector('#total-expansions .stat-value').textContent = statsCache.expansionsData.total;
+    document.getElementById('expandalones-count').textContent = statsCache.expansionsData.expandalones;
+    document.getElementById('expansion-only-count').textContent = statsCache.expansionsData.expansionOnly;
 }
 
 /**
@@ -257,14 +269,13 @@ function updatePlayStats() {
     document.querySelector('#total-days-played .stat-value').textContent = totalDays.toLocaleString();
 
     // Total Games Played
-    const gamesPlayedData = getTotalGamesPlayed(gameData.games, gameData.plays, currentYear);
-    document.querySelector('#total-games-played .stat-value').textContent = gamesPlayedData.total;
+    document.querySelector('#total-games-played .stat-value').textContent = statsCache.gamesPlayedData.total;
 
     // Show/hide new-to-me substat
     const newToMeContainer = document.getElementById('new-to-me-container');
-    if (currentYear && gamesPlayedData.newToMe !== null) {
+    if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
         newToMeContainer.style.display = 'block';
-        document.getElementById('new-to-me-count').textContent = gamesPlayedData.newToMe;
+        document.getElementById('new-to-me-count').textContent = statsCache.gamesPlayedData.newToMe;
     } else {
         newToMeContainer.style.display = 'none';
     }
@@ -277,12 +288,11 @@ function updatePlayStats() {
  * Update play time statistics
  */
 function updatePlayTimeStats() {
-    const playTimeData = getTotalPlayTime(gameData.plays, currentYear);
-    const hours = playTimeData.totalHours.toFixed(1);
-    const days = (playTimeData.totalHours / 24).toFixed(1);
+    const hours = statsCache.playTimeData.totalHours.toFixed(1);
+    const days = (statsCache.playTimeData.totalHours / 24).toFixed(1);
 
     // Add tilde prefix if any durations are estimated
-    const prefix = playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
+    const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
     document.querySelector('#total-play-time .stat-value').textContent = `${prefix}${hours} hours`;
     document.getElementById('play-time-days').textContent = `${prefix}${days}`;
 }
@@ -291,12 +301,10 @@ function updatePlayTimeStats() {
  * Update milestone statistics
  */
 function updateMilestoneStats() {
-    const milestones = getPlayMilestones(gameData.games, gameData.plays, currentYear);
-
-    document.querySelector('#fives .stat-value').textContent = milestones.fives.length;
-    document.querySelector('#dimes .stat-value').textContent = milestones.dimes.length;
-    document.querySelector('#quarters .stat-value').textContent = milestones.quarters.length;
-    document.querySelector('#centuries .stat-value').textContent = milestones.centuries.length;
+    document.querySelector('#fives .stat-value').textContent = statsCache.milestones.fives.length;
+    document.querySelector('#dimes .stat-value').textContent = statsCache.milestones.dimes.length;
+    document.querySelector('#quarters .stat-value').textContent = statsCache.milestones.quarters.length;
+    document.querySelector('#centuries .stat-value').textContent = statsCache.milestones.centuries.length;
 }
 
 /**
@@ -304,14 +312,12 @@ function updateMilestoneStats() {
  */
 function updateDiagnosticsSection() {
     // Update unknown acquisition dates card
-    const unknownGames = getGamesWithUnknownAcquisitionDate(gameData.games, currentYear);
     const unknownCard = document.querySelector('[data-stat="unknown-acquisition-dates"]');
-    unknownCard.querySelector('.stat-value').textContent = unknownGames.length;
+    unknownCard.querySelector('.stat-value').textContent = statsCache.unknownGames.length;
 
     // Update never played games card
-    const neverPlayedGames = getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear);
     const neverPlayedCard = document.querySelector('[data-stat="never-played"]');
-    neverPlayedCard.querySelector('.stat-value').textContent = neverPlayedGames.length;
+    neverPlayedCard.querySelector('.stat-value').textContent = statsCache.neverPlayedGames.length;
 }
 
 /**
@@ -437,53 +443,46 @@ function showDetailSection(statType) {
     switch (statType) {
         case 'traditional-h-index':
             detailTitle.textContent = `Traditional H-Index Breakdown${yearSuffix}`;
-            const traditionalHIndex = calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear);
-            populateStatSummary(detailStatSummary, traditionalHIndex);
-            showHIndexBreakdown(detailContent, false);
+            populateStatSummary(detailStatSummary, statsCache.traditionalHIndex);
+            showHIndexBreakdown(detailContent, false, statsCache.traditionalHIndex);
             break;
         case 'play-session-h-index':
             detailTitle.textContent = `Play Session H-Index Breakdown${yearSuffix}`;
-            const playSessionHIndex = calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear);
-            populateStatSummary(detailStatSummary, playSessionHIndex);
-            showHIndexBreakdown(detailContent, true);
+            populateStatSummary(detailStatSummary, statsCache.playSessionHIndex);
+            showHIndexBreakdown(detailContent, true, statsCache.playSessionHIndex);
             break;
         case 'total-bgg-entries':
             detailTitle.textContent = currentYear ? `BGG Entries Acquired in ${currentYear}` : 'BGG Entries (All Time)';
-            const totalBGGEntries = getTotalBGGEntries(gameData.games, currentYear);
-            populateStatSummary(detailStatSummary, totalBGGEntries);
+            populateStatSummary(detailStatSummary, statsCache.totalBGGEntries);
             showBGGEntries(detailContent);
             break;
         case 'total-games-owned':
             detailTitle.textContent = currentYear ? `Games Acquired in ${currentYear}` : 'Games Owned (All Time)';
-            const totalGamesOwned = getTotalGamesOwned(gameData.games, currentYear);
-            populateStatSummary(detailStatSummary, totalGamesOwned);
+            populateStatSummary(detailStatSummary, statsCache.totalGamesOwned);
             showGamesOwned(detailContent);
             break;
         case 'total-expansions':
             detailTitle.textContent = currentYear ? `Expansions Acquired in ${currentYear}` : 'Expansions (All Time)';
-            const expansionsData = getTotalExpansions(gameData.games, currentYear);
-            populateStatSummary(detailStatSummary, expansionsData.total, [
-                { label: 'Expandalones:', value: expansionsData.expandalones },
-                { label: 'Expansion-only:', value: expansionsData.expansionOnly }
+            populateStatSummary(detailStatSummary, statsCache.expansionsData.total, [
+                { label: 'Expandalones:', value: statsCache.expansionsData.expandalones },
+                { label: 'Expansion-only:', value: statsCache.expansionsData.expansionOnly }
             ]);
             showExpansions(detailContent);
             break;
         case 'total-games-played':
             detailTitle.textContent = currentYear ? `Games Played in ${currentYear}` : 'Games Played (All Time)';
-            const gamesPlayedData = getTotalGamesPlayed(gameData.games, gameData.plays, currentYear);
             const gamesPlayedSubstats = [];
-            if (currentYear && gamesPlayedData.newToMe !== null) {
-                gamesPlayedSubstats.push({ label: 'New-to-me:', value: gamesPlayedData.newToMe });
+            if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
+                gamesPlayedSubstats.push({ label: 'New-to-me:', value: statsCache.gamesPlayedData.newToMe });
             }
-            populateStatSummary(detailStatSummary, gamesPlayedData.total, gamesPlayedSubstats);
+            populateStatSummary(detailStatSummary, statsCache.gamesPlayedData.total, gamesPlayedSubstats);
             showGamesPlayed(detailContent);
             break;
         case 'total-play-time':
             detailTitle.textContent = currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game (All Time)';
-            const playTimeData = getTotalPlayTime(gameData.plays, currentYear);
-            const hours = playTimeData.totalHours.toFixed(1);
-            const days = (playTimeData.totalHours / 24).toFixed(1);
-            const prefix = playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
+            const hours = statsCache.playTimeData.totalHours.toFixed(1);
+            const days = (statsCache.playTimeData.totalHours / 24).toFixed(1);
+            const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
             populateStatSummary(detailStatSummary, `${prefix}${hours} hours`, [
                 { label: 'In days:', value: `${prefix}${days}` }
             ]);
@@ -491,27 +490,23 @@ function showDetailSection(statType) {
             break;
         case 'fives':
             detailTitle.textContent = `Fives (5+ Plays)${yearSuffix}`;
-            const fivesData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
-            populateStatSummary(detailStatSummary, fivesData.fives.length);
-            showMilestoneGames(detailContent, 'fives');
+            populateStatSummary(detailStatSummary, statsCache.milestones.fives.length);
+            showMilestoneGames(detailContent, 'fives', statsCache.milestones);
             break;
         case 'dimes':
             detailTitle.textContent = `Dimes (10+ Plays)${yearSuffix}`;
-            const dimesData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
-            populateStatSummary(detailStatSummary, dimesData.dimes.length);
-            showMilestoneGames(detailContent, 'dimes');
+            populateStatSummary(detailStatSummary, statsCache.milestones.dimes.length);
+            showMilestoneGames(detailContent, 'dimes', statsCache.milestones);
             break;
         case 'quarters':
             detailTitle.textContent = `Quarters (25+ Plays)${yearSuffix}`;
-            const quartersData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
-            populateStatSummary(detailStatSummary, quartersData.quarters.length);
-            showMilestoneGames(detailContent, 'quarters');
+            populateStatSummary(detailStatSummary, statsCache.milestones.quarters.length);
+            showMilestoneGames(detailContent, 'quarters', statsCache.milestones);
             break;
         case 'centuries':
             detailTitle.textContent = `Centuries (100+ Plays)${yearSuffix}`;
-            const centuriesData = getPlayMilestones(gameData.games, gameData.plays, currentYear);
-            populateStatSummary(detailStatSummary, centuriesData.centuries.length);
-            showMilestoneGames(detailContent, 'centuries');
+            populateStatSummary(detailStatSummary, statsCache.milestones.centuries.length);
+            showMilestoneGames(detailContent, 'centuries', statsCache.milestones);
             break;
     }
 
@@ -545,11 +540,8 @@ function closeDetailSection() {
 /**
  * Show H-Index breakdown table
  */
-function showHIndexBreakdown(container, usePlaySessions) {
+function showHIndexBreakdown(container, usePlaySessions, hIndex) {
     const breakdown = getHIndexBreakdown(gameData.games, gameData.plays, currentYear, usePlaySessions);
-    const hIndex = usePlaySessions
-        ? calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear)
-        : calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear);
 
     const table = document.createElement('table');
     table.innerHTML = `
@@ -740,9 +732,8 @@ function showGamesPlayed(container) {
 /**
  * Show milestone games table
  */
-function showMilestoneGames(container, milestone) {
-    const milestones = getPlayMilestones(gameData.games, gameData.plays, currentYear);
-    const games = milestones[milestone];
+function showMilestoneGames(container, milestone, milestonesData) {
+    const games = milestonesData[milestone];
 
     const table = document.createElement('table');
     table.innerHTML = `
@@ -894,15 +885,13 @@ function showDiagnosticDetail(statType) {
     switch (statType) {
         case 'unknown-acquisition-dates':
             detailTitle.textContent = 'Games with Unknown Acquisition Dates';
-            const unknownGames = getGamesWithUnknownAcquisitionDate(gameData.games, currentYear);
-            populateStatSummary(detailStatSummary, unknownGames.length);
-            createGameTable(detailContent, unknownGames, ['Name', 'Type', 'Year']);
+            populateStatSummary(detailStatSummary, statsCache.unknownGames.length);
+            createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year']);
             break;
         case 'never-played':
             detailTitle.textContent = currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games (All Time)';
-            const neverPlayedGames = getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear);
-            populateStatSummary(detailStatSummary, neverPlayedGames.length);
-            createGameTable(detailContent, neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
+            populateStatSummary(detailStatSummary, statsCache.neverPlayedGames.length);
+            createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
             break;
     }
 
