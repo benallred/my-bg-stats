@@ -540,10 +540,40 @@ function showDetailSection(statType) {
 
     // Show section
     detailSection.style.display = 'block';
-    detailSection.scrollIntoView({ behavior: 'smooth' });
+
+    // Calculate scroll position to show detail section below full-height header
+    requestAnimationFrame(() => {
+        // First, scroll to top to reset header to full height
+        const wasScrolled = window.pageYOffset > 0;
+
+        if (wasScrolled) {
+            // Scroll to top instantly to get full header height
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // Now get the position with full header
+        requestAnimationFrame(() => {
+            const rect = detailSection.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const elementTop = rect.top + scrollTop;
+
+            // Get actual current header height (should be full height now)
+            const header = document.querySelector('header');
+            const headerHeight = header.offsetHeight;
+
+            // Scroll to position element below the header
+            window.scrollTo({
+                top: elementTop - headerHeight,
+                behavior: 'smooth'
+            });
+        });
+    });
 
     // Track currently open stat
     currentlyOpenStatType = statType;
+
+    // Update detail header height for sticky table headers
+    updateDetailHeaderHeight();
 
     // Update URL when stat changes
     updateURL();
@@ -929,8 +959,24 @@ function showDiagnosticDetail(statType) {
     // Track currently open diagnostic
     currentlyOpenDiagnosticType = statType;
 
+    // Update detail header height for sticky table headers
+    updateDiagnosticHeaderHeight();
+
     // Update URL when diagnostic changes
     updateURL();
+}
+
+/**
+ * Update diagnostic header height CSS variable when diagnostic detail section is shown
+ */
+function updateDiagnosticHeaderHeight() {
+    const detailHeader = document.querySelector('#diagnostic-detail-section .detail-header');
+    if (detailHeader) {
+        requestAnimationFrame(() => {
+            const detailHeaderHeight = detailHeader.offsetHeight;
+            document.documentElement.style.setProperty('--detail-header-height', `${detailHeaderHeight}px`);
+        });
+    }
 }
 
 /**
@@ -1143,5 +1189,25 @@ function setupStickyHeader() {
         // Update CSS variable for detail header sticky positioning
         const currentHeaderHeight = header.offsetHeight;
         document.documentElement.style.setProperty('--main-header-height', `${currentHeaderHeight}px`);
+
+        // Also update detail header height if it exists
+        const detailHeader = document.querySelector('.detail-header');
+        if (detailHeader) {
+            const detailHeaderHeight = detailHeader.offsetHeight;
+            document.documentElement.style.setProperty('--detail-header-height', `${detailHeaderHeight}px`);
+        }
     }, { passive: true });
+}
+
+/**
+ * Update detail header height CSS variable when detail section is shown
+ */
+function updateDetailHeaderHeight() {
+    const detailHeader = document.querySelector('.detail-header');
+    if (detailHeader) {
+        requestAnimationFrame(() => {
+            const detailHeaderHeight = detailHeader.offsetHeight;
+            document.documentElement.style.setProperty('--detail-header-height', `${detailHeaderHeight}px`);
+        });
+    }
 }
