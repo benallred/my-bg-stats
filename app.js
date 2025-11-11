@@ -234,7 +234,8 @@ function updateAllStats() {
         playTimeData: getTotalPlayTime(gameData.plays, currentYear),
         milestones: getPlayMilestones(gameData.games, gameData.plays, currentYear),
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
-        neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear)
+        neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
+        suggestedGames: getSuggestedGames(gameData.games, gameData.plays)
     };
 
     updateHIndexStats();
@@ -545,6 +546,11 @@ function showDetailSection(statType) {
             detailTitle.textContent = `Centuries (100+ Plays)${yearSuffix}`;
             populateStatSummary(detailStatSummary, statsCache.milestones.centuries.length);
             showMilestoneGames(detailContent, 'centuries', statsCache.milestones);
+            break;
+        case 'play-next-suggestions':
+            detailTitle.textContent = 'Play Next Suggestions';
+            populateStatSummary(detailStatSummary, `${statsCache.suggestedGames.length} game${statsCache.suggestedGames.length === 1 ? '' : 's'}`);
+            showSuggestedGames(detailContent);
             break;
     }
 
@@ -891,6 +897,53 @@ function showPlayTimeBreakdown(container) {
                         <td class="no-wrap">${minMax}</td>
                         <td class="no-wrap">${medianAvg}</td>
                         <td>${dataSource}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show suggested games to play next
+ */
+function showSuggestedGames(container) {
+    const suggestions = statsCache.suggestedGames;
+
+    if (suggestions.length === 0) {
+        container.innerHTML = '<p>No suggestions available. This could mean all your owned base games are well-played!</p>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Recommendation Reason</th>
+                <th>Hours</th>
+                <th>Sessions</th>
+                <th>Play Count</th>
+                <th>Last Played</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${suggestions.map(suggestion => {
+                const hoursDisplay = suggestion.hoursPlayed > 0 ? suggestion.hoursPlayed.toFixed(1) : '0';
+                const lastPlayedDisplay = suggestion.daysSinceLastPlay !== null
+                    ? `${suggestion.daysSinceLastPlay} day${suggestion.daysSinceLastPlay === 1 ? '' : 's'} ago`
+                    : 'Never';
+                const reasonsDisplay = suggestion.reasons.join('<br/>');
+
+                return `
+                    <tr>
+                        <td>${suggestion.game.name}</td>
+                        <td>${reasonsDisplay}</td>
+                        <td>${hoursDisplay}</td>
+                        <td>${suggestion.uniqueDays}</td>
+                        <td>${suggestion.playCount}</td>
+                        <td>${lastPlayedDisplay}</td>
                     </tr>
                 `;
             }).join('')}

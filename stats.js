@@ -638,3 +638,351 @@ function getPlayTimeByGame(games, plays, year = null) {
 
   return breakdown;
 }
+
+/**
+ * Helper: Calculate days since a date
+ * @param {string} dateString - Date in YYYY-MM-DD format
+ * @returns {number} Days since the date
+ */
+function calculateDaysSince(dateString) {
+  const today = new Date();
+  const date = new Date(dateString);
+  return Math.floor((today - date) / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * Helper: Get next milestone target for a play count
+ * @param {number} count - Current play count
+ * @returns {number|null} Next milestone target or null if past 100
+ */
+function getNextMilestoneTarget(count) {
+  if (count < 5) return 5;
+  if (count < 10) return 10;
+  if (count < 25) return 25;
+  if (count < 100) return 100;
+  return null;
+}
+
+/**
+ * Helper: Randomly select from candidates with the same value as the first candidate
+ * @param {Array} sortedCandidates - Array of candidates already sorted by the desired criteria
+ * @param {Function} getValue - Function to extract the comparison value from a candidate
+ * @returns {Object} Randomly selected candidate from those tied with the best value
+ */
+function selectRandomFromTied(sortedCandidates, getValue) {
+  if (sortedCandidates.length === 0) return null;
+
+  const bestValue = getValue(sortedCandidates[0]);
+  const tiedCandidates = sortedCandidates.filter(candidate => getValue(candidate) === bestValue);
+
+  const randomIndex = Math.floor(Math.random() * tiedCandidates.length);
+  return tiedCandidates[randomIndex];
+}
+
+/**
+ * Suggestion Algorithm 1: Recent games with lowest play session counts
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestRecentlyPlayedWithLowSessions(gamePlayData) {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  const oneMonthAgoStr = oneMonthAgo.toISOString().split('T')[0];
+
+  const recentlyPlayedGames = Array.from(gamePlayData.values())
+    .filter(data => data.lastPlayDate && data.lastPlayDate >= oneMonthAgoStr && data.uniqueDays.size > 0)
+    .sort((a, b) => a.uniqueDays.size - b.uniqueDays.size);
+
+  if (recentlyPlayedGames.length === 0) return null;
+
+  const candidate = selectRandomFromTied(recentlyPlayedGames, data => data.uniqueDays.size);
+  return {
+    game: candidate.game,
+    reason: 'Fresh and recent',
+    playCount: candidate.playCount,
+    uniqueDays: candidate.uniqueDays.size,
+    hoursPlayed: candidate.totalMinutes / 60,
+    daysSinceLastPlay: calculateDaysSince(candidate.lastPlayDate)
+  };
+}
+
+/**
+ * Suggestion Algorithm 2: Game not played the longest
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestLongestUnplayed(gamePlayData) {
+  const playedGames = Array.from(gamePlayData.values())
+    .filter(data => data.lastPlayDate !== null);
+
+  if (playedGames.length === 0) return null;
+
+  playedGames.sort((a, b) => a.lastPlayDate.localeCompare(b.lastPlayDate));
+  const candidate = selectRandomFromTied(playedGames, data => data.lastPlayDate);
+  const daysSince = calculateDaysSince(candidate.lastPlayDate);
+
+  return {
+    game: candidate.game,
+    reason: 'Gathering dust',
+    playCount: candidate.playCount,
+    uniqueDays: candidate.uniqueDays.size,
+    hoursPlayed: candidate.totalMinutes / 60,
+    daysSinceLastPlay: daysSince
+  };
+}
+
+/**
+ * Helper: Generic h-index suggestion algorithm
+ * @param {Map} gamePlayData - Map of game play data
+ * @param {number} currentHIndex - Current h-index value
+ * @param {Function} getValue - Function to get the metric value from game data
+ * @param {string} reason - Reason string for this suggestion
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, reason) {
+  const nextHIndex = currentHIndex + 1;
+
+  // Count how many games already have nextHIndex or more of the metric
+  const gamesAtOrAboveNext = Array.from(gamePlayData.values())
+    .filter(data => getValue(data) >= nextHIndex).length;
+
+  // How many more games need to reach nextHIndex to achieve h-index of nextHIndex
+  const gamesNeeded = nextHIndex - gamesAtOrAboveNext;
+
+  if (gamesNeeded <= 0) return null; // Already at next h-index or beyond
+
+  // Get all candidates with metric below nextHIndex, sorted by highest metric first
+  const candidates = Array.from(gamePlayData.values())
+    .filter(data => {
+      const value = getValue(data);
+      return value > 0 && value < nextHIndex;
+    })
+    .sort((a, b) => getValue(b) - getValue(a));
+
+  if (candidates.length === 0) return null;
+
+  // Find the metric value of the Nth candidate (where N = gamesNeeded)
+  // Then select randomly from ALL games tied at that value or higher
+  const cutoffValue = getValue(candidates[Math.min(gamesNeeded - 1, candidates.length - 1)]);
+
+  const candidate = selectRandomFromTied(candidates, data => getValue(data) >= cutoffValue);
+
+  const daysSince = candidate.lastPlayDate ? calculateDaysSince(candidate.lastPlayDate) : null;
+
+  return {
+    game: candidate.game,
+    reason,
+    playCount: candidate.playCount,
+    uniqueDays: candidate.uniqueDays.size,
+    hoursPlayed: candidate.totalMinutes / 60,
+    daysSinceLastPlay: daysSince
+  };
+}
+
+/**
+ * Suggestion Algorithm 3: Games needed for next play session h-index
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextSessionHIndex(games, plays, gamePlayData) {
+  const currentHIndex = calculatePlaySessionHIndex(games, plays);
+  return suggestForNextHIndex(
+    gamePlayData,
+    currentHIndex,
+    data => data.uniqueDays.size,
+    'Squaring up: Sessions'
+  );
+}
+
+/**
+ * Suggestion Algorithm 4: Games needed for next traditional h-index (play count)
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextTraditionalHIndex(games, plays, gamePlayData) {
+  const currentHIndex = calculateTraditionalHIndex(games, plays);
+  return suggestForNextHIndex(
+    gamePlayData,
+    currentHIndex,
+    data => data.playCount,
+    'Squaring up: Plays'
+  );
+}
+
+/**
+ * Suggestion Algorithm 5: Games needed for next hour h-index
+ * @param {Array} plays - Array of play objects
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextHourHIndex(plays, gamePlayData) {
+  const currentHourHIndex = calculateHourHIndex(plays);
+  return suggestForNextHIndex(
+    gamePlayData,
+    currentHourHIndex,
+    data => data.totalMinutes / 60,
+    'Squaring up: Hours'
+  );
+}
+
+/**
+ * Suggestion Algorithm 6: Games needed for next play-count milestone
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextMilestone(gamePlayData) {
+  const allPlayedGames = Array.from(gamePlayData.values())
+    .filter(data => data.playCount > 0);
+
+  // Find games approaching each milestone
+  const milestoneChaseGames = allPlayedGames
+    .map(data => {
+      const target = getNextMilestoneTarget(data.playCount);
+      if (!target) return null;
+      return {
+        ...data,
+        target,
+        playsNeeded: target - data.playCount
+      };
+    })
+    .filter(item => item !== null);
+
+  if (milestoneChaseGames.length === 0) return null;
+
+  // Find the highest play count below each milestone (5, 10, 25, 100)
+  const milestones = [5, 10, 25, 100];
+  const closestToEachMilestone = [];
+
+  milestones.forEach(milestone => {
+    const gamesUnderThisMilestone = milestoneChaseGames.filter(data => data.target === milestone);
+    if (gamesUnderThisMilestone.length > 0) {
+      // Find the highest play count for this milestone
+      const maxPlayCount = Math.max(...gamesUnderThisMilestone.map(data => data.playCount));
+      closestToEachMilestone.push(maxPlayCount);
+    }
+  });
+
+  if (closestToEachMilestone.length === 0) return null;
+
+  // Select randomly from games at these "closest" play counts
+  const candidate = selectRandomFromTied(
+    milestoneChaseGames,
+    data => closestToEachMilestone.includes(data.playCount)
+  );
+  const daysSince = candidate.lastPlayDate ? calculateDaysSince(candidate.lastPlayDate) : null;
+
+  // Create pithy reason based on milestone target
+  const milestoneNames = {
+    5: 'five',
+    10: 'dime',
+    25: 'quarter',
+    100: 'century'
+  };
+  const milestoneName = milestoneNames[candidate.target];
+
+  return {
+    game: candidate.game,
+    reason: `Almost a ${milestoneName}`,
+    playCount: candidate.playCount,
+    uniqueDays: candidate.uniqueDays.size,
+    hoursPlayed: candidate.totalMinutes / 60,
+    daysSinceLastPlay: daysSince
+  };
+}
+
+/**
+ * Suggestion Algorithm 7: Add never-played game as suggestion
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestNeverPlayedGame(gamePlayData) {
+  const neverPlayedGames = Array.from(gamePlayData.values())
+    .filter(data => data.playCount === 0);
+
+  if (neverPlayedGames.length === 0) return null;
+
+  // Select random never-played game
+  const candidate = selectRandomFromTied(neverPlayedGames, () => true);
+
+  return {
+    game: candidate.game,
+    reason: 'Shelf of shame',
+    playCount: 0,
+    uniqueDays: 0,
+    hoursPlayed: 0,
+    daysSinceLastPlay: null
+  };
+}
+
+/**
+ * Get suggested games to play next based on play patterns
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} Array of {game, reasons, playCount, uniqueDays, hoursPlayed, daysSinceLastPlay} in priority order
+ */
+function getSuggestedGames(games, plays) {
+  // Filter to owned base games only
+  const ownedBaseGames = games.filter(game => game.isBaseGame && isGameOwned(game));
+
+  // Build play data for each game
+  const gamePlayData = new Map();
+
+  ownedBaseGames.forEach(game => {
+    gamePlayData.set(game.id, {
+      game,
+      playCount: 0,
+      uniqueDays: new Set(),
+      totalMinutes: 0,
+      lastPlayDate: null
+    });
+  });
+
+  // Populate play data
+  plays.forEach(play => {
+    if (gamePlayData.has(play.gameId)) {
+      const data = gamePlayData.get(play.gameId);
+      data.playCount++;
+      data.uniqueDays.add(play.date);
+      data.totalMinutes += play.durationMin;
+
+      // Track most recent play date
+      if (!data.lastPlayDate || play.date > data.lastPlayDate) {
+        data.lastPlayDate = play.date;
+      }
+    }
+  });
+
+  // Collect suggestions from each algorithm (ordered by priority)
+  const suggestions = [
+    suggestRecentlyPlayedWithLowSessions(gamePlayData),        // Priority 1: Fresh and recent
+    suggestForNextHourHIndex(plays, gamePlayData),             // Priority 2: Squaring up: Hours
+    suggestForNextSessionHIndex(games, plays, gamePlayData),   // Priority 3: Squaring up: Sessions
+    suggestForNextTraditionalHIndex(games, plays, gamePlayData), // Priority 4: Squaring up: Plays
+    suggestForNextMilestone(gamePlayData),                     // Priority 5: Almost a milestone
+    suggestLongestUnplayed(gamePlayData),                      // Priority 6: Gathering dust
+    suggestNeverPlayedGame(gamePlayData)                       // Priority 7: Shelf of shame
+  ].filter(suggestion => suggestion !== null);
+
+  // Merge duplicates by collecting reasons into an array
+  const gameMap = new Map();
+
+  suggestions.forEach(suggestion => {
+    if (!gameMap.has(suggestion.game.id)) {
+      // Convert reason to array for first occurrence
+      suggestion.reasons = [suggestion.reason];
+      delete suggestion.reason;
+      gameMap.set(suggestion.game.id, suggestion);
+    } else {
+      // Add reason to existing array
+      const existing = gameMap.get(suggestion.game.id);
+      existing.reasons.push(suggestion.reason);
+    }
+  });
+
+  // Convert map back to array (maintains priority order from first occurrence)
+  return Array.from(gameMap.values());
+}
