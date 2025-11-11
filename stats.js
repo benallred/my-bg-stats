@@ -664,19 +664,14 @@ function getNextMilestoneTarget(count) {
 }
 
 /**
- * Helper: Randomly select from candidates with the same value as the first candidate
- * @param {Array} sortedCandidates - Array of candidates already sorted by the desired criteria
- * @param {Function} getValue - Function to extract the comparison value from a candidate
- * @returns {Object} Randomly selected candidate from those tied with the best value
+ * Helper: Randomly select one item from an array
+ * @param {Array} items - Array of items to select from
+ * @returns {Object|null} Randomly selected item or null if array is empty
  */
-function selectRandomFromTied(sortedCandidates, getValue) {
-  if (sortedCandidates.length === 0) return null;
-
-  const bestValue = getValue(sortedCandidates[0]);
-  const tiedCandidates = sortedCandidates.filter(candidate => getValue(candidate) === bestValue);
-
-  const randomIndex = Math.floor(Math.random() * tiedCandidates.length);
-  return tiedCandidates[randomIndex];
+function selectRandom(items) {
+  if (items.length === 0) return null;
+  const randomIndex = Math.floor(Math.random() * items.length);
+  return items[randomIndex];
 }
 
 /**
@@ -695,7 +690,10 @@ function suggestRecentlyPlayedWithLowSessions(gamePlayData) {
 
   if (recentlyPlayedGames.length === 0) return null;
 
-  const candidate = selectRandomFromTied(recentlyPlayedGames, data => data.uniqueDays.size);
+  // Select randomly from games with the minimum session count
+  const minSessions = recentlyPlayedGames[0].uniqueDays.size;
+  const tiedGames = recentlyPlayedGames.filter(data => data.uniqueDays.size === minSessions);
+  const candidate = selectRandom(tiedGames);
   const sessionText = candidate.uniqueDays.size === 1 ? '1 total session' : `${candidate.uniqueDays.size} total sessions`;
   return {
     game: candidate.game,
@@ -716,7 +714,11 @@ function suggestLongestUnplayed(gamePlayData) {
   if (playedGames.length === 0) return null;
 
   playedGames.sort((a, b) => a.lastPlayDate.localeCompare(b.lastPlayDate));
-  const candidate = selectRandomFromTied(playedGames, data => data.lastPlayDate);
+
+  // Select randomly from games with the oldest last play date
+  const oldestDate = playedGames[0].lastPlayDate;
+  const tiedGames = playedGames.filter(data => data.lastPlayDate === oldestDate);
+  const candidate = selectRandom(tiedGames);
 
   // Format date as "Last played Month Year"
   const date = new Date(candidate.lastPlayDate);
@@ -760,10 +762,12 @@ function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, metricName)
   if (candidates.length === 0) return null;
 
   // Find the metric value of the Nth candidate (where N = gamesNeeded)
-  // Then select randomly from ALL games tied at that value or higher
+  // Then select randomly from ALL games at that value or higher
   const cutoffValue = getValue(candidates[Math.min(gamesNeeded - 1, candidates.length - 1)]);
+  const qualifyingCandidates = candidates.filter(data => getValue(data) >= cutoffValue);
 
-  const candidate = selectRandomFromTied(candidates, data => getValue(data) >= cutoffValue);
+  // Select randomly from all qualifying candidates (not just those tied at max)
+  const candidate = selectRandom(qualifyingCandidates);
 
   // Generate stat description based on the metric value
   const metricValue = getValue(candidate);
@@ -880,11 +884,9 @@ function suggestForNextMilestone(gamePlayData) {
 
   if (closestToEachMilestone.length === 0) return null;
 
-  // Select randomly from games at these "closest" play counts
-  const candidate = selectRandomFromTied(
-    milestoneChaseGames,
-    data => closestToEachMilestone.includes(data.playCount)
-  );
+  // Filter to games at these "closest" play counts, then select one randomly
+  const closestGames = milestoneChaseGames.filter(data => closestToEachMilestone.includes(data.playCount));
+  const candidate = selectRandom(closestGames);
 
   // Create pithy reason based on milestone target
   const milestoneNames = {
@@ -919,7 +921,7 @@ function suggestNeverPlayedGame(gamePlayData) {
   if (neverPlayedGames.length === 0) return null;
 
   // Select random never-played game
-  const candidate = selectRandomFromTied(neverPlayedGames, () => true);
+  const candidate = selectRandom(neverPlayedGames);
 
   return {
     game: candidate.game,
