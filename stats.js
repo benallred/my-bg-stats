@@ -696,13 +696,11 @@ function suggestRecentlyPlayedWithLowSessions(gamePlayData) {
   if (recentlyPlayedGames.length === 0) return null;
 
   const candidate = selectRandomFromTied(recentlyPlayedGames, data => data.uniqueDays.size);
+  const sessionText = candidate.uniqueDays.size === 1 ? '1 total session' : `${candidate.uniqueDays.size} total sessions`;
   return {
     game: candidate.game,
     reason: 'Fresh and recent',
-    playCount: candidate.playCount,
-    uniqueDays: candidate.uniqueDays.size,
-    hoursPlayed: candidate.totalMinutes / 60,
-    daysSinceLastPlay: calculateDaysSince(candidate.lastPlayDate)
+    stat: sessionText
   };
 }
 
@@ -719,15 +717,15 @@ function suggestLongestUnplayed(gamePlayData) {
 
   playedGames.sort((a, b) => a.lastPlayDate.localeCompare(b.lastPlayDate));
   const candidate = selectRandomFromTied(playedGames, data => data.lastPlayDate);
-  const daysSince = calculateDaysSince(candidate.lastPlayDate);
+
+  // Format date as "Last played Month Year"
+  const date = new Date(candidate.lastPlayDate);
+  const monthYear = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 
   return {
     game: candidate.game,
     reason: 'Gathering dust',
-    playCount: candidate.playCount,
-    uniqueDays: candidate.uniqueDays.size,
-    hoursPlayed: candidate.totalMinutes / 60,
-    daysSinceLastPlay: daysSince
+    stat: `Last played ${monthYear}`
   };
 }
 
@@ -736,10 +734,10 @@ function suggestLongestUnplayed(gamePlayData) {
  * @param {Map} gamePlayData - Map of game play data
  * @param {number} currentHIndex - Current h-index value
  * @param {Function} getValue - Function to get the metric value from game data
- * @param {string} reason - Reason string for this suggestion
+ * @param {string} metricName - Name of the metric ('Hours', 'Sessions', or 'Plays')
  * @returns {Object|null} Suggestion object or null
  */
-function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, reason) {
+function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, metricName) {
   const nextHIndex = currentHIndex + 1;
 
   // Count how many games already have nextHIndex or more of the metric
@@ -767,15 +765,29 @@ function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, reason) {
 
   const candidate = selectRandomFromTied(candidates, data => getValue(data) >= cutoffValue);
 
-  const daysSince = candidate.lastPlayDate ? calculateDaysSince(candidate.lastPlayDate) : null;
+  // Generate stat description based on the metric value
+  const metricValue = getValue(candidate);
+  let statText;
+  let reasonText;
+  if (metricName === 'Hours') {
+    statText = `${metricValue.toFixed(1)} hours`;
+    reasonText = `Squaring up: ${nextHIndex} hours`;
+  } else if (metricName === 'Sessions') {
+    const sessionText = metricValue === 1 ? 'session' : 'sessions';
+    statText = `${metricValue} ${sessionText}`;
+    const nextSessionText = nextHIndex === 1 ? 'session' : 'sessions';
+    reasonText = `Squaring up: ${nextHIndex} ${nextSessionText}`;
+  } else if (metricName === 'Plays') {
+    const playText = metricValue === 1 ? 'play' : 'plays';
+    statText = `${metricValue} ${playText}`;
+    const nextPlayText = nextHIndex === 1 ? 'play' : 'plays';
+    reasonText = `Squaring up: ${nextHIndex} ${nextPlayText}`;
+  }
 
   return {
     game: candidate.game,
-    reason,
-    playCount: candidate.playCount,
-    uniqueDays: candidate.uniqueDays.size,
-    hoursPlayed: candidate.totalMinutes / 60,
-    daysSinceLastPlay: daysSince
+    reason: reasonText,
+    stat: statText
   };
 }
 
@@ -792,7 +804,7 @@ function suggestForNextSessionHIndex(games, plays, gamePlayData) {
     gamePlayData,
     currentHIndex,
     data => data.uniqueDays.size,
-    'Squaring up: Sessions'
+    'Sessions'
   );
 }
 
@@ -809,7 +821,7 @@ function suggestForNextTraditionalHIndex(games, plays, gamePlayData) {
     gamePlayData,
     currentHIndex,
     data => data.playCount,
-    'Squaring up: Plays'
+    'Plays'
   );
 }
 
@@ -825,7 +837,7 @@ function suggestForNextHourHIndex(plays, gamePlayData) {
     gamePlayData,
     currentHourHIndex,
     data => data.totalMinutes / 60,
-    'Squaring up: Hours'
+    'Hours'
   );
 }
 
@@ -873,7 +885,6 @@ function suggestForNextMilestone(gamePlayData) {
     milestoneChaseGames,
     data => closestToEachMilestone.includes(data.playCount)
   );
-  const daysSince = candidate.lastPlayDate ? calculateDaysSince(candidate.lastPlayDate) : null;
 
   // Create pithy reason based on milestone target
   const milestoneNames = {
@@ -884,13 +895,15 @@ function suggestForNextMilestone(gamePlayData) {
   };
   const milestoneName = milestoneNames[candidate.target];
 
+  // Determine if within 90% of target (rounded down)
+  const prefix = candidate.playCount >= Math.floor(candidate.target * 0.9) ? 'Almost a' : 'Closest to a';
+
+  const playText = candidate.playCount === 1 ? '1 total play' : `${candidate.playCount} total plays`;
+
   return {
     game: candidate.game,
-    reason: `Almost a ${milestoneName}`,
-    playCount: candidate.playCount,
-    uniqueDays: candidate.uniqueDays.size,
-    hoursPlayed: candidate.totalMinutes / 60,
-    daysSinceLastPlay: daysSince
+    reason: `${prefix} ${milestoneName}`,
+    stat: playText
   };
 }
 
@@ -911,10 +924,7 @@ function suggestNeverPlayedGame(gamePlayData) {
   return {
     game: candidate.game,
     reason: 'Shelf of shame',
-    playCount: 0,
-    uniqueDays: 0,
-    hoursPlayed: 0,
-    daysSinceLastPlay: null
+    stat: 'Never played'
   };
 }
 
@@ -922,7 +932,7 @@ function suggestNeverPlayedGame(gamePlayData) {
  * Get suggested games to play next based on play patterns
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
- * @returns {Array} Array of {game, reasons, playCount, uniqueDays, hoursPlayed, daysSinceLastPlay} in priority order
+ * @returns {Array} Array of {game, reasons, stats} in priority order
  */
 function getSuggestedGames(games, plays) {
   // Filter to owned base games only
@@ -967,19 +977,22 @@ function getSuggestedGames(games, plays) {
     suggestNeverPlayedGame(gamePlayData)                       // Priority 7: Shelf of shame
   ].filter(suggestion => suggestion !== null);
 
-  // Merge duplicates by collecting reasons into an array
+  // Merge duplicates by collecting reasons and stats into arrays
   const gameMap = new Map();
 
   suggestions.forEach(suggestion => {
     if (!gameMap.has(suggestion.game.id)) {
-      // Convert reason to array for first occurrence
+      // Convert reason and stat to arrays for first occurrence
       suggestion.reasons = [suggestion.reason];
+      suggestion.stats = [suggestion.stat];
       delete suggestion.reason;
+      delete suggestion.stat;
       gameMap.set(suggestion.game.id, suggestion);
     } else {
-      // Add reason to existing array
+      // Add reason and stat to existing arrays
       const existing = gameMap.get(suggestion.game.id);
       existing.reasons.push(suggestion.reason);
+      existing.stats.push(suggestion.stat);
     }
   });
 

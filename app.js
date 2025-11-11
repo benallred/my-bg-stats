@@ -922,28 +922,19 @@ function showSuggestedGames(container) {
             <tr>
                 <th>Game</th>
                 <th>Recommendation Reason</th>
-                <th>Hours</th>
-                <th>Sessions</th>
-                <th>Play Count</th>
-                <th>Last Played</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody>
             ${suggestions.map(suggestion => {
-                const hoursDisplay = suggestion.hoursPlayed > 0 ? suggestion.hoursPlayed.toFixed(1) : '0';
-                const lastPlayedDisplay = suggestion.daysSinceLastPlay !== null
-                    ? `${suggestion.daysSinceLastPlay} day${suggestion.daysSinceLastPlay === 1 ? '' : 's'} ago`
-                    : 'Never';
                 const reasonsDisplay = suggestion.reasons.join('<br/>');
+                const statsDisplay = suggestion.stats.join('<br/>');
 
                 return `
                     <tr>
                         <td>${suggestion.game.name}</td>
                         <td>${reasonsDisplay}</td>
-                        <td>${hoursDisplay}</td>
-                        <td>${suggestion.uniqueDays}</td>
-                        <td>${suggestion.playCount}</td>
-                        <td>${lastPlayedDisplay}</td>
+                        <td>${statsDisplay}</td>
                     </tr>
                 `;
             }).join('')}
