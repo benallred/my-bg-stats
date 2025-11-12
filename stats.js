@@ -675,6 +675,50 @@ function selectRandom(items) {
 }
 
 /**
+ * Select a random item with sqrt rarity weighting.
+ * Items in larger groups get lower weight to boost underrepresented groups.
+ * @param {Array} items - Array of items to select from
+ * @param {Function} getGroupKeyFn - Function that returns group key for an item
+ * @returns {*} Selected item or null if items is empty
+ */
+function selectRandomWeightedBySqrtRarity(items, getGroupKeyFn) {
+  if (items.length === 0) return null;
+
+  // Count items per group
+  const groupCounts = new Map();
+  items.forEach(item => {
+    const key = getGroupKeyFn(item);
+    groupCounts.set(key, (groupCounts.get(key) || 0) + 1);
+  });
+
+  // Calculate weight for each item: 1 / sqrt(groupSize)
+  const weights = items.map(item => {
+    const groupSize = groupCounts.get(getGroupKeyFn(item));
+    return 1 / Math.sqrt(groupSize);
+  });
+
+  // Calculate cumulative weights
+  const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+  const cumulativeWeights = [];
+  let cumulative = 0;
+  for (const weight of weights) {
+    cumulative += weight;
+    cumulativeWeights.push(cumulative);
+  }
+
+  // Select using weighted random
+  const random = Math.random() * totalWeight;
+  for (let i = 0; i < cumulativeWeights.length; i++) {
+    if (random <= cumulativeWeights[i]) {
+      return items[i];
+    }
+  }
+
+  // Fallback (should never reach here)
+  return items[items.length - 1];
+}
+
+/**
  * Suggestion Algorithm 1: Recent games with lowest play session counts
  * @param {Map} gamePlayData - Map of game play data
  * @returns {Object|null} Suggestion object or null
@@ -884,9 +928,9 @@ function suggestForNextMilestone(gamePlayData) {
 
   if (closestToEachMilestone.length === 0) return null;
 
-  // Filter to games at these "closest" play counts, then select one randomly
+  // Filter to games at these "closest" play counts, then select one with sqrt rarity weighting
   const closestGames = milestoneChaseGames.filter(data => closestToEachMilestone.includes(data.playCount));
-  const candidate = selectRandom(closestGames);
+  const candidate = selectRandomWeightedBySqrtRarity(closestGames, game => game.target);
 
   // Create pithy reason based on milestone target
   const milestoneNames = {
