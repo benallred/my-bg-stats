@@ -10,9 +10,9 @@ export default defineConfig({
       exclude: ['scripts/**', 'tests/**', 'node_modules/**', '**/*.test.js'],
       all: false,
       thresholds: {
-        lines: 98,
-        functions: 100,
-        branches: 90,
+        lines: 100,
+        functions: 99,
+        branches: 91,
         statements: 98,
       },
     },

@@ -842,5 +842,45 @@ describe('Suggestion Algorithms', () => {
       const suggestions = stats.getSuggestedGames(testGames, testPlays);
       expect(Array.isArray(suggestions)).toBe(true);
     });
+
+    test('suggestRecentlyPlayedWithLowSessions sorts by session count', () => {
+      // Create test data with multiple recent games having different session counts
+      const today = new Date();
+      const date1 = new Date(today);
+      date1.setDate(today.getDate() - 10);
+      const date2 = new Date(today);
+      date2.setDate(today.getDate() - 11);
+      const date3 = new Date(today);
+      date3.setDate(today.getDate() - 12);
+
+      const testGames = [
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+        { id: 2, name: 'Game B', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+        { id: 3, name: 'Game C', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] }
+      ];
+
+      const testPlays = [
+        // Game 1: 3 sessions (most)
+        { gameId: 1, date: date1.toISOString().split('T')[0], durationMin: 60 },
+        { gameId: 1, date: date2.toISOString().split('T')[0], durationMin: 60 },
+        { gameId: 1, date: date3.toISOString().split('T')[0], durationMin: 60 },
+        // Game 2: 2 sessions (medium)
+        { gameId: 2, date: date1.toISOString().split('T')[0], durationMin: 60 },
+        { gameId: 2, date: date2.toISOString().split('T')[0], durationMin: 60 },
+        // Game 3: 1 session (least - should be suggested)
+        { gameId: 3, date: date1.toISOString().split('T')[0], durationMin: 60 }
+      ];
+
+      const suggestions = stats.getSuggestedGames(testGames, testPlays);
+      expect(Array.isArray(suggestions)).toBe(true);
+      expect(suggestions.length).toBeGreaterThan(0);
+
+      // The first suggestion should be from the recent/low sessions algorithm
+      // and should pick the game with the lowest session count (Game C)
+      const recentSuggestion = suggestions.find(s => s && s.reasons && s.reasons.includes('Fresh and recent'));
+      expect(recentSuggestion).toBeDefined();
+      expect(recentSuggestion.game.name).toBe('Game C');
+      expect(recentSuggestion.stats).toContain('1 total session');
+    });
   });
 });
