@@ -1,0 +1,22 @@
+{
+  "name": "my-bg-stats",
+  "version": "1.0.0",
+  "description": "Personal board game statistics tracker with data processing and visualization",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "process-data": "node scripts/process-data.js"
+  },
+  "keywords": [
+    "board-games",
+    "statistics",
+    "bgstats"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.9",
+    "vitest": "^2.1.9"
+  }
+}

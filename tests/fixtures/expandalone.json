@@ -1,0 +1,80 @@
+{
+  "tags": [
+    {
+      "uuid": "expandalone-tag-uuid",
+      "id": 1,
+      "name": "expandalone",
+      "type": "Game",
+      "group": "Default",
+      "isInternal": false
+    }
+  ],
+  "games": [
+    {
+      "id": 1,
+      "name": "Pure Base Game",
+      "bggId": 4001,
+      "bggYear": 2020,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2020-01-01\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 2,
+      "name": "Tagged Expandalone",
+      "bggId": 4002,
+      "bggYear": 2021,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2021-01-01\"}"
+        }
+      ],
+      "tags": [
+        {
+          "tagRefId": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Pure Expansion",
+      "bggId": 4003,
+      "bggYear": 2021,
+      "isBaseGame": 0,
+      "isExpansion": 1,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{}"
+        }
+      ],
+      "tags": []
+    }
+  ],
+  "plays": [
+    {
+      "gameRefId": 1,
+      "playDate": "2024-01-01 10:00:00",
+      "durationMin": 60
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2024-01-02 10:00:00",
+      "durationMin": 75
+    },
+    {
+      "gameRefId": 3,
+      "playDate": "2024-01-03 10:00:00",
+      "durationMin": 30
+    }
+  ]
+}

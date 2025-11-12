@@ -519,13 +519,12 @@ function getHourHIndexBreakdown(games, plays, year = null) {
  * Get total play time statistics
  * @param {Array} plays - Array of play objects
  * @param {number|null} year - Optional year filter
- * @returns {Object} { totalMinutes, totalHours, playsWithActualDuration, playsWithEstimatedDuration, playsSkipped, totalPlays }
+ * @returns {Object} { totalMinutes, totalHours, playsWithActualDuration, playsWithEstimatedDuration, totalPlays }
  */
 function getTotalPlayTime(plays, year = null) {
   let totalMinutes = 0;
   let playsWithActualDuration = 0;
   let playsWithEstimatedDuration = 0;
-  let playsSkipped = 0;
   let totalPlays = 0;
 
   plays.forEach(play => {
@@ -533,6 +532,8 @@ function getTotalPlayTime(plays, year = null) {
 
     totalPlays++;
 
+    // Note: With current process-data.js implementation, all plays have durationMin > 0
+    // (either actual or estimated with 30-minute default), so playsSkipped should always be 0
     if (play.durationMin > 0) {
       totalMinutes += play.durationMin;
       if (play.durationEstimated) {
@@ -540,8 +541,6 @@ function getTotalPlayTime(plays, year = null) {
       } else {
         playsWithActualDuration++;
       }
-    } else {
-      playsSkipped++;
     }
   });
 
@@ -550,7 +549,6 @@ function getTotalPlayTime(plays, year = null) {
     totalHours: totalMinutes / 60,
     playsWithActualDuration,
     playsWithEstimatedDuration,
-    playsSkipped,
     totalPlays
   };
 }
@@ -714,8 +712,8 @@ function selectRandomWeightedBySqrtRarity(items, getGroupKeyFn) {
     }
   }
 
-  // Fallback (should never reach here)
-  return items[items.length - 1];
+  // Should never reach here due to cumulative weight math
+  // If we do, return undefined and let the caller fail loudly (bug detection)
 }
 
 /**
@@ -1045,3 +1043,33 @@ function getSuggestedGames(games, plays) {
   // Convert map back to array (maintains priority order from first occurrence)
   return Array.from(gameMap.values());
 }
+
+// Export functions for testing (ES modules)
+export {
+  isGameOwned,
+  wasGameAcquiredInYear,
+  calculateDaysSince,
+  calculateHIndexFromSortedValues,
+  calculateTraditionalHIndex,
+  calculatePlaySessionHIndex,
+  calculateHourHIndex,
+  getTotalBGGEntries,
+  getTotalGamesOwned,
+  getTotalExpansions,
+  getTotalPlays,
+  getTotalDaysPlayed,
+  getTotalGamesPlayed,
+  getPlayMilestones,
+  getGamesWithUnknownAcquisitionDate,
+  getOwnedGamesNeverPlayed,
+  getAllAcquisitionYears,
+  getAvailableYears,
+  getHIndexBreakdown,
+  getHourHIndexBreakdown,
+  getTotalPlayTime,
+  getPlayTimeByGame,
+  getNextMilestoneTarget,
+  selectRandom,
+  selectRandomWeightedBySqrtRarity,
+  getSuggestedGames
+};

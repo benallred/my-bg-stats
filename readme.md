@@ -19,15 +19,20 @@ And displays interactive statistics including:
 ```
 my-bg-stats/
 ├── scripts/              # Data preprocessing
-│   ├── package.json
 │   ├── process-data.js
 │   └── README.md
+├── tests/                # Test suite
+│   ├── fixtures/         # Test data
+│   ├── stats.test.js
+│   └── process-data.test.js
 ├── index.html           # Main page
 ├── styles.css           # Styling
 ├── app.js              # Application logic
 ├── stats.js            # Statistics calculations
 ├── data.json           # Generated data (committed)
 ├── BGStatsExport.json  # Source data (gitignored)
+├── package.json        # Dependencies and scripts
+├── vitest.config.js    # Test configuration
 └── .gitignore
 ```
 
@@ -41,7 +46,7 @@ Place your source file in the project root:
 Run the preprocessing script:
 
 ```bash
-node scripts/process-data.js
+npm run process-data
 ```
 
 This generates `data.json` with only the necessary, non-private data.
@@ -127,7 +132,7 @@ To update the statistics with new plays or collection changes:
 2. Replace `BGStatsExport.json` in the project root
 3. Run the preprocessing script:
    ```bash
-   node scripts/process-data.js
+   npm run process-data
    ```
 4. Commit and push the updated `data.json`:
    ```bash
@@ -138,8 +143,35 @@ To update the statistics with new plays or collection changes:
 
 The GitHub Pages site will automatically update within a few minutes.
 
+## Testing
+
+The project includes a comprehensive test suite with excellent coverage:
+
+### Running Tests
+
+```bash
+# Install dependencies (first time only)
+npm install
+
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
+### Test Coverage
+
+The project has comprehensive test coverage. Run `npm run test:coverage` to see current metrics.
+
+Tests are located in the `tests/` directory and use [Vitest](https://vitest.dev/) as the testing framework.
+
 ## Technology Stack
 
 - **Frontend**: Vanilla HTML, CSS, JavaScript
 - **Data Processing**: Node.js
+- **Testing**: Vitest with comprehensive test coverage
 - **Hosting**: GitHub Pages

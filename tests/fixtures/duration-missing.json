@@ -1,0 +1,127 @@
+{
+  "tags": [],
+  "games": [
+    {
+      "id": 1,
+      "name": "Game With Mixed Durations",
+      "bggId": 5001,
+      "bggYear": 2020,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2020-01-01\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 2,
+      "name": "Game With All Zero Durations",
+      "bggId": 5002,
+      "bggYear": 2021,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2021-01-01\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 3,
+      "name": "Game With No Plays",
+      "bggId": 5003,
+      "bggYear": 2022,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2022-01-01\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 4,
+      "name": "Game With All Valid Durations",
+      "bggId": 5004,
+      "bggYear": 2019,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2019-01-01\"}"
+        }
+      ],
+      "tags": []
+    }
+  ],
+  "plays": [
+    {
+      "gameRefId": 1,
+      "playDate": "2024-01-01 10:00:00",
+      "durationMin": 60
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-01-02 10:00:00",
+      "durationMin": 0
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-01-03 10:00:00",
+      "durationMin": 65
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-01-04 10:00:00",
+      "durationMin": 0
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-01-05 10:00:00",
+      "durationMin": 55
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2024-02-01 10:00:00",
+      "durationMin": 0
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2024-02-02 10:00:00",
+      "durationMin": 0
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2024-02-03 10:00:00",
+      "durationMin": 0
+    },
+    {
+      "gameRefId": 4,
+      "playDate": "2024-03-01 10:00:00",
+      "durationMin": 45
+    },
+    {
+      "gameRefId": 4,
+      "playDate": "2024-03-02 10:00:00",
+      "durationMin": 50
+    },
+    {
+      "gameRefId": 4,
+      "playDate": "2024-03-03 10:00:00",
+      "durationMin": 48
+    },
+    {
+      "gameRefId": 4,
+      "playDate": "2024-03-04 10:00:00",
+      "durationMin": 52
+    }
+  ]
+}

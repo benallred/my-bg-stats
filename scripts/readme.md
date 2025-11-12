@@ -5,9 +5,9 @@ This script processes the BG Stats export to generate a minimal, privacy-focused
 ## Usage
 
 1. Ensure `BGStatsExport.json` is in the project root
-2. Run the script:
+2. Run the script from the project root:
    ```bash
-   node scripts/process-data.js
+   npm run process-data
    ```
 
 3. The script will generate `data.json` in the project root

@@ -2,9 +2,14 @@
 BGStatsExport.json
 collection.csv
 
-# Node modules for preprocessing script
+# Node modules
+node_modules/
 scripts/node_modules/
 scripts/package-lock.json
+
+# Test coverage
+coverage/
+.nyc_output/
 
 # Temporary files
 tmp/

@@ -3,15 +3,29 @@
  * Handles data loading, UI updates, and user interactions
  */
 
-/**
- * Helper: Check if a game is currently owned
- * @param {Object} game - Game object
- * @returns {boolean} true if any copy is currently owned
- */
-function isGameOwned(game) {
-  if (!game.copies || game.copies.length === 0) return false;
-  return game.copies.some(copy => copy.statusOwned === true);
-}
+// Import all functions from stats.js
+import {
+  isGameOwned,
+  wasGameAcquiredInYear,
+  getAvailableYears,
+  calculateHourHIndex,
+  calculateTraditionalHIndex,
+  calculatePlaySessionHIndex,
+  getTotalBGGEntries,
+  getTotalGamesOwned,
+  getTotalExpansions,
+  getTotalPlays,
+  getTotalDaysPlayed,
+  getTotalGamesPlayed,
+  getTotalPlayTime,
+  getPlayMilestones,
+  getGamesWithUnknownAcquisitionDate,
+  getOwnedGamesNeverPlayed,
+  getSuggestedGames,
+  getHIndexBreakdown,
+  getHourHIndexBreakdown,
+  getPlayTimeByGame
+} from './stats.js';
 
 /**
  * Helper: Get acquisition date for a game (from first owned or first copy)
@@ -29,19 +43,6 @@ function getGameAcquisitionDate(game) {
 
   // If no owned copies, return first copy's date
   return game.copies[0]?.acquisitionDate || null;
-}
-
-/**
- * Helper: Check if a game was acquired in a specific year
- * @param {Object} game - Game object
- * @param {number} year - Year to check
- * @returns {boolean} true if any copy was acquired in the year
- */
-function wasGameAcquiredInYear(game, year) {
-  if (!game.copies || game.copies.length === 0) return false;
-  return game.copies.some(copy =>
-    copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
-  );
 }
 
 // Global data

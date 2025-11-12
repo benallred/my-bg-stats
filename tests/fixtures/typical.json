@@ -1,0 +1,274 @@
+{
+  "tags": [
+    {
+      "uuid": "expandalone-tag-uuid",
+      "id": 1,
+      "name": "expandalone",
+      "type": "Game",
+      "group": "Default",
+      "isInternal": false
+    }
+  ],
+  "games": [
+    {
+      "id": 1,
+      "name": "Popular Game",
+      "bggId": 2001,
+      "bggYear": 2018,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2020-01-01\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 2,
+      "name": "Medium Play Game",
+      "bggId": 2002,
+      "bggYear": 2019,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2020-06-15\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 3,
+      "name": "Rare Play Game",
+      "bggId": 2003,
+      "bggYear": 2020,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2021-03-20\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 4,
+      "name": "Expansion Only",
+      "bggId": 2004,
+      "bggYear": 2019,
+      "isBaseGame": 0,
+      "isExpansion": 1,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 5,
+      "name": "Expandalone Game",
+      "bggId": 2005,
+      "bggYear": 2021,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2021-12-25\"}"
+        }
+      ],
+      "tags": [
+        {
+          "tagRefId": 1
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Unplayed Game",
+      "bggId": 2006,
+      "bggYear": 2022,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2023-01-01\"}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 7,
+      "name": "Unowned Game",
+      "bggId": 2007,
+      "bggYear": 2020,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": false,
+          "metaData": "{}"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "id": 8,
+      "name": "Multiple Copies Game",
+      "bggId": 2008,
+      "bggYear": 2017,
+      "isBaseGame": 1,
+      "isExpansion": 0,
+      "copies": [
+        {
+          "statusOwned": true,
+          "metaData": "{\"AcquisitionDate\":\"2019-05-10\"}"
+        },
+        {
+          "statusOwned": false,
+          "metaData": "{\"AcquisitionDate\":\"2018-03-01\"}"
+        }
+      ],
+      "tags": []
+    }
+  ],
+  "plays": [
+    {
+      "gameRefId": 1,
+      "playDate": "2023-01-15 14:30:00",
+      "durationMin": 60
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2023-01-16 15:00:00",
+      "durationMin": 55
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2023-02-20 10:00:00",
+      "durationMin": 65
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2023-03-10 12:00:00",
+      "durationMin": 58
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2023-04-05 18:00:00",
+      "durationMin": 62
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-01-10 14:00:00",
+      "durationMin": 60
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-02-15 16:00:00",
+      "durationMin": 57
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-03-20 11:00:00",
+      "durationMin": 63
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-04-12 13:00:00",
+      "durationMin": 59
+    },
+    {
+      "gameRefId": 1,
+      "playDate": "2024-05-08 19:00:00",
+      "durationMin": 61
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2023-01-20 10:00:00",
+      "durationMin": 45
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2023-02-15 14:00:00",
+      "durationMin": 50
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2023-03-10 16:00:00",
+      "durationMin": 48
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2023-04-20 12:00:00",
+      "durationMin": 52
+    },
+    {
+      "gameRefId": 2,
+      "playDate": "2024-01-25 15:00:00",
+      "durationMin": 47
+    },
+    {
+      "gameRefId": 3,
+      "playDate": "2023-06-01 18:00:00",
+      "durationMin": 90
+    },
+    {
+      "gameRefId": 3,
+      "playDate": "2024-07-15 20:00:00",
+      "durationMin": 95
+    },
+    {
+      "gameRefId": 4,
+      "playDate": "2023-01-15 16:30:00",
+      "durationMin": 30
+    },
+    {
+      "gameRefId": 5,
+      "playDate": "2023-12-25 10:00:00",
+      "durationMin": 75
+    },
+    {
+      "gameRefId": 5,
+      "playDate": "2024-01-01 14:00:00",
+      "durationMin": 80
+    },
+    {
+      "gameRefId": 5,
+      "playDate": "2024-02-14 16:00:00",
+      "durationMin": 78
+    },
+    {
+      "gameRefId": 7,
+      "playDate": "2022-05-10 12:00:00",
+      "durationMin": 120
+    },
+    {
+      "gameRefId": 8,
+      "playDate": "2023-03-15 14:00:00",
+      "durationMin": 40
+    },
+    {
+      "gameRefId": 8,
+      "playDate": "2023-06-20 16:00:00",
+      "durationMin": 42
+    },
+    {
+      "gameRefId": 8,
+      "playDate": "2023-09-10 18:00:00",
+      "durationMin": 38
+    },
+    {
+      "gameRefId": 8,
+      "playDate": "2024-01-05 10:00:00",
+      "durationMin": 41
+    }
+  ]
+}
