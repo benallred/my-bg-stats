@@ -448,6 +448,149 @@ function populateStatSummary(summaryElement, mainValue, substats = []) {
 }
 
 /**
+ * Configuration map for stat detail handlers
+ * Each handler defines how to display title, summary, and content for a stat type
+ */
+const statDetailHandlers = {
+    'hour-h-index': {
+        getTitle: (currentYear) => `Hour H-Index Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.hourHIndex
+        }),
+        render: (detailContent, statsCache) => {
+            showHIndexBreakdown(detailContent, 'hours', statsCache.hourHIndex);
+        }
+    },
+    'traditional-h-index': {
+        getTitle: (currentYear) => `Traditional H-Index Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.traditionalHIndex
+        }),
+        render: (detailContent, statsCache) => {
+            showHIndexBreakdown(detailContent, false, statsCache.traditionalHIndex);
+        }
+    },
+    'play-session-h-index': {
+        getTitle: (currentYear) => `Play Session H-Index Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.playSessionHIndex
+        }),
+        render: (detailContent, statsCache) => {
+            showHIndexBreakdown(detailContent, true, statsCache.playSessionHIndex);
+        }
+    },
+    'total-bgg-entries': {
+        getTitle: (currentYear) => currentYear ? `BGG Entries Acquired in ${currentYear}` : 'BGG Entries (All Time)',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.totalBGGEntries
+        }),
+        render: (detailContent) => {
+            showBGGEntries(detailContent);
+        }
+    },
+    'total-games-owned': {
+        getTitle: (currentYear) => currentYear ? `Games Acquired in ${currentYear}` : 'Games Owned (All Time)',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.totalGamesOwned
+        }),
+        render: (detailContent) => {
+            showGamesOwned(detailContent);
+        }
+    },
+    'total-expansions': {
+        getTitle: (currentYear) => currentYear ? `Expansions Acquired in ${currentYear}` : 'Expansions (All Time)',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.expansionsData.total,
+            substats: [
+                { label: 'Expandalones:', value: statsCache.expansionsData.expandalones },
+                { label: 'Expansion-only:', value: statsCache.expansionsData.expansionOnly }
+            ]
+        }),
+        render: (detailContent) => {
+            showExpansions(detailContent);
+        }
+    },
+    'total-games-played': {
+        getTitle: (currentYear) => currentYear ? `Games Played in ${currentYear}` : 'Games Played (All Time)',
+        getSummary: (statsCache, currentYear) => {
+            const substats = [];
+            if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
+                substats.push({ label: 'New-to-me:', value: statsCache.gamesPlayedData.newToMe });
+            }
+            return {
+                mainValue: statsCache.gamesPlayedData.total,
+                substats: substats
+            };
+        },
+        render: (detailContent) => {
+            showGamesPlayed(detailContent);
+        }
+    },
+    'total-play-time': {
+        getTitle: (currentYear) => currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game (All Time)',
+        getSummary: (statsCache) => {
+            const hours = statsCache.playTimeData.totalHours.toFixed(1);
+            const days = (statsCache.playTimeData.totalHours / 24).toFixed(1);
+            const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
+            return {
+                mainValue: `${prefix}${hours} hours`,
+                substats: [
+                    { label: 'In days:', value: `${prefix}${days}` }
+                ]
+            };
+        },
+        render: (detailContent) => {
+            showPlayTimeBreakdown(detailContent);
+        }
+    },
+    'fives': {
+        getTitle: (currentYear) => `Fives (5+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.milestones.fives.length
+        }),
+        render: (detailContent, statsCache) => {
+            showMilestoneGames(detailContent, 'fives', statsCache.milestones);
+        }
+    },
+    'dimes': {
+        getTitle: (currentYear) => `Dimes (10+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.milestones.dimes.length
+        }),
+        render: (detailContent, statsCache) => {
+            showMilestoneGames(detailContent, 'dimes', statsCache.milestones);
+        }
+    },
+    'quarters': {
+        getTitle: (currentYear) => `Quarters (25+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.milestones.quarters.length
+        }),
+        render: (detailContent, statsCache) => {
+            showMilestoneGames(detailContent, 'quarters', statsCache.milestones);
+        }
+    },
+    'centuries': {
+        getTitle: (currentYear) => `Centuries (100+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.milestones.centuries.length
+        }),
+        render: (detailContent, statsCache) => {
+            showMilestoneGames(detailContent, 'centuries', statsCache.milestones);
+        }
+    },
+    'play-next-suggestions': {
+        getTitle: () => 'Play Next Suggestions',
+        getSummary: (statsCache) => ({
+            mainValue: `${statsCache.suggestedGames.length} game${statsCache.suggestedGames.length === 1 ? '' : 's'}`
+        }),
+        render: (detailContent) => {
+            showSuggestedGames(detailContent);
+        }
+    }
+};
+
+/**
  * Show detail section for a specific stat
  */
 function showDetailSection(statType) {
@@ -472,88 +615,22 @@ function showDetailSection(statType) {
     detailStatSummary.innerHTML = '';
     detailStatSummary.style.display = 'none';
 
-    // Set title and content based on stat type
-    const yearSuffix = currentYear ? ` (${currentYear})` : ' (All Time)';
-
-    switch (statType) {
-        case 'hour-h-index':
-            detailTitle.textContent = `Hour H-Index Breakdown${yearSuffix}`;
-            populateStatSummary(detailStatSummary, statsCache.hourHIndex);
-            showHIndexBreakdown(detailContent, 'hours', statsCache.hourHIndex);
-            break;
-        case 'traditional-h-index':
-            detailTitle.textContent = `Traditional H-Index Breakdown${yearSuffix}`;
-            populateStatSummary(detailStatSummary, statsCache.traditionalHIndex);
-            showHIndexBreakdown(detailContent, false, statsCache.traditionalHIndex);
-            break;
-        case 'play-session-h-index':
-            detailTitle.textContent = `Play Session H-Index Breakdown${yearSuffix}`;
-            populateStatSummary(detailStatSummary, statsCache.playSessionHIndex);
-            showHIndexBreakdown(detailContent, true, statsCache.playSessionHIndex);
-            break;
-        case 'total-bgg-entries':
-            detailTitle.textContent = currentYear ? `BGG Entries Acquired in ${currentYear}` : 'BGG Entries (All Time)';
-            populateStatSummary(detailStatSummary, statsCache.totalBGGEntries);
-            showBGGEntries(detailContent);
-            break;
-        case 'total-games-owned':
-            detailTitle.textContent = currentYear ? `Games Acquired in ${currentYear}` : 'Games Owned (All Time)';
-            populateStatSummary(detailStatSummary, statsCache.totalGamesOwned);
-            showGamesOwned(detailContent);
-            break;
-        case 'total-expansions':
-            detailTitle.textContent = currentYear ? `Expansions Acquired in ${currentYear}` : 'Expansions (All Time)';
-            populateStatSummary(detailStatSummary, statsCache.expansionsData.total, [
-                { label: 'Expandalones:', value: statsCache.expansionsData.expandalones },
-                { label: 'Expansion-only:', value: statsCache.expansionsData.expansionOnly }
-            ]);
-            showExpansions(detailContent);
-            break;
-        case 'total-games-played':
-            detailTitle.textContent = currentYear ? `Games Played in ${currentYear}` : 'Games Played (All Time)';
-            const gamesPlayedSubstats = [];
-            if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
-                gamesPlayedSubstats.push({ label: 'New-to-me:', value: statsCache.gamesPlayedData.newToMe });
-            }
-            populateStatSummary(detailStatSummary, statsCache.gamesPlayedData.total, gamesPlayedSubstats);
-            showGamesPlayed(detailContent);
-            break;
-        case 'total-play-time':
-            detailTitle.textContent = currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game (All Time)';
-            const hours = statsCache.playTimeData.totalHours.toFixed(1);
-            const days = (statsCache.playTimeData.totalHours / 24).toFixed(1);
-            const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
-            populateStatSummary(detailStatSummary, `${prefix}${hours} hours`, [
-                { label: 'In days:', value: `${prefix}${days}` }
-            ]);
-            showPlayTimeBreakdown(detailContent);
-            break;
-        case 'fives':
-            detailTitle.textContent = `Fives (5+ Plays)${yearSuffix}`;
-            populateStatSummary(detailStatSummary, statsCache.milestones.fives.length);
-            showMilestoneGames(detailContent, 'fives', statsCache.milestones);
-            break;
-        case 'dimes':
-            detailTitle.textContent = `Dimes (10+ Plays)${yearSuffix}`;
-            populateStatSummary(detailStatSummary, statsCache.milestones.dimes.length);
-            showMilestoneGames(detailContent, 'dimes', statsCache.milestones);
-            break;
-        case 'quarters':
-            detailTitle.textContent = `Quarters (25+ Plays)${yearSuffix}`;
-            populateStatSummary(detailStatSummary, statsCache.milestones.quarters.length);
-            showMilestoneGames(detailContent, 'quarters', statsCache.milestones);
-            break;
-        case 'centuries':
-            detailTitle.textContent = `Centuries (100+ Plays)${yearSuffix}`;
-            populateStatSummary(detailStatSummary, statsCache.milestones.centuries.length);
-            showMilestoneGames(detailContent, 'centuries', statsCache.milestones);
-            break;
-        case 'play-next-suggestions':
-            detailTitle.textContent = 'Play Next Suggestions';
-            populateStatSummary(detailStatSummary, `${statsCache.suggestedGames.length} game${statsCache.suggestedGames.length === 1 ? '' : 's'}`);
-            showSuggestedGames(detailContent);
-            break;
+    // Get handler for this stat type
+    const handler = statDetailHandlers[statType];
+    if (!handler) {
+        console.error(`No handler found for stat type: ${statType}`);
+        return;
     }
+
+    // Set title using handler
+    detailTitle.textContent = handler.getTitle(currentYear);
+
+    // Get summary data and populate
+    const summary = handler.getSummary(statsCache, currentYear);
+    populateStatSummary(detailStatSummary, summary.mainValue, summary.substats);
+
+    // Render content using handler
+    handler.render(detailContent, statsCache, currentYear);
 
     // Show section
     detailSection.style.display = 'block';
@@ -1002,6 +1079,31 @@ function createGameTable(container, games, columns, filterYear = null) {
 }
 
 /**
+ * Configuration map for diagnostic detail handlers
+ * Each handler defines how to display title, summary, and content for a diagnostic type
+ */
+const diagnosticDetailHandlers = {
+    'unknown-acquisition-dates': {
+        getTitle: () => 'Games with Unknown Acquisition Dates',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.unknownGames.length
+        }),
+        render: (detailContent, statsCache) => {
+            createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year']);
+        }
+    },
+    'never-played': {
+        getTitle: (currentYear) => currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games (All Time)',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.neverPlayedGames.length
+        }),
+        render: (detailContent, statsCache) => {
+            createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
+        }
+    }
+};
+
+/**
  * Show diagnostic detail section
  */
 function showDiagnosticDetail(statType) {
@@ -1026,19 +1128,22 @@ function showDiagnosticDetail(statType) {
     detailStatSummary.innerHTML = '';
     detailStatSummary.style.display = 'none';
 
-    // Set title and content based on stat type
-    switch (statType) {
-        case 'unknown-acquisition-dates':
-            detailTitle.textContent = 'Games with Unknown Acquisition Dates';
-            populateStatSummary(detailStatSummary, statsCache.unknownGames.length);
-            createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year']);
-            break;
-        case 'never-played':
-            detailTitle.textContent = currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games (All Time)';
-            populateStatSummary(detailStatSummary, statsCache.neverPlayedGames.length);
-            createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
-            break;
+    // Get handler for this diagnostic type
+    const handler = diagnosticDetailHandlers[statType];
+    if (!handler) {
+        console.error(`No handler found for diagnostic type: ${statType}`);
+        return;
     }
+
+    // Set title using handler
+    detailTitle.textContent = handler.getTitle(currentYear);
+
+    // Get summary data and populate
+    const summary = handler.getSummary(statsCache);
+    populateStatSummary(detailStatSummary, summary.mainValue, summary.substats);
+
+    // Render content using handler
+    handler.render(detailContent, statsCache, currentYear);
 
     // Show section
     detailSection.style.display = 'block';
