@@ -220,6 +220,7 @@ function processPlays(plays, gamesMap) {
     processedPlays.push({
       gameId: gameId,
       date: playDate,
+      timestamp: play.playDate,
       durationMin: finalDuration,
       durationEstimated: isEstimated
     });
@@ -251,14 +252,23 @@ function finalizeOutput(gamesMap, plays) {
   // Sort games by name for easier browsing
   games.sort((a, b) => a.name.localeCompare(b.name));
 
-  // Sort plays by date (most recent first)
-  plays.sort((a, b) => b.date.localeCompare(a.date));
+  // Sort plays by timestamp (most recent first)
+  plays.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+
+  // Use latest play timestamp for generatedAt
+  let generatedAt;
+  if (plays.length > 0) {
+    generatedAt = new Date(plays[0].timestamp).toISOString();
+  } else {
+    // Fallback to current time if no plays exist
+    generatedAt = new Date().toISOString();
+  }
 
   // Create output data
   return {
     games: games,
     plays: plays,
-    generatedAt: new Date().toISOString()
+    generatedAt: generatedAt
   };
 }
 
