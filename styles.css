@@ -50,18 +50,21 @@ header.sticky-scrolled h1 {
     flex-wrap: wrap;
 }
 
+.filter-group {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
 .year-filter label {
     font-weight: 600;
     color: #555;
     white-space: nowrap;
 }
 
-.year-filter label,
-.year-filter select {
-    flex-shrink: 0;
-}
-
-#year-select {
+#year-select,
+#base-metric-select {
     padding: 0.5rem 1rem;
     border: 2px solid #ddd;
     border-radius: 4px;
@@ -71,11 +74,13 @@ header.sticky-scrolled h1 {
     transition: border-color 0.3s;
 }
 
-#year-select:hover {
+#year-select:hover,
+#base-metric-select:hover {
     border-color: #3498db;
 }
 
-#year-select:focus {
+#year-select:focus,
+#base-metric-select:focus {
     outline: none;
     border-color: #2980b9;
 }

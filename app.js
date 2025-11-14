@@ -48,6 +48,7 @@ function getGameAcquisitionDate(game) {
 // Global data
 let gameData = null;
 let currentYear = null;
+let currentBaseMetric = 'hours'; // Default to hours
 let currentlyOpenStatType = null;
 let currentlyOpenDiagnosticType = null;
 let yearDataCache = null;
@@ -55,6 +56,22 @@ let isLoadingFromPermalink = false;
 
 // Cache for calculated statistics (refreshed when year changes)
 let statsCache = null;
+
+// Helper function to get current h-index based on selected base metric
+function getCurrentHIndex() {
+    if (!statsCache) return 0;
+
+    switch (currentBaseMetric) {
+        case 'hours':
+            return statsCache.hourHIndex;
+        case 'sessions':
+            return statsCache.playSessionHIndex;
+        case 'plays':
+            return statsCache.traditionalHIndex;
+        default:
+            return statsCache.hourHIndex;
+    }
+}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -64,6 +81,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Setup year filter
         setupYearFilter();
+
+        // Setup base metric filter
+        setupBaseMetricFilter();
 
         // Check for permalink parameters and restore state
         loadFromPermalink();
@@ -146,9 +166,7 @@ function setupYearFilter() {
 
             // Check if currently open stat is play-related (unavailable in pre-logging years)
             const playRelatedStats = [
-                'hour-h-index',
-                'traditional-h-index',
-                'play-session-h-index',
+                'h-index',
                 'total-plays',
                 'total-days-played',
                 'total-games-played',
@@ -174,6 +192,30 @@ function setupYearFilter() {
         }
 
         // Update URL when year changes
+        updateURL();
+    });
+}
+
+/**
+ * Setup base metric filter dropdown
+ */
+function setupBaseMetricFilter() {
+    const baseMetricSelect = document.getElementById('base-metric-select');
+
+    baseMetricSelect.addEventListener('change', (e) => {
+        currentBaseMetric = e.target.value;
+        updateHIndexStats();
+        updateHIndexCardLabels();
+
+        // Only refresh sections if not loading from permalink
+        if (!isLoadingFromPermalink) {
+            // Refresh h-index detail section if open
+            if (currentlyOpenStatType === 'h-index') {
+                showDetailSection('h-index');
+            }
+        }
+
+        // Update URL when base metric changes
         updateURL();
     });
 }
@@ -240,6 +282,7 @@ function updateAllStats() {
     };
 
     updateHIndexStats();
+    updateHIndexCardLabels();
     updateCollectionStats();
     updatePlayStats();
     updateMilestoneStats();
@@ -250,14 +293,35 @@ function updateAllStats() {
  * Update H-Index statistics
  */
 function updateHIndexStats() {
-    // Hour H-Index
-    document.querySelector('#hour-h-index .stat-value').textContent = statsCache.hourHIndex;
+    const hIndexValue = getCurrentHIndex();
+    document.querySelector('#h-index .stat-value').textContent = hIndexValue;
+}
 
-    // Traditional H-Index
-    document.querySelector('#traditional-h-index .stat-value').textContent = statsCache.traditionalHIndex;
+/**
+ * Update H-Index card title and description based on current metric
+ */
+function updateHIndexCardLabels() {
+    const titleElement = document.getElementById('h-index-title');
+    const descriptionElement = document.getElementById('h-index-description');
 
-    // Play Session H-Index
-    document.querySelector('#play-session-h-index .stat-value').textContent = statsCache.playSessionHIndex;
+    const labels = {
+        hours: {
+            title: 'Hour H-Index',
+            description: 'Games ranked by total hours'
+        },
+        sessions: {
+            title: 'Play Session H-Index',
+            description: 'Games ranked by days played'
+        },
+        plays: {
+            title: 'Traditional H-Index',
+            description: 'Games ranked by play count'
+        }
+    };
+
+    const label = labels[currentBaseMetric] || labels.hours;
+    titleElement.textContent = label.title;
+    descriptionElement.textContent = label.description;
 }
 
 /**
@@ -452,31 +516,22 @@ function populateStatSummary(summaryElement, mainValue, substats = []) {
  * Each handler defines how to display title, summary, and content for a stat type
  */
 const statDetailHandlers = {
-    'hour-h-index': {
-        getTitle: (currentYear) => `Hour H-Index Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
+    'h-index': {
+        getTitle: (currentYear) => {
+            const metricTitles = {
+                hours: 'Hour H-Index',
+                sessions: 'Play Session H-Index',
+                plays: 'Traditional H-Index'
+            };
+            const title = metricTitles[currentBaseMetric] || 'H-Index';
+            return `${title} Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+        },
         getSummary: (statsCache) => ({
-            mainValue: statsCache.hourHIndex
+            mainValue: getCurrentHIndex()
         }),
         render: (detailContent, statsCache) => {
-            showHIndexBreakdown(detailContent, 'hours', statsCache.hourHIndex);
-        }
-    },
-    'traditional-h-index': {
-        getTitle: (currentYear) => `Traditional H-Index Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.traditionalHIndex
-        }),
-        render: (detailContent, statsCache) => {
-            showHIndexBreakdown(detailContent, false, statsCache.traditionalHIndex);
-        }
-    },
-    'play-session-h-index': {
-        getTitle: (currentYear) => `Play Session H-Index Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.playSessionHIndex
-        }),
-        render: (detailContent, statsCache) => {
-            showHIndexBreakdown(detailContent, true, statsCache.playSessionHIndex);
+            const hIndexValue = getCurrentHIndex();
+            showHIndexBreakdown(detailContent, currentBaseMetric, hIndexValue);
         }
     },
     'total-bgg-entries': {
@@ -692,17 +747,24 @@ function closeDetailSection() {
 
 /**
  * Show H-Index breakdown table
+ * @param {HTMLElement} container - Container element
+ * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
+ * @param {number} hIndex - H-index value
  */
-function showHIndexBreakdown(container, mode, hIndex) {
+function showHIndexBreakdown(container, metric, hIndex) {
     let breakdown, columnHeader, valueKey;
 
-    if (mode === 'hours') {
+    if (metric === 'hours') {
         breakdown = getHourHIndexBreakdown(gameData.games, gameData.plays, currentYear);
         columnHeader = 'Hours';
         valueKey = 'hours';
-    } else {
-        breakdown = getHIndexBreakdown(gameData.games, gameData.plays, currentYear, mode);
-        columnHeader = mode ? 'Days Played' : 'Play Count';
+    } else if (metric === 'sessions') {
+        breakdown = getHIndexBreakdown(gameData.games, gameData.plays, currentYear, true);
+        columnHeader = 'Days Played';
+        valueKey = 'count';
+    } else { // metric === 'plays'
+        breakdown = getHIndexBreakdown(gameData.games, gameData.plays, currentYear, false);
+        columnHeader = 'Play Count';
         valueKey = 'count';
     }
 
@@ -722,7 +784,7 @@ function showHIndexBreakdown(container, mode, hIndex) {
                 const rank = index + 1;
                 const value = item[valueKey];
                 const contributesToHIndex = rank <= value && rank <= hIndex;
-                const displayValue = mode === 'hours' ? value.toFixed(1) : value;
+                const displayValue = metric === 'hours' ? value.toFixed(1) : value;
                 return `
                     <tr${contributesToHIndex ? ' class="h-index-contributor"' : ''}>
                         <td>${rank}</td>
@@ -1222,9 +1284,10 @@ function setupDiagnosticsToggle() {
 function loadFromPermalink() {
     const urlParams = new URLSearchParams(window.location.search);
     const yearParam = urlParams.get('year');
+    const baseMetricParam = urlParams.get('baseMetric');
     const statParam = urlParams.get('stat');
 
-    if (!yearParam && !statParam) {
+    if (!yearParam && !baseMetricParam && !statParam) {
         return; // No permalink parameters
     }
 
@@ -1239,6 +1302,16 @@ function loadFromPermalink() {
             currentYear = year;
             updateYearInfoBadge();
             updateSectionVisibility();
+        }
+    }
+
+    // Set base metric if specified
+    if (baseMetricParam && ['hours', 'sessions', 'plays'].includes(baseMetricParam)) {
+        const baseMetricSelect = document.getElementById('base-metric-select');
+        if (baseMetricSelect) {
+            baseMetricSelect.value = baseMetricParam;
+            currentBaseMetric = baseMetricParam;
+            updateHIndexCardLabels();
         }
     }
 
@@ -1305,6 +1378,11 @@ function updateURL() {
     // Add year parameter if a specific year is selected
     if (currentYear) {
         params.set('year', currentYear.toString());
+    }
+
+    // Add base metric parameter if not default
+    if (currentBaseMetric !== 'hours') {
+        params.set('baseMetric', currentBaseMetric);
     }
 
     // Add stat parameter if a section is open

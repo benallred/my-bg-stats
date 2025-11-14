@@ -10,12 +10,23 @@
     <header>
         <h1>My Board Game Stats</h1>
         <div class="year-filter">
-            <label for="year-select">Filter by year:</label>
-            <select id="year-select">
-                <option value="all">All Time</option>
-                <!-- Years will be populated by JavaScript -->
-            </select>
+            <div class="filter-group">
+                <label for="year-select">Filter by year:</label>
+                <select id="year-select">
+                    <option value="all">All Time</option>
+                    <!-- Years will be populated by JavaScript -->
+                </select>
+            </div>
             <span id="year-info-badge" class="year-info-badge" style="display: none;"></span>
+
+            <div class="filter-group">
+                <label for="base-metric-select">Base Metric:</label>
+                <select id="base-metric-select">
+                    <option value="hours">Hours</option>
+                    <option value="sessions">Sessions</option>
+                    <option value="plays">Plays</option>
+                </select>
+            </div>
         </div>
     </header>
 
@@ -24,22 +35,10 @@
         <section id="h-index-section" class="stat-section">
             <h2 class="section-heading">H-Index Metrics</h2>
             <div class="section-grid">
-                <div class="stat-card clickable" id="hour-h-index" data-stat="hour-h-index">
-                    <h3>Hour H-Index</h3>
+                <div class="stat-card clickable" id="h-index" data-stat="h-index">
+                    <h3 id="h-index-title">H-Index</h3>
                     <div class="stat-value">--</div>
-                    <p class="stat-description">x games played x hours each</p>
-                </div>
-
-                <div class="stat-card clickable" id="play-session-h-index" data-stat="play-session-h-index">
-                    <h3>Play Session H-Index</h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Unique game sessions per day</p>
-                </div>
-
-                <div class="stat-card clickable" id="traditional-h-index" data-stat="traditional-h-index">
-                    <h3>Traditional H-Index</h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">All play entries counted</p>
+                    <p class="stat-description" id="h-index-description">Games ranked by total hours</p>
                 </div>
             </div>
         </section>
