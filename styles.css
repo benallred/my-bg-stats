@@ -860,6 +860,10 @@ footer p {
     animation: slideIn 0.3s ease-out;
 }
 
+.diagnostic-detail-section .detail-header {
+    background: var(--bg-diagnostics);
+}
+
 .diagnostic-detail-section .detail-header h3 {
     color: var(--text-diagnostic);
     font-size: 1.1rem;
