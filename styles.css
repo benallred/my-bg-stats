@@ -250,6 +250,12 @@ header.sticky-scrolled h1 {
     border-color: var(--color-primary-dark);
 }
 
+.theme-toggle svg {
+    display: block;
+    max-width: 20px;
+    max-height: 20px;
+}
+
 /* Stats Grid */
 .stats-grid {
     display: grid;
@@ -714,6 +720,16 @@ footer p {
     table th,
     table td {
         padding: 0.5rem;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+    }
+
+    .theme-toggle svg {
+        max-width: 18px;
+        max-height: 18px;
     }
 }
 
