@@ -57,6 +57,103 @@ let isLoadingFromPermalink = false;
 // Cache for calculated statistics (refreshed when year changes)
 let statsCache = null;
 
+// Theme management
+let currentTheme = 'system'; // 'system', 'light', or 'dark'
+
+/**
+ * Initialize theme on page load
+ */
+function initTheme() {
+    // Disable transitions temporarily for initial load
+    document.documentElement.classList.add('no-transition');
+
+    // Load saved theme preference from localStorage
+    const savedTheme = localStorage.getItem('themePreference');
+    if (savedTheme && ['system', 'light', 'dark'].includes(savedTheme)) {
+        currentTheme = savedTheme;
+    }
+
+    // Apply theme
+    applyTheme();
+
+    // Re-enable transitions after a brief delay
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            document.documentElement.classList.remove('no-transition');
+        });
+    });
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', () => {
+        if (currentTheme === 'system') {
+            applyTheme();
+        }
+    });
+}
+
+/**
+ * Apply current theme to document
+ */
+function applyTheme() {
+    const root = document.documentElement;
+
+    if (currentTheme === 'system') {
+        // Detect system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    } else {
+        // Apply explicit theme
+        root.setAttribute('data-theme', currentTheme);
+    }
+
+    // Update theme toggle button if it exists
+    updateThemeToggleButton();
+}
+
+/**
+ * Toggle theme to next state: system -> light -> dark -> system
+ */
+function toggleTheme() {
+    if (currentTheme === 'system') {
+        currentTheme = 'light';
+    } else if (currentTheme === 'light') {
+        currentTheme = 'dark';
+    } else {
+        currentTheme = 'system';
+    }
+
+    // Save preference
+    localStorage.setItem('themePreference', currentTheme);
+
+    // Apply theme
+    applyTheme();
+}
+
+/**
+ * Update theme toggle button appearance
+ */
+function updateThemeToggleButton() {
+    const button = document.getElementById('theme-toggle');
+    if (!button) return;
+
+    const icons = {
+        'system': '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a8 8 0 108 8 8 8 0 00-8-8zm0 14V4a6 6 0 010 12z"/></svg>',
+        'light': '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="4"/><line x1="10" y1="1" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="19"/><line x1="1" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="19" y2="10"/><line x1="3.5" y1="3.5" x2="5" y2="5"/><line x1="15" y1="15" x2="16.5" y2="16.5"/><line x1="3.5" y1="16.5" x2="5" y2="15"/><line x1="15" y1="5" x2="16.5" y2="3.5"/></svg>',
+        'dark': '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>'
+    };
+
+    const labels = {
+        'system': 'System theme',
+        'light': 'Light mode',
+        'dark': 'Dark mode'
+    };
+
+    button.innerHTML = icons[currentTheme];
+    button.setAttribute('aria-label', labels[currentTheme]);
+    button.setAttribute('title', labels[currentTheme]);
+}
+
 // Helper function to get current h-index based on selected base metric
 function getCurrentHIndex() {
     if (!statsCache) return 0;
@@ -92,6 +189,9 @@ function getCurrentMilestones() {
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        // Initialize theme first (before any content loads)
+        initTheme();
+
         // Load data
         await loadData();
 
@@ -525,6 +625,12 @@ function setupEventListeners() {
 
     // Diagnostics toggle button
     setupDiagnosticsToggle();
+
+    // Theme toggle button
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
 }
 
 /**
