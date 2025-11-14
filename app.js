@@ -18,7 +18,7 @@ import {
   getTotalDaysPlayed,
   getTotalGamesPlayed,
   getTotalPlayTime,
-  getPlayMilestones,
+  getMilestones,
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getSuggestedGames,
@@ -70,6 +70,22 @@ function getCurrentHIndex() {
             return statsCache.traditionalHIndex;
         default:
             return statsCache.hourHIndex;
+    }
+}
+
+// Helper function to get current milestones based on selected base metric
+function getCurrentMilestones() {
+    if (!statsCache) return { fives: [], dimes: [], quarters: [], centuries: [] };
+
+    switch (currentBaseMetric) {
+        case 'hours':
+            return statsCache.milestonesHours;
+        case 'sessions':
+            return statsCache.milestonesSessions;
+        case 'plays':
+            return statsCache.milestonesPlays;
+        default:
+            return statsCache.milestonesHours;
     }
 }
 
@@ -204,14 +220,23 @@ function setupBaseMetricFilter() {
 
     baseMetricSelect.addEventListener('change', (e) => {
         currentBaseMetric = e.target.value;
+
         updateHIndexStats();
         updateHIndexCardLabels();
+        updateMilestoneStats();
+        updateMilestoneCardLabels();
 
         // Only refresh sections if not loading from permalink
         if (!isLoadingFromPermalink) {
             // Refresh h-index detail section if open
             if (currentlyOpenStatType === 'h-index') {
                 showDetailSection('h-index');
+            }
+
+            // Refresh milestone detail sections if open
+            const milestoneStats = ['fives', 'dimes', 'quarters', 'centuries'];
+            if (milestoneStats.includes(currentlyOpenStatType)) {
+                showDetailSection(currentlyOpenStatType);
             }
         }
 
@@ -275,7 +300,9 @@ function updateAllStats() {
         expansionsData: getTotalExpansions(gameData.games, currentYear),
         gamesPlayedData: getTotalGamesPlayed(gameData.games, gameData.plays, currentYear),
         playTimeData: getTotalPlayTime(gameData.plays, currentYear),
-        milestones: getPlayMilestones(gameData.games, gameData.plays, currentYear),
+        milestonesHours: getMilestones(gameData.games, gameData.plays, currentYear, 'hours'),
+        milestonesSessions: getMilestones(gameData.games, gameData.plays, currentYear, 'sessions'),
+        milestonesPlays: getMilestones(gameData.games, gameData.plays, currentYear, 'plays'),
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays)
@@ -286,6 +313,7 @@ function updateAllStats() {
     updateCollectionStats();
     updatePlayStats();
     updateMilestoneStats();
+    updateMilestoneCardLabels();
     updateDiagnosticsSection();
 }
 
@@ -322,6 +350,39 @@ function updateHIndexCardLabels() {
     const label = labels[currentBaseMetric] || labels.hours;
     titleElement.textContent = label.title;
     descriptionElement.textContent = label.description;
+}
+
+/**
+ * Update milestone card labels based on current base metric
+ */
+function updateMilestoneCardLabels() {
+    const labels = {
+        hours: {
+            fives: 'Games played 5-9 hours total',
+            dimes: 'Games played 10-24 hours total',
+            quarters: 'Games played 25-99 hours total',
+            centuries: 'Games played 100 or more hours total'
+        },
+        sessions: {
+            fives: 'Games played 5-9 days total',
+            dimes: 'Games played 10-24 days total',
+            quarters: 'Games played 25-99 days total',
+            centuries: 'Games played 100 or more days total'
+        },
+        plays: {
+            fives: 'Games played 5-9 times',
+            dimes: 'Games played 10-24 times',
+            quarters: 'Games played 25-99 times',
+            centuries: 'Games played 100 or more times'
+        }
+    };
+
+    const currentLabels = labels[currentBaseMetric] || labels.hours;
+
+    document.querySelector('#fives .stat-description').textContent = currentLabels.fives;
+    document.querySelector('#dimes .stat-description').textContent = currentLabels.dimes;
+    document.querySelector('#quarters .stat-description').textContent = currentLabels.quarters;
+    document.querySelector('#centuries .stat-description').textContent = currentLabels.centuries;
 }
 
 /**
@@ -400,10 +461,11 @@ function updatePlayTimeStats() {
  * Update milestone statistics
  */
 function updateMilestoneStats() {
-    document.querySelector('#fives .stat-value').textContent = statsCache.milestones.fives.length;
-    document.querySelector('#dimes .stat-value').textContent = statsCache.milestones.dimes.length;
-    document.querySelector('#quarters .stat-value').textContent = statsCache.milestones.quarters.length;
-    document.querySelector('#centuries .stat-value').textContent = statsCache.milestones.centuries.length;
+    const milestones = getCurrentMilestones();
+    document.querySelector('#fives .stat-value').textContent = milestones.fives.length;
+    document.querySelector('#dimes .stat-value').textContent = milestones.dimes.length;
+    document.querySelector('#quarters .stat-value').textContent = milestones.quarters.length;
+    document.querySelector('#centuries .stat-value').textContent = milestones.centuries.length;
 }
 
 /**
@@ -599,39 +661,79 @@ const statDetailHandlers = {
         }
     },
     'fives': {
-        getTitle: (currentYear) => `Fives (5+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.milestones.fives.length
-        }),
-        render: (detailContent, statsCache) => {
-            showMilestoneGames(detailContent, 'fives', statsCache.milestones);
+        getTitle: (currentYear) => {
+            const metricLabels = {
+                hours: 'Fives (5-9 Hours)',
+                sessions: 'Fives (5-9 Days)',
+                plays: 'Fives (5-9 Plays)'
+            };
+            const label = metricLabels[currentBaseMetric] || metricLabels.hours;
+            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+        },
+        getSummary: () => {
+            const milestones = getCurrentMilestones();
+            return { mainValue: milestones.fives.length };
+        },
+        render: (detailContent) => {
+            const milestones = getCurrentMilestones();
+            showMilestoneGames(detailContent, 'fives', milestones);
         }
     },
     'dimes': {
-        getTitle: (currentYear) => `Dimes (10+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.milestones.dimes.length
-        }),
-        render: (detailContent, statsCache) => {
-            showMilestoneGames(detailContent, 'dimes', statsCache.milestones);
+        getTitle: (currentYear) => {
+            const metricLabels = {
+                hours: 'Dimes (10-24 Hours)',
+                sessions: 'Dimes (10-24 Days)',
+                plays: 'Dimes (10-24 Plays)'
+            };
+            const label = metricLabels[currentBaseMetric] || metricLabels.hours;
+            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+        },
+        getSummary: () => {
+            const milestones = getCurrentMilestones();
+            return { mainValue: milestones.dimes.length };
+        },
+        render: (detailContent) => {
+            const milestones = getCurrentMilestones();
+            showMilestoneGames(detailContent, 'dimes', milestones);
         }
     },
     'quarters': {
-        getTitle: (currentYear) => `Quarters (25+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.milestones.quarters.length
-        }),
-        render: (detailContent, statsCache) => {
-            showMilestoneGames(detailContent, 'quarters', statsCache.milestones);
+        getTitle: (currentYear) => {
+            const metricLabels = {
+                hours: 'Quarters (25-99 Hours)',
+                sessions: 'Quarters (25-99 Days)',
+                plays: 'Quarters (25-99 Plays)'
+            };
+            const label = metricLabels[currentBaseMetric] || metricLabels.hours;
+            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+        },
+        getSummary: () => {
+            const milestones = getCurrentMilestones();
+            return { mainValue: milestones.quarters.length };
+        },
+        render: (detailContent) => {
+            const milestones = getCurrentMilestones();
+            showMilestoneGames(detailContent, 'quarters', milestones);
         }
     },
     'centuries': {
-        getTitle: (currentYear) => `Centuries (100+ Plays)${currentYear ? ` (${currentYear})` : ' (All Time)'}`,
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.milestones.centuries.length
-        }),
-        render: (detailContent, statsCache) => {
-            showMilestoneGames(detailContent, 'centuries', statsCache.milestones);
+        getTitle: (currentYear) => {
+            const metricLabels = {
+                hours: 'Centuries (100+ Hours)',
+                sessions: 'Centuries (100+ Days)',
+                plays: 'Centuries (100+ Plays)'
+            };
+            const label = metricLabels[currentBaseMetric] || metricLabels.hours;
+            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+        },
+        getSummary: () => {
+            const milestones = getCurrentMilestones();
+            return { mainValue: milestones.centuries.length };
+        },
+        render: (detailContent) => {
+            const milestones = getCurrentMilestones();
+            showMilestoneGames(detailContent, 'centuries', milestones);
         }
     },
     'play-next-suggestions': {
@@ -963,21 +1065,38 @@ function showGamesPlayed(container) {
 function showMilestoneGames(container, milestone, milestonesData) {
     const games = milestonesData[milestone];
 
+    // Determine column header based on current base metric
+    const columnHeaders = {
+        hours: 'Total Hours',
+        sessions: 'Days Played',
+        plays: 'Play Count'
+    };
+    const columnHeader = columnHeaders[currentBaseMetric] || 'Total Hours';
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
             <tr>
                 <th>Game</th>
-                <th>Play Count</th>
+                <th>${columnHeader}</th>
             </tr>
         </thead>
         <tbody>
-            ${games.map(item => `
+            ${games.map(item => {
+                // Format count based on metric
+                let formattedCount;
+                if (currentBaseMetric === 'hours') {
+                    formattedCount = item.count.toFixed(1);
+                } else {
+                    formattedCount = Math.floor(item.count);
+                }
+                return `
                 <tr>
                     <td>${item.game.name}</td>
-                    <td>${item.count}</td>
+                    <td>${formattedCount}</td>
                 </tr>
-            `).join('')}
+                `;
+            }).join('')}
         </tbody>
     `;
     container.appendChild(table);

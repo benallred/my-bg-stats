@@ -284,15 +284,32 @@ function getTotalGamesPlayed(games, plays, year = null) {
  * @param {number|null} year - Optional year filter
  * @returns {Object} { fives, dimes, quarters, centuries }
  */
-function getPlayMilestones(games, plays, year = null) {
-  // Count plays per game
-  const playCountsPerGame = new Map();
+/**
+ * Get games categorized by milestones based on specified metric
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter
+ * @param {string} metric - Metric type: 'plays', 'sessions', or 'hours'
+ * @returns {Object} Milestone categories: {fives, dimes, quarters, centuries}
+ */
+function getMilestones(games, plays, year, metric) {
+  // Calculate metric values per game
+  const metricValuesPerGame = new Map();
 
   plays.forEach(play => {
     if (year && !play.date.startsWith(year.toString())) return;
 
-    const count = playCountsPerGame.get(play.gameId) || 0;
-    playCountsPerGame.set(play.gameId, count + 1);
+    const currentValue = metricValuesPerGame.get(play.gameId) || {
+      playCount: 0,
+      totalMinutes: 0,
+      uniqueDates: new Set()
+    };
+
+    currentValue.playCount += 1;
+    currentValue.totalMinutes += (play.durationMin || 0);
+    currentValue.uniqueDates.add(play.date);
+
+    metricValuesPerGame.set(play.gameId, currentValue);
   });
 
   // Categorize games by milestone
@@ -303,10 +320,21 @@ function getPlayMilestones(games, plays, year = null) {
     centuries: []
   };
 
-  playCountsPerGame.forEach((count, gameId) => {
+  metricValuesPerGame.forEach((value, gameId) => {
     const game = games.find(g => g.id === gameId);
     if (!game) return;
 
+    // Select the appropriate metric value
+    let count;
+    if (metric === 'hours') {
+      count = value.totalMinutes / 60;
+    } else if (metric === 'sessions') {
+      count = value.uniqueDates.size;
+    } else {
+      count = value.playCount;
+    }
+
+    // Categorize by threshold
     if (count >= 100) {
       milestones.centuries.push({ game, count });
     } else if (count >= 25) {
@@ -888,46 +916,60 @@ function suggestForNextHourHIndex(plays, gamePlayData) {
 }
 
 /**
- * Suggestion Algorithm 6: Games needed for next play-count milestone
+ * Suggestion Algorithm 6: Games needed for next milestone (metric-aware)
  * @param {Map} gamePlayData - Map of game play data
+ * @param {string} metric - Metric type: 'plays', 'sessions', or 'hours'
  * @returns {Object|null} Suggestion object or null
  */
-function suggestForNextMilestone(gamePlayData) {
+function suggestForNextMilestone(gamePlayData, metric) {
+  // Get value based on metric
+  const getValue = (data) => {
+    if (metric === 'hours') {
+      return data.totalMinutes / 60;
+    } else if (metric === 'sessions') {
+      return data.uniqueDays.size;
+    } else {
+      return data.playCount;
+    }
+  };
+
   const allPlayedGames = Array.from(gamePlayData.values())
-    .filter(data => data.playCount > 0);
+    .filter(data => getValue(data) > 0);
 
   // Find games approaching each milestone
   const milestoneChaseGames = allPlayedGames
     .map(data => {
-      const target = getNextMilestoneTarget(data.playCount);
+      const currentValue = getValue(data);
+      const target = getNextMilestoneTarget(currentValue);
       if (!target) return null;
       return {
         ...data,
+        currentValue,
         target,
-        playsNeeded: target - data.playCount
+        needed: target - currentValue
       };
     })
     .filter(item => item !== null);
 
   if (milestoneChaseGames.length === 0) return null;
 
-  // Find the highest play count below each milestone (5, 10, 25, 100)
+  // Find the highest value below each milestone (5, 10, 25, 100)
   const milestones = [5, 10, 25, 100];
   const closestToEachMilestone = [];
 
   milestones.forEach(milestone => {
     const gamesUnderThisMilestone = milestoneChaseGames.filter(data => data.target === milestone);
     if (gamesUnderThisMilestone.length > 0) {
-      // Find the highest play count for this milestone
-      const maxPlayCount = Math.max(...gamesUnderThisMilestone.map(data => data.playCount));
-      closestToEachMilestone.push(maxPlayCount);
+      // Find the highest value for this milestone
+      const maxValue = Math.max(...gamesUnderThisMilestone.map(data => data.currentValue));
+      closestToEachMilestone.push(maxValue);
     }
   });
 
   if (closestToEachMilestone.length === 0) return null;
 
-  // Filter to games at these "closest" play counts, then select one with sqrt rarity weighting
-  const closestGames = milestoneChaseGames.filter(data => closestToEachMilestone.includes(data.playCount));
+  // Filter to games at these "closest" values, then select one with sqrt rarity weighting
+  const closestGames = milestoneChaseGames.filter(data => closestToEachMilestone.includes(data.currentValue));
   const candidate = selectRandomWeightedBySqrtRarity(closestGames, game => game.target);
 
   // Create pithy reason based on milestone target
@@ -940,14 +982,24 @@ function suggestForNextMilestone(gamePlayData) {
   const milestoneName = milestoneNames[candidate.target];
 
   // Determine if within 90% of target (rounded down)
-  const prefix = candidate.playCount >= Math.floor(candidate.target * 0.9) ? 'Almost a' : 'Closest to a';
+  const prefix = candidate.currentValue >= Math.floor(candidate.target * 0.9) ? 'Almost a' : 'Closest to a';
 
-  const playText = candidate.playCount === 1 ? '1 total play' : `${candidate.playCount} total plays`;
+  // Format stat text based on metric
+  let statText;
+  if (metric === 'hours') {
+    statText = `${candidate.currentValue.toFixed(1)} total hours`;
+  } else if (metric === 'sessions') {
+    const sessionCount = Math.floor(candidate.currentValue);
+    statText = sessionCount === 1 ? '1 total day' : `${sessionCount} total days`;
+  } else {
+    const playCount = Math.floor(candidate.currentValue);
+    statText = playCount === 1 ? '1 total play' : `${playCount} total plays`;
+  }
 
   return {
     game: candidate.game,
     reason: `${prefix} ${milestoneName}`,
-    stat: playText
+    stat: statText
   };
 }
 
@@ -1010,15 +1062,17 @@ function getSuggestedGames(games, plays) {
     }
   });
 
-  // Collect suggestions from each algorithm (ordered by priority)
+  // Collect suggestions from each algorithm (in priority order)
   const suggestions = [
-    suggestRecentlyPlayedWithLowSessions(gamePlayData),        // Priority 1: Fresh and recent
-    suggestForNextHourHIndex(plays, gamePlayData),             // Priority 2: Squaring up: Hours
-    suggestForNextSessionHIndex(games, plays, gamePlayData),   // Priority 3: Squaring up: Sessions
-    suggestForNextTraditionalHIndex(games, plays, gamePlayData), // Priority 4: Squaring up: Plays
-    suggestForNextMilestone(gamePlayData),                     // Priority 5: Almost a milestone
-    suggestLongestUnplayed(gamePlayData),                      // Priority 6: Gathering dust
-    suggestNeverPlayedGame(gamePlayData)                       // Priority 7: Shelf of shame
+    suggestRecentlyPlayedWithLowSessions(gamePlayData),        // Fresh and recent
+    suggestForNextHourHIndex(plays, gamePlayData),             // Squaring up: Hours
+    suggestForNextSessionHIndex(games, plays, gamePlayData),   // Squaring up: Sessions
+    suggestForNextTraditionalHIndex(games, plays, gamePlayData), // Squaring up: Plays
+    suggestForNextMilestone(gamePlayData, 'hours'),            // Almost a milestone (hours)
+    suggestForNextMilestone(gamePlayData, 'sessions'),         // Almost a milestone (sessions)
+    suggestForNextMilestone(gamePlayData, 'plays'),            // Almost a milestone (plays)
+    suggestLongestUnplayed(gamePlayData),                      // Gathering dust
+    suggestNeverPlayedGame(gamePlayData)                       // Shelf of shame
   ].filter(suggestion => suggestion !== null);
 
   // Merge duplicates by collecting reasons and stats into arrays
@@ -1059,7 +1113,7 @@ export {
   getTotalPlays,
   getTotalDaysPlayed,
   getTotalGamesPlayed,
-  getPlayMilestones,
+  getMilestones,
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getAllAcquisitionYears,

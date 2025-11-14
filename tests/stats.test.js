@@ -331,55 +331,135 @@ describe('Play Statistics', () => {
     });
   });
 
-  describe('getPlayMilestones', () => {
-    test('returns object with fives, dimes, quarters, centuries', () => {
-      const result = stats.getPlayMilestones(edgeCasesData.games, edgeCasesData.plays);
-      expect(result).toHaveProperty('fives');
-      expect(result).toHaveProperty('dimes');
-      expect(result).toHaveProperty('quarters');
-      expect(result).toHaveProperty('centuries');
+  describe('getMilestones', () => {
+    describe('plays metric', () => {
+      test('returns object with fives, dimes, quarters, centuries', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
+        expect(result).toHaveProperty('fives');
+        expect(result).toHaveProperty('dimes');
+        expect(result).toHaveProperty('quarters');
+        expect(result).toHaveProperty('centuries');
+      });
+
+      test('categorizes games at exactly 5 plays', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
+        expect(result.fives.length).toBeGreaterThan(0);
+      });
+
+      test('categorizes games at exactly 10 plays', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
+        expect(result.dimes.length).toBeGreaterThan(0);
+      });
+
+      test('categorizes games at exactly 25 plays', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
+        expect(result.quarters.length).toBeGreaterThan(0);
+      });
+
+      test('categorizes games at 100 plays', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
+        expect(result.centuries.length).toBeGreaterThan(0);
+      });
+
+      test('sorts each category by count descending', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
+        if (result.centuries.length > 1) {
+          expect(result.centuries[0].count).toBeGreaterThanOrEqual(result.centuries[1].count);
+        }
+      });
+
+      test('filters by year', () => {
+        const result2020 = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, 2020, 'plays');
+        expect(result2020).toBeDefined();
+      });
+
+      test('returns empty arrays for no plays', () => {
+        const result = stats.getMilestones(typicalData.games, [], null, 'plays');
+        expect(result.fives).toEqual([]);
+        expect(result.dimes).toEqual([]);
+        expect(result.quarters).toEqual([]);
+        expect(result.centuries).toEqual([]);
+      });
     });
 
-    test('categorizes games at exactly 5 plays', () => {
-      const result = stats.getPlayMilestones(edgeCasesData.games, edgeCasesData.plays);
-      expect(result.fives.length).toBeGreaterThan(0);
+    describe('sessions metric', () => {
+      test('categorizes games by unique days played', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'sessions');
+        expect(result.fives.length).toBeGreaterThan(0);
+      });
+
+      test('counts unique dates correctly', () => {
+        // Create test data with known sessions
+        const testGames = [{ id: 1, name: 'Test Game' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 60 },
+          { gameId: 1, date: '2020-01-01', durationMin: 60 }, // Same day, should count as 1 session
+          { gameId: 1, date: '2020-01-02', durationMin: 60 },
+          { gameId: 1, date: '2020-01-03', durationMin: 60 },
+          { gameId: 1, date: '2020-01-04', durationMin: 60 },
+          { gameId: 1, date: '2020-01-05', durationMin: 60 }
+        ];
+        const result = stats.getMilestones(testGames, testPlays, null, 'sessions');
+        expect(result.fives).toHaveLength(1);
+        expect(result.fives[0].count).toBe(5); // 5 unique days
+      });
+
+      test('filters by year for sessions', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, 2020, 'sessions');
+        expect(result).toBeDefined();
+      });
     });
 
-    test('categorizes games at exactly 10 plays', () => {
-      const result = stats.getPlayMilestones(edgeCasesData.games, edgeCasesData.plays);
-      expect(result.dimes.length).toBeGreaterThan(0);
+    describe('hours metric', () => {
+      test('categorizes games by total hours played', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'hours');
+        expect(result.fives.length).toBeGreaterThan(0);
+      });
+
+      test('calculates hours from durationMin correctly', () => {
+        // Create test data with known hours
+        const testGames = [{ id: 1, name: 'Test Game' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 300 }, // 5 hours
+        ];
+        const result = stats.getMilestones(testGames, testPlays, null, 'hours');
+        expect(result.fives).toHaveLength(1);
+        expect(result.fives[0].count).toBe(5);
+      });
+
+      test('sums hours across multiple plays', () => {
+        const testGames = [{ id: 1, name: 'Test Game' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 120 }, // 2 hours
+          { gameId: 1, date: '2020-01-02', durationMin: 180 }, // 3 hours
+        ];
+        const result = stats.getMilestones(testGames, testPlays, null, 'hours');
+        expect(result.fives).toHaveLength(1);
+        expect(result.fives[0].count).toBe(5); // 2 + 3 = 5 hours
+      });
+
+      test('handles missing duration as 0', () => {
+        const testGames = [{ id: 1, name: 'Test Game' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01' }, // No durationMin
+        ];
+        const result = stats.getMilestones(testGames, testPlays, null, 'hours');
+        expect(result.fives).toHaveLength(0);
+      });
+
+      test('filters by year for hours', () => {
+        const result = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, 2020, 'hours');
+        expect(result).toBeDefined();
+      });
     });
 
-    test('categorizes games at exactly 25 plays', () => {
-      const result = stats.getPlayMilestones(edgeCasesData.games, edgeCasesData.plays);
-      expect(result.quarters.length).toBeGreaterThan(0);
-    });
-
-    test('categorizes games at 100 plays', () => {
-      const result = stats.getPlayMilestones(edgeCasesData.games, edgeCasesData.plays);
-      expect(result.centuries.length).toBeGreaterThan(0);
-    });
-
-    test('sorts each category by count descending', () => {
-      const result = stats.getPlayMilestones(edgeCasesData.games, edgeCasesData.plays);
-      if (result.centuries.length > 1) {
-        expect(result.centuries[0].count).toBeGreaterThanOrEqual(result.centuries[1].count);
-      }
-    });
-
-    test('filters by year', () => {
-      const result2020 = stats.getPlayMilestones(edgeCasesData.games, edgeCasesData.plays, 2020);
-      expect(result2020).toBeDefined();
-    });
-
-    test('returns empty arrays for no plays', () => {
-      const result = stats.getPlayMilestones(typicalData.games, []);
-      expect(result.fives).toEqual([]);
-      expect(result.dimes).toEqual([]);
-      expect(result.quarters).toEqual([]);
-      expect(result.centuries).toEqual([]);
+    test('defaults to plays metric when not specified', () => {
+      const resultDefault = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays);
+      const resultPlays = stats.getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
+      expect(resultDefault).toEqual(resultPlays);
     });
   });
+
 });
 
 describe('Diagnostic Functions', () => {
@@ -802,6 +882,47 @@ describe('Suggestion Algorithms', () => {
       const games = typicalData.games.map(g => ({ ...g, isBaseGame: false }));
       const suggestions = stats.getSuggestedGames(games, typicalData.plays);
       expect(suggestions).toEqual([]);
+    });
+
+    test('accepts metric parameter and uses it for milestone suggestions (hours)', () => {
+      const suggestions = stats.getSuggestedGames(typicalData.games, typicalData.plays, 'hours');
+      expect(Array.isArray(suggestions)).toBe(true);
+    });
+
+    test('accepts metric parameter and uses it for milestone suggestions (sessions)', () => {
+      const suggestions = stats.getSuggestedGames(typicalData.games, typicalData.plays, 'sessions');
+      expect(Array.isArray(suggestions)).toBe(true);
+    });
+
+    test('milestone suggestion respects hours metric', () => {
+      const testGames = [
+        { id: 1, name: 'Game Near Hour Milestone', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] }
+      ];
+      const testPlays = [
+        { gameId: 1, date: '2020-01-01', durationMin: 240 }, // 4 hours
+      ];
+      const suggestions = stats.getSuggestedGames(testGames, testPlays, 'hours');
+      const milestoneSuggestion = suggestions.find(s => s.reasons.includes('Closest to a five') || s.reasons.includes('Almost a five'));
+      if (milestoneSuggestion) {
+        expect(milestoneSuggestion.stats).toContain('4.0 total hours');
+      }
+    });
+
+    test('milestone suggestion respects sessions metric', () => {
+      const testGames = [
+        { id: 1, name: 'Game Near Session Milestone', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] }
+      ];
+      const testPlays = [
+        { gameId: 1, date: '2020-01-01', durationMin: 60 },
+        { gameId: 1, date: '2020-01-02', durationMin: 60 },
+        { gameId: 1, date: '2020-01-03', durationMin: 60 },
+        { gameId: 1, date: '2020-01-04', durationMin: 60 }, // 4 sessions
+      ];
+      const suggestions = stats.getSuggestedGames(testGames, testPlays, 'sessions');
+      const milestoneSuggestion = suggestions.find(s => s.reasons.includes('Closest to a five') || s.reasons.includes('Almost a five'));
+      if (milestoneSuggestion) {
+        expect(milestoneSuggestion.stats).toContain('4 total days');
+      }
     });
   });
 
