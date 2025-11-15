@@ -21,6 +21,44 @@ function calculateMedian(durations) {
 }
 
 /**
+ * Enum representing the playUsedGameCopy field values from BG Stats.
+ * @readonly
+ * @enum {number}
+ */
+const PlayUsedGameCopyType = {
+  NOT_SET: 0,
+  MY_COPY: 1,
+  OTHER_PLAYER_COPY: 2
+};
+
+/**
+ * Gets the earliest acquired owned copy from a game's copies array.
+ * @param {Array} copies - Array of copy objects
+ * @returns {string|null} copyId of the earliest acquired owned copy, or null if none found
+ */
+function getEarliestOwnedCopy(copies) {
+  if (!copies || copies.length === 0) {
+    return null;
+  }
+
+  // Filter to owned copies with acquisition dates
+  const ownedCopies = copies.filter(copy =>
+    copy.statusOwned && copy.acquisitionDate
+  );
+
+  if (ownedCopies.length === 0) {
+    // No owned copies with dates - try owned copies without dates
+    const ownedWithoutDates = copies.filter(copy => copy.statusOwned);
+    return ownedWithoutDates.length > 0 ? ownedWithoutDates[0].copyId : null;
+  }
+
+  // Sort by acquisition date (earliest first)
+  ownedCopies.sort((a, b) => a.acquisitionDate.localeCompare(b.acquisitionDate));
+
+  return ownedCopies[0].copyId;
+}
+
+/**
  * Extracts copy metadata from a game's copies array.
  * @param {Array} copies - Array of copy objects from BG Stats
  * @returns {Array} Array of copy objects with acquisitionDate and statusOwned
@@ -31,19 +69,35 @@ function extractCopyMetadata(copies) {
   if (copies && copies.length > 0) {
     copies.forEach(copy => {
       let copyAcquisitionDate = null;
+      let pricePaid = null;
+      let currency = null;
+
       if (copy.metaData) {
         try {
           const metadata = JSON.parse(copy.metaData);
           if (metadata.AcquisitionDate) {
             copyAcquisitionDate = metadata.AcquisitionDate; // Already in YYYY-MM-DD format
           }
+          if (metadata.PricePaid) {
+            const price = parseFloat(metadata.PricePaid);
+            if (!isNaN(price)) {
+              pricePaid = price;
+            }
+          }
+          if (metadata.PricePaidCurrency) {
+            currency = metadata.PricePaidCurrency;
+          }
         } catch (e) {
           // Invalid JSON in metaData, skip
         }
       }
+
       result.push({
+        copyId: copy.uuid || null,
         acquisitionDate: copyAcquisitionDate,
-        statusOwned: copy.statusOwned === true
+        statusOwned: copy.statusOwned === true,
+        pricePaid: pricePaid,
+        currency: currency
       });
     });
   }
@@ -217,8 +271,45 @@ function processPlays(plays, gamesMap) {
       }
     }
 
+    // Extract copy ID based on playUsedGameCopy enum
+    let copyId = null;
+    if (gamesMap.has(gameId)) {
+      const game = gamesMap.get(gameId);
+      let playUsedGameCopyType = PlayUsedGameCopyType.NOT_SET;
+
+      // Parse playUsedGameCopy from metaData
+      if (play.metaData) {
+        try {
+          const metadata = JSON.parse(play.metaData);
+          if (metadata.playUsedGameCopy !== undefined) {
+            playUsedGameCopyType = metadata.playUsedGameCopy;
+          }
+        } catch (e) {
+          // Invalid JSON in metaData, treat as NOT_SET
+        }
+      }
+
+      // Handle enum cases
+      if (playUsedGameCopyType === PlayUsedGameCopyType.MY_COPY) {
+        // My copy - check for explicit UUID, otherwise use earliest owned copy
+        if (play.playGameCopyUuid) {
+          // Find copy by UUID
+          const matchingCopy = game.copies.find(copy => copy.copyId === play.playGameCopyUuid);
+          copyId = matchingCopy ? matchingCopy.copyId : getEarliestOwnedCopy(game.copies);
+        } else {
+          // No explicit UUID - use earliest owned copy
+          copyId = getEarliestOwnedCopy(game.copies);
+        }
+      } else if (playUsedGameCopyType === PlayUsedGameCopyType.NOT_SET) {
+        // Not set - assume my copy if I own the game
+        copyId = getEarliestOwnedCopy(game.copies);
+      }
+      // playUsedGameCopyType === OTHER_PLAYER_COPY: copyId remains null
+    }
+
     processedPlays.push({
       gameId: gameId,
+      copyId: copyId,
       date: playDate,
       timestamp: play.playDate,
       durationMin: finalDuration,

@@ -20,7 +20,8 @@
       "copies": [
         {
           "statusOwned": true,
-          "metaData": "{\"AcquisitionDate\":\"2020-01-01\"}"
+          "metaData": "{\"AcquisitionDate\":\"2020-01-01\",\"PricePaid\":\"27.44\",\"PricePaidCurrency\":\"USD\"}",
+          "uuid": "expand-copy-1"
         }
       ],
       "tags": []
@@ -35,7 +36,8 @@
       "copies": [
         {
           "statusOwned": true,
-          "metaData": "{\"AcquisitionDate\":\"2021-01-01\"}"
+          "metaData": "{\"AcquisitionDate\":\"2021-01-01\",\"PricePaid\":\"75.56\",\"PricePaidCurrency\":\"USD\"}",
+          "uuid": "expand-copy-2"
         }
       ],
       "tags": [
@@ -54,7 +56,8 @@
       "copies": [
         {
           "statusOwned": true,
-          "metaData": "{}"
+          "metaData": "{}",
+          "uuid": "expand-copy-3"
         }
       ],
       "tags": []
@@ -64,17 +67,20 @@
     {
       "gameRefId": 1,
       "playDate": "2024-01-01 10:00:00",
-      "durationMin": 60
+      "durationMin": 60,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 2,
       "playDate": "2024-01-02 10:00:00",
-      "durationMin": 75
+      "durationMin": 75,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 3,
       "playDate": "2024-01-03 10:00:00",
-      "durationMin": 30
+      "durationMin": 30,
+      "metaData": "{\"playUsedGameCopy\":1}"
     }
   ]
 }

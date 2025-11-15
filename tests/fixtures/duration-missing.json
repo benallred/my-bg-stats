@@ -11,7 +11,8 @@
       "copies": [
         {
           "statusOwned": true,
-          "metaData": "{\"AcquisitionDate\":\"2020-01-01\"}"
+          "metaData": "{\"AcquisitionDate\":\"2020-01-01\",\"PricePaid\":\"31.32\",\"PricePaidCurrency\":\"USD\"}",
+          "uuid": "duration-copy-1"
         }
       ],
       "tags": []
@@ -26,7 +27,8 @@
       "copies": [
         {
           "statusOwned": true,
-          "metaData": "{\"AcquisitionDate\":\"2021-01-01\"}"
+          "metaData": "{\"AcquisitionDate\":\"2021-01-01\",\"PricePaid\":\"30.04\",\"PricePaidCurrency\":\"USD\"}",
+          "uuid": "duration-copy-2"
         }
       ],
       "tags": []
@@ -41,7 +43,8 @@
       "copies": [
         {
           "statusOwned": true,
-          "metaData": "{\"AcquisitionDate\":\"2022-01-01\"}"
+          "metaData": "{\"AcquisitionDate\":\"2022-01-01\",\"PricePaid\":\"33.26\",\"PricePaidCurrency\":\"USD\"}",
+          "uuid": "duration-copy-3"
         }
       ],
       "tags": []
@@ -56,7 +59,8 @@
       "copies": [
         {
           "statusOwned": true,
-          "metaData": "{\"AcquisitionDate\":\"2019-01-01\"}"
+          "metaData": "{\"AcquisitionDate\":\"2019-01-01\",\"PricePaid\":\"26.97\",\"PricePaidCurrency\":\"USD\"}",
+          "uuid": "duration-copy-4"
         }
       ],
       "tags": []
@@ -66,62 +70,74 @@
     {
       "gameRefId": 1,
       "playDate": "2024-01-01 10:00:00",
-      "durationMin": 60
+      "durationMin": 60,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-02 10:00:00",
-      "durationMin": 0
+      "durationMin": 0,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-03 10:00:00",
-      "durationMin": 65
+      "durationMin": 65,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-04 10:00:00",
-      "durationMin": 0
+      "durationMin": 0,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-05 10:00:00",
-      "durationMin": 55
+      "durationMin": 55,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 2,
       "playDate": "2024-02-01 10:00:00",
-      "durationMin": 0
+      "durationMin": 0,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 2,
       "playDate": "2024-02-02 10:00:00",
-      "durationMin": 0
+      "durationMin": 0,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 2,
       "playDate": "2024-02-03 10:00:00",
-      "durationMin": 0
+      "durationMin": 0,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-01 10:00:00",
-      "durationMin": 45
+      "durationMin": 45,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-02 10:00:00",
-      "durationMin": 50
+      "durationMin": 50,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-03 10:00:00",
-      "durationMin": 48
+      "durationMin": 48,
+      "metaData": "{\"playUsedGameCopy\":1}"
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-04 10:00:00",
-      "durationMin": 52
+      "durationMin": 52,
+      "metaData": "{\"playUsedGameCopy\":1}"
     }
   ]
 }

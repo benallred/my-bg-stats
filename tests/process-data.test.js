@@ -59,6 +59,29 @@ describe('process-data.js transformation logic', () => {
       expect(game.copies[0].acquisitionDate).toBe('2021-01-15');
     });
 
+    test('extracts copyId from copy uuid', () => {
+      const output = processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Base Game');
+
+      expect(game.copies[0].copyId).toBe('copy-uuid-1');
+    });
+
+    test('extracts price information from metaData JSON', () => {
+      const output = processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Base Game');
+
+      expect(game.copies[0].pricePaid).toBe(29.99);
+      expect(game.copies[0].currency).toBe('USD');
+    });
+
+    test('handles missing price data', () => {
+      const output = processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Expansion');
+
+      expect(game.copies[0].pricePaid).toBeNull();
+      expect(game.copies[0].currency).toBeNull();
+    });
+
     test('handles missing acquisition dates', () => {
       const output = processData(edgeCasesFixture);
       const game = output.games.find(g => g.name === 'Game With No Acquisition Date');
@@ -72,6 +95,7 @@ describe('process-data.js transformation logic', () => {
         games: [{
           ...minimalFixture.games[0],
           copies: [{
+            uuid: 'test-uuid',
             statusOwned: true,
             metaData: '{invalid json'
           }]
@@ -80,6 +104,8 @@ describe('process-data.js transformation logic', () => {
 
       const output = processData(fixtureWithBadJSON);
       expect(output.games[0].copies[0].acquisitionDate).toBeNull();
+      expect(output.games[0].copies[0].pricePaid).toBeNull();
+      expect(output.games[0].copies[0].currency).toBeNull();
     });
   });
 
@@ -128,6 +154,60 @@ describe('process-data.js transformation logic', () => {
       output.plays.forEach(play => {
         expect(play.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       });
+    });
+
+    test('extracts copyId from playUsedGameCopy in metaData', () => {
+      const output = processData(minimalFixture);
+      const play = output.plays.find(p => p.gameId === 1);
+
+      expect(play.copyId).toBe('copy-uuid-1');
+    });
+
+    test('handles missing playUsedGameCopy in metaData', () => {
+      const fixtureWithoutCopyRef = {
+        ...minimalFixture,
+        games: minimalFixture.games,
+        plays: [{
+          gameRefId: 1,
+          playDate: '2024-01-01 10:00:00',
+          durationMin: 60,
+          metaData: "{}"
+        }]
+      };
+
+      const output = processData(fixtureWithoutCopyRef);
+      // When playUsedGameCopy is not set and game is owned, assume my copy (earliest acquired)
+      expect(output.plays[0].copyId).toBe('copy-uuid-1');
+    });
+
+    test('handles missing playUsedGameCopy for unowned game', () => {
+      const fixtureUnownedGame = {
+        tags: [],
+        games: [{
+          id: 1,
+          name: "Unowned Game",
+          bggId: 9001,
+          bggYear: 2020,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [{
+            uuid: "unowned-copy-1",
+            statusOwned: false,
+            metaData: "{}"
+          }],
+          tags: []
+        }],
+        plays: [{
+          gameRefId: 1,
+          playDate: '2024-01-01 10:00:00',
+          durationMin: 60,
+          metaData: "{}"
+        }]
+      };
+
+      const output = processData(fixtureUnownedGame);
+      // When playUsedGameCopy is not set and game is NOT owned, copyId should be null
+      expect(output.plays[0].copyId).toBeNull();
     });
 
     test('sorts games alphabetically', () => {

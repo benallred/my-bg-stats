@@ -49,7 +49,7 @@ Run the preprocessing script:
 npm run process-data
 ```
 
-This generates `data.json` with only the necessary, non-private data.
+This generates `data.json` with the processed game and play data.
 
 ### 2. View the Site Locally
 
@@ -86,24 +86,6 @@ Then visit `http://localhost:8000` (or the appropriate port).
    - Click Save
 
 Your site will be live at: `https://[username].github.io/my-bg-stats/`
-
-## Privacy
-
-The preprocessing script ensures that private data is NOT included in the public `data.json`:
-
-### Included (Public)
-- Game names, BGG IDs, publication years
-- Play dates (dates only)
-- Acquisition dates (dates only)
-- Play counts
-
-### Excluded (Private)
-- Player names and IDs
-- Game locations
-- Scores and winners
-- Purchase prices and sources
-- Personal ratings
-- Comments and notes
 
 ## Features
 
@@ -168,6 +150,40 @@ npm run test:coverage
 The project has comprehensive test coverage. Run `npm run test:coverage` to see current metrics.
 
 Tests are located in the `tests/` directory and use [Vitest](https://vitest.dev/) as the testing framework.
+
+## Data Structure
+
+### Game Objects
+
+Each game in `data.json` includes:
+- `id`: Game ID
+- `name`: Game name
+- `bggId`: BoardGameGeek ID
+- `year`: Publication year
+- `isBaseGame`, `isExpansion`, `isExpandalone`: Classification flags
+- `copies`: Array of copy objects
+- `playCount`: Total number of plays
+- `uniquePlayDays`: Number of unique days played
+- `typicalPlayTimeMinutes`: Median play duration
+
+### Copy Objects
+
+Each copy includes:
+- `copyId`: Unique identifier for the copy
+- `acquisitionDate`: Date acquired (YYYY-MM-DD)
+- `statusOwned`: Boolean ownership status
+- `pricePaid`: Purchase price (number, null if not recorded)
+- `currency`: Currency code (e.g., "USD", "EUR", null if not recorded)
+
+### Play Objects
+
+Each play includes:
+- `gameId`: Reference to game ID
+- `copyId`: Reference to specific copy played (null if not recorded)
+- `date`: Play date (YYYY-MM-DD)
+- `timestamp`: Full timestamp
+- `durationMin`: Duration in minutes
+- `durationEstimated`: Boolean indicating if duration was estimated
 
 ## Technology Stack
 
