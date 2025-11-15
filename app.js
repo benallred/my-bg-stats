@@ -22,6 +22,7 @@ import {
   getTotalGamesPlayed,
   getTotalPlayTime,
   getMilestones,
+  getCumulativeMilestoneCount,
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getSuggestedGames,
@@ -328,6 +329,7 @@ function setupBaseMetricFilter() {
         updateHIndexCardLabels();
         updateMilestoneStats();
         updateMilestoneCardLabels();
+        updateMilestoneCumulativeSubstats();
 
         // Only refresh sections if not loading from permalink
         if (!isLoadingFromPermalink) {
@@ -406,6 +408,18 @@ function updateAllStats() {
         milestonesHours: getMilestones(gameData.games, gameData.plays, currentYear, 'hours'),
         milestonesSessions: getMilestones(gameData.games, gameData.plays, currentYear, 'sessions'),
         milestonesPlays: getMilestones(gameData.games, gameData.plays, currentYear, 'plays'),
+        cumulativeFivesHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 5),
+        cumulativeDimesHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 10),
+        cumulativeQuartersHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 25),
+        cumulativeCenturiesHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 100),
+        cumulativeFivesSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 5),
+        cumulativeDimesSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 10),
+        cumulativeQuartersSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 25),
+        cumulativeCenturiesSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 100),
+        cumulativeFivesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 5),
+        cumulativeDimesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 10),
+        cumulativeQuartersPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 25),
+        cumulativeCenturiesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 100),
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays)
@@ -432,6 +446,7 @@ function updateAllStats() {
     updatePlayStats();
     updateMilestoneStats();
     updateMilestoneCardLabels();
+    updateMilestoneCumulativeSubstats();
     updateDiagnosticsSection();
     updateYearInReview();
 }
@@ -502,6 +517,53 @@ function updateMilestoneCardLabels() {
     document.querySelector('#dimes .stat-description').textContent = currentLabels.dimes;
     document.querySelector('#quarters .stat-description').textContent = currentLabels.quarters;
     document.querySelector('#centuries .stat-description').textContent = currentLabels.centuries;
+}
+
+/**
+ * Update cumulative substats for milestone cards based on current base metric
+ */
+function updateMilestoneCumulativeSubstats() {
+    if (!statsCache) return;
+
+    const metricNames = {
+        hours: 'hours',
+        sessions: 'sessions',
+        plays: 'plays'
+    };
+
+    const metricName = metricNames[currentBaseMetric] || 'hours';
+
+    // Get cumulative counts based on current metric
+    let cumulativeFives, cumulativeDimes, cumulativeQuarters;
+
+    switch (currentBaseMetric) {
+        case 'sessions':
+            cumulativeFives = statsCache.cumulativeFivesSessions;
+            cumulativeDimes = statsCache.cumulativeDimesSessions;
+            cumulativeQuarters = statsCache.cumulativeQuartersSessions;
+            break;
+        case 'plays':
+            cumulativeFives = statsCache.cumulativeFivesPlays;
+            cumulativeDimes = statsCache.cumulativeDimesPlays;
+            cumulativeQuarters = statsCache.cumulativeQuartersPlays;
+            break;
+        case 'hours':
+        default:
+            cumulativeFives = statsCache.cumulativeFivesHours;
+            cumulativeDimes = statsCache.cumulativeDimesHours;
+            cumulativeQuarters = statsCache.cumulativeQuartersHours;
+            break;
+    }
+
+    // Update labels
+    document.getElementById('fives-cumulative-label').textContent = `All games with 5+ ${metricName}:`;
+    document.getElementById('dimes-cumulative-label').textContent = `All games with 10+ ${metricName}:`;
+    document.getElementById('quarters-cumulative-label').textContent = `All games with 25+ ${metricName}:`;
+
+    // Update values
+    document.getElementById('fives-cumulative').textContent = cumulativeFives;
+    document.getElementById('dimes-cumulative').textContent = cumulativeDimes;
+    document.getElementById('quarters-cumulative').textContent = cumulativeQuarters;
 }
 
 /**

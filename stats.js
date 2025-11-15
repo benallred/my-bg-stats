@@ -355,6 +355,59 @@ function getMilestones(games, plays, year, metric) {
 }
 
 /**
+ * Get cumulative count of games that have reached a specific milestone threshold or higher
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Year filter, or null for all time
+ * @param {string} metric - Metric to use ('hours', 'sessions', or 'plays')
+ * @param {number} threshold - Threshold value (5, 10, 25, or 100)
+ * @returns {number} Count of games with metric value >= threshold
+ */
+function getCumulativeMilestoneCount(games, plays, year, metric, threshold) {
+  // Calculate metric values per game
+  const metricValuesPerGame = new Map();
+
+  plays.forEach(play => {
+    if (year && !play.date.startsWith(year.toString())) return;
+
+    const currentValue = metricValuesPerGame.get(play.gameId) || {
+      playCount: 0,
+      totalMinutes: 0,
+      uniqueDates: new Set()
+    };
+
+    currentValue.playCount += 1;
+    currentValue.totalMinutes += (play.durationMin || 0);
+    currentValue.uniqueDates.add(play.date);
+
+    metricValuesPerGame.set(play.gameId, currentValue);
+  });
+
+  // Count games at or above threshold
+  let count = 0;
+  metricValuesPerGame.forEach((value, gameId) => {
+    const game = games.find(g => g.id === gameId);
+    if (!game) return;
+
+    // Select the appropriate metric value
+    let metricValue;
+    if (metric === 'hours') {
+      metricValue = value.totalMinutes / 60;
+    } else if (metric === 'sessions') {
+      metricValue = value.uniqueDates.size;
+    } else {
+      metricValue = value.playCount;
+    }
+
+    if (metricValue >= threshold) {
+      count++;
+    }
+  });
+
+  return count;
+}
+
+/**
  * Get games with unknown acquisition dates
  * Only returns currently owned games (including expansions and expandalones)
  * @param {Array} games - Array of game objects
@@ -1272,6 +1325,7 @@ export {
   getTotalDaysPlayed,
   getTotalGamesPlayed,
   getMilestones,
+  getCumulativeMilestoneCount,
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getAllAcquisitionYears,

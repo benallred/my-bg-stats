@@ -660,6 +660,190 @@ describe('Play Statistics', () => {
     });
   });
 
+  describe('getCumulativeMilestoneCount', () => {
+    describe('plays metric', () => {
+      test('counts games with 5+ plays', () => {
+        const testGames = [
+          { id: 1, name: 'Game 1' },
+          { id: 2, name: 'Game 2' },
+          { id: 3, name: 'Game 3' }
+        ];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 60 },
+          { gameId: 1, date: '2020-01-02', durationMin: 60 },
+          { gameId: 1, date: '2020-01-03', durationMin: 60 },
+          { gameId: 1, date: '2020-01-04', durationMin: 60 },
+          { gameId: 1, date: '2020-01-05', durationMin: 60 }, // 5 plays
+          { gameId: 2, date: '2020-01-01', durationMin: 60 },
+          { gameId: 2, date: '2020-01-02', durationMin: 60 },
+          { gameId: 2, date: '2020-01-03', durationMin: 60 }, // 3 plays
+          { gameId: 3, date: '2020-01-01', durationMin: 60 },
+          { gameId: 3, date: '2020-01-02', durationMin: 60 },
+          { gameId: 3, date: '2020-01-03', durationMin: 60 },
+          { gameId: 3, date: '2020-01-04', durationMin: 60 },
+          { gameId: 3, date: '2020-01-05', durationMin: 60 },
+          { gameId: 3, date: '2020-01-06', durationMin: 60 },
+          { gameId: 3, date: '2020-01-07', durationMin: 60 },
+          { gameId: 3, date: '2020-01-08', durationMin: 60 },
+          { gameId: 3, date: '2020-01-09', durationMin: 60 },
+          { gameId: 3, date: '2020-01-10', durationMin: 60 } // 10 plays
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
+        expect(result).toBe(2); // Game 1 (5 plays) and Game 3 (10 plays)
+      });
+
+      test('counts games with 10+ plays', () => {
+        const testGames = [
+          { id: 1, name: 'Game 1' },
+          { id: 2, name: 'Game 2' }
+        ];
+        const testPlays = [
+          ...Array(10).fill(null).map((_, i) => ({ gameId: 1, date: `2020-01-${String(i + 1).padStart(2, '0')}`, durationMin: 60 })),
+          ...Array(5).fill(null).map((_, i) => ({ gameId: 2, date: `2020-01-${String(i + 1).padStart(2, '0')}`, durationMin: 60 }))
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 10);
+        expect(result).toBe(1); // Only Game 1 has 10+ plays
+      });
+
+      test('counts games with 25+ plays', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = Array(30).fill(null).map((_, i) => ({
+          gameId: 1,
+          date: `2020-01-${String((i % 30) + 1).padStart(2, '0')}`,
+          durationMin: 60
+        }));
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 25);
+        expect(result).toBe(1);
+      });
+
+      test('counts games with 100+ plays', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = Array(150).fill(null).map((_, i) => ({
+          gameId: 1,
+          date: `2020-${String(Math.floor(i / 30) + 1).padStart(2, '0')}-${String((i % 30) + 1).padStart(2, '0')}`,
+          durationMin: 60
+        }));
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 100);
+        expect(result).toBe(1);
+      });
+
+      test('returns 0 when no games meet threshold', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 60 },
+          { gameId: 1, date: '2020-01-02', durationMin: 60 }
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
+        expect(result).toBe(0);
+      });
+
+      test('filters by year', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 60 },
+          { gameId: 1, date: '2020-01-02', durationMin: 60 },
+          { gameId: 1, date: '2020-01-03', durationMin: 60 },
+          { gameId: 1, date: '2020-01-04', durationMin: 60 },
+          { gameId: 1, date: '2020-01-05', durationMin: 60 },
+          { gameId: 1, date: '2021-01-01', durationMin: 60 }
+        ];
+        const result2020 = stats.getCumulativeMilestoneCount(testGames, testPlays, 2020, 'plays', 5);
+        const result2021 = stats.getCumulativeMilestoneCount(testGames, testPlays, 2021, 'plays', 5);
+        expect(result2020).toBe(1); // 5 plays in 2020
+        expect(result2021).toBe(0); // Only 1 play in 2021
+      });
+    });
+
+    describe('sessions metric', () => {
+      test('counts games with 5+ sessions', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 60 },
+          { gameId: 1, date: '2020-01-01', durationMin: 60 }, // Same day
+          { gameId: 1, date: '2020-01-02', durationMin: 60 },
+          { gameId: 1, date: '2020-01-03', durationMin: 60 },
+          { gameId: 1, date: '2020-01-04', durationMin: 60 },
+          { gameId: 1, date: '2020-01-05', durationMin: 60 }
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 5);
+        expect(result).toBe(1); // 5 unique days
+      });
+
+      test('correctly handles duplicate dates', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 60 },
+          { gameId: 1, date: '2020-01-01', durationMin: 60 },
+          { gameId: 1, date: '2020-01-01', durationMin: 60 }
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 1);
+        expect(result).toBe(1); // Only 1 unique day
+      });
+    });
+
+    describe('hours metric', () => {
+      test('counts games with 5+ hours', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 300 } // 5 hours
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 5);
+        expect(result).toBe(1);
+      });
+
+      test('sums hours across multiple plays', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 120 }, // 2 hours
+          { gameId: 1, date: '2020-01-02', durationMin: 180 }, // 3 hours
+          { gameId: 1, date: '2020-01-03', durationMin: 60 }   // 1 hour
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 5);
+        expect(result).toBe(1); // 6 total hours
+      });
+
+      test('handles missing duration as 0', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01' } // No durationMin
+        ];
+        const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 1);
+        expect(result).toBe(0);
+      });
+
+      test('handles fractional hours correctly', () => {
+        const testGames = [{ id: 1, name: 'Game 1' }];
+        const testPlays = [
+          { gameId: 1, date: '2020-01-01', durationMin: 299 } // 4.98 hours
+        ];
+        const result5 = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 5);
+        const result4 = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 4);
+        expect(result5).toBe(0); // Less than 5 hours
+        expect(result4).toBe(1); // More than 4 hours
+      });
+    });
+
+    test('returns 0 for empty plays array', () => {
+      const testGames = [{ id: 1, name: 'Game 1' }];
+      const result = stats.getCumulativeMilestoneCount(testGames, [], null, 'plays', 5);
+      expect(result).toBe(0);
+    });
+
+    test('ignores plays for non-existent games', () => {
+      const testGames = [{ id: 1, name: 'Game 1' }];
+      const testPlays = [
+        { gameId: 1, date: '2020-01-01', durationMin: 60 },
+        { gameId: 2, date: '2020-01-01', durationMin: 60 },
+        { gameId: 2, date: '2020-01-02', durationMin: 60 },
+        { gameId: 2, date: '2020-01-03', durationMin: 60 },
+        { gameId: 2, date: '2020-01-04', durationMin: 60 },
+        { gameId: 2, date: '2020-01-05', durationMin: 60 }
+      ];
+      const result = stats.getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
+      expect(result).toBe(0); // Game 2 doesn't exist in games array
+    });
+  });
+
 });
 
 describe('Diagnostic Functions', () => {
