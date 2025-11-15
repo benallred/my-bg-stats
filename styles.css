@@ -139,10 +139,10 @@ body {
 /* Header */
 header {
     background: var(--bg-header);
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -260,24 +260,24 @@ header.sticky-scrolled h1 {
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 /* Stat Sections */
 .stat-section {
     background: var(--bg-card);
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .section-heading {
     color: var(--text-heading);
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--color-primary);
 }
@@ -285,13 +285,13 @@ header.sticky-scrolled h1 {
 .section-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 /* Stat Cards */
 .stat-card {
     background: var(--bg-card);
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-hover), box-shadow var(--transition-hover), background-color var(--transition-theme), color var(--transition-theme), border-color var(--transition-theme);
@@ -319,17 +319,17 @@ header.sticky-scrolled h1 {
 .stat-card h3 {
     color: var(--text-heading);
     font-size: 1.1rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .stat-value {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
     font-weight: bold;
     color: var(--color-primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .stat-description {
@@ -684,33 +684,45 @@ footer p {
     }
 
     header {
-        padding: 1rem;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
     }
 
     header h1 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
     }
 
     .stats-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
     }
 
     .stat-section {
-        padding: 1rem;
-        margin-bottom: 1rem;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
     }
 
     .section-heading {
-        font-size: 1.1rem;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .section-grid {
-        gap: 1rem;
+        gap: 0.5rem;
+    }
+
+    .stat-card {
+        padding: 0.75rem;
+    }
+
+    .stat-card h3 {
+        margin-bottom: 0.4rem;
     }
 
     .stat-value {
-        font-size: 2rem;
+        font-size: 1.25rem;
+        margin-bottom: 0.3rem;
     }
 
     table {
