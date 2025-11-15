@@ -11,6 +11,9 @@ import {
   calculateHourHIndex,
   calculateTraditionalHIndex,
   calculatePlaySessionHIndex,
+  calculateAllTimeHIndexThroughYear,
+  calculateHIndexIncrease,
+  getNewHIndexGames,
   getTotalBGGEntries,
   getTotalGamesOwned,
   getTotalExpansions,
@@ -408,6 +411,21 @@ function updateAllStats() {
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays)
     };
 
+    // Calculate year-in-review stats when year filter is active
+    if (currentYear !== null) {
+        statsCache.yearReview = {
+            hoursHIndexIncrease: calculateHIndexIncrease(gameData.games, gameData.plays, currentYear, 'hours'),
+            sessionsHIndexIncrease: calculateHIndexIncrease(gameData.games, gameData.plays, currentYear, 'sessions'),
+            playsHIndexIncrease: calculateHIndexIncrease(gameData.games, gameData.plays, currentYear, 'plays'),
+            hoursHIndexCurrent: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear, 'hours'),
+            sessionsHIndexCurrent: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear, 'sessions'),
+            playsHIndexCurrent: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear, 'plays'),
+            hoursHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, 'hours'),
+            sessionsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, 'sessions'),
+            playsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, 'plays')
+        };
+    }
+
     updateHIndexStats();
     updateHIndexCardLabels();
     updateCollectionStats();
@@ -415,6 +433,7 @@ function updateAllStats() {
     updateMilestoneStats();
     updateMilestoneCardLabels();
     updateDiagnosticsSection();
+    updateYearInReview();
 }
 
 /**
@@ -579,6 +598,28 @@ function updateDiagnosticsSection() {
     // Update never played games card
     const neverPlayedCard = document.querySelector('[data-stat="never-played"]');
     neverPlayedCard.querySelector('.stat-value').textContent = statsCache.neverPlayedGames.length;
+}
+
+/**
+ * Update Gaming Year in Review card visibility
+ */
+function updateYearInReview() {
+    const yearReviewCard = document.getElementById('year-review-card');
+
+    // Only show card when year filter is active and not a pre-logging year
+    if (currentYear !== null && statsCache.yearReview) {
+        // Check if this is a pre-logging year
+        const yearInfo = yearDataCache && yearDataCache.find(y => y.year === currentYear);
+        const isPreLogging = yearInfo && yearInfo.isPreLogging;
+
+        if (!isPreLogging) {
+            yearReviewCard.style.display = 'block';
+        } else {
+            yearReviewCard.style.display = 'none';
+        }
+    } else {
+        yearReviewCard.style.display = 'none';
+    }
 }
 
 /**
@@ -849,6 +890,15 @@ const statDetailHandlers = {
         }),
         render: (detailContent) => {
             showSuggestedGames(detailContent);
+        }
+    },
+    'year-review': {
+        getTitle: (currentYear) => `Gaming Year in Review (${currentYear})`,
+        getSummary: () => ({
+            mainValue: ''
+        }),
+        render: (detailContent, statsCache) => {
+            showYearReviewDetail(detailContent, statsCache);
         }
     }
 };
@@ -1306,6 +1356,136 @@ function showSuggestedGames(container) {
         </tbody>
     `;
     container.appendChild(table);
+}
+
+/**
+ * Show Gaming Year in Review detail
+ */
+function showYearReviewDetail(container, statsCache) {
+    if (!statsCache.yearReview) {
+        container.innerHTML = '<p>No year-in-review data available.</p>';
+        return;
+    }
+
+    const formatIncrease = (increase, previous, current) => {
+        const sign = increase > 0 ? '+' : '';
+        return `${sign}${increase} (from ${previous} to ${current})`;
+    };
+
+    // Get new h-index games for each metric
+    const newHoursGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'hours');
+    const newSessionsGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'sessions');
+    const newPlaysGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'plays');
+
+    const detailDiv = document.createElement('div');
+    detailDiv.className = 'year-review-detail';
+    detailDiv.innerHTML = `
+        <div class="year-review-subsection">
+            <h3 class="year-review-subsection-heading">Engagement & Milestones</h3>
+            <table class="year-review-table">
+                <tbody>
+                    <tr class="year-review-row-clickable" data-metric="hours">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in all-time hours h-index:
+                        </td>
+                        <td class="year-review-value-detail">${formatIncrease(
+                            statsCache.yearReview.hoursHIndexIncrease,
+                            statsCache.yearReview.hoursHIndexPrevious,
+                            statsCache.yearReview.hoursHIndexCurrent
+                        )}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-metric="hours" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${newHoursGames.length > 0
+                                    ? newHoursGames.map(item => `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-value">${item.value.toFixed(1)} hours (${item.thisYearValue.toFixed(1)} this year)</span>
+                                        </div>
+                                    `).join('')
+                                    : '<div class="year-review-no-games">No new games added to h-index</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="year-review-row-clickable" data-metric="sessions">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in all-time sessions h-index:
+                        </td>
+                        <td class="year-review-value-detail">${formatIncrease(
+                            statsCache.yearReview.sessionsHIndexIncrease,
+                            statsCache.yearReview.sessionsHIndexPrevious,
+                            statsCache.yearReview.sessionsHIndexCurrent
+                        )}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-metric="sessions" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${newSessionsGames.length > 0
+                                    ? newSessionsGames.map(item => `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-value">${item.value} days (${item.thisYearValue} this year)</span>
+                                        </div>
+                                    `).join('')
+                                    : '<div class="year-review-no-games">No new games added to h-index</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="year-review-row-clickable" data-metric="plays">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in all-time plays h-index:
+                        </td>
+                        <td class="year-review-value-detail">${formatIncrease(
+                            statsCache.yearReview.playsHIndexIncrease,
+                            statsCache.yearReview.playsHIndexPrevious,
+                            statsCache.yearReview.playsHIndexCurrent
+                        )}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-metric="plays" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${newPlaysGames.length > 0
+                                    ? newPlaysGames.map(item => `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-value">${item.value} plays (${item.thisYearValue} this year)</span>
+                                        </div>
+                                    `).join('')
+                                    : '<div class="year-review-no-games">No new games added to h-index</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+
+    // Add click handlers for expandable rows
+    const clickableRows = detailDiv.querySelectorAll('.year-review-row-clickable');
+    clickableRows.forEach(row => {
+        row.addEventListener('click', () => {
+            const metric = row.dataset.metric;
+            const expandedRow = detailDiv.querySelector(`.year-review-expanded-content[data-metric="${metric}"]`);
+            const icon = row.querySelector('.year-review-expand-icon');
+
+            if (expandedRow.style.display === 'none') {
+                expandedRow.style.display = 'table-row';
+                icon.textContent = '▼';
+            } else {
+                expandedRow.style.display = 'none';
+                icon.textContent = '▶';
+            }
+        });
+    });
+
+    container.appendChild(detailDiv);
 }
 
 /**

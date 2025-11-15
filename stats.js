@@ -544,6 +544,161 @@ function getHourHIndexBreakdown(games, plays, year = null) {
 }
 
 /**
+ * Calculate all-time h-index through a specific year (includes all plays up to and including that year)
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to calculate through (inclusive)
+ * @param {string} metric - Metric type: 'plays', 'sessions', or 'hours'
+ * @returns {number} h-index value
+ */
+function calculateAllTimeHIndexThroughYear(games, plays, year, metric) {
+  // Filter plays up to and including the specified year
+  const filteredPlays = plays.filter(play => {
+    const playYear = parseInt(play.date.substring(0, 4));
+    return playYear <= year;
+  });
+
+  // Calculate h-index based on metric type
+  switch (metric) {
+    case 'sessions':
+      return calculatePlaySessionHIndex(games, filteredPlays);
+    case 'plays':
+      return calculateTraditionalHIndex(games, filteredPlays);
+    case 'hours':
+    default:
+      return calculateHourHIndex(filteredPlays);
+  }
+}
+
+/**
+ * Calculate year-over-year h-index increase
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to calculate increase for
+ * @param {string} metric - Metric type: 'plays', 'sessions', or 'hours'
+ * @returns {number} h-index increase (can be negative or zero)
+ */
+function calculateHIndexIncrease(games, plays, year, metric) {
+  const currentYearHIndex = calculateAllTimeHIndexThroughYear(games, plays, year, metric);
+  const previousYearHIndex = calculateAllTimeHIndexThroughYear(games, plays, year - 1, metric);
+  return currentYearHIndex - previousYearHIndex;
+}
+
+/**
+ * Get games newly added to h-index in a specific year
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to analyze
+ * @param {string} metric - Metric type: 'plays', 'sessions', or 'hours'
+ * @returns {Array} Array of games newly contributing to h-index this year
+ */
+function getNewHIndexGames(games, plays, year, metric) {
+  // Get current year h-index and previous year h-index
+  const currentHIndex = calculateAllTimeHIndexThroughYear(games, plays, year, metric);
+  const previousHIndex = calculateAllTimeHIndexThroughYear(games, plays, year - 1, metric);
+
+  // Get contributor games for current year
+  const filteredPlaysCurrentYear = plays.filter(play => {
+    const playYear = parseInt(play.date.substring(0, 4));
+    return playYear <= year;
+  });
+
+  let currentBreakdown;
+  switch (metric) {
+    case 'sessions':
+      currentBreakdown = getHIndexBreakdown(games, filteredPlaysCurrentYear, null, true);
+      break;
+    case 'plays':
+      currentBreakdown = getHIndexBreakdown(games, filteredPlaysCurrentYear, null, false);
+      break;
+    case 'hours':
+    default:
+      currentBreakdown = getHourHIndexBreakdown(games, filteredPlaysCurrentYear);
+      break;
+  }
+
+  // Get contributor game IDs for current year
+  const currentContributors = new Set();
+  for (let i = 0; i < currentHIndex && i < currentBreakdown.length; i++) {
+    const rank = i + 1;
+    const value = metric === 'hours' ? currentBreakdown[i].hours : currentBreakdown[i].count;
+    if (rank <= value && rank <= currentHIndex) {
+      currentContributors.add(currentBreakdown[i].game.id);
+    }
+  }
+
+  // Get contributor games for previous year
+  const filteredPlaysPreviousYear = plays.filter(play => {
+    const playYear = parseInt(play.date.substring(0, 4));
+    return playYear <= year - 1;
+  });
+
+  let previousBreakdown;
+  switch (metric) {
+    case 'sessions':
+      previousBreakdown = getHIndexBreakdown(games, filteredPlaysPreviousYear, null, true);
+      break;
+    case 'plays':
+      previousBreakdown = getHIndexBreakdown(games, filteredPlaysPreviousYear, null, false);
+      break;
+    case 'hours':
+    default:
+      previousBreakdown = getHourHIndexBreakdown(games, filteredPlaysPreviousYear);
+      break;
+  }
+
+  // Get contributor game IDs for previous year
+  const previousContributors = new Set();
+  for (let i = 0; i < previousHIndex && i < previousBreakdown.length; i++) {
+    const rank = i + 1;
+    const value = metric === 'hours' ? previousBreakdown[i].hours : previousBreakdown[i].count;
+    if (rank <= value && rank <= previousHIndex) {
+      previousContributors.add(previousBreakdown[i].game.id);
+    }
+  }
+
+  // Find games that are in current contributors but not in previous contributors
+  const newGames = [];
+  for (let i = 0; i < currentBreakdown.length; i++) {
+    const gameId = currentBreakdown[i].game.id;
+    if (currentContributors.has(gameId) && !previousContributors.has(gameId)) {
+      const allTimeValue = metric === 'hours' ? currentBreakdown[i].hours : currentBreakdown[i].count;
+
+      // Calculate this year's value for this game
+      const thisYearPlays = plays.filter(play => {
+        const playYear = parseInt(play.date.substring(0, 4));
+        return playYear === year && play.gameId === gameId;
+      });
+
+      let thisYearValue;
+      switch (metric) {
+        case 'sessions':
+          // Count unique days
+          thisYearValue = new Set(thisYearPlays.map(play => play.date)).size;
+          break;
+        case 'plays':
+          // Count plays
+          thisYearValue = thisYearPlays.length;
+          break;
+        case 'hours':
+        default:
+          // Sum hours
+          thisYearValue = thisYearPlays.reduce((sum, play) => sum + (play.durationMin / 60), 0);
+          break;
+      }
+
+      newGames.push({
+        game: currentBreakdown[i].game,
+        value: allTimeValue,
+        thisYearValue: thisYearValue
+      });
+    }
+  }
+
+  return newGames;
+}
+
+/**
  * Get total play time statistics
  * @param {Array} plays - Array of play objects
  * @param {number|null} year - Optional year filter
@@ -1107,6 +1262,9 @@ export {
   calculateTraditionalHIndex,
   calculatePlaySessionHIndex,
   calculateHourHIndex,
+  calculateAllTimeHIndexThroughYear,
+  calculateHIndexIncrease,
+  getNewHIndexGames,
   getTotalBGGEntries,
   getTotalGamesOwned,
   getTotalExpansions,
