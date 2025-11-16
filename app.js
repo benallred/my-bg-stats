@@ -290,7 +290,7 @@ function setupYearFilter() {
                 'h-index',
                 'total-plays',
                 'total-days-played',
-                'total-games-played',
+                'unique-games-played',
                 'total-play-time',
                 'fives',
                 'dimes',
@@ -622,8 +622,8 @@ function updatePlayStats() {
         dailySessionAverage.textContent = '--';
     }
 
-    // Total Games Played
-    document.querySelector('#total-games-played .stat-value').textContent = statsCache.gamesPlayedData.total;
+    // Unique Games Played
+    document.querySelector('#unique-games-played .stat-value').textContent = statsCache.gamesPlayedData.total;
 
     // Show/hide new-to-me substat
     const newToMeContainer = document.getElementById('new-to-me-container');
@@ -849,8 +849,8 @@ const statDetailHandlers = {
             showExpansions(detailContent);
         }
     },
-    'total-games-played': {
-        getTitle: (currentYear) => currentYear ? `Games Played in ${currentYear}` : 'Games Played (All Time)',
+    'unique-games-played': {
+        getTitle: (currentYear) => currentYear ? `Unique Games Played in ${currentYear}` : 'Unique Games Played (All Time)',
         getSummary: (statsCache, currentYear) => {
             const substats = [];
             if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
