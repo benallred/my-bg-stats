@@ -1261,16 +1261,23 @@ function showExpansions(container) {
  */
 function showGamesPlayed(container) {
     const playCountsPerGame = new Map();
+    const ownedGamesInYear = new Set();
 
     gameData.plays.forEach(play => {
         if (currentYear && !play.date.startsWith(currentYear.toString())) return;
         const count = playCountsPerGame.get(play.gameId) || 0;
         playCountsPerGame.set(play.gameId, count + 1);
+
+        // Track if this game was played with user's copy in the filtered year
+        if (play.copyId !== null) {
+            ownedGamesInYear.add(play.gameId);
+        }
     });
 
     const gamesWithPlays = Array.from(playCountsPerGame.entries()).map(([gameId, count]) => {
         const game = gameData.games.find(g => g.id === gameId);
-        return { game, count };
+        const owned = ownedGamesInYear.has(gameId);
+        return { game, count, owned };
     });
 
     gamesWithPlays.sort((a, b) => b.count - a.count);
@@ -1281,6 +1288,7 @@ function showGamesPlayed(container) {
             <tr>
                 <th>Game</th>
                 <th>Plays</th>
+                <th>Owned</th>
             </tr>
         </thead>
         <tbody>
@@ -1288,6 +1296,7 @@ function showGamesPlayed(container) {
                 <tr>
                     <td>${item.game ? item.game.name : 'Unknown Game'}</td>
                     <td>${item.count}</td>
+                    <td>${item.owned ? '✓' : ''}</td>
                 </tr>
             `).join('')}
         </tbody>
