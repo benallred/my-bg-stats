@@ -614,9 +614,15 @@ function updatePlayStats() {
     // Daily Session Stats
     const dailySessionMedian = document.getElementById('daily-session-median');
     const dailySessionAverage = document.getElementById('daily-session-average');
-    if (statsCache.dailySessionStats.medianHours !== null) {
-        dailySessionMedian.textContent = `${statsCache.dailySessionStats.medianHours.toFixed(1)} hours per gaming day`;
-        dailySessionAverage.textContent = `${statsCache.dailySessionStats.averageHours.toFixed(1)} hours per gaming day`;
+    if (statsCache.dailySessionStats.medianMinutes !== null) {
+        const formatTimePerDay = (minutes) => {
+            if (minutes < 60) {
+                return `${Math.round(minutes)} minutes per gaming day`;
+            }
+            return `${(minutes / 60).toFixed(1)} hours per gaming day`;
+        };
+        dailySessionMedian.textContent = formatTimePerDay(statsCache.dailySessionStats.medianMinutes);
+        dailySessionAverage.textContent = formatTimePerDay(statsCache.dailySessionStats.averageMinutes);
     } else {
         dailySessionMedian.textContent = '--';
         dailySessionAverage.textContent = '--';

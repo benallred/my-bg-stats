@@ -255,15 +255,15 @@ function getDailySessionStats(plays, year) {
     .filter(minutes => minutes > 0);
 
   if (dailyMinutes.length === 0) {
-    return { medianHours: null, averageHours: null };
+    return { medianMinutes: null, averageMinutes: null };
   }
 
   const averageMinutes = dailyMinutes.reduce((sum, m) => sum + m, 0) / dailyMinutes.length;
   const medianMinutes = calculateMedian(dailyMinutes);
 
   return {
-    medianHours: medianMinutes / 60,
-    averageHours: averageMinutes / 60
+    medianMinutes,
+    averageMinutes
   };
 }
 
