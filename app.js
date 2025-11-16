@@ -19,6 +19,7 @@ import {
   getTotalExpansions,
   getTotalPlays,
   getTotalDaysPlayed,
+  getDailySessionStats,
   getTotalGamesPlayed,
   getTotalPlayTime,
   getMilestones,
@@ -422,7 +423,8 @@ function updateAllStats() {
         cumulativeCenturiesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 100),
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
-        suggestedGames: getSuggestedGames(gameData.games, gameData.plays)
+        suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
+        dailySessionStats: getDailySessionStats(gameData.plays, currentYear)
     };
 
     // Calculate year-in-review stats when year filter is active
@@ -608,6 +610,17 @@ function updatePlayStats() {
     // Total Days Played
     const totalDays = getTotalDaysPlayed(gameData.plays, currentYear);
     document.querySelector('#total-days-played .stat-value').textContent = totalDays.toLocaleString();
+
+    // Daily Session Stats
+    const dailySessionMedian = document.getElementById('daily-session-median');
+    const dailySessionAverage = document.getElementById('daily-session-average');
+    if (statsCache.dailySessionStats.medianHours !== null) {
+        dailySessionMedian.textContent = `${statsCache.dailySessionStats.medianHours.toFixed(1)} hours per gaming day`;
+        dailySessionAverage.textContent = `${statsCache.dailySessionStats.averageHours.toFixed(1)} hours per gaming day`;
+    } else {
+        dailySessionMedian.textContent = '--';
+        dailySessionAverage.textContent = '--';
+    }
 
     // Total Games Played
     document.querySelector('#total-games-played .stat-value').textContent = statsCache.gamesPlayedData.total;

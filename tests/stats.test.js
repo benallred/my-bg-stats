@@ -506,6 +506,78 @@ describe('Play Statistics', () => {
     });
   });
 
+  describe('getDailySessionStats', () => {
+    test('calculates median and average without year filter', () => {
+      const result = stats.getDailySessionStats(typicalData.plays, null);
+      expect(result.medianHours).toBeGreaterThan(0);
+      expect(result.averageHours).toBeGreaterThan(0);
+    });
+
+    test('filters by year correctly', () => {
+      const result2023 = stats.getDailySessionStats(typicalData.plays, 2023);
+      expect(result2023.medianHours).toBeGreaterThan(0);
+      expect(result2023.averageHours).toBeGreaterThan(0);
+    });
+
+    test('returns null for empty plays array', () => {
+      const result = stats.getDailySessionStats([], null);
+      expect(result.medianHours).toBeNull();
+      expect(result.averageHours).toBeNull();
+    });
+
+    test('excludes days with zero total duration', () => {
+      const testPlays = [
+        { date: '2023-01-01', durationMin: 60 },
+        { date: '2023-01-02', durationMin: 0 },
+        { date: '2023-01-03', durationMin: 120 }
+      ];
+      const result = stats.getDailySessionStats(testPlays, null);
+      expect(result.medianHours).toBe(1.5);
+      expect(result.averageHours).toBe(1.5);
+    });
+
+    test('calculates median correctly for odd number of days', () => {
+      const testPlays = [
+        { date: '2023-01-01', durationMin: 60 },
+        { date: '2023-01-02', durationMin: 120 },
+        { date: '2023-01-03', durationMin: 180 }
+      ];
+      const result = stats.getDailySessionStats(testPlays, null);
+      expect(result.medianHours).toBe(2);
+    });
+
+    test('calculates median correctly for even number of days', () => {
+      const testPlays = [
+        { date: '2023-01-01', durationMin: 60 },
+        { date: '2023-01-02', durationMin: 120 },
+        { date: '2023-01-03', durationMin: 180 },
+        { date: '2023-01-04', durationMin: 240 }
+      ];
+      const result = stats.getDailySessionStats(testPlays, null);
+      expect(result.medianHours).toBe(2.5);
+    });
+
+    test('sums multiple plays on same day', () => {
+      const testPlays = [
+        { date: '2023-01-01', durationMin: 60 },
+        { date: '2023-01-01', durationMin: 60 },
+        { date: '2023-01-02', durationMin: 120 }
+      ];
+      const result = stats.getDailySessionStats(testPlays, null);
+      expect(result.medianHours).toBe(2);
+      expect(result.averageHours).toBe(2);
+    });
+
+    test('converts minutes to hours correctly', () => {
+      const testPlays = [
+        { date: '2023-01-01', durationMin: 90 }
+      ];
+      const result = stats.getDailySessionStats(testPlays, null);
+      expect(result.medianHours).toBe(1.5);
+      expect(result.averageHours).toBe(1.5);
+    });
+  });
+
   describe('getTotalGamesPlayed', () => {
     test('counts unique games played without year filter', () => {
       const result = stats.getTotalGamesPlayed(typicalData.games, typicalData.plays);

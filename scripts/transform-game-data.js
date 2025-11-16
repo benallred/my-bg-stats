@@ -1,24 +1,4 @@
-/**
- * Calculates the median of an array of numbers.
- * @param {number[]} durations - Array of duration values
- * @returns {number|null} Median value or null if array is empty
- */
-function calculateMedian(durations) {
-  if (durations.length === 0) {
-    return null;
-  }
-
-  const sorted = durations.slice().sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-
-  if (sorted.length % 2 === 0) {
-    // Even number: average of two middle values
-    return (sorted[mid - 1] + sorted[mid]) / 2;
-  } else {
-    // Odd number: middle value
-    return sorted[mid];
-  }
-}
+import { calculateMedian } from '../utils.js';
 
 /**
  * Enum representing the playUsedGameCopy field values from BG Stats.

@@ -3,6 +3,8 @@
  * All functions for calculating board game statistics
  */
 
+import { calculateMedian } from './utils.js';
+
 /**
  * Helper: Check if a game is currently owned
  * @param {Object} game - Game object
@@ -231,6 +233,38 @@ function getTotalDaysPlayed(plays, year = null) {
     }
   });
   return uniqueDays.size;
+}
+
+/**
+ * Get daily session statistics (median and average play duration per gaming day)
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter
+ * @returns {Object} Object with medianHours and averageHours properties (null if no data)
+ */
+function getDailySessionStats(plays, year) {
+  const dailyTotals = new Map();
+
+  plays.forEach(play => {
+    if (year && !play.date.startsWith(year.toString())) return;
+
+    const currentTotal = dailyTotals.get(play.date) || 0;
+    dailyTotals.set(play.date, currentTotal + play.durationMin);
+  });
+
+  const dailyMinutes = Array.from(dailyTotals.values())
+    .filter(minutes => minutes > 0);
+
+  if (dailyMinutes.length === 0) {
+    return { medianHours: null, averageHours: null };
+  }
+
+  const averageMinutes = dailyMinutes.reduce((sum, m) => sum + m, 0) / dailyMinutes.length;
+  const medianMinutes = calculateMedian(dailyMinutes);
+
+  return {
+    medianHours: medianMinutes / 60,
+    averageHours: averageMinutes / 60
+  };
 }
 
 /**
@@ -841,15 +875,7 @@ function getPlayTimeByGame(games, plays, year = null) {
         minMinutes = Math.min(...timeData.durations);
         maxMinutes = Math.max(...timeData.durations);
         avgMinutes = timeData.totalMinutes / timeData.durations.length;
-
-        // Calculate median
-        const sorted = [...timeData.durations].sort((a, b) => a - b);
-        const mid = Math.floor(sorted.length / 2);
-        if (sorted.length % 2 === 0) {
-          medianMinutes = (sorted[mid - 1] + sorted[mid]) / 2;
-        } else {
-          medianMinutes = sorted[mid];
-        }
+        medianMinutes = calculateMedian(timeData.durations);
       }
 
       breakdown.push({
@@ -1323,6 +1349,7 @@ export {
   getTotalExpansions,
   getTotalPlays,
   getTotalDaysPlayed,
+  getDailySessionStats,
   getTotalGamesPlayed,
   getMilestones,
   getCumulativeMilestoneCount,
