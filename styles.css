@@ -351,6 +351,10 @@ header.sticky-scrolled h1 {
     font-size: 0.95rem;
 }
 
+.substat.hidden {
+    display: none;
+}
+
 .substat-label {
     color: var(--text-secondary);
 }

@@ -624,14 +624,16 @@ function updatePlayStats() {
 
     // Unique Games Played
     document.querySelector('#unique-games-played .stat-value').textContent = statsCache.gamesPlayedData.total;
+    document.getElementById('my-games-count').textContent = statsCache.gamesPlayedData.myGames;
+    document.getElementById('others-games-count').textContent = statsCache.gamesPlayedData.othersGames;
 
     // Show/hide new-to-me substat
     const newToMeContainer = document.getElementById('new-to-me-container');
     if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
-        newToMeContainer.style.display = 'block';
+        newToMeContainer.classList.remove('hidden');
         document.getElementById('new-to-me-count').textContent = statsCache.gamesPlayedData.newToMe;
     } else {
-        newToMeContainer.style.display = 'none';
+        newToMeContainer.classList.add('hidden');
     }
 
     // Total Play Time
@@ -852,7 +854,10 @@ const statDetailHandlers = {
     'unique-games-played': {
         getTitle: (currentYear) => currentYear ? `Unique Games Played in ${currentYear}` : 'Unique Games Played (All Time)',
         getSummary: (statsCache, currentYear) => {
-            const substats = [];
+            const substats = [
+                { label: 'My games:', value: statsCache.gamesPlayedData.myGames },
+                { label: 'Others\' games:', value: statsCache.gamesPlayedData.othersGames }
+            ];
             if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
                 substats.push({ label: 'New-to-me:', value: statsCache.gamesPlayedData.newToMe });
             }

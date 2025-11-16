@@ -295,6 +295,21 @@ function getTotalGamesPlayed(games, plays, year = null) {
     }
   });
 
+  // Determine which games are "my games" vs "others' games"
+  // Check all plays for each game (not just year-filtered plays)
+  const myGamesIds = new Set();
+  const othersGamesIds = new Set();
+  gamesPlayedIds.forEach(gameId => {
+    const hasMyPlay = plays.some(play =>
+      play.gameId === gameId && play.copyId !== null
+    );
+    if (hasMyPlay) {
+      myGamesIds.add(gameId);
+    } else {
+      othersGamesIds.add(gameId);
+    }
+  });
+
   // Count new-to-me games if filtering by year
   let newToMe = 0;
   if (year) {
@@ -307,7 +322,9 @@ function getTotalGamesPlayed(games, plays, year = null) {
 
   return {
     total: gamesPlayedIds.size,
-    newToMe: year ? newToMe : null
+    newToMe: year ? newToMe : null,
+    myGames: myGamesIds.size,
+    othersGames: othersGamesIds.size
   };
 }
 

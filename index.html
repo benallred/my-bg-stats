@@ -105,8 +105,16 @@
                 <div class="stat-card clickable" id="unique-games-played" data-stat="unique-games-played">
                     <h3>Unique Games Played</h3>
                     <div class="stat-value">--</div>
-                    <div class="stat-substats" id="new-to-me-container" style="display: none;">
+                    <div class="stat-substats">
                         <div class="substat">
+                            <span class="substat-label">My games:</span>
+                            <span class="substat-value" id="my-games-count">--</span>
+                        </div>
+                        <div class="substat">
+                            <span class="substat-label">Others' games:</span>
+                            <span class="substat-value" id="others-games-count">--</span>
+                        </div>
+                        <div class="substat hidden" id="new-to-me-container">
                             <span class="substat-label">New-to-me:</span>
                             <span class="substat-value" id="new-to-me-count">--</span>
                         </div>
