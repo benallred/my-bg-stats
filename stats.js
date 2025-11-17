@@ -419,7 +419,7 @@ function getCumulativeMilestoneCount(games, plays, year, metric, threshold) {
   const metricValuesPerGame = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (year && parseInt(play.date.substring(0, 4)) > year) return;
 
     const currentValue = metricValuesPerGame.get(play.gameId) || {
       playCount: 0,
