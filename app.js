@@ -537,7 +537,14 @@ function updateHIndexCardLabels() {
     };
 
     const label = labels[currentBaseMetric] || labels.hours;
+
+    // Preserve the info icon when updating title
+    const infoIcon = titleElement.querySelector('.info-icon');
     titleElement.textContent = label.title;
+    if (infoIcon) {
+        titleElement.appendChild(infoIcon);
+    }
+
     descriptionElement.textContent = label.description;
 }
 
@@ -808,6 +815,38 @@ function setupEventListeners() {
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
     }
+
+    // H-Index info icon
+    const hIndexInfoIcon = document.getElementById('h-index-info-icon');
+    if (hIndexInfoIcon) {
+        hIndexInfoIcon.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click from triggering
+            showHIndexModal();
+        });
+    }
+
+    // H-Index modal close handlers
+    const modal = document.getElementById('h-index-modal');
+    const modalBackdrop = modal?.querySelector('.modal-backdrop');
+    const modalClose = modal?.querySelector('.modal-close');
+
+    if (modalBackdrop) {
+        modalBackdrop.addEventListener('click', hideHIndexModal);
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener('click', hideHIndexModal);
+    }
+
+    // ESC key to close modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('h-index-modal');
+            if (modal && modal.style.display === 'flex') {
+                hideHIndexModal();
+            }
+        }
+    });
 }
 
 /**
@@ -854,6 +893,50 @@ function populateStatSummary(summaryElement, mainValue, substats = []) {
 
         summaryElement.appendChild(substatsDiv);
     }
+}
+
+/**
+ * Show h-index info modal
+ * Updates content based on current base metric selection
+ */
+function showHIndexModal() {
+    const modal = document.getElementById('h-index-modal');
+    const exampleDiv = document.getElementById('h-index-modal-example');
+
+    // Get current base metric
+    const baseMetric = document.getElementById('base-metric-select').value;
+
+    // Generate metric-specific example text
+    let exampleText = '';
+    let improveText = '';
+    switch (baseMetric) {
+        case 'sessions':
+            exampleText = 'For example, if your sessions h-index is <strong>8</strong>, you have at least <strong>8 games</strong> that you\'ve played on <strong>8 or more different days</strong>.';
+            improveText = 'To increase it to <strong>9</strong>, you need <strong>1 more game</strong> with 9+ sessions (breadth) AND <strong>1 more session each</strong> for your existing 8 games (depth).';
+            break;
+        case 'plays':
+            exampleText = 'For example, if your plays h-index is <strong>12</strong>, you have at least <strong>12 games</strong> that you\'ve played <strong>12 or more times</strong>.';
+            improveText = 'To increase it to <strong>13</strong>, you need <strong>1 more game</strong> with 13+ plays (breadth) AND <strong>1 more play each</strong> for your existing 12 games (depth).';
+            break;
+        case 'hours':
+        default:
+            exampleText = 'For example, if your hours h-index is <strong>5</strong>, you have at least <strong>5 games</strong> that you\'ve played for <strong>5 or more hours</strong> each.';
+            improveText = 'To increase it to <strong>6</strong>, you need <strong>1 more game</strong> with 6+ hours (breadth) AND <strong>1 more hour each</strong> for your existing 5 games (depth).';
+            break;
+    }
+
+    exampleDiv.innerHTML = `<p>${exampleText}</p><p>${improveText}</p>`;
+
+    // Show modal
+    modal.style.display = 'flex';
+}
+
+/**
+ * Hide h-index info modal
+ */
+function hideHIndexModal() {
+    const modal = document.getElementById('h-index-modal');
+    modal.style.display = 'none';
 }
 
 /**
