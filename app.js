@@ -300,12 +300,21 @@ function setupYearFilter() {
                 'centuries'
             ];
 
-            // Close detail section only if it's a play-related stat and year is pre-logging
-            if (currentlyOpenStatType && isNewYearPreLogging && playRelatedStats.includes(currentlyOpenStatType)) {
-                closeDetailSection();
-            } else if (currentlyOpenStatType) {
-                // Refresh the detail section with updated data for the new year
-                showDetailSection(currentlyOpenStatType);
+            // Close detail section if:
+            // - It's a play-related stat and year is pre-logging, OR
+            // - It's the year-review stat and switching to All Time (or pre-logging year)
+            if (currentlyOpenStatType) {
+                const shouldCloseYearReview = currentlyOpenStatType === 'year-review' &&
+                    (currentYear === null || isNewYearPreLogging);
+                const shouldClosePlayRelated = isNewYearPreLogging &&
+                    playRelatedStats.includes(currentlyOpenStatType);
+
+                if (shouldCloseYearReview || shouldClosePlayRelated) {
+                    closeDetailSection();
+                } else {
+                    // Refresh the detail section with updated data for the new year
+                    showDetailSection(currentlyOpenStatType);
+                }
             }
 
             // Refresh diagnostic detail section if open
