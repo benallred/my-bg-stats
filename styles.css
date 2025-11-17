@@ -952,18 +952,19 @@ footer p {
 }
 
 .year-review-table .year-review-row-clickable td {
-    transition: background-color 0.2s ease;
+    transition: background-color var(--transition-theme), border-color var(--transition-theme);
 }
 
 .year-review-table .year-review-row-clickable:hover td {
     background-color: var(--bg-hover);
+    transition: background-color var(--transition-hover) ease;
 }
 
 .year-review-table .year-review-expand-icon {
     display: inline-block;
     width: 1em;
     margin-right: 0.5rem;
-    transition: transform 0.2s ease;
+    transition: transform var(--transition-hover) ease;
     font-size: 0.8em;
 }
 
