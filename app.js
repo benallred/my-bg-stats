@@ -1751,6 +1751,20 @@ function showYearReviewDetail(container, statsCache) {
             // Get new milestone games
             const newGames = getNewMilestoneGames(gameData.games, gameData.plays, currentYear, def.metric, def.type);
 
+            // Calculate graduated count (games that entered but left the range)
+            const entered = newGames.length;
+            const graduated = entered - increase;
+
+            // Build summary text for the expanded section
+            let summaryText = '';
+            if (newGames.length > 0) {
+                if (graduated > 0) {
+                    summaryText = `<div class="year-review-milestone-summary">${entered} entered • ${graduated} graduated</div>`;
+                } else {
+                    summaryText = `<div class="year-review-milestone-summary">${entered} entered</div>`;
+                }
+            }
+
             milestoneRows.push(`
                 <tr class="year-review-row-clickable" data-milestone="${rowId}">
                     <td class="year-review-label-detail">
@@ -1762,6 +1776,7 @@ function showYearReviewDetail(container, statsCache) {
                 <tr class="year-review-expanded-content" data-milestone="${rowId}" style="display: none;">
                     <td colspan="2">
                         <div class="year-review-games-list">
+                            ${summaryText}
                             ${newGames.length > 0
                                 ? newGames.map(item => {
                                     const totalValue = def.metric === 'hours' ? item.value.toFixed(1) : item.value;

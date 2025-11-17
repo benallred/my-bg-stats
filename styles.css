@@ -997,6 +997,14 @@ footer p {
     background-color: var(--bg-secondary);
 }
 
+.year-review-milestone-summary {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
 .year-review-game-item {
     display: flex;
     justify-content: space-between;
