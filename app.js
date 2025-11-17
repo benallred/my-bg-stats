@@ -931,6 +931,9 @@ function showHIndexModal() {
     modal.style.display = 'flex';
 }
 
+// Make showHIndexModal globally accessible for inline onclick handlers
+window.showHIndexModal = showHIndexModal;
+
 /**
  * Hide h-index info modal
  */
@@ -952,7 +955,8 @@ const statDetailHandlers = {
                 plays: 'Traditional H-Index'
             };
             const title = metricTitles[currentBaseMetric] || 'H-Index';
-            return `${title} Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+            const infoIcon = '<svg class="info-icon" style="margin-left: 0.5rem; cursor: pointer;" width="16" height="16" viewBox="0 0 16 16" aria-label="Show h-index information" onclick="window.showHIndexModal(); event.stopPropagation();"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>';
+            return `${title} Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}${infoIcon}`;
         },
         getSummary: (statsCache) => ({
             mainValue: getCurrentHIndex()
@@ -1158,7 +1162,7 @@ function showDetailSection(statType) {
     }
 
     // Set title using handler
-    detailTitle.textContent = handler.getTitle(currentYear);
+    detailTitle.innerHTML = handler.getTitle(currentYear);
 
     // Get summary data and populate
     const summary = handler.getSummary(statsCache, currentYear);
@@ -1925,7 +1929,7 @@ function showDiagnosticDetail(statType) {
     }
 
     // Set title using handler
-    detailTitle.textContent = handler.getTitle(currentYear);
+    detailTitle.innerHTML = handler.getTitle(currentYear);
 
     // Get summary data and populate
     const summary = handler.getSummary(statsCache);
