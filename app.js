@@ -962,7 +962,8 @@ const statDetailHandlers = {
             };
             const title = metricTitles[currentBaseMetric] || 'H-Index';
             const infoIcon = '<svg class="info-icon" style="margin-left: 0.5rem; cursor: pointer;" width="16" height="16" viewBox="0 0 16 16" aria-label="Show h-index information" onclick="window.showHIndexModal(); event.stopPropagation();"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>';
-            return `${title} Breakdown${currentYear ? ` (${currentYear})` : ' (All Time)'}${infoIcon}`;
+            const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${title} Breakdown ${yearText}${infoIcon}`;
         },
         getSummary: (statsCache) => ({
             mainValue: getCurrentHIndex()
@@ -973,7 +974,7 @@ const statDetailHandlers = {
         }
     },
     'total-bgg-entries': {
-        getTitle: (currentYear) => currentYear ? `BGG Entries Acquired in ${currentYear}` : 'BGG Entries (All Time)',
+        getTitle: (currentYear) => currentYear ? `BGG Entries Acquired in <span style="white-space: nowrap">(${currentYear})</span>` : 'BGG Entries <span style="white-space: nowrap">(All Time)</span>',
         getSummary: (statsCache) => ({
             mainValue: statsCache.totalBGGEntries
         }),
@@ -982,7 +983,7 @@ const statDetailHandlers = {
         }
     },
     'total-games-owned': {
-        getTitle: (currentYear) => currentYear ? `Games Acquired in ${currentYear}` : 'Games Owned (All Time)',
+        getTitle: (currentYear) => currentYear ? `Games Acquired in <span style="white-space: nowrap">(${currentYear})</span>` : 'Games Owned <span style="white-space: nowrap">(All Time)</span>',
         getSummary: (statsCache) => ({
             mainValue: statsCache.totalGamesOwned
         }),
@@ -991,7 +992,7 @@ const statDetailHandlers = {
         }
     },
     'total-expansions': {
-        getTitle: (currentYear) => currentYear ? `Expansions Acquired in ${currentYear}` : 'Expansions (All Time)',
+        getTitle: (currentYear) => currentYear ? `Expansions Acquired in <span style="white-space: nowrap">(${currentYear})</span>` : 'Expansions <span style="white-space: nowrap">(All Time)</span>',
         getSummary: (statsCache) => ({
             mainValue: statsCache.expansionsData.total,
             substats: [
@@ -1004,7 +1005,7 @@ const statDetailHandlers = {
         }
     },
     'unique-games-played': {
-        getTitle: (currentYear) => currentYear ? `Unique Games Played in ${currentYear}` : 'Unique Games Played (All Time)',
+        getTitle: (currentYear) => currentYear ? `Unique Games Played in <span style="white-space: nowrap">(${currentYear})</span>` : 'Unique Games Played <span style="white-space: nowrap">(All Time)</span>',
         getSummary: (statsCache, currentYear) => {
             const substats = [
                 { label: 'My games:', value: statsCache.gamesPlayedData.myGames },
@@ -1023,7 +1024,7 @@ const statDetailHandlers = {
         }
     },
     'total-play-time': {
-        getTitle: (currentYear) => currentYear ? `Play Time by Game in ${currentYear}` : 'Play Time by Game (All Time)',
+        getTitle: (currentYear) => currentYear ? `Play Time by Game in <span style="white-space: nowrap">(${currentYear})</span>` : 'Play Time by Game <span style="white-space: nowrap">(All Time)</span>',
         getSummary: (statsCache) => {
             const hours = statsCache.playTimeData.totalHours.toFixed(1);
             const days = (statsCache.playTimeData.totalHours / 24).toFixed(1);
@@ -1047,7 +1048,8 @@ const statDetailHandlers = {
                 plays: 'Fives (5-9 Plays)'
             };
             const label = metricLabels[currentBaseMetric] || metricLabels.hours;
-            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+            const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${label} ${yearText}`;
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
@@ -1066,7 +1068,8 @@ const statDetailHandlers = {
                 plays: 'Dimes (10-24 Plays)'
             };
             const label = metricLabels[currentBaseMetric] || metricLabels.hours;
-            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+            const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${label} ${yearText}`;
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
@@ -1085,7 +1088,8 @@ const statDetailHandlers = {
                 plays: 'Quarters (25-99 Plays)'
             };
             const label = metricLabels[currentBaseMetric] || metricLabels.hours;
-            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+            const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${label} ${yearText}`;
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
@@ -1104,7 +1108,8 @@ const statDetailHandlers = {
                 plays: 'Centuries (100+ Plays)'
             };
             const label = metricLabels[currentBaseMetric] || metricLabels.hours;
-            return `${label}${currentYear ? ` (${currentYear})` : ' (All Time)'}`;
+            const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${label} ${yearText}`;
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
@@ -1125,7 +1130,7 @@ const statDetailHandlers = {
         }
     },
     'year-review': {
-        getTitle: (currentYear) => `Gaming Year in Review (${currentYear})`,
+        getTitle: (currentYear) => `Gaming Year in Review <span style="white-space: nowrap">(${currentYear})</span>`,
         getSummary: () => ({
             mainValue: ''
         }),
@@ -1892,7 +1897,7 @@ const diagnosticDetailHandlers = {
         }
     },
     'never-played': {
-        getTitle: (currentYear) => currentYear ? `Never Played (Acquired in ${currentYear})` : 'Never Played Games (All Time)',
+        getTitle: (currentYear) => currentYear ? `Never Played (Acquired in <span style="white-space: nowrap">${currentYear}</span>)` : 'Never Played Games <span style="white-space: nowrap">(All Time)</span>',
         getSummary: (statsCache) => ({
             mainValue: statsCache.neverPlayedGames.length
         }),
