@@ -1535,7 +1535,7 @@ function showYearReviewDetail(container, statsCache) {
                     <tr class="year-review-row-clickable" data-metric="hours">
                         <td class="year-review-label-detail">
                             <span class="year-review-expand-icon">▶</span>
-                            Increase in all-time hours h-index:
+                            Increase in all-time <span class="metric-name hours">hours</span> h-index:
                         </td>
                         <td class="year-review-value-detail">${formatIncrease(
                             statsCache.yearReview.hoursHIndexIncrease,
@@ -1561,7 +1561,7 @@ function showYearReviewDetail(container, statsCache) {
                     <tr class="year-review-row-clickable" data-metric="sessions">
                         <td class="year-review-label-detail">
                             <span class="year-review-expand-icon">▶</span>
-                            Increase in all-time sessions h-index:
+                            Increase in all-time <span class="metric-name sessions">sessions</span> h-index:
                         </td>
                         <td class="year-review-value-detail">${formatIncrease(
                             statsCache.yearReview.sessionsHIndexIncrease,
@@ -1587,7 +1587,7 @@ function showYearReviewDetail(container, statsCache) {
                     <tr class="year-review-row-clickable" data-metric="plays">
                         <td class="year-review-label-detail">
                             <span class="year-review-expand-icon">▶</span>
-                            Increase in all-time plays h-index:
+                            Increase in all-time <span class="metric-name plays">plays</span> h-index:
                         </td>
                         <td class="year-review-value-detail">${formatIncrease(
                             statsCache.yearReview.playsHIndexIncrease,
@@ -1655,7 +1655,7 @@ function showYearReviewDetail(container, statsCache) {
                 <tr class="year-review-row-clickable" data-milestone="${rowId}">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
-                        Increase in ${def.label} by ${def.metric} (played ${def.range} ${def.unit} total):
+                        Increase in ${def.label} by <span class="metric-name ${def.metric}">${def.metric}</span> (played ${def.range} ${def.unit} total):
                     </td>
                     <td class="year-review-value-detail">${displayValue}</td>
                 </tr>
