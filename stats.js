@@ -6,6 +6,25 @@
 import { calculateMedian } from './utils.js';
 
 /**
+ * Metric types for statistics calculations
+ */
+const Metric = {
+  HOURS: 'hours',
+  SESSIONS: 'sessions',
+  PLAYS: 'plays'
+};
+
+/**
+ * Milestone types for achievement tracking
+ */
+const Milestone = {
+  FIVES: 'fives',
+  DIMES: 'dimes',
+  QUARTERS: 'quarters',
+  CENTURIES: 'centuries'
+};
+
+/**
  * Helper: Check if a game is currently owned
  * @param {Object} game - Game object
  * @returns {boolean} true if any copy is currently owned
@@ -406,15 +425,17 @@ function getMilestones(games, plays, year, metric) {
 }
 
 /**
- * Get cumulative count of games that have reached a specific milestone threshold or higher
+ * Get cumulative count of games within a milestone range
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
  * @param {number|null} year - Year filter, or null for all time
  * @param {string} metric - Metric to use ('hours', 'sessions', or 'plays')
- * @param {number} threshold - Threshold value (5, 10, 25, or 100)
- * @returns {number} Count of games with metric value >= threshold
+ * @param {string} milestoneType - Milestone type: 'fives', 'dimes', 'quarters', or 'centuries'
+ * @returns {number} Count of games within the milestone range
  */
-function getCumulativeMilestoneCount(games, plays, year, metric, threshold) {
+function getCumulativeMilestoneCount(games, plays, year, metric, milestoneType) {
+  const { min, max } = getMilestoneThreshold(milestoneType);
+
   // Calculate metric values per game
   const metricValuesPerGame = new Map();
 
@@ -434,7 +455,7 @@ function getCumulativeMilestoneCount(games, plays, year, metric, threshold) {
     metricValuesPerGame.set(play.gameId, currentValue);
   });
 
-  // Count games at or above threshold
+  // Count games within the threshold range
   let count = 0;
   metricValuesPerGame.forEach((value, gameId) => {
     const game = games.find(g => g.id === gameId);
@@ -450,7 +471,11 @@ function getCumulativeMilestoneCount(games, plays, year, metric, threshold) {
       metricValue = value.playCount;
     }
 
-    if (metricValue >= threshold) {
+    // Check if value is within range
+    const meetsMin = metricValue >= min;
+    const meetsMax = max === null || metricValue < max;
+
+    if (meetsMin && meetsMax) {
       count++;
     }
   });
@@ -803,17 +828,17 @@ function getNewHIndexGames(games, plays, year, metric) {
 }
 
 /**
- * Get threshold value for milestone type
+ * Get threshold range for milestone type
  * @param {string} milestoneType - Milestone type: 'fives', 'dimes', 'quarters', or 'centuries'
- * @returns {number} Threshold value
+ * @returns {Object} Object with min and max threshold values
  */
 function getMilestoneThreshold(milestoneType) {
   switch (milestoneType) {
-    case 'fives': return 5;
-    case 'dimes': return 10;
-    case 'quarters': return 25;
-    case 'centuries': return 100;
-    default: return 0;
+    case 'fives': return { min: 5, max: 10 };
+    case 'dimes': return { min: 10, max: 25 };
+    case 'quarters': return { min: 25, max: 100 };
+    case 'centuries': return { min: 100, max: null };
+    default: return { min: 0, max: null };
   }
 }
 
@@ -827,13 +852,11 @@ function getMilestoneThreshold(milestoneType) {
  * @returns {number} Increase in milestone count (can be negative)
  */
 function calculateMilestoneIncrease(games, plays, year, metric, milestoneType) {
-  const threshold = getMilestoneThreshold(milestoneType);
-
   // Calculate current year count
-  const currentYearCount = getCumulativeMilestoneCount(games, plays, year, metric, threshold);
+  const currentYearCount = getCumulativeMilestoneCount(games, plays, year, metric, milestoneType);
 
   // Calculate previous year count
-  const previousYearCount = getCumulativeMilestoneCount(games, plays, year - 1, metric, threshold);
+  const previousYearCount = getCumulativeMilestoneCount(games, plays, year - 1, metric, milestoneType);
 
   return currentYearCount - previousYearCount;
 }
@@ -848,7 +871,7 @@ function calculateMilestoneIncrease(games, plays, year, metric, milestoneType) {
  * @returns {Array} Array of games newly reaching this milestone threshold
  */
 function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
-  const threshold = getMilestoneThreshold(milestoneType);
+  const { min, max } = getMilestoneThreshold(milestoneType);
 
   // Calculate metric values per game through current year
   const metricValuesCurrentYear = new Map();
@@ -905,8 +928,10 @@ function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
       currentCount = currentValue.playCount;
     }
 
-    // Check if game reached threshold by current year
-    if (currentCount < threshold) return;
+    // Check if game is within the milestone range by current year
+    const currentMeetsMin = currentCount >= min;
+    const currentMeetsMax = max === null || currentCount < max;
+    if (!currentMeetsMin || !currentMeetsMax) return;
 
     // Calculate previous year metric value
     const previousValue = metricValuesPreviousYear.get(gameId);
@@ -921,8 +946,12 @@ function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
       }
     }
 
-    // Check if game crossed threshold this year
-    if (previousCount < threshold) {
+    // Check if game entered this milestone range this year
+    const previousMeetsMin = previousCount >= min;
+    const previousMeetsMax = max === null || previousCount < max;
+    const wasInRange = previousMeetsMin && previousMeetsMax;
+
+    if (!wasInRange) {
       // Calculate this year's value for this game
       const thisYearPlays = plays.filter(play => {
         const playYear = parseInt(play.date.substring(0, 4));
@@ -1501,6 +1530,8 @@ function getSuggestedGames(games, plays) {
 
 // Export functions for testing (ES modules)
 export {
+  Metric,
+  Milestone,
   isGameOwned,
   wasGameAcquiredInYear,
   calculateDaysSince,
