@@ -706,6 +706,10 @@ footer p {
         font-size: 1.25rem;
     }
 
+    .detail-header-buttons {
+        flex-direction: column-reverse;
+    }
+
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 0.5rem;
