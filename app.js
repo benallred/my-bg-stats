@@ -929,6 +929,9 @@ function showHIndexModal() {
 
     // Show modal
     modal.style.display = 'flex';
+
+    // Update URL to include modal state
+    updateURL();
 }
 
 // Make showHIndexModal globally accessible for inline onclick handlers
@@ -940,6 +943,9 @@ window.showHIndexModal = showHIndexModal;
 function hideHIndexModal() {
     const modal = document.getElementById('h-index-modal');
     modal.style.display = 'none';
+
+    // Update URL to remove modal state
+    updateURL();
 }
 
 /**
@@ -2017,8 +2023,9 @@ function loadFromPermalink() {
     const yearParam = urlParams.get('year');
     const baseMetricParam = urlParams.get('baseMetric');
     const statParam = urlParams.get('stat');
+    const modalParam = urlParams.get('modal');
 
-    if (!yearParam && !baseMetricParam && !statParam) {
+    if (!yearParam && !baseMetricParam && !statParam && !modalParam) {
         return; // No permalink parameters
     }
 
@@ -2046,16 +2053,24 @@ function loadFromPermalink() {
         }
     }
 
-    // Open the specified stat after a short delay to ensure stats are loaded
-    if (statParam) {
+    // Open the specified stat or modal after a short delay to ensure stats are loaded
+    if (statParam || modalParam) {
         setTimeout(() => {
-            // Check if it's a diagnostic stat
-            const isDiagnostic = statParam === 'unknown-acquisition-dates' || statParam === 'never-played';
+            // Open modal if specified
+            if (modalParam === 'h-index') {
+                showHIndexModal();
+            }
 
-            if (isDiagnostic) {
-                showDiagnosticDetail(statParam);
-            } else {
-                showDetailSection(statParam);
+            // Open stat detail if specified
+            if (statParam) {
+                // Check if it's a diagnostic stat
+                const isDiagnostic = statParam === 'unknown-acquisition-dates' || statParam === 'never-played';
+
+                if (isDiagnostic) {
+                    showDiagnosticDetail(statParam);
+                } else {
+                    showDetailSection(statParam);
+                }
             }
 
             isLoadingFromPermalink = false;
@@ -2121,6 +2136,12 @@ function updateURL() {
         params.set('stat', currentlyOpenStatType);
     } else if (currentlyOpenDiagnosticType) {
         params.set('stat', currentlyOpenDiagnosticType);
+    }
+
+    // Add modal parameter if h-index modal is open
+    const modal = document.getElementById('h-index-modal');
+    if (modal && modal.style.display === 'flex') {
+        params.set('modal', 'h-index');
     }
 
     // Update the URL without reloading the page
