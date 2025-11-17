@@ -4,7 +4,7 @@
 
 1. Add price-per-play statistics: cheapest game per play, most expensive game per play, average price-per-play
 2. Add "Gaming Year in Review" section: New section positioned below stat cards and above diagnostics, using inline "description: number" format. Include:
-   - **Engagement & Milestones:** New milestones reached for all base metric types (games hitting fives/dimes/quarters/centuries), games closest to next milestone for all base metric types, biggest jumps (games with most increased play count vs previous year)
+   - **Biggest Jumps:** Games with most increased play count vs previous year
    - **Time & Activity:** Total days played, total play time (hours), longest total playtime in one day, shortest total playtime in one day, busiest gaming month, longest play streak (consecutive days), longest dry spell (days between sessions), most productive gaming day
    - **Game Statistics:** Most played game by days, most played game by hours, longest single play (game + duration), most time-efficient game (most plays per hour), marathon game (highest total hours), unique games played, new-to-me games played, highest rated new-to-me game, oldest game played (by publication year), newest game played (by publication year)
    - **Social & Locations:** Total number of other players (excluding self), total solo plays, total solo days, total solo-only days (no multiplayer games that day), most common player count, most common day to play, game played with the most unique players, most social game (played with most unique players), biggest gaming session (most players in single session/day), locations played in, game played in the most locations, most frequented location

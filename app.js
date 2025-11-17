@@ -14,6 +14,8 @@ import {
   calculateAllTimeHIndexThroughYear,
   calculateHIndexIncrease,
   getNewHIndexGames,
+  calculateMilestoneIncrease,
+  getNewMilestoneGames,
   getTotalBGGEntries,
   getTotalGamesOwned,
   getTotalExpansions,
@@ -438,7 +440,49 @@ function updateAllStats() {
             playsHIndexCurrent: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear, 'plays'),
             hoursHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, 'hours'),
             sessionsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, 'sessions'),
-            playsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, 'plays')
+            playsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, 'plays'),
+
+            // Milestone increases - hours
+            fivesHoursIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'hours', 'fives'),
+            dimesHoursIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'hours', 'dimes'),
+            quartersHoursIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'hours', 'quarters'),
+            centuriesHoursIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'hours', 'centuries'),
+            fivesHoursCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 5),
+            dimesHoursCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 10),
+            quartersHoursCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 25),
+            centuriesHoursCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'hours', 100),
+            fivesHoursPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'hours', 5),
+            dimesHoursPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'hours', 10),
+            quartersHoursPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'hours', 25),
+            centuriesHoursPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'hours', 100),
+
+            // Milestone increases - sessions
+            fivesSessionsIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'sessions', 'fives'),
+            dimesSessionsIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'sessions', 'dimes'),
+            quartersSessionsIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'sessions', 'quarters'),
+            centuriesSessionsIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'sessions', 'centuries'),
+            fivesSessionsCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 5),
+            dimesSessionsCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 10),
+            quartersSessionsCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 25),
+            centuriesSessionsCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'sessions', 100),
+            fivesSessionsPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'sessions', 5),
+            dimesSessionsPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'sessions', 10),
+            quartersSessionsPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'sessions', 25),
+            centuriesSessionsPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'sessions', 100),
+
+            // Milestone increases - plays
+            fivesPlaysIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'plays', 'fives'),
+            dimesPlaysIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'plays', 'dimes'),
+            quartersPlaysIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'plays', 'quarters'),
+            centuriesPlaysIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, 'plays', 'centuries'),
+            fivesPlaysCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 5),
+            dimesPlaysCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 10),
+            quartersPlaysCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 25),
+            centuriesPlaysCurrent: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, 'plays', 100),
+            fivesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'plays', 5),
+            dimesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'plays', 10),
+            quartersPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'plays', 25),
+            centuriesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, 'plays', 100)
         };
     }
 
@@ -1476,7 +1520,7 @@ function showYearReviewDetail(container, statsCache) {
     detailDiv.className = 'year-review-detail';
     detailDiv.innerHTML = `
         <div class="year-review-subsection">
-            <h3 class="year-review-subsection-heading">Engagement & Milestones</h3>
+            <h3 class="year-review-subsection-heading">H-Index Growth</h3>
             <table class="year-review-table">
                 <tbody>
                     <tr class="year-review-row-clickable" data-metric="hours">
@@ -1562,18 +1606,109 @@ function showYearReviewDetail(container, statsCache) {
         </div>
     `;
 
+    // Build milestone rows dynamically - only show rows with increase > 0
+    const milestoneRows = [];
+    const milestoneDefinitions = [
+        { type: 'fives', label: 'fives', range: '5-9', metric: 'hours', unit: 'hours' },
+        { type: 'dimes', label: 'dimes', range: '10-24', metric: 'hours', unit: 'hours' },
+        { type: 'quarters', label: 'quarters', range: '25-99', metric: 'hours', unit: 'hours' },
+        { type: 'centuries', label: 'centuries', range: '100 or more', metric: 'hours', unit: 'hours' },
+        { type: 'fives', label: 'fives', range: '5-9', metric: 'sessions', unit: 'days' },
+        { type: 'dimes', label: 'dimes', range: '10-24', metric: 'sessions', unit: 'days' },
+        { type: 'quarters', label: 'quarters', range: '25-99', metric: 'sessions', unit: 'days' },
+        { type: 'centuries', label: 'centuries', range: '100 or more', metric: 'sessions', unit: 'days' },
+        { type: 'fives', label: 'fives', range: '5-9', metric: 'plays', unit: 'times' },
+        { type: 'dimes', label: 'dimes', range: '10-24', metric: 'plays', unit: 'times' },
+        { type: 'quarters', label: 'quarters', range: '25-99', metric: 'plays', unit: 'times' },
+        { type: 'centuries', label: 'centuries', range: '100 or more', metric: 'plays', unit: 'times' }
+    ];
+
+    milestoneDefinitions.forEach((def) => {
+        const increaseKey = `${def.type}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Increase`;
+        const currentKey = `${def.type}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Current`;
+        const previousKey = `${def.type}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Previous`;
+
+        const increase = statsCache.yearReview[increaseKey];
+        const current = statsCache.yearReview[currentKey];
+        const previous = statsCache.yearReview[previousKey];
+
+        // Only show rows where increase > 0
+        if (increase > 0) {
+            const rowId = `milestone-${def.type}-${def.metric}`;
+            const displayValue = increase === 0
+                ? `+0 (stayed at ${current})`
+                : `+${increase} (from ${previous} to ${current})`;
+
+            // Get new milestone games
+            const newGames = getNewMilestoneGames(gameData.games, gameData.plays, currentYear, def.metric, def.type);
+
+            milestoneRows.push(`
+                <tr class="year-review-row-clickable" data-milestone="${rowId}">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Increase in ${def.label} by ${def.metric} (played ${def.range} ${def.unit} total):
+                    </td>
+                    <td class="year-review-value-detail">${displayValue}</td>
+                </tr>
+                <tr class="year-review-expanded-content" data-milestone="${rowId}" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${newGames.length > 0
+                                ? newGames.map(item => {
+                                    const totalValue = def.metric === 'hours' ? item.value.toFixed(1) : item.value;
+                                    const thisYearValue = def.metric === 'hours' ? item.thisYearValue.toFixed(1) : item.thisYearValue;
+                                    return `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-value">${totalValue} ${def.unit} total (${thisYearValue} this year)</span>
+                                        </div>
+                                    `;
+                                }).join('')
+                                : '<div class="year-review-no-games">No new games reached this milestone</div>'
+                            }
+                        </div>
+                    </td>
+                </tr>
+            `);
+        }
+    });
+
+    // Add milestones subsection if there are any rows to show
+    if (milestoneRows.length > 0) {
+        const milestonesSubsection = document.createElement('div');
+        milestonesSubsection.className = 'year-review-subsection';
+        milestonesSubsection.innerHTML = `
+            <h3 class="year-review-subsection-heading">New Milestones Reached</h3>
+            <table class="year-review-table">
+                <tbody>
+                    ${milestoneRows.join('')}
+                </tbody>
+            </table>
+        `;
+        detailDiv.appendChild(milestonesSubsection);
+    }
+
     // Add click handlers for expandable rows
     const clickableRows = detailDiv.querySelectorAll('.year-review-row-clickable');
     clickableRows.forEach(row => {
         row.addEventListener('click', () => {
+            // Check if this is a metric row (h-index) or milestone row
             const metric = row.dataset.metric;
-            const expandedRow = detailDiv.querySelector(`.year-review-expanded-content[data-metric="${metric}"]`);
+            const milestone = row.dataset.milestone;
+
+            let expandedRow;
+            if (metric) {
+                expandedRow = detailDiv.querySelector(`.year-review-expanded-content[data-metric="${metric}"]`);
+            } else if (milestone) {
+                expandedRow = detailDiv.querySelector(`.year-review-expanded-content[data-milestone="${milestone}"]`);
+            }
+
             const icon = row.querySelector('.year-review-expand-icon');
 
-            if (expandedRow.style.display === 'none') {
+            if (expandedRow && expandedRow.style.display === 'none') {
                 expandedRow.style.display = 'table-row';
                 icon.textContent = '▼';
-            } else {
+            } else if (expandedRow) {
                 expandedRow.style.display = 'none';
                 icon.textContent = '▶';
             }

@@ -803,6 +803,156 @@ function getNewHIndexGames(games, plays, year, metric) {
 }
 
 /**
+ * Get threshold value for milestone type
+ * @param {string} milestoneType - Milestone type: 'fives', 'dimes', 'quarters', or 'centuries'
+ * @returns {number} Threshold value
+ */
+function getMilestoneThreshold(milestoneType) {
+  switch (milestoneType) {
+    case 'fives': return 5;
+    case 'dimes': return 10;
+    case 'quarters': return 25;
+    case 'centuries': return 100;
+    default: return 0;
+  }
+}
+
+/**
+ * Calculate the increase in milestone count for a specific milestone type
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to analyze
+ * @param {string} metric - Metric type: 'plays', 'sessions', or 'hours'
+ * @param {string} milestoneType - Milestone type: 'fives', 'dimes', 'quarters', or 'centuries'
+ * @returns {number} Increase in milestone count (can be negative)
+ */
+function calculateMilestoneIncrease(games, plays, year, metric, milestoneType) {
+  const threshold = getMilestoneThreshold(milestoneType);
+
+  // Calculate current year count
+  const currentYearCount = getCumulativeMilestoneCount(games, plays, year, metric, threshold);
+
+  // Calculate previous year count
+  const previousYearCount = getCumulativeMilestoneCount(games, plays, year - 1, metric, threshold);
+
+  return currentYearCount - previousYearCount;
+}
+
+/**
+ * Get games newly reaching a specific milestone threshold in a specific year
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to analyze
+ * @param {string} metric - Metric type: 'plays', 'sessions', or 'hours'
+ * @param {string} milestoneType - Milestone type: 'fives', 'dimes', 'quarters', or 'centuries'
+ * @returns {Array} Array of games newly reaching this milestone threshold
+ */
+function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
+  const threshold = getMilestoneThreshold(milestoneType);
+
+  // Calculate metric values per game through current year
+  const metricValuesCurrentYear = new Map();
+  plays.forEach(play => {
+    const playYear = parseInt(play.date.substring(0, 4));
+    if (playYear > year) return;
+
+    const currentValue = metricValuesCurrentYear.get(play.gameId) || {
+      playCount: 0,
+      totalMinutes: 0,
+      uniqueDates: new Set()
+    };
+
+    currentValue.playCount += 1;
+    currentValue.totalMinutes += (play.durationMin || 0);
+    currentValue.uniqueDates.add(play.date);
+
+    metricValuesCurrentYear.set(play.gameId, currentValue);
+  });
+
+  // Calculate metric values per game through previous year
+  const metricValuesPreviousYear = new Map();
+  plays.forEach(play => {
+    const playYear = parseInt(play.date.substring(0, 4));
+    if (playYear > year - 1) return;
+
+    const currentValue = metricValuesPreviousYear.get(play.gameId) || {
+      playCount: 0,
+      totalMinutes: 0,
+      uniqueDates: new Set()
+    };
+
+    currentValue.playCount += 1;
+    currentValue.totalMinutes += (play.durationMin || 0);
+    currentValue.uniqueDates.add(play.date);
+
+    metricValuesPreviousYear.set(play.gameId, currentValue);
+  });
+
+  // Find games that crossed the threshold this year
+  const newMilestoneGames = [];
+
+  metricValuesCurrentYear.forEach((currentValue, gameId) => {
+    const game = games.find(g => g.id === gameId);
+    if (!game) return;
+
+    // Calculate current year metric value
+    let currentCount;
+    if (metric === 'hours') {
+      currentCount = currentValue.totalMinutes / 60;
+    } else if (metric === 'sessions') {
+      currentCount = currentValue.uniqueDates.size;
+    } else {
+      currentCount = currentValue.playCount;
+    }
+
+    // Check if game reached threshold by current year
+    if (currentCount < threshold) return;
+
+    // Calculate previous year metric value
+    const previousValue = metricValuesPreviousYear.get(gameId);
+    let previousCount = 0;
+    if (previousValue) {
+      if (metric === 'hours') {
+        previousCount = previousValue.totalMinutes / 60;
+      } else if (metric === 'sessions') {
+        previousCount = previousValue.uniqueDates.size;
+      } else {
+        previousCount = previousValue.playCount;
+      }
+    }
+
+    // Check if game crossed threshold this year
+    if (previousCount < threshold) {
+      // Calculate this year's value for this game
+      const thisYearPlays = plays.filter(play => {
+        const playYear = parseInt(play.date.substring(0, 4));
+        return playYear === year && play.gameId === gameId;
+      });
+
+      let thisYearValue;
+      if (metric === 'hours') {
+        thisYearValue = thisYearPlays.reduce((sum, play) => sum + (play.durationMin / 60), 0);
+      } else if (metric === 'sessions') {
+        thisYearValue = new Set(thisYearPlays.map(play => play.date)).size;
+      } else {
+        thisYearValue = thisYearPlays.length;
+      }
+
+      newMilestoneGames.push({
+        game: game,
+        value: currentCount,
+        thisYearValue: thisYearValue
+      });
+    }
+  });
+
+  // Sort by value descending
+  newMilestoneGames.sort((a, b) => b.value - a.value);
+
+  return newMilestoneGames;
+}
+
+/**
  * Get total play time statistics
  * @param {Array} plays - Array of play objects
  * @param {number|null} year - Optional year filter
@@ -1361,6 +1511,8 @@ export {
   calculateAllTimeHIndexThroughYear,
   calculateHIndexIncrease,
   getNewHIndexGames,
+  calculateMilestoneIncrease,
+  getNewMilestoneGames,
   getTotalBGGEntries,
   getTotalGamesOwned,
   getTotalExpansions,
