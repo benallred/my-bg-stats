@@ -1104,7 +1104,8 @@ function getDaysPlayedByGame(games, plays, year = null) {
     if (!gameDaysMap.has(play.gameId)) {
       gameDaysMap.set(play.gameId, {
         uniqueDates: new Set(),
-        minutesPerDay: new Map() // date -> total minutes
+        minutesPerDay: new Map(), // date -> total minutes
+        playsPerDay: new Map() // date -> play count
       });
     }
 
@@ -1114,6 +1115,10 @@ function getDaysPlayedByGame(games, plays, year = null) {
     // Track minutes per day
     const currentMinutes = gameDays.minutesPerDay.get(play.date) || 0;
     gameDays.minutesPerDay.set(play.date, currentMinutes + play.durationMin);
+
+    // Track plays per day
+    const currentPlays = gameDays.playsPerDay.get(play.date) || 0;
+    gameDays.playsPerDay.set(play.date, currentPlays + 1);
   });
 
   // Convert to array with game objects
@@ -1122,6 +1127,7 @@ function getDaysPlayedByGame(games, plays, year = null) {
     const game = games.find(g => g.id === gameId);
     if (game) {
       const minutesPerDayArray = Array.from(daysData.minutesPerDay.values());
+      const playsPerDayArray = Array.from(daysData.playsPerDay.values());
 
       // Calculate min, max, median, and average minutes per day
       let minMinutes = null;
@@ -1136,13 +1142,24 @@ function getDaysPlayedByGame(games, plays, year = null) {
         medianMinutes = calculateMedian(minutesPerDayArray);
       }
 
+      // Calculate median and average plays per day
+      let medianPlays = null;
+      let avgPlays = null;
+
+      if (playsPerDayArray.length > 0) {
+        avgPlays = playsPerDayArray.reduce((sum, plays) => sum + plays, 0) / playsPerDayArray.length;
+        medianPlays = calculateMedian(playsPerDayArray);
+      }
+
       breakdown.push({
         game,
         uniqueDays: daysData.uniqueDates.size,
         minMinutes,
         maxMinutes,
         medianMinutes,
-        avgMinutes
+        avgMinutes,
+        medianPlays,
+        avgPlays
       });
     }
   });

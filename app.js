@@ -1546,8 +1546,9 @@ function showDaysPlayedBreakdown(container) {
             <tr>
                 <th>Game</th>
                 <th>Days Played</th>
-                <th>Min/Max Per Day</th>
-                <th>Median/Avg Per Day</th>
+                <th>Median/Avg Plays Per Day</th>
+                <th>Min/Max Time Per Day</th>
+                <th>Median/Avg Time Per Day</th>
             </tr>
         </thead>
         <tbody>
@@ -1563,15 +1564,23 @@ function showDaysPlayedBreakdown(container) {
                     return `${mins}m`;
                 };
 
-                const minMax = `${formatMinutes(item.minMinutes)}<br>${formatMinutes(item.maxMinutes)}`;
-                const medianAvg = `${formatMinutes(item.medianMinutes)}<br>${formatMinutes(item.avgMinutes)}`;
+                // Format plays per day values
+                const formatPlays = (plays) => {
+                    if (plays === null) return '-';
+                    return plays % 1 === 0 ? plays.toString() : plays.toFixed(1);
+                };
+
+                const minMaxHours = `${formatMinutes(item.minMinutes)}<br>${formatMinutes(item.maxMinutes)}`;
+                const medianAvgHours = `${formatMinutes(item.medianMinutes)}<br>${formatMinutes(item.avgMinutes)}`;
+                const medianAvgPlays = `${formatPlays(item.medianPlays)}<br>${formatPlays(item.avgPlays)}`;
 
                 return `
                     <tr>
                         <td>${item.game.name}</td>
                         <td>${item.uniqueDays}</td>
-                        <td class="no-wrap">${minMax}</td>
-                        <td class="no-wrap">${medianAvg}</td>
+                        <td class="no-wrap">${medianAvgPlays}</td>
+                        <td class="no-wrap">${minMaxHours}</td>
+                        <td class="no-wrap">${medianAvgHours}</td>
                     </tr>
                 `;
             }).join('')}
