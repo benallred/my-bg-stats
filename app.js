@@ -1601,7 +1601,6 @@ function showPlayTimeBreakdown(container) {
             <tr>
                 <th>Game</th>
                 <th>Time Played</th>
-                <th>Play Count</th>
                 <th>Min/Max Play Time</th>
                 <th>Median/Avg Play Time</th>
                 <th>Play Durations</th>
@@ -1639,7 +1638,6 @@ function showPlayTimeBreakdown(container) {
                     <tr>
                         <td>${item.game.name}</td>
                         <td>${hours} hours</td>
-                        <td>${item.playCount}</td>
                         <td class="no-wrap">${minMax}</td>
                         <td class="no-wrap">${medianAvg}</td>
                         <td>${dataSource}</td>
