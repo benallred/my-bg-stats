@@ -107,6 +107,21 @@ describe('process-data.js transformation logic', () => {
       expect(output.games[0].copies[0].pricePaid).toBeNull();
       expect(output.games[0].copies[0].currency).toBeNull();
     });
+
+    test('extracts versionName from copy', () => {
+      const output = processData(typicalFixture);
+      const game = output.games.find(g => g.name === 'Multiple Copies Game');
+
+      expect(game.copies[0].versionName).toBe('English second edition');
+      expect(game.copies[1].versionName).toBeNull();
+    });
+
+    test('handles missing versionName as null', () => {
+      const output = processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Base Game');
+
+      expect(game.copies[0].versionName).toBeNull();
+    });
   });
 
   describe('Typical Play Time Calculation', () => {

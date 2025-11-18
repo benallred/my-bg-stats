@@ -136,11 +136,13 @@
       "copies": [
         {
           "uuid": "typical-copy-8a",
+          "versionName": "English second edition",
           "statusOwned": true,
           "metaData": "{\"AcquisitionDate\":\"2019-05-10\",\"PricePaid\":\"19.99\",\"PricePaidCurrency\":\"USD\"}"
         },
         {
           "uuid": "typical-copy-8b",
+          "versionName": "",
           "statusOwned": false,
           "metaData": "{\"AcquisitionDate\":\"2018-03-01\",\"PricePaid\":\"15.00\",\"PricePaidCurrency\":\"EUR\"}"
         }

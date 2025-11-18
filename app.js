@@ -1334,27 +1334,47 @@ function showBGGEntries(container) {
     gameData.games.forEach(game => {
         if (game.copies && game.copies.length > 0) {
             // Show each copy that matches the filter
-            game.copies.forEach((copy, index) => {
+            game.copies.forEach((copy) => {
                 if (currentYear) {
                     if (copy.acquisitionDate && copy.acquisitionDate.startsWith(currentYear.toString())) {
                         entries.push({
+                            gameId: game.id,
                             game,
-                            copy,
-                            copyNumber: game.copies.length > 1 ? index + 1 : null
+                            copy
                         });
                     }
                 } else {
                     if (copy.statusOwned === true) {
                         entries.push({
+                            gameId: game.id,
                             game,
-                            copy,
-                            copyNumber: game.copies.length > 1 ? index + 1 : null
+                            copy
                         });
                     }
                 }
             });
         }
     });
+
+    // Count how many entries per game
+    const entriesPerGame = new Map();
+    entries.forEach(entry => {
+        const count = entriesPerGame.get(entry.gameId) || 0;
+        entriesPerGame.set(entry.gameId, count + 1);
+    });
+
+    // Track versionName usage per game to add disambiguators
+    const versionNameCounts = new Map();
+    entries.forEach(entry => {
+        const gameId = entry.gameId;
+        const versionName = entry.copy.versionName || 'no version set';
+        const key = `${gameId}:${versionName}`;
+        const count = versionNameCounts.get(key) || 0;
+        versionNameCounts.set(key, count + 1);
+    });
+
+    // Track which version name occurrence we're on for each game
+    const versionNameIndexes = new Map();
 
     const table = document.createElement('table');
     table.innerHTML = `
@@ -1369,8 +1389,26 @@ function showBGGEntries(container) {
             ${entries.map(entry => {
                 const game = entry.game;
                 const copy = entry.copy;
-                const copyNumber = entry.copyNumber;
-                const name = game.name + (copyNumber ? ` (Copy ${copyNumber})` : '');
+                const gameId = entry.gameId;
+                const hasMutipleCopies = entriesPerGame.get(gameId) > 1;
+
+                let name = game.name;
+                if (hasMutipleCopies) {
+                    const versionName = copy.versionName || 'no version set';
+                    const key = `${gameId}:${versionName}`;
+                    const versionCount = versionNameCounts.get(key);
+
+                    if (versionCount > 1) {
+                        // Multiple copies with same versionName, add disambiguator
+                        const currentIndex = versionNameIndexes.get(key) || 1;
+                        versionNameIndexes.set(key, currentIndex + 1);
+                        name += ` (${versionName} - ${currentIndex})`;
+                    } else {
+                        // Single copy with this versionName
+                        name += ` (${versionName})`;
+                    }
+                }
+
                 const type = game.isBaseGame ? 'Base Game' :
                             game.isExpandalone ? 'Expandalone' :
                             game.isExpansion ? 'Expansion' : 'Unknown';

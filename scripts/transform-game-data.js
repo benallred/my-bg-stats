@@ -74,6 +74,7 @@ function extractCopyMetadata(copies) {
 
       result.push({
         copyId: copy.uuid || null,
+        versionName: copy.versionName || null,
         acquisitionDate: copyAcquisitionDate,
         statusOwned: copy.statusOwned === true,
         pricePaid: pricePaid,
@@ -360,4 +361,4 @@ function processData(bgStatsData) {
   return finalizeOutput(gamesMap, plays);
 }
 
-module.exports = { processData };
+export { processData };
