@@ -33,7 +33,8 @@ import {
   getSuggestedGames,
   getHIndexBreakdown,
   getHourHIndexBreakdown,
-  getPlayTimeByGame
+  getPlayTimeByGame,
+  getDaysPlayedByGame
 } from './stats.js';
 
 /**
@@ -418,6 +419,7 @@ function updateAllStats() {
         totalGamesOwned: getTotalGamesOwned(gameData.games, currentYear),
         expansionsData: getTotalExpansions(gameData.games, currentYear),
         gamesPlayedData: getTotalGamesPlayed(gameData.games, gameData.plays, currentYear),
+        totalDaysPlayed: getTotalDaysPlayed(gameData.plays, currentYear),
         playTimeData: getTotalPlayTime(gameData.plays, currentYear),
         milestonesHours: getMilestones(gameData.games, gameData.plays, currentYear, Metric.HOURS),
         milestonesSessions: getMilestones(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
@@ -1042,6 +1044,32 @@ const statDetailHandlers = {
             showPlayTimeBreakdown(detailContent);
         }
     },
+    'total-days-played': {
+        getTitle: (currentYear) => currentYear ? `Days Played by Game in <span style="white-space: nowrap">(${currentYear})</span>` : 'Days Played by Game <span style="white-space: nowrap">(All Time)</span>',
+        getSummary: (statsCache) => {
+            const totalDays = statsCache.totalDaysPlayed;
+            const dailyStats = statsCache.dailySessionStats;
+
+            const formatTimePerDay = (minutes) => {
+                if (minutes === null) return '-';
+                if (minutes < 60) {
+                    return `${Math.round(minutes)} minutes per gaming day`;
+                }
+                return `${(minutes / 60).toFixed(1)} hours per gaming day`;
+            };
+
+            return {
+                mainValue: `${totalDays.toLocaleString()} days`,
+                substats: [
+                    { label: 'Median:', value: formatTimePerDay(dailyStats.medianMinutes) },
+                    { label: 'Average:', value: formatTimePerDay(dailyStats.averageMinutes) }
+                ]
+            };
+        },
+        render: (detailContent) => {
+            showDaysPlayedBreakdown(detailContent);
+        }
+    },
     'fives': {
         getTitle: (currentYear) => {
             const metricLabels = {
@@ -1499,6 +1527,52 @@ function showMilestoneGames(container, milestone, milestonesData) {
                     <td>${item.game.name}</td>
                     <td>${formattedCount}</td>
                 </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show days played breakdown by game
+ */
+function showDaysPlayedBreakdown(container) {
+    const breakdown = getDaysPlayedByGame(gameData.games, gameData.plays, currentYear);
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Days Played</th>
+                <th>Min/Max Per Day</th>
+                <th>Median/Avg Per Day</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${breakdown.map(item => {
+                // Format minutes as hours per day values
+                const formatMinutes = (minutes) => {
+                    if (minutes === null) return '-';
+                    const hrs = Math.floor(minutes / 60);
+                    const mins = Math.round(minutes % 60);
+                    if (hrs > 0) {
+                        return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
+                    }
+                    return `${mins}m`;
+                };
+
+                const minMax = `${formatMinutes(item.minMinutes)}<br>${formatMinutes(item.maxMinutes)}`;
+                const medianAvg = `${formatMinutes(item.medianMinutes)}<br>${formatMinutes(item.avgMinutes)}`;
+
+                return `
+                    <tr>
+                        <td>${item.game.name}</td>
+                        <td>${item.uniqueDays}</td>
+                        <td class="no-wrap">${minMax}</td>
+                        <td class="no-wrap">${medianAvg}</td>
+                    </tr>
                 `;
             }).join('')}
         </tbody>

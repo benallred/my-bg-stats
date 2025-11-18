@@ -82,3 +82,49 @@ function calculateHIndexIncrease(games, plays, year, metric = 'plays') {
 ```
 
 This ensures function calls are explicit and self-documenting about required vs optional parameters.
+
+## Time Duration Data Storage
+
+Always aggregate and store time durations in **minutes**, never hours.
+
+**Rules:**
+- Data layer (stats.js): Always work with minutes for calculations and return values
+- Display layer (app.js): Convert minutes to hours/formatted strings only when rendering
+
+**Rationale:**
+- Minutes provide integer precision for most play durations
+- Consistent unit throughout data calculations prevents conversion errors
+- Display concerns remain separate from data concerns
+
+**Examples:**
+
+```javascript
+// CORRECT - data layer stores minutes
+function getDaysPlayedByGame(games, plays, year = null) {
+  // ...
+  gameDays.minutesPerDay.set(play.date, currentMinutes + play.durationMin);
+  // ...
+  return {
+    minMinutes: Math.min(...minutesPerDayArray),
+    maxMinutes: Math.max(...minutesPerDayArray),
+    // ...
+  };
+}
+
+// CORRECT - display layer converts to hours
+function showDaysPlayedBreakdown(container) {
+  const formatMinutes = (minutes) => {
+    const hrs = Math.floor(minutes / 60);
+    const mins = Math.round(minutes % 60);
+    return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+  };
+  // ...
+}
+
+// INCORRECT - data layer converts to hours
+function getDaysPlayedByGame(games, plays, year = null) {
+  // ...
+  gameDays.hoursPerDay.set(play.date, currentHours + (play.durationMin / 60));
+  // ...
+}
+```

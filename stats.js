@@ -1095,6 +1095,64 @@ function getPlayTimeByGame(games, plays, year = null) {
   return breakdown;
 }
 
+function getDaysPlayedByGame(games, plays, year = null) {
+  const gameDaysMap = new Map();
+
+  plays.forEach(play => {
+    if (year && !play.date.startsWith(year.toString())) return;
+
+    if (!gameDaysMap.has(play.gameId)) {
+      gameDaysMap.set(play.gameId, {
+        uniqueDates: new Set(),
+        minutesPerDay: new Map() // date -> total minutes
+      });
+    }
+
+    const gameDays = gameDaysMap.get(play.gameId);
+    gameDays.uniqueDates.add(play.date);
+
+    // Track minutes per day
+    const currentMinutes = gameDays.minutesPerDay.get(play.date) || 0;
+    gameDays.minutesPerDay.set(play.date, currentMinutes + play.durationMin);
+  });
+
+  // Convert to array with game objects
+  const breakdown = [];
+  gameDaysMap.forEach((daysData, gameId) => {
+    const game = games.find(g => g.id === gameId);
+    if (game) {
+      const minutesPerDayArray = Array.from(daysData.minutesPerDay.values());
+
+      // Calculate min, max, median, and average minutes per day
+      let minMinutes = null;
+      let maxMinutes = null;
+      let medianMinutes = null;
+      let avgMinutes = null;
+
+      if (minutesPerDayArray.length > 0) {
+        minMinutes = Math.min(...minutesPerDayArray);
+        maxMinutes = Math.max(...minutesPerDayArray);
+        avgMinutes = minutesPerDayArray.reduce((sum, minutes) => sum + minutes, 0) / minutesPerDayArray.length;
+        medianMinutes = calculateMedian(minutesPerDayArray);
+      }
+
+      breakdown.push({
+        game,
+        uniqueDays: daysData.uniqueDates.size,
+        minMinutes,
+        maxMinutes,
+        medianMinutes,
+        avgMinutes
+      });
+    }
+  });
+
+  // Sort by unique days descending
+  breakdown.sort((a, b) => b.uniqueDays - a.uniqueDays);
+
+  return breakdown;
+}
+
 /**
  * Helper: Calculate days since a date
  * @param {string} dateString - Date in YYYY-MM-DD format
@@ -1561,6 +1619,7 @@ export {
   getHourHIndexBreakdown,
   getTotalPlayTime,
   getPlayTimeByGame,
+  getDaysPlayedByGame,
   getNextMilestoneTarget,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
