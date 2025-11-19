@@ -986,6 +986,10 @@ footer p {
     padding-left: 2rem;
 }
 
+.nowrap-date {
+    white-space: nowrap;
+}
+
 .year-review-table .year-review-expanded-content td {
     padding: 0;
     border-bottom: 1px solid var(--border-light);

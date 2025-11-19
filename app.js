@@ -1905,7 +1905,7 @@ function showYearReviewDetail(container, statsCache) {
                         <span class="year-review-expand-icon">▶</span>
                         Most unique games in one day:
                     </td>
-                    <td class="year-review-value-detail">${timeAndActivity.mostGamesDay} games on ${formatDateWithDay(timeAndActivity.mostGamesDayDate)}</td>
+                    <td class="year-review-value-detail">${timeAndActivity.mostGamesDay} games on <span class="nowrap-date">${formatDateWithDay(timeAndActivity.mostGamesDayDate)}</span></td>
                 </tr>
                 <tr class="year-review-expanded-content" data-detail="most-games-day" style="display: none;">
                     <td colspan="2">
@@ -1940,7 +1940,7 @@ function showYearReviewDetail(container, statsCache) {
                         <span class="year-review-expand-icon">▶</span>
                         Longest total playtime in one day:
                     </td>
-                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.longestDayMinutes)} on ${formatDateWithDay(timeAndActivity.longestDayDate)}</td>
+                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.longestDayMinutes)} on <span class="nowrap-date">${formatDateWithDay(timeAndActivity.longestDayDate)}</span></td>
                 </tr>
                 <tr class="year-review-expanded-content" data-detail="longest-day" style="display: none;">
                     <td colspan="2">
@@ -1975,7 +1975,7 @@ function showYearReviewDetail(container, statsCache) {
                         <span class="year-review-expand-icon">▶</span>
                         Shortest total playtime in one day:
                     </td>
-                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.shortestDayMinutes)} on ${formatDateWithDay(timeAndActivity.shortestDayDate)}</td>
+                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.shortestDayMinutes)} on <span class="nowrap-date">${formatDateWithDay(timeAndActivity.shortestDayDate)}</span></td>
                 </tr>
                 <tr class="year-review-expanded-content" data-detail="shortest-day" style="display: none;">
                     <td colspan="2">
