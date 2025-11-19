@@ -1171,6 +1171,179 @@ function getDaysPlayedByGame(games, plays, year = null) {
 }
 
 /**
+ * Get time and activity statistics for Gaming Year in Review
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter
+ * @returns {Object} Time and activity metrics including streaks, dry spells, and daily stats
+ */
+function getTimeAndActivityStats(plays, year = null) {
+  // Filter plays by year
+  const filteredPlays = plays.filter(play => {
+    if (!year) return true;
+    return play.date.startsWith(year.toString());
+  });
+
+  if (filteredPlays.length === 0) {
+    return {
+      totalDays: 0,
+      totalMinutes: 0,
+      longestDayMinutes: null,
+      longestDayDate: null,
+      longestDayGamesList: [],
+      shortestDayMinutes: null,
+      shortestDayDate: null,
+      shortestDayGamesList: [],
+      longestStreak: 0,
+      longestStreakStart: null,
+      longestStreakEnd: null,
+      longestDrySpell: 0,
+      longestDrySpellStart: null,
+      longestDrySpellEnd: null,
+      mostGamesDay: 0,
+      mostGamesDayDate: null,
+      mostGamesDayGamesList: []
+    };
+  }
+
+  // Aggregate by date
+  const dateMap = new Map(); // date -> { minutes, games: Set, gamePlays: Map<gameId, count>, gameMinutes: Map<gameId, minutes> }
+  filteredPlays.forEach(play => {
+    if (!dateMap.has(play.date)) {
+      dateMap.set(play.date, {
+        minutes: 0,
+        games: new Set(),
+        gamePlays: new Map(),
+        gameMinutes: new Map()
+      });
+    }
+    const dayData = dateMap.get(play.date);
+    dayData.minutes += play.durationMin;
+    dayData.games.add(play.gameId);
+    dayData.gamePlays.set(play.gameId, (dayData.gamePlays.get(play.gameId) || 0) + 1);
+    dayData.gameMinutes.set(play.gameId, (dayData.gameMinutes.get(play.gameId) || 0) + play.durationMin);
+  });
+
+  // Get sorted dates
+  const sortedDates = Array.from(dateMap.keys()).sort();
+  const totalDays = sortedDates.length;
+
+  // Total play time (sum all minutes)
+  const totalMinutes = Array.from(dateMap.values()).reduce((sum, d) => sum + d.minutes, 0);
+
+  // Find longest and shortest playtime days
+  let longestDayMinutes = -Infinity;
+  let longestDayDate = null;
+  let longestDayGamesList = [];
+  let shortestDayMinutes = Infinity;
+  let shortestDayDate = null;
+  let shortestDayGamesList = [];
+
+  dateMap.forEach((data, date) => {
+    if (data.minutes > longestDayMinutes) {
+      longestDayMinutes = data.minutes;
+      longestDayDate = date;
+      longestDayGamesList = Array.from(data.games).map(gameId => ({
+        gameId: gameId,
+        minutes: data.gameMinutes.get(gameId) || 0
+      }));
+    }
+    if (data.minutes < shortestDayMinutes) {
+      shortestDayMinutes = data.minutes;
+      shortestDayDate = date;
+      shortestDayGamesList = Array.from(data.games).map(gameId => ({
+        gameId: gameId,
+        minutes: data.gameMinutes.get(gameId) || 0
+      }));
+    }
+  });
+
+  // Calculate longest streak (consecutive days)
+  let longestStreak = 1;
+  let longestStreakStart = sortedDates[0];
+  let longestStreakEnd = sortedDates[0];
+  let currentStreak = 1;
+  let currentStreakStart = sortedDates[0];
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const prevDate = new Date(sortedDates[i - 1]);
+    const currDate = new Date(sortedDates[i]);
+    const daysDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
+
+    if (daysDiff === 1) {
+      currentStreak++;
+      if (currentStreak > longestStreak) {
+        longestStreak = currentStreak;
+        longestStreakStart = currentStreakStart;
+        longestStreakEnd = sortedDates[i];
+      }
+    } else {
+      currentStreak = 1;
+      currentStreakStart = sortedDates[i];
+    }
+  }
+
+  // Calculate longest dry spell (days between sessions)
+  let longestDrySpell = 0;
+  let longestDrySpellStart = null;
+  let longestDrySpellEnd = null;
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const prevDate = new Date(sortedDates[i - 1]);
+    const currDate = new Date(sortedDates[i]);
+    const daysDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24)) - 1;
+
+    if (daysDiff > longestDrySpell) {
+      longestDrySpell = daysDiff;
+      // Calculate the first and last days of the dry spell (not the play dates)
+      const drySpellStartDate = new Date(prevDate);
+      drySpellStartDate.setDate(drySpellStartDate.getDate() + 1);
+      const drySpellEndDate = new Date(currDate);
+      drySpellEndDate.setDate(drySpellEndDate.getDate() - 1);
+
+      longestDrySpellStart = drySpellStartDate.toISOString().split('T')[0];
+      longestDrySpellEnd = drySpellEndDate.toISOString().split('T')[0];
+    }
+  }
+
+  // Find most games played in one day
+  let mostGamesDay = 0;
+  let mostGamesDayDate = null;
+  let mostGamesDayGamesList = [];
+
+  dateMap.forEach((data, date) => {
+    const gameCount = data.games.size;
+    if (gameCount > mostGamesDay) {
+      mostGamesDay = gameCount;
+      mostGamesDayDate = date;
+      mostGamesDayGamesList = Array.from(data.games).map(gameId => ({
+        gameId: gameId,
+        playCount: data.gamePlays.get(gameId) || 1
+      }));
+    }
+  });
+
+  return {
+    totalDays,
+    totalMinutes,
+    longestDayMinutes,
+    longestDayDate,
+    longestDayGamesList,
+    shortestDayMinutes,
+    shortestDayDate,
+    shortestDayGamesList,
+    longestStreak,
+    longestStreakStart,
+    longestStreakEnd,
+    longestDrySpell,
+    longestDrySpellStart,
+    longestDrySpellEnd,
+    mostGamesDay,
+    mostGamesDayDate,
+    mostGamesDayGamesList
+  };
+}
+
+/**
  * Helper: Calculate days since a date
  * @param {string} dateString - Date in YYYY-MM-DD format
  * @returns {number} Days since the date
@@ -1637,6 +1810,7 @@ export {
   getTotalPlayTime,
   getPlayTimeByGame,
   getDaysPlayedByGame,
+  getTimeAndActivityStats,
   getNextMilestoneTarget,
   selectRandom,
   selectRandomWeightedBySqrtRarity,

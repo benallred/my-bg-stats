@@ -128,3 +128,20 @@ function getDaysPlayedByGame(games, plays, year = null) {
   // ...
 }
 ```
+
+## Pre-Commit Requirements
+
+**CRITICAL: Always run the test suite before creating any commit.**
+
+Before committing changes:
+
+1. **Run tests**: Execute `npm test` to ensure all tests pass and coverage thresholds are met
+2. **Verify output**: Confirm no test failures and coverage meets configured thresholds
+3. **Fix issues**: If tests fail or coverage drops, resolve issues before committing
+
+**Never commit code that:**
+- Fails any test
+- Reduces coverage below configured thresholds
+- Has not been tested
+
+This ensures the codebase remains stable and well-tested at all times.

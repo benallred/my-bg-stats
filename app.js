@@ -34,7 +34,8 @@ import {
   getHIndexBreakdown,
   getHourHIndexBreakdown,
   getPlayTimeByGame,
-  getDaysPlayedByGame
+  getDaysPlayedByGame,
+  getTimeAndActivityStats
 } from './stats.js';
 
 /**
@@ -495,7 +496,10 @@ function updateAllStats() {
             fivesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS, Milestone.FIVES),
             dimesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS, Milestone.DIMES),
             quartersPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS, Milestone.QUARTERS),
-            centuriesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS, Milestone.CENTURIES)
+            centuriesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS, Milestone.CENTURIES),
+
+            // Time and Activity stats
+            timeAndActivity: getTimeAndActivityStats(gameData.plays, currentYear)
         };
     }
 
@@ -1833,6 +1837,222 @@ function showYearReviewDetail(container, statsCache) {
             </table>
         </div>
     `;
+
+    // Add Time & Activity subsection
+    const timeAndActivity = statsCache.yearReview.timeAndActivity;
+    if (timeAndActivity) {
+        const formatMinutes = (minutes) => {
+            if (minutes === null) return '-';
+            const hrs = Math.floor(minutes / 60);
+            const mins = Math.round(minutes % 60);
+            if (hrs > 0) {
+                return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
+            }
+            return `${mins}m`;
+        };
+
+        const formatDate = (dateString) => {
+            if (!dateString) return '-';
+            const [year, month, day] = dateString.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        };
+
+        const formatDateWithDay = (dateString) => {
+            if (!dateString) return '-';
+            const [year, month, day] = dateString.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        };
+
+        const timeActivitySubsection = document.createElement('div');
+        timeActivitySubsection.className = 'year-review-subsection';
+
+        let timeActivityRows = [];
+
+        // Total days played
+        timeActivityRows.push(`
+            <tr>
+                <td class="year-review-label-detail">Total days played:</td>
+                <td class="year-review-value-detail">${timeAndActivity.totalDays}</td>
+            </tr>
+        `);
+
+        // Total play time
+        timeActivityRows.push(`
+            <tr>
+                <td class="year-review-label-detail">Total play time:</td>
+                <td class="year-review-value-detail">${formatMinutes(timeAndActivity.totalMinutes)}</td>
+            </tr>
+        `);
+
+        // Most unique games in one day
+        if (timeAndActivity.mostGamesDay > 0) {
+            // Get game names and play counts for the most games day
+            const gamesPlayedThatDay = timeAndActivity.mostGamesDayGamesList
+                .map(gameInfo => {
+                    const game = gameData.games.find(g => g.id === gameInfo.gameId);
+                    return {
+                        name: game ? game.name : 'Unknown',
+                        plays: gameInfo.playCount
+                    };
+                })
+                .sort((a, b) => a.name.localeCompare(b.name));
+
+            timeActivityRows.push(`
+                <tr class="year-review-row-clickable" data-detail="most-games-day">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Most unique games in one day:
+                    </td>
+                    <td class="year-review-value-detail">${timeAndActivity.mostGamesDay} games on ${formatDateWithDay(timeAndActivity.mostGamesDayDate)}</td>
+                </tr>
+                <tr class="year-review-expanded-content" data-detail="most-games-day" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${gamesPlayedThatDay.map(gameInfo => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-name">${gameInfo.name}</span>
+                                    <span class="year-review-game-value">${gameInfo.plays} ${gameInfo.plays === 1 ? 'play' : 'plays'}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `);
+        }
+
+        // Longest day
+        if (timeAndActivity.longestDayMinutes !== null) {
+            const longestDayGames = timeAndActivity.longestDayGamesList
+                .map(gameInfo => {
+                    const game = gameData.games.find(g => g.id === gameInfo.gameId);
+                    return {
+                        name: game ? game.name : 'Unknown',
+                        minutes: gameInfo.minutes
+                    };
+                })
+                .sort((a, b) => a.name.localeCompare(b.name));
+
+            timeActivityRows.push(`
+                <tr class="year-review-row-clickable" data-detail="longest-day">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Longest total playtime in one day:
+                    </td>
+                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.longestDayMinutes)} on ${formatDateWithDay(timeAndActivity.longestDayDate)}</td>
+                </tr>
+                <tr class="year-review-expanded-content" data-detail="longest-day" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${longestDayGames.map(gameInfo => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-name">${gameInfo.name}</span>
+                                    <span class="year-review-game-value">${formatMinutes(gameInfo.minutes)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `);
+        }
+
+        // Shortest day
+        if (timeAndActivity.shortestDayMinutes !== null) {
+            const shortestDayGames = timeAndActivity.shortestDayGamesList
+                .map(gameInfo => {
+                    const game = gameData.games.find(g => g.id === gameInfo.gameId);
+                    return {
+                        name: game ? game.name : 'Unknown',
+                        minutes: gameInfo.minutes
+                    };
+                })
+                .sort((a, b) => a.name.localeCompare(b.name));
+
+            timeActivityRows.push(`
+                <tr class="year-review-row-clickable" data-detail="shortest-day">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Shortest total playtime in one day:
+                    </td>
+                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.shortestDayMinutes)} on ${formatDateWithDay(timeAndActivity.shortestDayDate)}</td>
+                </tr>
+                <tr class="year-review-expanded-content" data-detail="shortest-day" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${shortestDayGames.map(gameInfo => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-name">${gameInfo.name}</span>
+                                    <span class="year-review-game-value">${formatMinutes(gameInfo.minutes)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `);
+        }
+
+        // Longest streak
+        if (timeAndActivity.longestStreak > 0) {
+            let streakValue;
+            if (timeAndActivity.longestStreak === 1) {
+                streakValue = `1 day (${formatDate(timeAndActivity.longestStreakStart)})`;
+            } else {
+                streakValue = `${timeAndActivity.longestStreak} days (${formatDate(timeAndActivity.longestStreakStart)} to ${formatDate(timeAndActivity.longestStreakEnd)})`;
+            }
+            timeActivityRows.push(`
+                <tr>
+                    <td class="year-review-label-detail">Longest play streak (consecutive days):</td>
+                    <td class="year-review-value-detail">${streakValue}</td>
+                </tr>
+            `);
+        }
+
+        // Longest dry spell
+        if (timeAndActivity.longestDrySpell > 0) {
+            let drySpellValue;
+            if (timeAndActivity.longestDrySpell === 1) {
+                drySpellValue = `1 day (${formatDate(timeAndActivity.longestDrySpellStart)})`;
+            } else {
+                drySpellValue = `${timeAndActivity.longestDrySpell} days (${formatDate(timeAndActivity.longestDrySpellStart)} to ${formatDate(timeAndActivity.longestDrySpellEnd)})`;
+            }
+            timeActivityRows.push(`
+                <tr>
+                    <td class="year-review-label-detail">Longest dry spell (days between sessions):</td>
+                    <td class="year-review-value-detail">${drySpellValue}</td>
+                </tr>
+            `);
+        }
+
+        timeActivitySubsection.innerHTML = `
+            <h3 class="year-review-subsection-heading">Time & Activity</h3>
+            <table class="year-review-table">
+                <tbody>
+                    ${timeActivityRows.join('')}
+                </tbody>
+            </table>
+        `;
+
+        detailDiv.appendChild(timeActivitySubsection);
+
+        // Add click handlers for expandable rows
+        const timeActivityClickableRows = timeActivitySubsection.querySelectorAll('.year-review-row-clickable');
+        timeActivityClickableRows.forEach(row => {
+            row.addEventListener('click', () => {
+                const detail = row.dataset.detail;
+                const expandedRow = timeActivitySubsection.querySelector(`.year-review-expanded-content[data-detail="${detail}"]`);
+                const icon = row.querySelector('.year-review-expand-icon');
+
+                if (expandedRow && expandedRow.style.display === 'none') {
+                    expandedRow.style.display = 'table-row';
+                    icon.textContent = '▼';
+                } else if (expandedRow) {
+                    expandedRow.style.display = 'none';
+                    icon.textContent = '▶';
+                }
+            });
+        });
+    }
 
     // Build milestone rows dynamically - only show rows with increase > 0
     const milestoneRows = [];

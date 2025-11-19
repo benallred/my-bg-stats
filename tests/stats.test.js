@@ -1779,4 +1779,280 @@ describe('Suggestion Algorithms', () => {
       expect(recentSuggestion.stats).toContain('1 total session');
     });
   });
+
+  describe('getTimeAndActivityStats', () => {
+    test('returns empty state for no plays', () => {
+      const result = stats.getTimeAndActivityStats([], 2024);
+
+      expect(result.totalDays).toBe(0);
+      expect(result.totalMinutes).toBe(0);
+      expect(result.longestDayMinutes).toBeNull();
+      expect(result.longestDayDate).toBeNull();
+      expect(result.longestDayGamesList).toEqual([]);
+      expect(result.shortestDayMinutes).toBeNull();
+      expect(result.shortestDayDate).toBeNull();
+      expect(result.shortestDayGamesList).toEqual([]);
+      expect(result.longestStreak).toBe(0);
+      expect(result.longestStreakStart).toBeNull();
+      expect(result.longestStreakEnd).toBeNull();
+      expect(result.longestDrySpell).toBe(0);
+      expect(result.longestDrySpellStart).toBeNull();
+      expect(result.longestDrySpellEnd).toBeNull();
+      expect(result.mostGamesDay).toBe(0);
+      expect(result.mostGamesDayDate).toBeNull();
+      expect(result.mostGamesDayGamesList).toEqual([]);
+    });
+
+    test('calculates stats for single play day', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 120 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, null);
+
+      expect(result.totalDays).toBe(1);
+      expect(result.totalMinutes).toBe(120);
+      expect(result.longestDayMinutes).toBe(120);
+      expect(result.longestDayDate).toBe('2024-01-15');
+      expect(result.shortestDayMinutes).toBe(120);
+      expect(result.shortestDayDate).toBe('2024-01-15');
+      expect(result.longestStreak).toBe(1);
+      expect(result.longestStreakStart).toBe('2024-01-15');
+      expect(result.longestStreakEnd).toBe('2024-01-15');
+      expect(result.longestDrySpell).toBe(0);
+      expect(result.mostGamesDay).toBe(1);
+      expect(result.mostGamesDayDate).toBe('2024-01-15');
+      expect(result.mostGamesDayGamesList).toHaveLength(1);
+      expect(result.mostGamesDayGamesList[0].gameId).toBe(1);
+      expect(result.mostGamesDayGamesList[0].playCount).toBe(1);
+    });
+
+    test('tracks longest and shortest play days with game lists', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 30 },  // Short day: 30min
+        { gameId: 2, date: '2024-01-16', durationMin: 180 }, // Long day: 180min
+        { gameId: 1, date: '2024-01-17', durationMin: 60 }   // Medium day: 60min
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.longestDayMinutes).toBe(180);
+      expect(result.longestDayDate).toBe('2024-01-16');
+      expect(result.longestDayGamesList).toHaveLength(1);
+      expect(result.longestDayGamesList[0].gameId).toBe(2);
+      expect(result.longestDayGamesList[0].minutes).toBe(180);
+
+      expect(result.shortestDayMinutes).toBe(30);
+      expect(result.shortestDayDate).toBe('2024-01-15');
+      expect(result.shortestDayGamesList).toHaveLength(1);
+      expect(result.shortestDayGamesList[0].gameId).toBe(1);
+      expect(result.shortestDayGamesList[0].minutes).toBe(30);
+    });
+
+    test('tracks multiple games on same day', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 2, date: '2024-01-15', durationMin: 90 },
+        { gameId: 3, date: '2024-01-15', durationMin: 30 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.totalMinutes).toBe(180);
+      expect(result.longestDayGamesList).toHaveLength(3);
+      expect(result.mostGamesDay).toBe(3);
+      expect(result.mostGamesDayGamesList).toHaveLength(3);
+
+      // Check individual game minutes
+      const game1 = result.longestDayGamesList.find(g => g.gameId === 1);
+      const game2 = result.longestDayGamesList.find(g => g.gameId === 2);
+      const game3 = result.longestDayGamesList.find(g => g.gameId === 3);
+      expect(game1.minutes).toBe(60);
+      expect(game2.minutes).toBe(90);
+      expect(game3.minutes).toBe(30);
+    });
+
+    test('tracks multiple plays of same game on same day', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-15', durationMin: 30 },
+        { gameId: 2, date: '2024-01-15', durationMin: 45 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.mostGamesDay).toBe(2);
+      expect(result.mostGamesDayGamesList).toHaveLength(2);
+
+      const game1 = result.mostGamesDayGamesList.find(g => g.gameId === 1);
+      const game2 = result.mostGamesDayGamesList.find(g => g.gameId === 2);
+      expect(game1.playCount).toBe(2);
+      expect(game2.playCount).toBe(1);
+
+      // Check total minutes per game
+      const game1Minutes = result.longestDayGamesList.find(g => g.gameId === 1);
+      expect(game1Minutes.minutes).toBe(90);
+    });
+
+    test('calculates longest consecutive streak', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-16', durationMin: 60 },
+        { gameId: 1, date: '2024-01-17', durationMin: 60 },
+        { gameId: 1, date: '2024-01-19', durationMin: 60 },
+        { gameId: 1, date: '2024-01-20', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.longestStreak).toBe(3);
+      expect(result.longestStreakStart).toBe('2024-01-15');
+      expect(result.longestStreakEnd).toBe('2024-01-17');
+    });
+
+    test('calculates longest dry spell', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-20', durationMin: 60 }, // 4 day gap
+        { gameId: 1, date: '2024-01-22', durationMin: 60 }  // 1 day gap
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.longestDrySpell).toBe(4);
+      expect(result.longestDrySpellStart).toBe('2024-01-16');
+      expect(result.longestDrySpellEnd).toBe('2024-01-19');
+    });
+
+    test('filters plays by year', () => {
+      const plays = [
+        { gameId: 1, date: '2023-12-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-16', durationMin: 60 },
+        { gameId: 1, date: '2025-01-15', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.totalDays).toBe(2);
+      expect(result.totalMinutes).toBe(120);
+    });
+
+    test('handles all-time stats when year is null', () => {
+      const plays = [
+        { gameId: 1, date: '2023-12-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2025-01-15', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, null);
+
+      expect(result.totalDays).toBe(3);
+      expect(result.totalMinutes).toBe(180);
+    });
+
+    test('tracks most games day with correct counts', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 2, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-16', durationMin: 60 },
+        { gameId: 2, date: '2024-01-16', durationMin: 60 },
+        { gameId: 3, date: '2024-01-16', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.mostGamesDay).toBe(3);
+      expect(result.mostGamesDayDate).toBe('2024-01-16');
+      expect(result.mostGamesDayGamesList).toHaveLength(3);
+    });
+
+    test('handles single day dry spell', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-17', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.longestDrySpell).toBe(1);
+      expect(result.longestDrySpellStart).toBe('2024-01-16');
+      expect(result.longestDrySpellEnd).toBe('2024-01-16');
+    });
+
+    test('handles decreasing streaks (first streak is longest)', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-16', durationMin: 60 },
+        { gameId: 1, date: '2024-01-17', durationMin: 60 },
+        { gameId: 1, date: '2024-01-19', durationMin: 60 },
+        { gameId: 1, date: '2024-01-20', durationMin: 60 },
+        { gameId: 1, date: '2024-01-25', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.longestStreak).toBe(3);
+      expect(result.longestStreakStart).toBe('2024-01-15');
+      expect(result.longestStreakEnd).toBe('2024-01-17');
+    });
+
+    test('handles decreasing dry spells (first dry spell is longest)', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-20', durationMin: 60 }, // 4 day gap
+        { gameId: 1, date: '2024-01-22', durationMin: 60 }, // 1 day gap
+        { gameId: 1, date: '2024-01-23', durationMin: 60 }  // 0 day gap
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.longestDrySpell).toBe(4);
+      expect(result.longestDrySpellStart).toBe('2024-01-16');
+      expect(result.longestDrySpellEnd).toBe('2024-01-19');
+    });
+
+    test('handles decreasing game counts (first day has most games)', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 2, date: '2024-01-15', durationMin: 60 },
+        { gameId: 3, date: '2024-01-15', durationMin: 60 },
+        { gameId: 1, date: '2024-01-16', durationMin: 60 },
+        { gameId: 2, date: '2024-01-16', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.mostGamesDay).toBe(3);
+      expect(result.mostGamesDayDate).toBe('2024-01-15');
+      expect(result.mostGamesDayGamesList).toHaveLength(3);
+    });
+
+    test('handles equal duration days (tests tie-breaking)', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 60 },
+        { gameId: 2, date: '2024-01-16', durationMin: 60 },
+        { gameId: 3, date: '2024-01-17', durationMin: 60 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.longestDayMinutes).toBe(60);
+      expect(result.shortestDayMinutes).toBe(60);
+      expect(result.totalDays).toBe(3);
+    });
+
+    test('handles zero duration plays', () => {
+      const plays = [
+        { gameId: 1, date: '2024-01-15', durationMin: 0 },
+        { gameId: 2, date: '2024-01-15', durationMin: 30 }
+      ];
+
+      const result = stats.getTimeAndActivityStats(plays, 2024);
+
+      expect(result.totalMinutes).toBe(30);
+      expect(result.shortestDayMinutes).toBe(30);
+      expect(result.mostGamesDay).toBe(2);
+    });
+  });
 });
