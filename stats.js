@@ -532,6 +532,32 @@ function getOwnedGamesNeverPlayed(games, plays, year = null) {
 }
 
 /**
+ * Get owned base games missing price paid information
+ * Only returns owned base games (excludes expansions and expandalones)
+ * @param {Array} games - Array of game objects
+ * @returns {Array} base games with owned copies missing price paid
+ */
+function getOwnedBaseGamesMissingPricePaid(games) {
+  return games.filter(game => {
+    // Must be a base game (exclude expansions and expandalones)
+    if (!game.isBaseGame) return false;
+
+    if (!game.copies || game.copies.length === 0) return false;
+
+    // Get owned copies
+    const ownedCopies = game.copies.filter(copy => copy.statusOwned === true);
+    if (ownedCopies.length === 0) return false;
+
+    // Check if any owned copy is missing price paid
+    return ownedCopies.some(copy =>
+      copy.pricePaid === null ||
+      copy.pricePaid === undefined ||
+      copy.pricePaid === ''
+    );
+  });
+}
+
+/**
  * Get all acquisition years from game copies
  * @param {Array} games - Array of game objects
  * @returns {Array} sorted array of years
@@ -1803,6 +1829,7 @@ export {
   getCumulativeMilestoneCount,
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
+  getOwnedBaseGamesMissingPricePaid,
   getAllAcquisitionYears,
   getAvailableYears,
   getHIndexBreakdown,

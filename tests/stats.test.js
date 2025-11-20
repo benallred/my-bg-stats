@@ -1296,6 +1296,158 @@ describe('Diagnostic Functions', () => {
       expect(Array.isArray(result)).toBe(true);
     });
   });
+
+  describe('getOwnedBaseGamesMissingPricePaid', () => {
+    test('finds owned base games without price paid', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Base Game Without Price',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01', pricePaid: null }]
+        },
+        {
+          id: 2,
+          name: 'Base Game With Price',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01', pricePaid: 39.99 }]
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(1);
+    });
+
+    test('excludes expandalones even if missing price', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Expandalone Without Price',
+          isBaseGame: false,
+          isExpansion: false,
+          isExpandalone: true,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01', pricePaid: null }]
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(0);
+    });
+
+    test('excludes expansions even if missing price', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Expansion Without Price',
+          isBaseGame: false,
+          isExpansion: true,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01', pricePaid: null }]
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(0);
+    });
+
+    test('excludes unowned games missing price', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Unowned Base Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: false, acquisitionDate: '2023-01-01', pricePaid: null }]
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(0);
+    });
+
+    test('handles empty string as missing price', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game With Empty Price',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01', pricePaid: '' }]
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(1);
+    });
+
+    test('handles undefined price paid', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game With Undefined Price',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01' }]
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(1);
+    });
+
+    test('returns empty array when no games match criteria', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game With Price',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01', pricePaid: 49.99 }]
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result).toEqual([]);
+    });
+
+    test('returns only base games from real dataset', () => {
+      const result = stats.getOwnedBaseGamesMissingPricePaid(typicalData.games);
+      result.forEach(game => {
+        expect(game.isBaseGame).toBe(true);
+      });
+    });
+
+    test('handles games with no copies array', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game Without Copies',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(0);
+    });
+
+    test('handles games with empty copies array', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game With Empty Copies',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: []
+        }
+      ];
+      const result = stats.getOwnedBaseGamesMissingPricePaid(testGames);
+      expect(result.length).toBe(0);
+    });
+  });
 });
 
 describe('Year Functions', () => {

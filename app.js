@@ -30,6 +30,7 @@ import {
   getCumulativeMilestoneCount,
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
+  getOwnedBaseGamesMissingPricePaid,
   getSuggestedGames,
   getHIndexBreakdown,
   getHourHIndexBreakdown,
@@ -439,6 +440,7 @@ function updateAllStats() {
         cumulativeCenturiesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.PLAYS, Milestone.CENTURIES),
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
+        missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear)
     };
@@ -749,6 +751,10 @@ function updateDiagnosticsSection() {
     // Update never played games card
     const neverPlayedCard = document.querySelector('[data-stat="never-played"]');
     neverPlayedCard.querySelector('.stat-value').textContent = statsCache.neverPlayedGames.length;
+
+    // Update missing price paid card
+    const missingPriceCard = document.querySelector('[data-stat="missing-price-paid"]');
+    missingPriceCard.querySelector('.stat-value').textContent = statsCache.missingPricePaidGames.length;
 }
 
 /**
@@ -2259,6 +2265,15 @@ const diagnosticDetailHandlers = {
         }),
         render: (detailContent, statsCache) => {
             createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
+        }
+    },
+    'missing-price-paid': {
+        getTitle: () => 'Owned Base Games Missing Price Paid',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.missingPricePaidGames.length
+        }),
+        render: (detailContent, statsCache) => {
+            createGameTable(detailContent, statsCache.missingPricePaidGames, ['Name', 'Year', 'Acquisition Date']);
         }
     }
 };
