@@ -1,6 +1,7 @@
 {
   "name": "my-bg-stats",
   "version": "1.0.0",
+  "type": "module",
   "description": "Personal board game statistics tracker with data processing and visualization",
   "scripts": {
     "test": "vitest run",

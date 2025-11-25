@@ -1397,9 +1397,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 18,
-      "uniquePlayDays": 15,
-      "typicalPlayTimeMinutes": 22
+      "playCount": 20,
+      "uniquePlayDays": 16,
+      "typicalPlayTimeMinutes": 21
     },
     {
       "id": 232,
@@ -1775,9 +1775,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 3,
-      "typicalPlayTimeMinutes": 83
+      "playCount": 4,
+      "uniquePlayDays": 4,
+      "typicalPlayTimeMinutes": 85
     },
     {
       "id": 533,
@@ -2964,9 +2964,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 5,
-      "uniquePlayDays": 3,
-      "typicalPlayTimeMinutes": 8
+      "playCount": 7,
+      "uniquePlayDays": 4,
+      "typicalPlayTimeMinutes": 5
     },
     {
       "id": 355,
@@ -5321,9 +5321,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 5,
-      "uniquePlayDays": 4,
-      "typicalPlayTimeMinutes": 12
+      "playCount": 8,
+      "uniquePlayDays": 5,
+      "typicalPlayTimeMinutes": 9
     },
     {
       "id": 200,
@@ -5519,9 +5519,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 13,
-      "uniquePlayDays": 12,
-      "typicalPlayTimeMinutes": 12
+      "playCount": 14,
+      "uniquePlayDays": 13,
+      "typicalPlayTimeMinutes": 11
     },
     {
       "id": 494,
@@ -6253,9 +6253,9 @@
       "name": "Monumental Duel: Espionage",
       "bggId": 420522,
       "year": 2024,
-      "isBaseGame": true,
+      "isBaseGame": false,
       "isExpansion": false,
-      "isExpandalone": false,
+      "isExpandalone": true,
       "copies": [
         {
           "copyId": "1aa0ebe9-7986-4cea-b59e-9dc4e511f17d",
@@ -6297,9 +6297,9 @@
       "name": "Monumental Duel: Trade",
       "bggId": 420523,
       "year": 2024,
-      "isBaseGame": true,
+      "isBaseGame": false,
       "isExpansion": false,
-      "isExpandalone": false,
+      "isExpandalone": true,
       "copies": [
         {
           "copyId": "3625b01d-d9f0-4270-9948-711a12e432fe",
@@ -6802,9 +6802,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
-      "typicalPlayTimeMinutes": 15.5
+      "playCount": 5,
+      "uniquePlayDays": 5,
+      "typicalPlayTimeMinutes": 17
     },
     {
       "id": 51,
@@ -8230,13 +8230,35 @@
           "versionName": null,
           "acquisitionDate": "2019-11-25",
           "statusOwned": true,
-          "pricePaid": 3.21,
+          "pricePaid": 5.78,
           "currency": "USD"
         }
       ],
       "playCount": 2,
       "uniquePlayDays": 2,
       "typicalPlayTimeMinutes": 51.5
+    },
+    {
+      "id": 582,
+      "name": "Saboteur 2",
+      "bggId": 91072,
+      "year": 2011,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "copies": [
+        {
+          "copyId": "d34103c3-4a9f-415e-b4bd-d2179b1a4435",
+          "versionName": "English edition 2015",
+          "acquisitionDate": "2025-10-25",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 535,
@@ -8256,9 +8278,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
-      "typicalPlayTimeMinutes": 33.5
+      "playCount": 7,
+      "uniquePlayDays": 5,
+      "typicalPlayTimeMinutes": 31
     },
     {
       "id": 165,
@@ -8692,8 +8714,8 @@
           "currency": null
         }
       ],
-      "playCount": 10,
-      "uniquePlayDays": 2,
+      "playCount": 14,
+      "uniquePlayDays": 3,
       "typicalPlayTimeMinutes": 8
     },
     {
@@ -8749,9 +8771,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 29,
-      "uniquePlayDays": 24,
-      "typicalPlayTimeMinutes": 77
+      "playCount": 30,
+      "uniquePlayDays": 25,
+      "typicalPlayTimeMinutes": 76.5
     },
     {
       "id": 567,
@@ -8903,9 +8925,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 7,
-      "uniquePlayDays": 7,
-      "typicalPlayTimeMinutes": 37
+      "playCount": 8,
+      "uniquePlayDays": 8,
+      "typicalPlayTimeMinutes": 36.5
     },
     {
       "id": 299,
@@ -9413,8 +9435,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 12,
-      "uniquePlayDays": 12,
+      "playCount": 13,
+      "uniquePlayDays": 13,
       "typicalPlayTimeMinutes": 46
     },
     {
@@ -9717,6 +9739,19 @@
       "typicalPlayTimeMinutes": 20
     },
     {
+      "id": 584,
+      "name": "Terraforming Mars",
+      "bggId": 167791,
+      "year": 2016,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "copies": [],
+      "playCount": 1,
+      "uniquePlayDays": 1,
+      "typicalPlayTimeMinutes": 353
+    },
+    {
       "id": 85,
       "name": "Terraforming Mars: Ares Expedition",
       "bggId": 328871,
@@ -9839,6 +9874,19 @@
           "currency": null
         }
       ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 585,
+      "name": "Terraforming Mars: Colonies",
+      "bggId": 255681,
+      "year": 2018,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
       "typicalPlayTimeMinutes": null
@@ -10098,9 +10146,9 @@
           "currency": "USD"
         }
       ],
-      "playCount": 6,
-      "uniquePlayDays": 6,
-      "typicalPlayTimeMinutes": 23.5
+      "playCount": 7,
+      "uniquePlayDays": 7,
+      "typicalPlayTimeMinutes": 22
     },
     {
       "id": 317,
@@ -11901,16 +11949,38 @@
       "copies": [
         {
           "copyId": "ad0d0150-8c3e-43be-b650-0f2e33ea9837",
-          "versionName": null,
+          "versionName": "English edition",
           "acquisitionDate": "2021-11-11",
           "statusOwned": true,
-          "pricePaid": 58,
+          "pricePaid": 63.24,
           "currency": "USD"
         }
       ],
       "playCount": 6,
       "uniquePlayDays": 6,
       "typicalPlayTimeMinutes": 58.5
+    },
+    {
+      "id": 583,
+      "name": "Zoo King: 2025 Promo Card Pack",
+      "bggId": 437349,
+      "year": 2026,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "copies": [
+        {
+          "copyId": "d46fda64-9cd7-45b0-a66e-a30df48e8834",
+          "versionName": "English second edition",
+          "acquisitionDate": "2025-08-25",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 472,
@@ -12288,6 +12358,182 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 38,
+      "copyId": "91ef0289-233d-4464-ae48-9e6e93c7f822",
+      "date": "2025-11-19",
+      "timestamp": "2025-11-19 21:08:45",
+      "durationMin": 17,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 467,
+      "copyId": "fc278d76-564b-476b-a541-2bb6a4007383",
+      "date": "2025-11-18",
+      "timestamp": "2025-11-18 21:38:13",
+      "durationMin": 6,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 133,
+      "copyId": "7cdf5b99-2582-4f33-b554-c1043714ad5e",
+      "date": "2025-11-17",
+      "timestamp": "2025-11-17 20:16:27",
+      "durationMin": 6,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 133,
+      "copyId": "7cdf5b99-2582-4f33-b554-c1043714ad5e",
+      "date": "2025-11-17",
+      "timestamp": "2025-11-17 20:08:11",
+      "durationMin": 7,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 133,
+      "copyId": "7cdf5b99-2582-4f33-b554-c1043714ad5e",
+      "date": "2025-11-17",
+      "timestamp": "2025-11-17 19:58:33",
+      "durationMin": 8,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 529,
+      "copyId": "dd0e10a1-031e-46a4-9493-0d5b8610b286",
+      "date": "2025-11-16",
+      "timestamp": "2025-11-16 19:11:41",
+      "durationMin": 87,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 578,
+      "copyId": "3b3b797a-6db5-42b6-9715-87421c25a754",
+      "date": "2025-11-16",
+      "timestamp": "2025-11-16 14:34:15",
+      "durationMin": 4,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 578,
+      "copyId": "3b3b797a-6db5-42b6-9715-87421c25a754",
+      "date": "2025-11-16",
+      "timestamp": "2025-11-16 14:29:18",
+      "durationMin": 5,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 584,
+      "copyId": null,
+      "date": "2025-11-15",
+      "timestamp": "2025-11-15 20:02:16",
+      "durationMin": 353,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 225,
+      "copyId": "b36ffae0-b363-4fd2-b112-851f62323c35",
+      "date": "2025-11-14",
+      "timestamp": "2025-11-14 18:38:51",
+      "durationMin": 49,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 535,
+      "copyId": "ed8b10d2-26b5-48ad-a244-5be8fecdac40",
+      "date": "2025-11-13",
+      "timestamp": "2025-11-13 21:58:10",
+      "durationMin": 34,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 535,
+      "copyId": "ed8b10d2-26b5-48ad-a244-5be8fecdac40",
+      "date": "2025-11-13",
+      "timestamp": "2025-11-13 21:30:54",
+      "durationMin": 27,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 535,
+      "copyId": "ed8b10d2-26b5-48ad-a244-5be8fecdac40",
+      "date": "2025-11-13",
+      "timestamp": "2025-11-13 21:06:30",
+      "durationMin": 24,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "copyId": "8ed0c570-7e7d-45f1-86c3-ec7f028bcfde",
+      "date": "2025-11-13",
+      "timestamp": "2025-11-13 19:34:44",
+      "durationMin": 5,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "copyId": "8ed0c570-7e7d-45f1-86c3-ec7f028bcfde",
+      "date": "2025-11-13",
+      "timestamp": "2025-11-13 19:30:37",
+      "durationMin": 4,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "copyId": "8ed0c570-7e7d-45f1-86c3-ec7f028bcfde",
+      "date": "2025-11-13",
+      "timestamp": "2025-11-13 19:21:30",
+      "durationMin": 9,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 579,
+      "copyId": "8ed0c570-7e7d-45f1-86c3-ec7f028bcfde",
+      "date": "2025-11-13",
+      "timestamp": "2025-11-13 19:13:14",
+      "durationMin": 8,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 22,
+      "copyId": "52304ded-4648-4fa3-9338-daf65b47bf07",
+      "date": "2025-11-09",
+      "timestamp": "2025-11-09 19:05:35",
+      "durationMin": 33,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 497,
+      "copyId": "8c2b2483-90af-4679-9e51-494233f9f538",
+      "date": "2025-11-09",
+      "timestamp": "2025-11-09 18:46:40",
+      "durationMin": 18,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 504,
+      "copyId": "3839b299-e746-43b5-8691-6845c56004b5",
+      "date": "2025-11-09",
+      "timestamp": "2025-11-09 14:58:21",
+      "durationMin": 17,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 504,
+      "copyId": "3839b299-e746-43b5-8691-6845c56004b5",
+      "date": "2025-11-09",
+      "timestamp": "2025-11-09 14:42:49",
+      "durationMin": 16,
+      "durationEstimated": false
+    },
+    {
+      "gameId": 508,
+      "copyId": "58f2dac9-82d5-440e-89b5-6d850cd65f31",
+      "date": "2025-11-07",
+      "timestamp": "2025-11-07 20:48:22",
+      "durationMin": 55,
+      "durationEstimated": false
+    },
     {
       "gameId": 578,
       "copyId": "3b3b797a-6db5-42b6-9715-87421c25a754",
@@ -27145,5 +27391,5 @@
       "durationEstimated": true
     }
   ],
-  "generatedAt": "2025-11-07T04:17:17.000Z"
+  "generatedAt": "2025-11-20T04:08:45.000Z"
 }
