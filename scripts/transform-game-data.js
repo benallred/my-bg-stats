@@ -146,6 +146,26 @@ function buildGamesMap(games, expandaloneTagId) {
     // Classify game based on mutually exclusive rules
     const classification = classifyGame(game, isExpandalone);
 
+    // Extract image URLs: prefer game-level, then earliest owned copy, then null
+    let thumbnailUrl = game.urlThumb || null;
+    let coverUrl = game.urlImage || null;
+
+    // Fall back to earliest owned copy if game doesn't have them
+    if ((!thumbnailUrl || !coverUrl) && game.copies && game.copies.length > 0) {
+      const earliestCopyId = getEarliestOwnedCopy(copies);
+      if (earliestCopyId) {
+        const earliestCopy = game.copies.find(copy => copy.uuid === earliestCopyId);
+        if (earliestCopy) {
+          if (!thumbnailUrl) {
+            thumbnailUrl = earliestCopy.urlThumb || null;
+          }
+          if (!coverUrl) {
+            coverUrl = earliestCopy.urlImage || null;
+          }
+        }
+      }
+    }
+
     gamesMap.set(game.id, {
       id: game.id,
       name: game.name,
@@ -156,7 +176,9 @@ function buildGamesMap(games, expandaloneTagId) {
       isExpandalone: classification.isExpandalone,
       copies: copies,
       playCount: 0,
-      uniquePlayDays: new Set()
+      uniquePlayDays: new Set(),
+      thumbnailUrl: thumbnailUrl,
+      coverUrl: coverUrl
     });
   });
 

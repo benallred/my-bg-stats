@@ -241,4 +241,139 @@ describe('process-data.js transformation logic', () => {
       }
     });
   });
+
+  describe('Image URL Processing', () => {
+    test('preserves thumbnailUrl and coverUrl from source data', () => {
+      const testData = {
+        tags: [],
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          isBaseGame: 1,
+          bggId: 12345,
+          copies: [],
+          tags: [],
+          urlThumb: 'https://cf.geekdo-images.com/test__thumb/img/abc.jpg',
+          urlImage: 'https://cf.geekdo-images.com/test__original/img/xyz.jpg'
+        }],
+        plays: []
+      };
+
+      const output = processData(testData);
+      const game = output.games.find(g => g.name === 'Test Game');
+
+      expect(game.thumbnailUrl).toBe('https://cf.geekdo-images.com/test__thumb/img/abc.jpg');
+      expect(game.coverUrl).toBe('https://cf.geekdo-images.com/test__original/img/xyz.jpg');
+    });
+
+    test('handles missing image URLs gracefully', () => {
+      const testData = {
+        tags: [],
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          isBaseGame: 1,
+          bggId: 12345,
+          copies: [],
+          tags: []
+          // No urlThumb or urlImage
+        }],
+        plays: []
+      };
+
+      const output = processData(testData);
+      const game = output.games.find(g => g.name === 'Test Game');
+
+      expect(game.thumbnailUrl).toBeNull();
+      expect(game.coverUrl).toBeNull();
+    });
+
+    test('handles null image URLs', () => {
+      const testData = {
+        tags: [],
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          isBaseGame: 1,
+          bggId: 12345,
+          copies: [],
+          tags: [],
+          urlThumb: null,
+          urlImage: null
+        }],
+        plays: []
+      };
+
+      const output = processData(testData);
+      const game = output.games.find(g => g.name === 'Test Game');
+
+      expect(game.thumbnailUrl).toBeNull();
+      expect(game.coverUrl).toBeNull();
+    });
+
+    test('falls back to earliest owned copy image URLs when game URLs are missing', () => {
+      const testData = {
+        tags: [],
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          isBaseGame: 1,
+          bggId: 12345,
+          copies: [
+            {
+              uuid: 'copy-2',
+              statusOwned: true,
+              metaData: '{"AcquisitionDate":"2024-06-01"}',
+              urlThumb: 'https://cf.geekdo-images.com/later__thumb/img/wrong.jpg',
+              urlImage: 'https://cf.geekdo-images.com/later__original/img/wrong.jpg'
+            },
+            {
+              uuid: 'copy-1',
+              statusOwned: true,
+              metaData: '{"AcquisitionDate":"2024-01-01"}',
+              urlThumb: 'https://cf.geekdo-images.com/earliest__thumb/img/abc.jpg',
+              urlImage: 'https://cf.geekdo-images.com/earliest__original/img/xyz.jpg'
+            }
+          ],
+          tags: []
+          // No game-level urlThumb or urlImage
+        }],
+        plays: []
+      };
+
+      const output = processData(testData);
+      const game = output.games.find(g => g.name === 'Test Game');
+
+      expect(game.thumbnailUrl).toBe('https://cf.geekdo-images.com/earliest__thumb/img/abc.jpg');
+      expect(game.coverUrl).toBe('https://cf.geekdo-images.com/earliest__original/img/xyz.jpg');
+    });
+
+    test('prefers game-level URLs over copy URLs', () => {
+      const testData = {
+        tags: [],
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          isBaseGame: 1,
+          bggId: 12345,
+          urlThumb: 'https://cf.geekdo-images.com/game__thumb/img/abc.jpg',
+          urlImage: 'https://cf.geekdo-images.com/game__original/img/xyz.jpg',
+          copies: [{
+            uuid: 'copy-1',
+            statusOwned: true,
+            urlThumb: 'https://cf.geekdo-images.com/copy__thumb/img/different.jpg',
+            urlImage: 'https://cf.geekdo-images.com/copy__original/img/different.jpg'
+          }],
+          tags: []
+        }],
+        plays: []
+      };
+
+      const output = processData(testData);
+      const game = output.games.find(g => g.name === 'Test Game');
+
+      expect(game.thumbnailUrl).toBe('https://cf.geekdo-images.com/game__thumb/img/abc.jpg');
+      expect(game.coverUrl).toBe('https://cf.geekdo-images.com/game__original/img/xyz.jpg');
+    });
+  });
 });

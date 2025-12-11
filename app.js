@@ -57,6 +57,120 @@ function getGameAcquisitionDate(game) {
   return game.copies[0]?.acquisitionDate || null;
 }
 
+/**
+ * Helper: Get all initials from game name for placeholder
+ * @param {string} name - Game name
+ * @returns {string} Initials string
+ */
+function getGameInitials(name) {
+  const words = name.split(/\s+/);
+
+  // Filter out first word if it's a common article
+  const filteredWords = words[0] && ['the', 'a', 'an', 'of', 'and'].includes(words[0].toLowerCase())
+    ? words.slice(1)
+    : words;
+
+  if (filteredWords.length === 0) {
+    return name.substring(0, 2).toUpperCase();
+  }
+
+  // Get first letter of each word
+  return filteredWords.map(word => word[0]).join('').toUpperCase();
+}
+
+/**
+ * Helper: Render game name with thumbnail image
+ * Progressive enhancement: text-first, image enhances
+ * @param {Object} game - Game object with name, thumbnailUrl, coverUrl
+ * @returns {string} HTML string for table cell content
+ */
+function renderGameNameWithThumbnail(game) {
+  // Determine if we have an image or need placeholder
+  const hasImage = !!game.thumbnailUrl;
+  const modalClass = game.coverUrl ? ' game-image-clickable' : '';
+  const fullImageAttr = game.coverUrl
+    ? ` data-full-image="${game.coverUrl}"`
+    : '';
+
+  const initials = getGameInitials(game.name);
+
+  let imageHTML;
+  if (hasImage) {
+    imageHTML = `
+      <img
+        src="${game.thumbnailUrl}"
+        alt="${game.name} cover"
+        class="game-thumbnail${modalClass}"${fullImageAttr}
+        onerror="this.classList.add('game-thumbnail-error'); this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');"
+      />
+      <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden">
+        ${initials}
+      </div>
+    `;
+  } else {
+    imageHTML = `
+      <div class="game-thumbnail-placeholder">
+        ${initials}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="game-name-with-image">
+      ${imageHTML}
+      <span class="game-name">${game.name}</span>
+    </div>
+  `;
+}
+
+/**
+ * Initialize image modal for click-to-enlarge functionality
+ * Creates modal element and sets up event listeners
+ */
+function initializeImageModal() {
+  // Create modal element
+  const modal = document.createElement('div');
+  modal.id = 'image-modal';
+  modal.className = 'image-modal';
+  modal.innerHTML = `
+    <img src="" alt="" class="image-modal-content" />
+  `;
+  document.body.appendChild(modal);
+
+  const modalImg = modal.querySelector('.image-modal-content');
+
+  // Close on click
+  modal.addEventListener('click', () => {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modalImg.src = '';
+    }, 200); // Clear after fade-out
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      modal.classList.remove('active');
+      setTimeout(() => {
+        modalImg.src = '';
+      }, 200);
+    }
+  });
+
+  // Event delegation for thumbnail clicks
+  document.addEventListener('click', (e) => {
+    const thumbnail = e.target.closest('.game-image-clickable');
+    if (thumbnail) {
+      const fullImageUrl = thumbnail.dataset.fullImage;
+      if (fullImageUrl) {
+        modalImg.src = fullImageUrl;
+        modalImg.alt = thumbnail.alt;
+        modal.classList.add('active');
+      }
+    }
+  });
+}
+
 // Global data
 let gameData = null;
 let currentYear = null;
@@ -206,6 +320,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Load data
         await loadData();
+
+        // Initialize image modal
+        initializeImageModal();
 
         // Setup year filter
         setupYearFilter();
@@ -1323,7 +1440,7 @@ function showHIndexBreakdown(container, metric, hIndex) {
                 return `
                     <tr${contributesToHIndex ? ' class="h-index-contributor"' : ''}>
                         <td>${rank}</td>
-                        <td>${item.game.name}</td>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
                         <td>${displayValue}</td>
                         <td>${contributesToHIndex ? '✓' : ''}</td>
                     </tr>
@@ -1424,9 +1541,12 @@ function showBGGEntries(container) {
                             game.isExpansion ? 'Expansion' : 'Unknown';
                 const acquisitionDate = copy ? (copy.acquisitionDate || 'Unknown') : 'Unknown';
 
+                // Create a temporary game object with modified name for rendering
+                const displayGame = { ...game, name: name };
+
                 return `
                     <tr>
-                        <td>${name}</td>
+                        <td>${renderGameNameWithThumbnail(displayGame)}</td>
                         <td>${type}</td>
                         <td>${acquisitionDate}</td>
                     </tr>
@@ -1481,7 +1601,7 @@ function showExpansions(container) {
         <tbody>
             ${expansions.map(game => `
                 <tr>
-                    <td>${game.name}</td>
+                    <td>${renderGameNameWithThumbnail(game)}</td>
                     <td>${game.isExpandalone ? 'Expandalone' : 'Expansion'}</td>
                     <td>${getGameAcquisitionDate(game) || 'Unknown'}</td>
                 </tr>
@@ -1529,7 +1649,7 @@ function showGamesPlayed(container) {
         <tbody>
             ${gamesWithPlays.map(item => `
                 <tr>
-                    <td>${item.game ? item.game.name : 'Unknown Game'}</td>
+                    <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
                     <td>${item.count}</td>
                     <td>${item.owned ? '✓' : ''}</td>
                 </tr>
@@ -1572,7 +1692,7 @@ function showMilestoneGames(container, milestone, milestonesData) {
                 }
                 return `
                 <tr>
-                    <td>${item.game.name}</td>
+                    <td>${renderGameNameWithThumbnail(item.game)}</td>
                     <td>${formattedCount}</td>
                 </tr>
                 `;
@@ -1624,7 +1744,7 @@ function showDaysPlayedBreakdown(container) {
 
                 return `
                     <tr>
-                        <td>${item.game.name}</td>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
                         <td>${item.uniqueDays}</td>
                         <td class="no-wrap">${medianAvgPlays}</td>
                         <td class="no-wrap">${minMaxHours}</td>
@@ -1684,7 +1804,7 @@ function showPlayTimeBreakdown(container) {
 
                 return `
                     <tr>
-                        <td>${item.game.name}</td>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
                         <td>${hours} hours</td>
                         <td class="no-wrap">${minMax}</td>
                         <td class="no-wrap">${medianAvg}</td>
@@ -1724,7 +1844,7 @@ function showSuggestedGames(container) {
 
                 return `
                     <tr>
-                        <td>${suggestion.game.name}</td>
+                        <td>${renderGameNameWithThumbnail(suggestion.game)}</td>
                         <td>${reasonsDisplay}</td>
                         <td>${statsDisplay}</td>
                     </tr>
@@ -1778,7 +1898,7 @@ function showYearReviewDetail(container, statsCache) {
                                 ${newHoursGames.length > 0
                                     ? newHoursGames.map(item => `
                                         <div class="year-review-game-item">
-                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
                                             <span class="year-review-game-value">${item.value.toFixed(1)} hours (${item.thisYearValue.toFixed(1)} this year)</span>
                                         </div>
                                     `).join('')
@@ -1804,7 +1924,7 @@ function showYearReviewDetail(container, statsCache) {
                                 ${newSessionsGames.length > 0
                                     ? newSessionsGames.map(item => `
                                         <div class="year-review-game-item">
-                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
                                             <span class="year-review-game-value">${item.value} days (${item.thisYearValue} this year)</span>
                                         </div>
                                     `).join('')
@@ -1830,7 +1950,7 @@ function showYearReviewDetail(container, statsCache) {
                                 ${newPlaysGames.length > 0
                                     ? newPlaysGames.map(item => `
                                         <div class="year-review-game-item">
-                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
                                             <span class="year-review-game-value">${item.value} plays (${item.thisYearValue} this year)</span>
                                         </div>
                                     `).join('')
@@ -1899,11 +2019,11 @@ function showYearReviewDetail(container, statsCache) {
                 .map(gameInfo => {
                     const game = gameData.games.find(g => g.id === gameInfo.gameId);
                     return {
-                        name: game ? game.name : 'Unknown',
+                        game: game || null,
                         plays: gameInfo.playCount
                     };
                 })
-                .sort((a, b) => a.name.localeCompare(b.name));
+                .sort((a, b) => (a.game?.name || 'Unknown').localeCompare(b.game?.name || 'Unknown'));
 
             timeActivityRows.push(`
                 <tr class="year-review-row-clickable" data-detail="most-games-day">
@@ -1918,7 +2038,7 @@ function showYearReviewDetail(container, statsCache) {
                         <div class="year-review-games-list">
                             ${gamesPlayedThatDay.map(gameInfo => `
                                 <div class="year-review-game-item">
-                                    <span class="year-review-game-name">${gameInfo.name}</span>
+                                    <span class="year-review-game-name">${gameInfo.game ? renderGameNameWithThumbnail(gameInfo.game) : 'Unknown'}</span>
                                     <span class="year-review-game-value">${gameInfo.plays} ${gameInfo.plays === 1 ? 'play' : 'plays'}</span>
                                 </div>
                             `).join('')}
@@ -1934,11 +2054,11 @@ function showYearReviewDetail(container, statsCache) {
                 .map(gameInfo => {
                     const game = gameData.games.find(g => g.id === gameInfo.gameId);
                     return {
-                        name: game ? game.name : 'Unknown',
+                        game: game || null,
                         minutes: gameInfo.minutes
                     };
                 })
-                .sort((a, b) => a.name.localeCompare(b.name));
+                .sort((a, b) => (a.game?.name || 'Unknown').localeCompare(b.game?.name || 'Unknown'));
 
             timeActivityRows.push(`
                 <tr class="year-review-row-clickable" data-detail="longest-day">
@@ -1953,7 +2073,7 @@ function showYearReviewDetail(container, statsCache) {
                         <div class="year-review-games-list">
                             ${longestDayGames.map(gameInfo => `
                                 <div class="year-review-game-item">
-                                    <span class="year-review-game-name">${gameInfo.name}</span>
+                                    <span class="year-review-game-name">${gameInfo.game ? renderGameNameWithThumbnail(gameInfo.game) : 'Unknown'}</span>
                                     <span class="year-review-game-value">${formatMinutes(gameInfo.minutes)}</span>
                                 </div>
                             `).join('')}
@@ -1969,11 +2089,11 @@ function showYearReviewDetail(container, statsCache) {
                 .map(gameInfo => {
                     const game = gameData.games.find(g => g.id === gameInfo.gameId);
                     return {
-                        name: game ? game.name : 'Unknown',
+                        game: game || null,
                         minutes: gameInfo.minutes
                     };
                 })
-                .sort((a, b) => a.name.localeCompare(b.name));
+                .sort((a, b) => (a.game?.name || 'Unknown').localeCompare(b.game?.name || 'Unknown'));
 
             timeActivityRows.push(`
                 <tr class="year-review-row-clickable" data-detail="shortest-day">
@@ -1988,7 +2108,7 @@ function showYearReviewDetail(container, statsCache) {
                         <div class="year-review-games-list">
                             ${shortestDayGames.map(gameInfo => `
                                 <div class="year-review-game-item">
-                                    <span class="year-review-game-name">${gameInfo.name}</span>
+                                    <span class="year-review-game-name">${gameInfo.game ? renderGameNameWithThumbnail(gameInfo.game) : 'Unknown'}</span>
                                     <span class="year-review-game-value">${formatMinutes(gameInfo.minutes)}</span>
                                 </div>
                             `).join('')}
@@ -2128,7 +2248,7 @@ function showYearReviewDetail(container, statsCache) {
                                     const thisYearValue = def.metric === 'hours' ? item.thisYearValue.toFixed(1) : item.thisYearValue;
                                     return `
                                         <div class="year-review-game-item">
-                                            <span class="year-review-game-name">${item.game.name}</span>
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
                                             <span class="year-review-game-value">${totalValue} ${def.unit} total (${thisYearValue} this year)</span>
                                         </div>
                                     `;
@@ -2200,7 +2320,7 @@ function createGameTable(container, games, columns, filterYear = null) {
         columns.forEach(col => {
             switch(col) {
                 case 'Name':
-                    cells.push(`<td>${game.name}</td>`);
+                    cells.push(`<td>${renderGameNameWithThumbnail(game)}</td>`);
                     break;
                 case 'Type':
                     const type = game.isBaseGame ? 'Base Game' :
