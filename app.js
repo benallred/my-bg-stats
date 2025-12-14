@@ -543,18 +543,6 @@ function updateAllStats() {
         milestonesHours: getMilestones(gameData.games, gameData.plays, currentYear, Metric.HOURS),
         milestonesSessions: getMilestones(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
         milestonesPlays: getMilestones(gameData.games, gameData.plays, currentYear, Metric.PLAYS),
-        cumulativeFivesHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.HOURS, Milestone.FIVES),
-        cumulativeDimesHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.HOURS, Milestone.DIMES),
-        cumulativeQuartersHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.HOURS, Milestone.QUARTERS),
-        cumulativeCenturiesHours: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.HOURS, Milestone.CENTURIES),
-        cumulativeFivesSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, Milestone.FIVES),
-        cumulativeDimesSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, Milestone.DIMES),
-        cumulativeQuartersSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, Milestone.QUARTERS),
-        cumulativeCenturiesSessions: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, Milestone.CENTURIES),
-        cumulativeFivesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.PLAYS, Milestone.FIVES),
-        cumulativeDimesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.PLAYS, Milestone.DIMES),
-        cumulativeQuartersPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.PLAYS, Milestone.QUARTERS),
-        cumulativeCenturiesPlays: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear, Metric.PLAYS, Milestone.CENTURIES),
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
@@ -722,27 +710,25 @@ function updateMilestoneCumulativeSubstats() {
 
     const metricName = metricNames[currentBaseMetric] || 'hours';
 
-    // Get cumulative counts based on current metric
-    let cumulativeFives, cumulativeDimes, cumulativeQuarters;
-
+    // Get milestones based on current metric
+    let milestones;
     switch (currentBaseMetric) {
         case 'sessions':
-            cumulativeFives = statsCache.cumulativeFivesSessions;
-            cumulativeDimes = statsCache.cumulativeDimesSessions;
-            cumulativeQuarters = statsCache.cumulativeQuartersSessions;
+            milestones = statsCache.milestonesSessions;
             break;
         case 'plays':
-            cumulativeFives = statsCache.cumulativeFivesPlays;
-            cumulativeDimes = statsCache.cumulativeDimesPlays;
-            cumulativeQuarters = statsCache.cumulativeQuartersPlays;
+            milestones = statsCache.milestonesPlays;
             break;
         case 'hours':
         default:
-            cumulativeFives = statsCache.cumulativeFivesHours;
-            cumulativeDimes = statsCache.cumulativeDimesHours;
-            cumulativeQuarters = statsCache.cumulativeQuartersHours;
+            milestones = statsCache.milestonesHours;
             break;
     }
+
+    // Derive cumulative counts by summing all milestones at or above each threshold
+    const cumulativeFives = milestones.fives.length + milestones.dimes.length + milestones.quarters.length + milestones.centuries.length;
+    const cumulativeDimes = milestones.dimes.length + milestones.quarters.length + milestones.centuries.length;
+    const cumulativeQuarters = milestones.quarters.length + milestones.centuries.length;
 
     // Update labels
     document.getElementById('fives-cumulative-label').textContent = `All games with 5+ ${metricName}:`;
