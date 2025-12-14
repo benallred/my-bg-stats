@@ -1154,7 +1154,7 @@ footer p {
 .year-review-game-item {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     gap: 1rem;
     padding: 0.5rem 0;
     border-bottom: 1px solid var(--border-light);
@@ -1199,6 +1199,20 @@ footer p {
     color: var(--text-secondary);
     font-style: italic;
     font-size: 0.9rem;
+}
+
+.top-games-thumbnails {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.year-review-game-rank {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 2rem;
+    flex-shrink: 0;
 }
 
 /* Mobile adjustments for year review detail */

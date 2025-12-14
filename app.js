@@ -36,6 +36,7 @@ import {
   getHourHIndexBreakdown,
   getPlayTimeByGame,
   getDaysPlayedByGame,
+  getTopGamesByMetric,
   getTimeAndActivityStats
 } from './stats.js';
 
@@ -121,6 +122,43 @@ function renderGameNameWithThumbnail(game) {
       <span class="game-name">${game.name}</span>
     </div>
   `;
+}
+
+/**
+ * Helper: Render just the game cover thumbnail (no name)
+ * Used for compact displays like top games row values
+ * @param {Object} game - Game object with name, thumbnailUrl, coverUrl
+ * @returns {string} HTML string for thumbnail only
+ */
+function renderGameThumbnailOnly(game) {
+  const hasImage = !!game.thumbnailUrl;
+  const modalClass = game.coverUrl ? ' game-image-clickable' : '';
+  const fullImageAttr = game.coverUrl
+    ? ` data-full-image="${game.coverUrl}"`
+    : '';
+
+  const initials = getGameInitials(game.name);
+
+  if (hasImage) {
+    return `
+      <img
+        src="${game.thumbnailUrl}"
+        alt="${game.name} cover"
+        title="${game.name}"
+        class="game-thumbnail${modalClass}"${fullImageAttr}
+        onerror="this.classList.add('game-thumbnail-error'); this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');"
+      />
+      <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden" title="${game.name}">
+        ${initials}
+      </div>
+    `;
+  } else {
+    return `
+      <div class="game-thumbnail-placeholder" title="${game.name}">
+        ${initials}
+      </div>
+    `;
+  }
 }
 
 /**
@@ -606,7 +644,12 @@ function updateAllStats() {
             centuriesPlaysPrevious: getCumulativeMilestoneCount(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS, Milestone.CENTURIES),
 
             // Time and Activity stats
-            timeAndActivity: getTimeAndActivityStats(gameData.plays, currentYear)
+            timeAndActivity: getTimeAndActivityStats(gameData.plays, currentYear),
+
+            // Top games by metric (for Game Highlights section)
+            topGamesByHours: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.HOURS, 3),
+            topGamesBySessions: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, 3),
+            topGamesByPlays: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.PLAYS, 3)
         };
     }
 
@@ -1949,6 +1992,90 @@ function showYearReviewDetail(container, statsCache) {
             </table>
         </div>
     `;
+
+    // Add Game Highlights subsection
+    const topHours = statsCache.yearReview.topGamesByHours;
+    const topSessions = statsCache.yearReview.topGamesBySessions;
+    const topPlays = statsCache.yearReview.topGamesByPlays;
+
+    if (topHours.length > 0 || topSessions.length > 0 || topPlays.length > 0) {
+        const formatHoursValue = (minutes) => {
+            const hours = minutes / 60;
+            return `${hours.toFixed(1)} hours this year`;
+        };
+
+        const formatSessionsValue = (days) => {
+            return `${days} ${days === 1 ? 'day' : 'days'} this year`;
+        };
+
+        const formatPlaysValue = (plays) => {
+            return `${plays} ${plays === 1 ? 'play' : 'plays'} this year`;
+        };
+
+        const renderTopGamesRow = (metric, topGames, formatValue) => {
+            if (topGames.length === 0) return '';
+
+            const thumbnails = topGames.map(item => renderGameThumbnailOnly(item.game)).join('');
+            const rankLabels = ['1st', '2nd', '3rd'];
+
+            return `
+                <tr class="year-review-row-clickable" data-detail="top-${metric}">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Top ${topGames.length} games played by <span class="metric-name ${metric}">${metric}</span>:
+                    </td>
+                    <td class="year-review-value-detail">
+                        <span class="top-games-thumbnails">${thumbnails}</span>
+                    </td>
+                </tr>
+                <tr class="year-review-expanded-content" data-detail="top-${metric}" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${topGames.map((item, index) => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-rank">${rankLabels[index]}</span>
+                                    <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                    <span class="year-review-game-value">${formatValue(item.value)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        };
+
+        const gameHighlightsSubsection = document.createElement('div');
+        gameHighlightsSubsection.className = 'year-review-subsection';
+        gameHighlightsSubsection.innerHTML = `
+            <h3 class="year-review-subsection-heading">Game Highlights</h3>
+            <table class="year-review-table">
+                <tbody>
+                    ${renderTopGamesRow('hours', topHours, formatHoursValue)}
+                    ${renderTopGamesRow('sessions', topSessions, formatSessionsValue)}
+                    ${renderTopGamesRow('plays', topPlays, formatPlaysValue)}
+                </tbody>
+            </table>
+        `;
+        detailDiv.appendChild(gameHighlightsSubsection);
+
+        // Add click handlers for expandable rows
+        const gameHighlightsClickableRows = gameHighlightsSubsection.querySelectorAll('.year-review-row-clickable');
+        gameHighlightsClickableRows.forEach(row => {
+            row.addEventListener('click', () => {
+                const detail = row.dataset.detail;
+                const expandedRow = gameHighlightsSubsection.querySelector(`.year-review-expanded-content[data-detail="${detail}"]`);
+                const icon = row.querySelector('.year-review-expand-icon');
+
+                if (expandedRow && expandedRow.style.display === 'none') {
+                    expandedRow.style.display = 'table-row';
+                    icon.textContent = '▼';
+                } else if (expandedRow) {
+                    expandedRow.style.display = 'none';
+                    icon.textContent = '▶';
+                }
+            });
+        });
+    }
 
     // Add Time & Activity subsection
     const timeAndActivity = statsCache.yearReview.timeAndActivity;

@@ -1197,6 +1197,77 @@ function getDaysPlayedByGame(games, plays, year = null) {
 }
 
 /**
+ * Get top games by a specific metric
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to filter by
+ * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
+ * @param {number} limit - Number of top games to return (default 3)
+ * @returns {Array} Array of { game, value, hours, sessions, plays } sorted by metric then hours/sessions/plays
+ */
+function getTopGamesByMetric(games, plays, year, metric, limit = 3) {
+  // Get all three breakdowns to enable secondary sorting
+  const hoursBreakdown = getPlayTimeByGame(games, plays, year);
+  const sessionsBreakdown = getDaysPlayedByGame(games, plays, year);
+  const playsBreakdown = getHIndexBreakdown(games, plays, year, false);
+
+  // Create lookup maps for quick access
+  const hoursMap = new Map(hoursBreakdown.map(item => [item.game.id, item.totalMinutes]));
+  const sessionsMap = new Map(sessionsBreakdown.map(item => [item.game.id, item.uniqueDays]));
+  const playsMap = new Map(playsBreakdown.map(item => [item.game.id, item.count]));
+
+  // Get all unique game IDs
+  const allGameIds = new Set([
+    ...hoursBreakdown.map(item => item.game.id),
+    ...sessionsBreakdown.map(item => item.game.id),
+    ...playsBreakdown.map(item => item.game.id)
+  ]);
+
+  // Build combined data for each game
+  const combined = [];
+  allGameIds.forEach(gameId => {
+    const game = games.find(g => g.id === gameId);
+    if (game) {
+      const hours = hoursMap.get(gameId) || 0;
+      const sessions = sessionsMap.get(gameId) || 0;
+      const gamePlays = playsMap.get(gameId) || 0;
+
+      let value;
+      switch (metric) {
+        case 'sessions':
+          value = sessions;
+          break;
+        case 'plays':
+          value = gamePlays;
+          break;
+        case 'hours':
+        default:
+          value = hours;
+          break;
+      }
+
+      combined.push({
+        game,
+        value,
+        hours,
+        sessions,
+        plays: gamePlays
+      });
+    }
+  });
+
+  // Sort by: metric value desc, then hours desc, then sessions desc, then plays desc
+  combined.sort((a, b) => {
+    if (b.value !== a.value) return b.value - a.value;
+    if (b.hours !== a.hours) return b.hours - a.hours;
+    if (b.sessions !== a.sessions) return b.sessions - a.sessions;
+    return b.plays - a.plays;
+  });
+
+  return combined.slice(0, limit);
+}
+
+/**
  * Get time and activity statistics for Gaming Year in Review
  * @param {Array} plays - Array of play objects
  * @param {number|null} year - Optional year filter
@@ -1837,6 +1908,7 @@ export {
   getTotalPlayTime,
   getPlayTimeByGame,
   getDaysPlayedByGame,
+  getTopGamesByMetric,
   getTimeAndActivityStats,
   getNextMilestoneTarget,
   selectRandom,

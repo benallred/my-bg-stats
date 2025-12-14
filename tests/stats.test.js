@@ -1688,6 +1688,155 @@ describe('Play Time Statistics', () => {
       }
     });
   });
+
+  describe('getTopGamesByMetric', () => {
+    test('returns top N games by hours', () => {
+      const result = stats.getTopGamesByMetric(typicalData.games, typicalData.plays, 2024, 'hours', 3);
+      expect(result.length).toBeLessThanOrEqual(3);
+      expect(result.length).toBeGreaterThan(0);
+      result.forEach(item => {
+        expect(item).toHaveProperty('game');
+        expect(item).toHaveProperty('value');
+        expect(item).toHaveProperty('hours');
+        expect(item).toHaveProperty('sessions');
+        expect(item).toHaveProperty('plays');
+      });
+    });
+
+    test('returns top N games by sessions', () => {
+      const result = stats.getTopGamesByMetric(typicalData.games, typicalData.plays, 2024, 'sessions', 3);
+      expect(result.length).toBeLessThanOrEqual(3);
+      result.forEach(item => {
+        expect(item.value).toBe(item.sessions);
+      });
+    });
+
+    test('returns top N games by plays', () => {
+      const result = stats.getTopGamesByMetric(typicalData.games, typicalData.plays, 2024, 'plays', 3);
+      expect(result.length).toBeLessThanOrEqual(3);
+      result.forEach(item => {
+        expect(item.value).toBe(item.plays);
+      });
+    });
+
+    test('sorts by metric value descending', () => {
+      const result = stats.getTopGamesByMetric(typicalData.games, typicalData.plays, 2024, 'hours', 3);
+      for (let i = 1; i < result.length; i++) {
+        expect(result[i - 1].value).toBeGreaterThanOrEqual(result[i].value);
+      }
+    });
+
+    test('limits results to specified count', () => {
+      const result = stats.getTopGamesByMetric(typicalData.games, typicalData.plays, 2024, 'hours', 2);
+      expect(result.length).toBeLessThanOrEqual(2);
+    });
+
+    test('returns empty array when no plays in year', () => {
+      const result = stats.getTopGamesByMetric(typicalData.games, typicalData.plays, 1900, 'hours', 3);
+      expect(result).toEqual([]);
+    });
+
+    test('secondary sort uses hours then sessions then plays', () => {
+      // When primary metric ties, should fall back to hours, then sessions, then plays
+      const result = stats.getTopGamesByMetric(typicalData.games, typicalData.plays, 2024, 'hours', 10);
+      for (let i = 1; i < result.length; i++) {
+        const prev = result[i - 1];
+        const curr = result[i];
+        if (prev.value === curr.value) {
+          // When metric ties, hours should be >= (or if hours tie, sessions >= etc)
+          expect(prev.hours >= curr.hours ||
+            (prev.hours === curr.hours && prev.sessions >= curr.sessions) ||
+            (prev.hours === curr.hours && prev.sessions === curr.sessions && prev.plays >= curr.plays)
+          ).toBe(true);
+        }
+      }
+    });
+
+    test('tiebreaker sort falls through hours to sessions to plays', () => {
+      // Create mock data where games tie on primary metric and hours, requiring sessions/plays tiebreaker
+      const games = [
+        { id: 1, name: 'Game A' },
+        { id: 2, name: 'Game B' },
+        { id: 3, name: 'Game C' }
+      ];
+      // All games have same hours (60 min each), same sessions (1 day each), but different plays
+      const plays = [
+        { gameId: 1, date: '2024-01-01', durationMin: 60 },
+        { gameId: 2, date: '2024-01-01', durationMin: 60 },
+        { gameId: 3, date: '2024-01-01', durationMin: 60 },
+        { gameId: 3, date: '2024-01-01', durationMin: 0 }, // Extra play for game 3, no duration
+        { gameId: 3, date: '2024-01-01', durationMin: 0 }  // Another extra play for game 3
+      ];
+
+      const result = stats.getTopGamesByMetric(games, plays, 2024, 'hours', 3);
+
+      // All have same hours (60), same sessions (1), but game 3 has more plays
+      expect(result[0].game.id).toBe(3); // 3 plays
+      expect(result[0].plays).toBe(3);
+      // Games 1 and 2 both have 1 play, order determined by plays tiebreaker (equal, so stable)
+      expect(result[1].plays).toBe(1);
+      expect(result[2].plays).toBe(1);
+    });
+
+    test('tiebreaker sort handles sessions tiebreaker when hours tie', () => {
+      // Create mock data where games tie on hours but differ on sessions
+      const games = [
+        { id: 1, name: 'Game A' },
+        { id: 2, name: 'Game B' }
+      ];
+      // Both games have same hours (60 min), but different sessions
+      const plays = [
+        { gameId: 1, date: '2024-01-01', durationMin: 60 },
+        { gameId: 2, date: '2024-01-01', durationMin: 30 },
+        { gameId: 2, date: '2024-01-02', durationMin: 30 }  // Game 2 has 2 sessions
+      ];
+
+      const result = stats.getTopGamesByMetric(games, plays, 2024, 'hours', 2);
+
+      // Both have 60 min hours, but game 2 has 2 sessions vs game 1's 1 session
+      expect(result[0].game.id).toBe(2);
+      expect(result[0].sessions).toBe(2);
+      expect(result[1].game.id).toBe(1);
+      expect(result[1].sessions).toBe(1);
+    });
+
+    test('ignores plays for games not in games array', () => {
+      // Play references a gameId that doesn't exist in games array
+      const games = [
+        { id: 1, name: 'Game A' }
+      ];
+      const plays = [
+        { gameId: 1, date: '2024-01-01', durationMin: 60 },
+        { gameId: 999, date: '2024-01-01', durationMin: 120 }  // Game 999 doesn't exist
+      ];
+
+      const result = stats.getTopGamesByMetric(games, plays, 2024, 'hours', 3);
+
+      // Should only return game 1, ignoring the orphaned play
+      expect(result.length).toBe(1);
+      expect(result[0].game.id).toBe(1);
+    });
+
+    test('defaults to limit of 3 when not specified', () => {
+      const games = [
+        { id: 1, name: 'Game A' },
+        { id: 2, name: 'Game B' },
+        { id: 3, name: 'Game C' },
+        { id: 4, name: 'Game D' }
+      ];
+      const plays = [
+        { gameId: 1, date: '2024-01-01', durationMin: 60 },
+        { gameId: 2, date: '2024-01-01', durationMin: 50 },
+        { gameId: 3, date: '2024-01-01', durationMin: 40 },
+        { gameId: 4, date: '2024-01-01', durationMin: 30 }
+      ];
+
+      // Call without limit parameter to test default
+      const result = stats.getTopGamesByMetric(games, plays, 2024, 'hours');
+
+      expect(result.length).toBe(3);
+    });
+  });
 });
 
 describe('Suggestion Algorithms', () => {
