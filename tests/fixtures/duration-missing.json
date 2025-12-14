@@ -1,5 +1,39 @@
 {
-  "tags": [],
+  "userInfo": {
+    "meRefId": 1
+  },
+  "tags": [
+    {
+      "uuid": "player-1-uuid",
+      "id": 1,
+      "name": "Player 1",
+      "type": "Player",
+      "group": "Default",
+      "isInternal": false
+    },
+    {
+      "uuid": "player-2-uuid",
+      "id": 2,
+      "name": "Player 2",
+      "type": "Player",
+      "group": "Default",
+      "isInternal": false
+    }
+  ],
+  "players": [
+    {
+      "uuid": "player-1-uuid",
+      "id": 1,
+      "name": "Player 1",
+      "isAnonymous": false
+    },
+    {
+      "uuid": "player-2-uuid",
+      "id": 2,
+      "name": "Player 2",
+      "isAnonymous": false
+    }
+  ],
   "games": [
     {
       "id": 1,
@@ -71,73 +105,157 @@
       "gameRefId": 1,
       "playDate": "2024-01-01 10:00:00",
       "durationMin": 60,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-02 10:00:00",
       "durationMin": 0,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-03 10:00:00",
       "durationMin": 65,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-04 10:00:00",
       "durationMin": 0,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 1,
       "playDate": "2024-01-05 10:00:00",
       "durationMin": 55,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 2,
       "playDate": "2024-02-01 10:00:00",
       "durationMin": 0,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 2,
       "playDate": "2024-02-02 10:00:00",
       "durationMin": 0,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 2,
       "playDate": "2024-02-03 10:00:00",
       "durationMin": 0,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-01 10:00:00",
       "durationMin": 45,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-02 10:00:00",
       "durationMin": 50,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-03 10:00:00",
       "durationMin": 48,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
     },
     {
       "gameRefId": 4,
       "playDate": "2024-03-04 10:00:00",
       "durationMin": 52,
-      "metaData": "{\"playUsedGameCopy\":1}"
+      "metaData": "{\"playUsedGameCopy\":1}",
+      "locationRefId": 1,
+      "playerScores": [
+        {
+          "playerRefId": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "uuid": "location-1-uuid",
+      "id": 1,
+      "name": "Home"
+    },
+    {
+      "uuid": "location-2-uuid",
+      "id": 2,
+      "name": "Store"
     }
   ]
 }

@@ -197,7 +197,10 @@ describe('process-data.js transformation logic', () => {
 
     test('handles missing playUsedGameCopy for unowned game', () => {
       const fixtureUnownedGame = {
+        userInfo: { meRefId: 1 },
         tags: [],
+        players: [{ id: 1, name: "Player 1", isAnonymous: false }],
+        locations: [{ id: 1, name: "Home" }],
         games: [{
           id: 1,
           name: "Unowned Game",
@@ -216,6 +219,8 @@ describe('process-data.js transformation logic', () => {
           gameRefId: 1,
           playDate: '2024-01-01 10:00:00',
           durationMin: 60,
+          locationRefId: 1,
+          playerScores: [{ playerRefId: 1 }],
           metaData: "{}"
         }]
       };
@@ -245,7 +250,10 @@ describe('process-data.js transformation logic', () => {
   describe('Image URL Processing', () => {
     test('preserves thumbnailUrl and coverUrl from source data', () => {
       const testData = {
+        userInfo: { meRefId: 1 },
         tags: [],
+        players: [],
+        locations: [],
         games: [{
           id: 1,
           name: 'Test Game',
@@ -268,7 +276,10 @@ describe('process-data.js transformation logic', () => {
 
     test('handles missing image URLs gracefully', () => {
       const testData = {
+        userInfo: { meRefId: 1 },
         tags: [],
+        players: [],
+        locations: [],
         games: [{
           id: 1,
           name: 'Test Game',
@@ -290,7 +301,10 @@ describe('process-data.js transformation logic', () => {
 
     test('handles null image URLs', () => {
       const testData = {
+        userInfo: { meRefId: 1 },
         tags: [],
+        players: [],
+        locations: [],
         games: [{
           id: 1,
           name: 'Test Game',
@@ -313,7 +327,10 @@ describe('process-data.js transformation logic', () => {
 
     test('falls back to earliest owned copy image URLs when game URLs are missing', () => {
       const testData = {
+        userInfo: { meRefId: 1 },
         tags: [],
+        players: [],
+        locations: [],
         games: [{
           id: 1,
           name: 'Test Game',
@@ -350,7 +367,10 @@ describe('process-data.js transformation logic', () => {
 
     test('prefers game-level URLs over copy URLs', () => {
       const testData = {
+        userInfo: { meRefId: 1 },
         tags: [],
+        players: [],
+        locations: [],
         games: [{
           id: 1,
           name: 'Test Game',

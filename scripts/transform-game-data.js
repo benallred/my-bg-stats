@@ -96,6 +96,34 @@ function findExpandaloneTagId(tags) {
 }
 
 /**
+ * Extracts players from players array.
+ * @param {Array} players - Array of player objects from BG Stats
+ * @returns {Array} Array of player objects with playerId and name
+ */
+function extractPlayers(players) {
+  return players
+    .map(player => ({
+      playerId: player.id,
+      name: player.name
+    }))
+    .sort((a, b) => a.playerId - b.playerId);
+}
+
+/**
+ * Extracts locations from locations array.
+ * @param {Array} locations - Array of location objects from BG Stats
+ * @returns {Array} Array of location objects with locationId and name
+ */
+function extractLocations(locations) {
+  return locations
+    .map(location => ({
+      locationId: location.id,
+      name: location.name
+    }))
+    .sort((a, b) => a.locationId - b.locationId);
+}
+
+/**
  * Classifies a game based on mutually exclusive rules.
  * Priority: expandalone > base game > expansion
  * @param {Object} game - Game object from BG Stats
@@ -310,13 +338,23 @@ function processPlays(plays, gamesMap) {
       // playUsedGameCopyType === OTHER_PLAYER_COPY: copyId remains null
     }
 
+    // Extract player IDs from playerScores
+    const players = play.playerScores && Array.isArray(play.playerScores)
+      ? play.playerScores.map(ps => ps.playerRefId)
+      : [];
+
+    // Extract location ID
+    const locationId = play.locationRefId;
+
     processedPlays.push({
       gameId: gameId,
       copyId: copyId,
       date: playDate,
       timestamp: play.playDate,
       durationMin: finalDuration,
-      durationEstimated: isEstimated
+      durationEstimated: isEstimated,
+      players: players,
+      locationId: locationId
     });
 
     // Update game play statistics
@@ -334,9 +372,12 @@ function processPlays(plays, gamesMap) {
  * Finalizes output by converting maps to arrays, sorting, and adding metadata.
  * @param {Map} gamesMap - Map of game ID to game object
  * @param {Array} plays - Array of processed play objects
- * @returns {Object} Final output object with games, plays, and metadata
+ * @param {Array} players - Array of player objects
+ * @param {Array} locations - Array of location objects
+ * @param {number} selfPlayerId - Player ID of the owner
+ * @returns {Object} Final output object with games, plays, players, locations, and metadata
  */
-function finalizeOutput(gamesMap, plays) {
+function finalizeOutput(gamesMap, plays, players, locations, selfPlayerId) {
   // Convert games map to array and finalize
   const games = Array.from(gamesMap.values()).map(game => ({
     ...game,
@@ -360,14 +401,22 @@ function finalizeOutput(gamesMap, plays) {
 
   // Create output data
   return {
+    selfPlayerId: selfPlayerId,
     games: games,
     plays: plays,
+    players: players,
+    locations: locations,
     generatedAt: generatedAt
   };
 }
 
 // Pure transformation function (testable)
 function processData(bgStatsData) {
+  // Extract players and locations
+  const players = extractPlayers(bgStatsData.players);
+  const locations = extractLocations(bgStatsData.locations);
+  const selfPlayerId = bgStatsData.userInfo.meRefId;
+
   // Build games map from BG Stats
   const expandaloneTagId = findExpandaloneTagId(bgStatsData.tags);
   const gamesMap = buildGamesMap(bgStatsData.games, expandaloneTagId);
@@ -376,11 +425,11 @@ function processData(bgStatsData) {
   const gameDurationsMap = collectGameDurations(bgStatsData.plays);
   calculateTypicalPlayTimes(gamesMap, gameDurationsMap, bgStatsData.plays);
 
-  // Process plays (store date, game reference, and duration data)
+  // Process plays (store date, game reference, duration data, players, and location)
   const plays = processPlays(bgStatsData.plays, gamesMap);
 
   // Finalize output (convert to arrays, sort, add metadata)
-  return finalizeOutput(gamesMap, plays);
+  return finalizeOutput(gamesMap, plays, players, locations, selfPlayerId);
 }
 
 export { processData };
