@@ -1910,7 +1910,7 @@ function showYearReviewDetail(container, statsCache) {
             <h3 class="year-review-subsection-heading">H-Index Growth</h3>
             <table class="year-review-table">
                 <tbody>
-                    <tr class="year-review-row-clickable" data-metric="hours">
+                    <tr class="year-review-row year-review-row-clickable" data-metric="hours">
                         <td class="year-review-label-detail">
                             <span class="year-review-expand-icon">▶</span>
                             Increase in all-time <span class="metric-name hours">hours</span> h-index:
@@ -1936,7 +1936,7 @@ function showYearReviewDetail(container, statsCache) {
                             </div>
                         </td>
                     </tr>
-                    <tr class="year-review-row-clickable" data-metric="sessions">
+                    <tr class="year-review-row year-review-row-clickable" data-metric="sessions">
                         <td class="year-review-label-detail">
                             <span class="year-review-expand-icon">▶</span>
                             Increase in all-time <span class="metric-name sessions">sessions</span> h-index:
@@ -1962,7 +1962,7 @@ function showYearReviewDetail(container, statsCache) {
                             </div>
                         </td>
                     </tr>
-                    <tr class="year-review-row-clickable" data-metric="plays">
+                    <tr class="year-review-row year-review-row-clickable" data-metric="plays">
                         <td class="year-review-label-detail">
                             <span class="year-review-expand-icon">▶</span>
                             Increase in all-time <span class="metric-name plays">plays</span> h-index:
@@ -2019,7 +2019,7 @@ function showYearReviewDetail(container, statsCache) {
             const rankLabels = ['1st', '2nd', '3rd'];
 
             return `
-                <tr class="year-review-row-clickable" data-detail="top-${metric}">
+                <tr class="year-review-row year-review-row-clickable" data-detail="top-${metric}">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
                         Top ${topGames.length} games played by <span class="metric-name ${metric}">${metric}</span>:
@@ -2111,7 +2111,7 @@ function showYearReviewDetail(container, statsCache) {
 
         // Total days played
         timeActivityRows.push(`
-            <tr>
+            <tr class="year-review-row">
                 <td class="year-review-label-detail">Total days played:</td>
                 <td class="year-review-value-detail">${timeAndActivity.totalDays}</td>
             </tr>
@@ -2119,7 +2119,7 @@ function showYearReviewDetail(container, statsCache) {
 
         // Total play time
         timeActivityRows.push(`
-            <tr>
+            <tr class="year-review-row">
                 <td class="year-review-label-detail">Total play time:</td>
                 <td class="year-review-value-detail">${formatMinutes(timeAndActivity.totalMinutes)}</td>
             </tr>
@@ -2139,7 +2139,7 @@ function showYearReviewDetail(container, statsCache) {
                 .sort((a, b) => (a.game?.name || 'Unknown').localeCompare(b.game?.name || 'Unknown'));
 
             timeActivityRows.push(`
-                <tr class="year-review-row-clickable" data-detail="most-games-day">
+                <tr class="year-review-row year-review-row-clickable" data-detail="most-games-day">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
                         Most unique games in one day:
@@ -2174,7 +2174,7 @@ function showYearReviewDetail(container, statsCache) {
                 .sort((a, b) => (a.game?.name || 'Unknown').localeCompare(b.game?.name || 'Unknown'));
 
             timeActivityRows.push(`
-                <tr class="year-review-row-clickable" data-detail="longest-day">
+                <tr class="year-review-row year-review-row-clickable" data-detail="longest-day">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
                         Longest total playtime in one day:
@@ -2209,7 +2209,7 @@ function showYearReviewDetail(container, statsCache) {
                 .sort((a, b) => (a.game?.name || 'Unknown').localeCompare(b.game?.name || 'Unknown'));
 
             timeActivityRows.push(`
-                <tr class="year-review-row-clickable" data-detail="shortest-day">
+                <tr class="year-review-row year-review-row-clickable" data-detail="shortest-day">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
                         Shortest total playtime in one day:
@@ -2240,7 +2240,7 @@ function showYearReviewDetail(container, statsCache) {
                 streakValue = `${timeAndActivity.longestStreak} days (${formatDate(timeAndActivity.longestStreakStart)} to ${formatDate(timeAndActivity.longestStreakEnd)})`;
             }
             timeActivityRows.push(`
-                <tr>
+                <tr class="year-review-row">
                     <td class="year-review-label-detail">Longest play streak (consecutive days):</td>
                     <td class="year-review-value-detail">${streakValue}</td>
                 </tr>
@@ -2256,7 +2256,7 @@ function showYearReviewDetail(container, statsCache) {
                 drySpellValue = `${timeAndActivity.longestDrySpell} days (${formatDate(timeAndActivity.longestDrySpellStart)} to ${formatDate(timeAndActivity.longestDrySpellEnd)})`;
             }
             timeActivityRows.push(`
-                <tr>
+                <tr class="year-review-row">
                     <td class="year-review-label-detail">Longest dry spell (days between sessions):</td>
                     <td class="year-review-value-detail">${drySpellValue}</td>
                 </tr>
@@ -2344,7 +2344,7 @@ function showYearReviewDetail(container, statsCache) {
             }
 
             milestoneRows.push(`
-                <tr class="year-review-row-clickable" data-milestone="${rowId}">
+                <tr class="year-review-row year-review-row-clickable" data-milestone="${rowId}">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
                         Increase in ${def.label} by <span class="metric-name ${def.metric}">${def.metric}</span> (played ${def.range} ${def.unit} total):

@@ -1100,6 +1100,29 @@ footer p {
     border-bottom: 1px solid var(--border-light);
 }
 
+/* Year-review table: disable default nth-child alternating */
+.year-review-table tbody tr:nth-child(even),
+.year-review-table tbody tr:nth-child(even) td:first-child {
+    background: transparent;
+}
+
+/* Apply even-row background only to data rows (skipping expanded content rows) */
+.year-review-table tbody tr:nth-child(even of .year-review-row),
+.year-review-table tbody tr:nth-child(even of .year-review-row) td {
+    background: var(--bg-table-row-even);
+}
+
+/* Expanded content rows always get subtle background */
+.year-review-table tbody tr.year-review-expanded-content {
+    background: var(--bg-table-row-even);
+}
+
+/* Hover state for all data rows */
+.year-review-table tbody tr.year-review-row:hover,
+.year-review-table tbody tr.year-review-row:hover td {
+    background: var(--bg-table-row-hover);
+}
+
 .year-review-table .year-review-row-clickable {
     cursor: pointer;
 }
