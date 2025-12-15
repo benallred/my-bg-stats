@@ -1067,8 +1067,16 @@ footer p {
 }
 
 /* Gaming Year in Review Detail */
+@media (min-width: 1200px) {
+    .year-review-detail {
+        columns: 2;
+        column-gap: 2rem;
+    }
+}
+
 .year-review-detail .year-review-subsection {
     margin-bottom: 1.5rem;
+    break-inside: avoid;
 }
 
 .year-review-detail .year-review-subsection-heading {
@@ -1082,15 +1090,14 @@ footer p {
 
 .year-review-table {
     width: 100%;
-    max-width: 600px;
-    table-layout: fixed;
+    max-width: 100%;
+    table-layout: auto;
     border-collapse: collapse;
 }
 
 .year-review-table td {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--border-light);
-    white-space: nowrap;
 }
 
 .year-review-table .year-review-row-clickable {
