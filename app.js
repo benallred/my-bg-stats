@@ -37,7 +37,8 @@ import {
   getPlayTimeByGame,
   getDaysPlayedByGame,
   getTopGamesByMetric,
-  getTimeAndActivityStats
+  getTimeAndActivityStats,
+  getLoggingAchievements
 } from './stats.js';
 
 /**
@@ -649,7 +650,10 @@ function updateAllStats() {
             // Top games by metric (for Game Highlights section)
             topGamesByHours: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.HOURS, 3),
             topGamesBySessions: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, 3),
-            topGamesByPlays: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.PLAYS, 3)
+            topGamesByPlays: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.PLAYS, 3),
+
+            // Logging achievements (cumulative thresholds crossed)
+            loggingAchievements: getLoggingAchievements(gameData.plays, currentYear)
         };
     }
 
@@ -2291,6 +2295,55 @@ function showYearReviewDetail(container, statsCache) {
                 }
             });
         });
+    }
+
+    // Add Logging Achievements subsection
+    const loggingAchievements = statsCache.yearReview.loggingAchievements;
+    if (loggingAchievements && loggingAchievements.length > 0) {
+        const formatAchievementDate = (dateStr) => {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        };
+
+        const formatThreshold = (threshold) => {
+            return threshold.toLocaleString();
+        };
+
+        const getMetricLabel = (metric) => {
+            switch (metric) {
+                case 'hours': return 'Hour';
+                case 'sessions': return 'Session';
+                case 'plays': return 'Play';
+                default: return metric;
+            }
+        };
+
+        const achievementRows = loggingAchievements.map(achievement => {
+            const metricLabel = getMetricLabel(achievement.metric);
+            const formattedThreshold = formatThreshold(achievement.threshold);
+            const formattedDate = formatAchievementDate(achievement.date);
+
+            return `
+                <tr class="year-review-row">
+                    <td class="year-review-label-detail">
+                        Logged ${formattedThreshold}th <span class="metric-name ${achievement.metric}">${metricLabel}</span>
+                    </td>
+                    <td class="year-review-value-detail">${formattedDate}</td>
+                </tr>
+            `;
+        }).join('');
+
+        const loggingAchievementsSubsection = document.createElement('div');
+        loggingAchievementsSubsection.className = 'year-review-subsection';
+        loggingAchievementsSubsection.innerHTML = `
+            <h3 class="year-review-subsection-heading">Logging Achievements</h3>
+            <table class="year-review-table">
+                <tbody>
+                    ${achievementRows}
+                </tbody>
+            </table>
+        `;
+        detailDiv.appendChild(loggingAchievementsSubsection);
     }
 
     // Build milestone rows dynamically - only show rows with increase > 0

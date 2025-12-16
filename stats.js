@@ -1441,6 +1441,73 @@ function getTimeAndActivityStats(plays, year = null) {
 }
 
 /**
+ * Get logging achievements (cumulative totals crossing round-number thresholds) for a year
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to filter achievements by
+ * @returns {Array} Array of { metric: Metric.HOURS|Metric.SESSIONS|Metric.PLAYS, threshold: number, date: string }
+ */
+function getLoggingAchievements(plays, year) {
+  // Sort plays chronologically (oldest first)
+  const sortedPlays = [...plays].sort((a, b) => a.date.localeCompare(b.date));
+
+  let cumulativeMinutes = 0;
+  const uniqueDays = new Set();
+  let cumulativePlays = 0;
+
+  const achievements = [];
+  let nextHourThreshold = 100;
+  let nextSessionThreshold = 100;
+  let nextPlayThreshold = 250;
+
+  for (const play of sortedPlays) {
+    // Track hours
+    cumulativeMinutes += play.durationMin;
+    const newHours = Math.floor(cumulativeMinutes / 60);
+
+    // Check hour thresholds crossed
+    while (nextHourThreshold <= newHours) {
+      achievements.push({ metric: Metric.HOURS, threshold: nextHourThreshold, date: play.date });
+      nextHourThreshold += 100;
+    }
+
+    // Track sessions (only count if this is a new unique day)
+    const prevSessions = uniqueDays.size;
+    uniqueDays.add(play.date);
+    const newSessions = uniqueDays.size;
+
+    // Check session thresholds crossed
+    if (newSessions > prevSessions) {
+      while (nextSessionThreshold <= newSessions) {
+        achievements.push({ metric: Metric.SESSIONS, threshold: nextSessionThreshold, date: play.date });
+        nextSessionThreshold += 100;
+      }
+    }
+
+    // Track plays
+    cumulativePlays++;
+
+    // Check play thresholds crossed
+    while (nextPlayThreshold <= cumulativePlays) {
+      achievements.push({ metric: Metric.PLAYS, threshold: nextPlayThreshold, date: play.date });
+      nextPlayThreshold += 250;
+    }
+  }
+
+  // Filter to achievements where date is in specified year
+  // Sort by: hours first, then sessions, then plays (per metric ordering convention)
+  // Within each metric, sort by threshold ascending
+  const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2 };
+  return achievements
+    .filter(a => a.date.startsWith(year.toString()))
+    .sort((a, b) => {
+      if (metricOrder[a.metric] !== metricOrder[b.metric]) {
+        return metricOrder[a.metric] - metricOrder[b.metric];
+      }
+      return a.threshold - b.threshold;
+    });
+}
+
+/**
  * Helper: Calculate days since a date
  * @param {string} dateString - Date in YYYY-MM-DD format
  * @returns {number} Days since the date
@@ -1910,6 +1977,7 @@ export {
   getDaysPlayedByGame,
   getTopGamesByMetric,
   getTimeAndActivityStats,
+  getLoggingAchievements,
   getNextMilestoneTarget,
   selectRandom,
   selectRandomWeightedBySqrtRarity,

@@ -2357,3 +2357,168 @@ describe('Suggestion Algorithms', () => {
     });
   });
 });
+
+describe('getLoggingAchievements', () => {
+  test('returns empty array when no thresholds crossed in year', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 30 },
+      { gameId: 2, date: '2024-01-16', durationMin: 30 }
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    expect(result).toEqual([]);
+  });
+
+  test('detects hour thresholds (every 100 hours)', () => {
+    // 100 hours = 6000 minutes
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 5900 },
+      { gameId: 2, date: '2024-01-16', durationMin: 100 } // crosses 100 hours
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-16' });
+  });
+
+  test('detects session thresholds (every 100 sessions)', () => {
+    // Create 100 unique days (sessions)
+    const plays = [];
+    for (let i = 1; i <= 100; i++) {
+      const month = i <= 31 ? '01' : i <= 59 ? '02' : i <= 90 ? '03' : '04';
+      const dayOfMonth = i <= 31 ? i : i <= 59 ? i - 31 : i <= 90 ? i - 59 : i - 90;
+      plays.push({
+        gameId: 1,
+        date: `2024-${month}-${dayOfMonth.toString().padStart(2, '0')}`,
+        durationMin: 30
+      });
+    }
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    expect(result).toContainEqual(expect.objectContaining({ metric: 'sessions', threshold: 100 }));
+  });
+
+  test('detects play thresholds (every 250 plays)', () => {
+    // Create 250 plays
+    const plays = [];
+    for (let i = 0; i < 250; i++) {
+      plays.push({
+        gameId: 1,
+        date: '2024-01-15',
+        durationMin: 10
+      });
+    }
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    expect(result).toContainEqual({ metric: 'plays', threshold: 250, date: '2024-01-15' });
+  });
+
+  test('returns correct date for each threshold', () => {
+    // 100 hours = 6000 minutes, spread across two days
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 5000 },
+      { gameId: 2, date: '2024-01-20', durationMin: 1000 } // crosses 100 hours on this date
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    const hourAchievement = result.find(a => a.metric === 'hours' && a.threshold === 100);
+    expect(hourAchievement.date).toBe('2024-01-20');
+  });
+
+  test('handles multiple thresholds of same type in one year', () => {
+    // 200 hours = 12000 minutes
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 6000 }, // crosses 100 hours
+      { gameId: 2, date: '2024-06-15', durationMin: 6000 }  // crosses 200 hours
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-15' });
+    expect(result).toContainEqual({ metric: 'hours', threshold: 200, date: '2024-06-15' });
+  });
+
+  test('filters to only specified year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-12-15', durationMin: 5900 },
+      { gameId: 2, date: '2024-01-15', durationMin: 100 } // crosses 100 hours, but threshold was nearly reached in 2023
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    // Should include the 100 hour threshold since it was crossed in 2024
+    expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-15' });
+  });
+
+  test('excludes thresholds crossed in other years', () => {
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 6000 } // crosses 100 hours in 2023
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    expect(result).toEqual([]);
+  });
+
+  test('orders results by metric (hours, sessions, plays) then threshold', () => {
+    // Create plays that cross multiple thresholds
+    const plays = [];
+    // 250 plays on unique days with enough hours
+    for (let i = 0; i < 250; i++) {
+      const day = (i % 28) + 1;
+      const month = Math.floor(i / 28) + 1;
+      plays.push({
+        gameId: 1,
+        date: `2024-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`,
+        durationMin: 60 // 1 hour each, so 250 hours total
+      });
+    }
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    // Verify ordering: hours first, then sessions, then plays
+    const metrics = result.map(a => a.metric);
+    const hoursEndIndex = metrics.lastIndexOf('hours');
+    const sessionsStartIndex = metrics.indexOf('sessions');
+    const sessionsEndIndex = metrics.lastIndexOf('sessions');
+    const playsStartIndex = metrics.indexOf('plays');
+
+    if (hoursEndIndex >= 0 && sessionsStartIndex >= 0) {
+      expect(hoursEndIndex).toBeLessThan(sessionsStartIndex);
+    }
+    if (sessionsEndIndex >= 0 && playsStartIndex >= 0) {
+      expect(sessionsEndIndex).toBeLessThan(playsStartIndex);
+    }
+  });
+
+  test('session threshold only counts unique days', () => {
+    // Multiple plays on same day should only count as 1 session
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 30 },
+      { gameId: 2, date: '2024-01-15', durationMin: 30 },
+      { gameId: 3, date: '2024-01-15', durationMin: 30 }
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    // Should not have any session thresholds since only 1 unique day
+    const sessionAchievements = result.filter(a => a.metric === 'sessions');
+    expect(sessionAchievements).toEqual([]);
+  });
+
+  test('handles crossing multiple thresholds in single play', () => {
+    // One massive play that crosses 100 and 200 hours
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 12500 } // ~208 hours
+    ];
+
+    const result = stats.getLoggingAchievements(plays, 2024);
+
+    expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-15' });
+    expect(result).toContainEqual({ metric: 'hours', threshold: 200, date: '2024-01-15' });
+  });
+});
