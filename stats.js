@@ -396,9 +396,9 @@ function getMilestones(games, plays, year, metric) {
 
     // Select the appropriate metric value
     let count;
-    if (metric === 'hours') {
+    if (metric === Metric.HOURS) {
       count = value.totalMinutes / 60;
-    } else if (metric === 'sessions') {
+    } else if (metric === Metric.SESSIONS) {
       count = value.uniqueDates.size;
     } else {
       count = value.playCount;
@@ -463,9 +463,9 @@ function getCumulativeMilestoneCount(games, plays, year, metric, milestoneType) 
 
     // Select the appropriate metric value
     let metricValue;
-    if (metric === 'hours') {
+    if (metric === Metric.HOURS) {
       metricValue = value.totalMinutes / 60;
-    } else if (metric === 'sessions') {
+    } else if (metric === Metric.SESSIONS) {
       metricValue = value.uniqueDates.size;
     } else {
       metricValue = value.playCount;
@@ -715,11 +715,11 @@ function calculateAllTimeHIndexThroughYear(games, plays, year, metric) {
 
   // Calculate h-index based on metric type
   switch (metric) {
-    case 'sessions':
+    case Metric.SESSIONS:
       return calculatePlaySessionHIndex(games, filteredPlays);
-    case 'plays':
+    case Metric.PLAYS:
       return calculateTraditionalHIndex(games, filteredPlays);
-    case 'hours':
+    case Metric.HOURS:
     default:
       return calculateHourHIndex(filteredPlays);
   }
@@ -760,13 +760,13 @@ function getNewHIndexGames(games, plays, year, metric) {
 
   let currentBreakdown;
   switch (metric) {
-    case 'sessions':
+    case Metric.SESSIONS:
       currentBreakdown = getHIndexBreakdown(games, filteredPlaysCurrentYear, null, true);
       break;
-    case 'plays':
+    case Metric.PLAYS:
       currentBreakdown = getHIndexBreakdown(games, filteredPlaysCurrentYear, null, false);
       break;
-    case 'hours':
+    case Metric.HOURS:
     default:
       currentBreakdown = getHourHIndexBreakdown(games, filteredPlaysCurrentYear);
       break;
@@ -776,7 +776,7 @@ function getNewHIndexGames(games, plays, year, metric) {
   const currentContributors = new Set();
   for (let i = 0; i < currentHIndex && i < currentBreakdown.length; i++) {
     const rank = i + 1;
-    const value = metric === 'hours' ? currentBreakdown[i].hours : currentBreakdown[i].count;
+    const value = metric === Metric.HOURS ? currentBreakdown[i].hours : currentBreakdown[i].count;
     if (rank <= value && rank <= currentHIndex) {
       currentContributors.add(currentBreakdown[i].game.id);
     }
@@ -790,13 +790,13 @@ function getNewHIndexGames(games, plays, year, metric) {
 
   let previousBreakdown;
   switch (metric) {
-    case 'sessions':
+    case Metric.SESSIONS:
       previousBreakdown = getHIndexBreakdown(games, filteredPlaysPreviousYear, null, true);
       break;
-    case 'plays':
+    case Metric.PLAYS:
       previousBreakdown = getHIndexBreakdown(games, filteredPlaysPreviousYear, null, false);
       break;
-    case 'hours':
+    case Metric.HOURS:
     default:
       previousBreakdown = getHourHIndexBreakdown(games, filteredPlaysPreviousYear);
       break;
@@ -806,7 +806,7 @@ function getNewHIndexGames(games, plays, year, metric) {
   const previousContributors = new Set();
   for (let i = 0; i < previousHIndex && i < previousBreakdown.length; i++) {
     const rank = i + 1;
-    const value = metric === 'hours' ? previousBreakdown[i].hours : previousBreakdown[i].count;
+    const value = metric === Metric.HOURS ? previousBreakdown[i].hours : previousBreakdown[i].count;
     if (rank <= value && rank <= previousHIndex) {
       previousContributors.add(previousBreakdown[i].game.id);
     }
@@ -817,7 +817,7 @@ function getNewHIndexGames(games, plays, year, metric) {
   for (let i = 0; i < currentBreakdown.length; i++) {
     const gameId = currentBreakdown[i].game.id;
     if (currentContributors.has(gameId) && !previousContributors.has(gameId)) {
-      const allTimeValue = metric === 'hours' ? currentBreakdown[i].hours : currentBreakdown[i].count;
+      const allTimeValue = metric === Metric.HOURS ? currentBreakdown[i].hours : currentBreakdown[i].count;
 
       // Calculate this year's value for this game
       const thisYearPlays = plays.filter(play => {
@@ -827,15 +827,15 @@ function getNewHIndexGames(games, plays, year, metric) {
 
       let thisYearValue;
       switch (metric) {
-        case 'sessions':
+        case Metric.SESSIONS:
           // Count unique days
           thisYearValue = new Set(thisYearPlays.map(play => play.date)).size;
           break;
-        case 'plays':
+        case Metric.PLAYS:
           // Count plays
           thisYearValue = thisYearPlays.length;
           break;
-        case 'hours':
+        case Metric.HOURS:
         default:
           // Sum hours
           thisYearValue = thisYearPlays.reduce((sum, play) => sum + (play.durationMin / 60), 0);
@@ -946,9 +946,9 @@ function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
 
     // Calculate current year metric value
     let currentCount;
-    if (metric === 'hours') {
+    if (metric === Metric.HOURS) {
       currentCount = currentValue.totalMinutes / 60;
-    } else if (metric === 'sessions') {
+    } else if (metric === Metric.SESSIONS) {
       currentCount = currentValue.uniqueDates.size;
     } else {
       currentCount = currentValue.playCount;
@@ -963,9 +963,9 @@ function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
     const previousValue = metricValuesPreviousYear.get(gameId);
     let previousCount = 0;
     if (previousValue) {
-      if (metric === 'hours') {
+      if (metric === Metric.HOURS) {
         previousCount = previousValue.totalMinutes / 60;
-      } else if (metric === 'sessions') {
+      } else if (metric === Metric.SESSIONS) {
         previousCount = previousValue.uniqueDates.size;
       } else {
         previousCount = previousValue.playCount;
@@ -985,9 +985,9 @@ function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
       });
 
       let thisYearValue;
-      if (metric === 'hours') {
+      if (metric === Metric.HOURS) {
         thisYearValue = thisYearPlays.reduce((sum, play) => sum + (play.durationMin / 60), 0);
-      } else if (metric === 'sessions') {
+      } else if (metric === Metric.SESSIONS) {
         thisYearValue = new Set(thisYearPlays.map(play => play.date)).size;
       } else {
         thisYearValue = thisYearPlays.length;
@@ -1234,13 +1234,13 @@ function getTopGamesByMetric(games, plays, year, metric, limit = 3) {
 
       let value;
       switch (metric) {
-        case 'sessions':
+        case Metric.SESSIONS:
           value = sessions;
           break;
-        case 'plays':
+        case Metric.PLAYS:
           value = gamePlays;
           break;
-        case 'hours':
+        case Metric.HOURS:
         default:
           value = hours;
           break;
@@ -1766,9 +1766,9 @@ function suggestForNextHourHIndex(plays, gamePlayData) {
 function suggestForNextMilestone(gamePlayData, metric) {
   // Get value based on metric
   const getValue = (data) => {
-    if (metric === 'hours') {
+    if (metric === Metric.HOURS) {
       return data.totalMinutes / 60;
-    } else if (metric === 'sessions') {
+    } else if (metric === Metric.SESSIONS) {
       return data.uniqueDays.size;
     } else {
       return data.playCount;
@@ -1828,9 +1828,9 @@ function suggestForNextMilestone(gamePlayData, metric) {
 
   // Format stat text based on metric
   let statText;
-  if (metric === 'hours') {
+  if (metric === Metric.HOURS) {
     statText = `${candidate.currentValue.toFixed(1)} total hours`;
-  } else if (metric === 'sessions') {
+  } else if (metric === Metric.SESSIONS) {
     const sessionCount = Math.floor(candidate.currentValue);
     statText = sessionCount === 1 ? '1 total day' : `${sessionCount} total days`;
   } else {
@@ -1910,9 +1910,9 @@ function getSuggestedGames(games, plays) {
     suggestForNextHourHIndex(plays, gamePlayData),             // Squaring up: Hours
     suggestForNextSessionHIndex(games, plays, gamePlayData),   // Squaring up: Sessions
     suggestForNextTraditionalHIndex(games, plays, gamePlayData), // Squaring up: Plays
-    suggestForNextMilestone(gamePlayData, 'hours'),            // Almost a milestone (hours)
-    suggestForNextMilestone(gamePlayData, 'sessions'),         // Almost a milestone (sessions)
-    suggestForNextMilestone(gamePlayData, 'plays'),            // Almost a milestone (plays)
+    suggestForNextMilestone(gamePlayData, Metric.HOURS),        // Almost a milestone (hours)
+    suggestForNextMilestone(gamePlayData, Metric.SESSIONS),    // Almost a milestone (sessions)
+    suggestForNextMilestone(gamePlayData, Metric.PLAYS),       // Almost a milestone (plays)
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData)                       // Shelf of shame
   ].filter(suggestion => suggestion !== null);
