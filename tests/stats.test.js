@@ -2522,3 +2522,123 @@ describe('getLoggingAchievements', () => {
     expect(result).toContainEqual({ metric: 'hours', threshold: 200, date: '2024-01-15' });
   });
 });
+
+describe('getSoloStats', () => {
+  test('counts solo plays correctly', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 45, players: [1] },           // Solo
+      { gameId: 1, date: '2024-01-16', durationMin: 50, players: [1, 2] },        // Not solo
+      { gameId: 2, date: '2024-01-17', durationMin: 30, players: [1] },           // Solo
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId);
+
+    expect(result.totalSoloPlays).toBe(2);
+  });
+
+  test('counts solo sessions (unique dates) correctly', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 45, players: [1] },           // Solo, day 1
+      { gameId: 1, date: '2024-01-15', durationMin: 30, players: [1] },           // Solo, same day
+      { gameId: 2, date: '2024-01-16', durationMin: 50, players: [1, 2] },        // Not solo
+      { gameId: 3, date: '2024-01-17', durationMin: 30, players: [1] },           // Solo, day 2
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId);
+
+    expect(result.totalSoloSessions).toBe(2);  // 2024-01-15 and 2024-01-17
+  });
+
+  test('sums solo minutes correctly', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 45, players: [1] },           // Solo: 45 min
+      { gameId: 1, date: '2024-01-16', durationMin: 50, players: [1, 2] },        // Not solo
+      { gameId: 2, date: '2024-01-17', durationMin: 30, players: [1] },           // Solo: 30 min
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId);
+
+    expect(result.totalSoloMinutes).toBe(75);  // 45 + 30
+  });
+
+  test('filters by year when specified', () => {
+    const plays = [
+      { gameId: 1, date: '2023-12-31', durationMin: 60, players: [1] },           // Solo, 2023
+      { gameId: 1, date: '2024-01-15', durationMin: 45, players: [1] },           // Solo, 2024
+      { gameId: 2, date: '2024-01-16', durationMin: 30, players: [1] },           // Solo, 2024
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId, 2024);
+
+    expect(result.totalSoloPlays).toBe(2);
+    expect(result.totalSoloSessions).toBe(2);
+    expect(result.totalSoloMinutes).toBe(75);  // 45 + 30
+  });
+
+  test('returns all-time stats when year is null', () => {
+    const plays = [
+      { gameId: 1, date: '2023-12-31', durationMin: 60, players: [1] },           // Solo, 2023
+      { gameId: 1, date: '2024-01-15', durationMin: 45, players: [1] },           // Solo, 2024
+      { gameId: 2, date: '2024-01-16', durationMin: 30, players: [1] },           // Solo, 2024
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId, null);
+
+    expect(result.totalSoloPlays).toBe(3);
+    expect(result.totalSoloSessions).toBe(3);
+    expect(result.totalSoloMinutes).toBe(135);  // 60 + 45 + 30
+  });
+
+  test('handles empty plays array', () => {
+    const result = stats.getSoloStats([], 1);
+
+    expect(result.totalSoloMinutes).toBe(0);
+    expect(result.totalSoloSessions).toBe(0);
+    expect(result.totalSoloPlays).toBe(0);
+  });
+
+  test('handles no solo plays', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 45, players: [1, 2] },
+      { gameId: 2, date: '2024-01-16', durationMin: 30, players: [1, 2, 3] },
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId);
+
+    expect(result.totalSoloMinutes).toBe(0);
+    expect(result.totalSoloSessions).toBe(0);
+    expect(result.totalSoloPlays).toBe(0);
+  });
+
+  test('does not count single-player games with different player as solo', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 45, players: [2] },           // Single player, but not self
+      { gameId: 2, date: '2024-01-16', durationMin: 30, players: [1] },           // Solo (self only)
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId);
+
+    expect(result.totalSoloPlays).toBe(1);
+    expect(result.totalSoloMinutes).toBe(30);
+  });
+
+  test('returns results in hours, sessions, plays order', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [1] },
+    ];
+    const selfPlayerId = 1;
+
+    const result = stats.getSoloStats(plays, selfPlayerId);
+
+    // Verify the object has keys in the expected order (hours/minutes first, sessions, plays)
+    const keys = Object.keys(result);
+    expect(keys).toEqual(['totalSoloMinutes', 'totalSoloSessions', 'totalSoloPlays']);
+  });
+});

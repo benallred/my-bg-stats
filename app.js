@@ -38,7 +38,8 @@ import {
   getDaysPlayedByGame,
   getTopGamesByMetric,
   getTimeAndActivityStats,
-  getLoggingAchievements
+  getLoggingAchievements,
+  getSoloStats,
 } from './stats.js';
 
 /**
@@ -653,7 +654,10 @@ function updateAllStats() {
             topGamesByPlays: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.PLAYS, 3),
 
             // Logging achievements (cumulative thresholds crossed)
-            loggingAchievements: getLoggingAchievements(gameData.plays, currentYear)
+            loggingAchievements: getLoggingAchievements(gameData.plays, currentYear),
+
+            // Solo gaming stats
+            soloStats: getSoloStats(gameData.plays, gameData.selfPlayerId, currentYear),
         };
     }
 
@@ -2295,6 +2299,38 @@ function showYearReviewDetail(container, statsCache) {
                 }
             });
         });
+    }
+
+    // Add Social & Locations subsection
+    const soloStats = statsCache.yearReview.soloStats;
+    if (soloStats) {
+        const socialSubsection = document.createElement('div');
+        socialSubsection.className = 'year-review-subsection';
+
+        // Format hours from minutes
+        const soloHours = soloStats.totalSoloMinutes / 60;
+        const soloHoursDisplay = soloHours.toFixed(1);
+
+        socialSubsection.innerHTML = `
+            <h3 class="year-review-subsection-heading">Social & Locations</h3>
+            <table class="year-review-table">
+                <tbody>
+                    <tr class="year-review-row">
+                        <td class="year-review-label-detail">Solo <span class="metric-name hours">hours</span>:</td>
+                        <td class="year-review-value-detail">${soloHoursDisplay}</td>
+                    </tr>
+                    <tr class="year-review-row">
+                        <td class="year-review-label-detail">Solo <span class="metric-name sessions">sessions</span>:</td>
+                        <td class="year-review-value-detail">${soloStats.totalSoloSessions.toLocaleString()}</td>
+                    </tr>
+                    <tr class="year-review-row">
+                        <td class="year-review-label-detail">Solo <span class="metric-name plays">plays</span>:</td>
+                        <td class="year-review-value-detail">${soloStats.totalSoloPlays.toLocaleString()}</td>
+                    </tr>
+                </tbody>
+            </table>
+        `;
+        detailDiv.appendChild(socialSubsection);
     }
 
     // Add Logging Achievements subsection

@@ -12,6 +12,14 @@ In board game statistics contexts, "base game" refers exclusively to standalone 
 
 These categories are mutually exclusive. A game classified as an expandalone is NOT a base game, even though it can be played standalone.
 
+### Session Definition
+
+A "session" is approximated as a unique calendar day. Multiple plays may occur during separate sessions on the same day, but we have no way to distinguish them from our data. Therefore:
+
+- **Session**: All plays that occur on the same calendar day
+- Use the term "session" (not "day") when describing this concept in code and UI
+- One session = one unique date, regardless of how many plays occurred
+
 ## Metric Ordering Convention
 
 When hours, sessions, and plays are used together for any reason, they MUST always appear in this order:
@@ -38,17 +46,17 @@ This allows hours to be the default while maintaining logical grouping of explic
 **Examples:**
 ```javascript
 // Correct ordering - variable declarations
-hoursHIndexIncrease: calculateHIndexIncrease(..., 'hours'),
-sessionsHIndexIncrease: calculateHIndexIncrease(..., 'sessions'),
-playsHIndexIncrease: calculateHIndexIncrease(..., 'plays'),
+hoursHIndexIncrease: calculateHIndexIncrease(..., Metric.HOURS),
+sessionsHIndexIncrease: calculateHIndexIncrease(..., Metric.SESSIONS),
+playsHIndexIncrease: calculateHIndexIncrease(..., Metric.PLAYS),
 
 // Correct ordering - switch with hours as default
 switch (metric) {
-  case 'sessions':
+  case Metric.SESSIONS:
     return calculateSessionValue();
-  case 'plays':
+  case Metric.PLAYS:
     return calculatePlaysValue();
-  case 'hours':
+  case Metric.HOURS:
   default:
     return calculateHoursValue();
 }
@@ -76,7 +84,7 @@ function calculateTraditionalHIndex(games, plays, year = null) {
 }
 
 // INCORRECT - don't use arbitrary defaults for required parameters
-function calculateHIndexIncrease(games, plays, year, metric = 'plays') {
+function calculateHIndexIncrease(games, plays, year, metric = Metric.PLAYS) {
   // ...
 }
 ```
@@ -127,6 +135,73 @@ function getDaysPlayedByGame(games, plays, year = null) {
   gameDays.hoursPerDay.set(play.date, currentHours + (play.durationMin / 60));
   // ...
 }
+```
+
+## Metric Keyword Highlighting in Year in Review
+
+When displaying metric keywords (hours, sessions, plays) in Year in Review UI, always wrap them with the `metric-name` span for consistent highlighting:
+
+```html
+<span class="metric-name hours">hours</span>
+<span class="metric-name sessions">sessions</span>
+<span class="metric-name plays">plays</span>
+```
+
+**Example:**
+```javascript
+// CORRECT - metric keywords highlighted
+`Solo <span class="metric-name hours">hours</span>:`
+`Solo <span class="metric-name sessions">sessions</span>:`
+`Solo <span class="metric-name plays">plays</span>:`
+
+// INCORRECT - plain text
+`Solo hours:`
+`Solo sessions:`
+`Solo plays:`
+```
+
+## Trailing Commas
+
+Always use trailing commas in multi-line constructs where they are syntactically valid:
+
+- Array literals
+- Object literals
+- Function parameters and arguments
+- Import/export statements
+
+**Rationale:**
+- Cleaner diffs when adding/removing items (only one line changes)
+- Reduces merge conflicts
+- Consistent style throughout codebase
+
+**Examples:**
+
+```javascript
+// CORRECT - trailing commas
+const stats = {
+    hours: 100,
+    sessions: 50,
+    plays: 200,
+};
+
+const games = [
+    'Catan',
+    'Wingspan',
+    'Azul',
+];
+
+calculateStats(
+    gameData.games,
+    gameData.plays,
+    currentYear,
+);
+
+// INCORRECT - missing trailing commas
+const stats = {
+    hours: 100,
+    sessions: 50,
+    plays: 200
+};
 ```
 
 ## Pre-Commit Requirements

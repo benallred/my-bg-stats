@@ -1940,6 +1940,32 @@ function getSuggestedGames(games, plays) {
   return Array.from(gameMap.values());
 }
 
+/**
+ * Get solo gaming statistics for Year in Review
+ * @param {Array} plays - Array of play objects
+ * @param {number} selfPlayerId - The player ID representing the user
+ * @param {number|null} year - Year to filter by, or null for all time
+ * @returns {Object} Solo statistics: totalSoloMinutes, totalSoloSessions, totalSoloPlays
+ */
+function getSoloStats(plays, selfPlayerId, year = null) {
+  const filteredPlays = year
+    ? plays.filter(play => play.date.startsWith(year.toString()))
+    : plays;
+
+  const soloPlays = filteredPlays.filter(
+    play => play.players.length === 1 && play.players[0] === selfPlayerId
+  );
+
+  const soloDates = new Set(soloPlays.map(play => play.date));
+  const totalSoloMinutes = soloPlays.reduce((sum, play) => sum + play.durationMin, 0);
+
+  return {
+    totalSoloMinutes,
+    totalSoloSessions: soloDates.size,
+    totalSoloPlays: soloPlays.length,
+  };
+}
+
 // Export functions for testing (ES modules)
 export {
   Metric,
@@ -1981,5 +2007,6 @@ export {
   getNextMilestoneTarget,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
-  getSuggestedGames
+  getSuggestedGames,
+  getSoloStats,
 };
