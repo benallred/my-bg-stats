@@ -1966,6 +1966,44 @@ function getSoloStats(plays, selfPlayerId, year = null) {
   };
 }
 
+/**
+ * Get top locations by number of sessions (unique play dates)
+ * @param {Array} plays - Array of play objects
+ * @param {Array} locations - Array of location objects with locationId and name
+ * @param {number|null} year - Year to filter by, or null for all time
+ * @param {number} limit - Maximum number of locations to return
+ * @returns {Array} Array of { locationId, name, sessions } sorted by sessions descending
+ */
+function getTopLocationsBySession(plays, locations, year, limit = 3) {
+  const filteredPlays = year
+    ? plays.filter(play => play.date.startsWith(year.toString()))
+    : plays;
+
+  // Create location lookup map
+  const locationMap = new Map(locations.map(loc => [loc.locationId, loc.name]));
+
+  // Group plays by locationId and collect unique dates
+  const locationDates = new Map();
+  for (const play of filteredPlays) {
+    if (!locationDates.has(play.locationId)) {
+      locationDates.set(play.locationId, new Set());
+    }
+    locationDates.get(play.locationId).add(play.date);
+  }
+
+  // Convert to array with session counts and sort
+  const results = Array.from(locationDates.entries())
+    .map(([locationId, dates]) => ({
+      locationId,
+      name: locationMap.get(locationId) || `Location ${locationId}`,
+      sessions: dates.size,
+    }))
+    .sort((a, b) => b.sessions - a.sessions)
+    .slice(0, limit);
+
+  return results;
+}
+
 // Export functions for testing (ES modules)
 export {
   Metric,
@@ -2009,4 +2047,5 @@ export {
   selectRandomWeightedBySqrtRarity,
   getSuggestedGames,
   getSoloStats,
+  getTopLocationsBySession,
 };

@@ -2642,3 +2642,124 @@ describe('getSoloStats', () => {
     expect(keys).toEqual(['totalSoloMinutes', 'totalSoloSessions', 'totalSoloPlays']);
   });
 });
+
+describe('getTopLocationsBySession', () => {
+  const locations = [
+    { locationId: 1, name: 'Home' },
+    { locationId: 2, name: 'Church' },
+    { locationId: 3, name: 'Work' },
+    { locationId: 4, name: 'Vacation' },
+  ];
+
+  test('returns top 3 locations sorted by session count', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-01', locationId: 1 },
+      { gameId: 1, date: '2024-01-02', locationId: 1 },
+      { gameId: 1, date: '2024-01-03', locationId: 1 },
+      { gameId: 1, date: '2024-01-04', locationId: 2 },
+      { gameId: 1, date: '2024-01-05', locationId: 2 },
+      { gameId: 1, date: '2024-01-06', locationId: 3 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, null, 3);
+
+    expect(result).toHaveLength(3);
+    expect(result[0]).toEqual({ locationId: 1, name: 'Home', sessions: 3 });
+    expect(result[1]).toEqual({ locationId: 2, name: 'Church', sessions: 2 });
+    expect(result[2]).toEqual({ locationId: 3, name: 'Work', sessions: 1 });
+  });
+
+  test('counts unique dates (sessions) not plays per location', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-01', locationId: 1 },
+      { gameId: 2, date: '2024-01-01', locationId: 1 },  // Same date, same location
+      { gameId: 3, date: '2024-01-01', locationId: 1 },  // Same date, same location
+      { gameId: 1, date: '2024-01-02', locationId: 2 },
+      { gameId: 2, date: '2024-01-03', locationId: 2 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, null, 3);
+
+    expect(result[0]).toEqual({ locationId: 2, name: 'Church', sessions: 2 });
+    expect(result[1]).toEqual({ locationId: 1, name: 'Home', sessions: 1 });
+  });
+
+  test('filters by year when specified', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-01', locationId: 1 },
+      { gameId: 1, date: '2023-01-02', locationId: 1 },
+      { gameId: 1, date: '2024-01-01', locationId: 2 },
+      { gameId: 1, date: '2024-01-02', locationId: 2 },
+      { gameId: 1, date: '2024-01-03', locationId: 2 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual({ locationId: 2, name: 'Church', sessions: 3 });
+  });
+
+  test('returns all locations when year is null', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-01', locationId: 1 },
+      { gameId: 1, date: '2024-01-01', locationId: 2 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, null, 3);
+
+    expect(result).toHaveLength(2);
+  });
+
+  test('handles empty plays array', () => {
+    const result = stats.getTopLocationsBySession([], locations, null, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('returns fewer than limit if insufficient locations', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-01', locationId: 1 },
+      { gameId: 1, date: '2024-01-02', locationId: 2 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, null, 5);
+
+    expect(result).toHaveLength(2);
+  });
+
+  test('returns empty array when no plays match year filter', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-01', locationId: 1 },
+      { gameId: 1, date: '2023-01-02', locationId: 2 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('handles unknown location IDs gracefully', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-01', locationId: 999 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, null, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('Location 999');
+    expect(result[0].sessions).toBe(1);
+  });
+
+  test('respects limit parameter', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-01', locationId: 1 },
+      { gameId: 1, date: '2024-01-02', locationId: 2 },
+      { gameId: 1, date: '2024-01-03', locationId: 3 },
+      { gameId: 1, date: '2024-01-04', locationId: 4 },
+    ];
+
+    const result = stats.getTopLocationsBySession(plays, locations, null, 2);
+
+    expect(result).toHaveLength(2);
+  });
+});

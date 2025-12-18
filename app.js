@@ -40,6 +40,7 @@ import {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
+  getTopLocationsBySession,
 } from './stats.js';
 
 /**
@@ -658,6 +659,9 @@ function updateAllStats() {
 
             // Solo gaming stats
             soloStats: getSoloStats(gameData.plays, gameData.selfPlayerId, currentYear),
+
+            // Top locations by session count
+            topLocations: getTopLocationsBySession(gameData.plays, gameData.locations, currentYear, 2),
         };
     }
 
@@ -2303,6 +2307,7 @@ function showYearReviewDetail(container, statsCache) {
 
     // Add Social & Locations subsection
     const soloStats = statsCache.yearReview.soloStats;
+    const topLocations = statsCache.yearReview.topLocations;
     if (soloStats) {
         const socialSubsection = document.createElement('div');
         socialSubsection.className = 'year-review-subsection';
@@ -2310,6 +2315,11 @@ function showYearReviewDetail(container, statsCache) {
         // Format hours from minutes
         const soloHours = soloStats.totalSoloMinutes / 60;
         const soloHoursDisplay = soloHours.toFixed(1);
+
+        // Format top locations
+        const topLocationsDisplay = topLocations && topLocations.length > 0
+            ? topLocations.map(loc => `${loc.name} (${loc.sessions} days)`).join('<br>')
+            : 'No locations recorded';
 
         socialSubsection.innerHTML = `
             <h3 class="year-review-subsection-heading">Social & Locations</h3>
@@ -2326,6 +2336,10 @@ function showYearReviewDetail(container, statsCache) {
                     <tr class="year-review-row">
                         <td class="year-review-label-detail">Solo <span class="metric-name plays">plays</span>:</td>
                         <td class="year-review-value-detail">${soloStats.totalSoloPlays.toLocaleString()}</td>
+                    </tr>
+                    <tr class="year-review-row">
+                        <td class="year-review-label-detail">Top locations:</td>
+                        <td class="year-review-value-detail">${topLocationsDisplay}</td>
                     </tr>
                 </tbody>
             </table>
