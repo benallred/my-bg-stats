@@ -202,6 +202,7 @@ function initializeImageModal() {
   document.addEventListener('click', (e) => {
     const thumbnail = e.target.closest('.game-image-clickable');
     if (thumbnail) {
+      e.stopPropagation(); // Prevent click from bubbling to parent row handlers
       const fullImageUrl = thumbnail.dataset.fullImage;
       if (fullImageUrl) {
         modalImg.src = fullImageUrl;
@@ -517,6 +518,15 @@ function setupBaseMetricFilter() {
             const milestoneStats = ['fives', 'dimes', 'quarters', 'centuries'];
             if (milestoneStats.includes(currentlyOpenStatType)) {
                 showDetailSection(currentlyOpenStatType);
+            }
+
+            // Update year-review filter if open and toggle is not checked
+            if (currentlyOpenStatType === 'year-review') {
+                const toggleCheckbox = document.getElementById('year-review-show-all-metrics');
+                const detailDiv = document.querySelector('.year-review-detail');
+                if (toggleCheckbox && detailDiv && !toggleCheckbox.checked) {
+                    applyYearReviewMetricFilter(detailDiv, false);
+                }
             }
         }
 
@@ -1332,6 +1342,34 @@ const statDetailHandlers = {
         getSummary: () => ({
             mainValue: ''
         }),
+        renderSummary: (summaryElement, detailContent) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const showAllMetricsParam = urlParams.get('showAllMetrics') === 'true';
+
+            summaryElement.innerHTML = `
+                <div class="year-review-filter-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="year-review-show-all-metrics" ${showAllMetricsParam ? 'checked' : ''}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Show all base metrics</span>
+                </div>
+            `;
+            summaryElement.style.display = 'block';
+
+            // Add toggle event handler
+            const toggleCheckbox = document.getElementById('year-review-show-all-metrics');
+            const detailDiv = detailContent.querySelector('.year-review-detail');
+            if (toggleCheckbox && detailDiv) {
+                toggleCheckbox.addEventListener('change', () => {
+                    applyYearReviewMetricFilter(detailDiv, toggleCheckbox.checked);
+                    updateURL();
+                });
+
+                // Apply initial filter
+                applyYearReviewMetricFilter(detailDiv, showAllMetricsParam);
+            }
+        },
         render: (detailContent, statsCache) => {
             showYearReviewDetail(detailContent, statsCache);
         }
@@ -1379,6 +1417,11 @@ function showDetailSection(statType) {
 
     // Render content using handler
     handler.render(detailContent, statsCache, currentYear);
+
+    // Call renderSummary if handler provides custom summary rendering
+    if (handler.renderSummary) {
+        handler.renderSummary(detailStatSummary, detailContent);
+    }
 
     // Show section
     detailSection.style.display = 'block';
@@ -2031,7 +2074,7 @@ function showYearReviewDetail(container, statsCache) {
             const rankLabels = ['1st', '2nd', '3rd'];
 
             return `
-                <tr class="year-review-row year-review-row-clickable" data-detail="top-${metric}">
+                <tr class="year-review-row year-review-row-clickable" data-detail="top-${metric}" data-metric="${metric}">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
                         Top ${topGames.length} games played by <span class="metric-name ${metric}">${metric}</span>:
@@ -2040,7 +2083,7 @@ function showYearReviewDetail(container, statsCache) {
                         <span class="top-games-thumbnails">${thumbnails}</span>
                     </td>
                 </tr>
-                <tr class="year-review-expanded-content" data-detail="top-${metric}" style="display: none;">
+                <tr class="year-review-expanded-content" data-detail="top-${metric}" data-metric="${metric}" style="display: none;">
                     <td colspan="2">
                         <div class="year-review-games-list">
                             ${topGames.map((item, index) => `
@@ -2069,24 +2112,6 @@ function showYearReviewDetail(container, statsCache) {
             </table>
         `;
         detailDiv.appendChild(gameHighlightsSubsection);
-
-        // Add click handlers for expandable rows
-        const gameHighlightsClickableRows = gameHighlightsSubsection.querySelectorAll('.year-review-row-clickable');
-        gameHighlightsClickableRows.forEach(row => {
-            row.addEventListener('click', () => {
-                const detail = row.dataset.detail;
-                const expandedRow = gameHighlightsSubsection.querySelector(`.year-review-expanded-content[data-detail="${detail}"]`);
-                const icon = row.querySelector('.year-review-expand-icon');
-
-                if (expandedRow && expandedRow.style.display === 'none') {
-                    expandedRow.style.display = 'table-row';
-                    icon.textContent = '▼';
-                } else if (expandedRow) {
-                    expandedRow.style.display = 'none';
-                    icon.textContent = '▶';
-                }
-            });
-        });
     }
 
     // Add Time & Activity subsection
@@ -2285,24 +2310,6 @@ function showYearReviewDetail(container, statsCache) {
         `;
 
         detailDiv.appendChild(timeActivitySubsection);
-
-        // Add click handlers for expandable rows
-        const timeActivityClickableRows = timeActivitySubsection.querySelectorAll('.year-review-row-clickable');
-        timeActivityClickableRows.forEach(row => {
-            row.addEventListener('click', () => {
-                const detail = row.dataset.detail;
-                const expandedRow = timeActivitySubsection.querySelector(`.year-review-expanded-content[data-detail="${detail}"]`);
-                const icon = row.querySelector('.year-review-expand-icon');
-
-                if (expandedRow && expandedRow.style.display === 'none') {
-                    expandedRow.style.display = 'table-row';
-                    icon.textContent = '▼';
-                } else if (expandedRow) {
-                    expandedRow.style.display = 'none';
-                    icon.textContent = '▶';
-                }
-            });
-        });
     }
 
     // Add Social & Locations subsection
@@ -2325,15 +2332,15 @@ function showYearReviewDetail(container, statsCache) {
             <h3 class="year-review-subsection-heading">Social & Locations</h3>
             <table class="year-review-table">
                 <tbody>
-                    <tr class="year-review-row">
+                    <tr class="year-review-row" data-metric="hours">
                         <td class="year-review-label-detail">Solo <span class="metric-name hours">hours</span>:</td>
                         <td class="year-review-value-detail">${soloHoursDisplay}</td>
                     </tr>
-                    <tr class="year-review-row">
+                    <tr class="year-review-row" data-metric="sessions">
                         <td class="year-review-label-detail">Solo <span class="metric-name sessions">sessions</span>:</td>
                         <td class="year-review-value-detail">${soloStats.totalSoloSessions.toLocaleString()}</td>
                     </tr>
-                    <tr class="year-review-row">
+                    <tr class="year-review-row" data-metric="plays">
                         <td class="year-review-label-detail">Solo <span class="metric-name plays">plays</span>:</td>
                         <td class="year-review-value-detail">${soloStats.totalSoloPlays.toLocaleString()}</td>
                     </tr>
@@ -2374,7 +2381,7 @@ function showYearReviewDetail(container, statsCache) {
             const formattedDate = formatAchievementDate(achievement.date);
 
             return `
-                <tr class="year-review-row">
+                <tr class="year-review-row" data-metric="${achievement.metric}">
                     <td class="year-review-label-detail">
                         Logged ${formattedThreshold}th <span class="metric-name ${achievement.metric}">${metricLabel}</span>
                     </td>
@@ -2447,14 +2454,14 @@ function showYearReviewDetail(container, statsCache) {
             }
 
             milestoneRows.push(`
-                <tr class="year-review-row year-review-row-clickable" data-milestone="${rowId}">
+                <tr class="year-review-row year-review-row-clickable" data-milestone="${rowId}" data-metric="${def.metric}">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
                         Increase in ${def.label} by <span class="metric-name ${def.metric}">${def.metric}</span> (played ${def.range} ${def.unit} total):
                     </td>
                     <td class="year-review-value-detail">${displayValue}</td>
                 </tr>
-                <tr class="year-review-expanded-content" data-milestone="${rowId}" style="display: none;">
+                <tr class="year-review-expanded-content" data-milestone="${rowId}" data-metric="${def.metric}" style="display: none;">
                     <td colspan="2">
                         <div class="year-review-games-list">
                             ${summaryText}
@@ -2496,24 +2503,24 @@ function showYearReviewDetail(container, statsCache) {
     // Add click handlers for expandable rows
     const clickableRows = detailDiv.querySelectorAll('.year-review-row-clickable');
     clickableRows.forEach(row => {
-        row.addEventListener('click', () => {
-            // Check if this is a metric row (h-index) or milestone row
-            const metric = row.dataset.metric;
-            const milestone = row.dataset.milestone;
+        row.addEventListener('click', (e) => {
+            // Ignore clicks on thumbnails (they open the image modal)
+            if (e.target.closest('.top-games-thumbnails')) {
+                return;
+            }
 
-            let expandedRow;
-            if (metric) {
-                expandedRow = detailDiv.querySelector(`.year-review-expanded-content[data-metric="${metric}"]`);
-            } else if (milestone) {
-                expandedRow = detailDiv.querySelector(`.year-review-expanded-content[data-milestone="${milestone}"]`);
+            // The expanded content row always immediately follows the clickable row
+            const expandedRow = row.nextElementSibling;
+            if (!expandedRow || !expandedRow.classList.contains('year-review-expanded-content')) {
+                return;
             }
 
             const icon = row.querySelector('.year-review-expand-icon');
 
-            if (expandedRow && expandedRow.style.display === 'none') {
+            if (expandedRow.style.display === 'none') {
                 expandedRow.style.display = 'table-row';
                 icon.textContent = '▼';
-            } else if (expandedRow) {
+            } else {
                 expandedRow.style.display = 'none';
                 icon.textContent = '▶';
             }
@@ -2521,6 +2528,38 @@ function showYearReviewDetail(container, statsCache) {
     });
 
     container.appendChild(detailDiv);
+}
+
+/**
+ * Apply metric filter to Year in Review rows
+ * @param {HTMLElement} detailDiv - The year review detail container
+ * @param {boolean} showAll - If true, show all metrics; if false, filter to currentBaseMetric
+ */
+function applyYearReviewMetricFilter(detailDiv, showAll) {
+    const metricRows = detailDiv.querySelectorAll('[data-metric]');
+    metricRows.forEach(row => {
+        const rowMetric = row.dataset.metric;
+        const shouldShow = showAll || rowMetric === currentBaseMetric;
+        const isExpandedContent = row.classList.contains('year-review-expanded-content');
+
+        if (shouldShow) {
+            // Expanded content rows should stay hidden until clicked
+            // Regular rows should be visible
+            if (!isExpandedContent) {
+                row.style.display = '';
+            }
+        } else {
+            row.style.display = 'none';
+
+            // If hiding a clickable row, also collapse its icon
+            if (row.classList.contains('year-review-row-clickable')) {
+                const icon = row.querySelector('.year-review-expand-icon');
+                if (icon) {
+                    icon.textContent = '▶';
+                }
+            }
+        }
+    });
 }
 
 /**
@@ -2846,6 +2885,14 @@ function updateURL() {
     // Add stat parameter if a section is open
     if (currentlyOpenStatType) {
         params.set('stat', currentlyOpenStatType);
+
+        // Add showAllMetrics param if year-review toggle is checked
+        if (currentlyOpenStatType === 'year-review') {
+            const toggleCheckbox = document.getElementById('year-review-show-all-metrics');
+            if (toggleCheckbox && toggleCheckbox.checked) {
+                params.set('showAllMetrics', 'true');
+            }
+        }
     } else if (currentlyOpenDiagnosticType) {
         params.set('stat', currentlyOpenDiagnosticType);
     }

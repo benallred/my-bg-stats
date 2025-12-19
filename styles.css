@@ -1225,6 +1225,65 @@ footer p {
 .metric-name.plays {
     color: var(--color-metric-plays);
 }
+
+/* Year Review Filter Toggle */
+.year-review-filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-primary);
+    border-radius: 22px;
+    transition: background-color var(--transition-hover), border-color var(--transition-hover);
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--text-secondary);
+    border-radius: 50%;
+    transition: transform var(--transition-hover), background-color var(--transition-hover);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    border-color: var(--color-primary);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(18px);
+    background-color: var(--color-primary);
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
 .year-review-no-games {
     color: var(--text-secondary);
     font-style: italic;
