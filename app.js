@@ -221,6 +221,7 @@ let currentlyOpenStatType = null;
 let currentlyOpenDiagnosticType = null;
 let yearDataCache = null;
 let isLoadingFromPermalink = false;
+let showAllYearReviewMetrics = false;
 
 // Cache for calculated statistics (refreshed when year changes)
 let statsCache = null;
@@ -1343,13 +1344,10 @@ const statDetailHandlers = {
             mainValue: ''
         }),
         renderSummary: (summaryElement, detailContent) => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const showAllMetricsParam = urlParams.get('showAllMetrics') === 'true';
-
             summaryElement.innerHTML = `
                 <div class="year-review-filter-toggle">
                     <label class="toggle-switch">
-                        <input type="checkbox" id="year-review-show-all-metrics" ${showAllMetricsParam ? 'checked' : ''}>
+                        <input type="checkbox" id="year-review-show-all-metrics" ${showAllYearReviewMetrics ? 'checked' : ''}>
                         <span class="toggle-slider"></span>
                     </label>
                     <span class="toggle-label">Show all base metrics</span>
@@ -1362,12 +1360,13 @@ const statDetailHandlers = {
             const detailDiv = detailContent.querySelector('.year-review-detail');
             if (toggleCheckbox && detailDiv) {
                 toggleCheckbox.addEventListener('change', () => {
+                    showAllYearReviewMetrics = toggleCheckbox.checked;
                     applyYearReviewMetricFilter(detailDiv, toggleCheckbox.checked);
                     updateURL();
                 });
 
                 // Apply initial filter
-                applyYearReviewMetricFilter(detailDiv, showAllMetricsParam);
+                applyYearReviewMetricFilter(detailDiv, showAllYearReviewMetrics);
             }
         },
         render: (detailContent, statsCache) => {
@@ -2946,6 +2945,12 @@ function loadFromPermalink() {
     const baseMetricParam = urlParams.get('baseMetric');
     const statParam = urlParams.get('stat');
     const modalParam = urlParams.get('modal');
+    const showAllMetricsParam = urlParams.get('showAllMetrics');
+
+    // Initialize showAllYearReviewMetrics from URL before early return check
+    if (showAllMetricsParam === 'true') {
+        showAllYearReviewMetrics = true;
+    }
 
     if (!yearParam && !baseMetricParam && !statParam && !modalParam) {
         return; // No permalink parameters
@@ -3056,16 +3061,13 @@ function updateURL() {
     // Add stat parameter if a section is open
     if (currentlyOpenStatType) {
         params.set('stat', currentlyOpenStatType);
-
-        // Add showAllMetrics param if year-review toggle is checked
-        if (currentlyOpenStatType === 'year-review') {
-            const toggleCheckbox = document.getElementById('year-review-show-all-metrics');
-            if (toggleCheckbox && toggleCheckbox.checked) {
-                params.set('showAllMetrics', 'true');
-            }
-        }
     } else if (currentlyOpenDiagnosticType) {
         params.set('stat', currentlyOpenDiagnosticType);
+    }
+
+    // Add showAllMetrics param if toggle is enabled (persists even when section is closed)
+    if (showAllYearReviewMetrics) {
+        params.set('showAllMetrics', 'true');
     }
 
     // Add modal parameter if h-index modal is open
