@@ -8,6 +8,7 @@ import {
   getCumulativeMilestoneCount,
   calculateMilestoneIncrease,
   getNewMilestoneGames,
+  getSkippedMilestoneCount,
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getOwnedBaseGamesMissingPricePaid,
@@ -561,6 +562,121 @@ describe('getNewMilestoneGames', () => {
     ];
     const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
     expect(result.length).toBe(1);
+  });
+});
+
+describe('getSkippedMilestoneCount', () => {
+  test('counts games that skip fives (jump from <5 to >=10)', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had 3 plays in 2020, gets 10 more in 2021 = 13 total (skips fives, lands in dimes)
+    const testPlays = [
+      { gameId: 1, date: '2020-01-01', durationMin: 60 },
+      { gameId: 1, date: '2020-01-02', durationMin: 60 },
+      { gameId: 1, date: '2020-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-01', durationMin: 60 },
+      { gameId: 1, date: '2021-01-02', durationMin: 60 },
+      { gameId: 1, date: '2021-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-04', durationMin: 60 },
+      { gameId: 1, date: '2021-01-05', durationMin: 60 },
+      { gameId: 1, date: '2021-01-06', durationMin: 60 },
+      { gameId: 1, date: '2021-01-07', durationMin: 60 },
+      { gameId: 1, date: '2021-01-08', durationMin: 60 },
+      { gameId: 1, date: '2021-01-09', durationMin: 60 },
+      { gameId: 1, date: '2021-01-10', durationMin: 60 },
+    ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    expect(result).toBe(1);
+  });
+
+  test('does not count games that land within the range', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had 3 plays in 2020, gets 4 more in 2021 = 7 total (lands in fives, not skipped)
+    const testPlays = [
+      { gameId: 1, date: '2020-01-01', durationMin: 60 },
+      { gameId: 1, date: '2020-01-02', durationMin: 60 },
+      { gameId: 1, date: '2020-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-01', durationMin: 60 },
+      { gameId: 1, date: '2021-01-02', durationMin: 60 },
+      { gameId: 1, date: '2021-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-04', durationMin: 60 },
+    ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    expect(result).toBe(0);
+  });
+
+  test('returns 0 for centuries (cannot be skipped)', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    const testPlays = [];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'centuries');
+    expect(result).toBe(0);
+  });
+
+  test('counts games that skip dimes (jump from <10 to >=25)', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had 8 plays in 2020, gets 20 more in 2021 = 28 total (skips dimes, lands in quarters)
+    const testPlays = [
+      { gameId: 1, date: '2020-01-01', durationMin: 60 },
+      { gameId: 1, date: '2020-01-02', durationMin: 60 },
+      { gameId: 1, date: '2020-01-03', durationMin: 60 },
+      { gameId: 1, date: '2020-01-04', durationMin: 60 },
+      { gameId: 1, date: '2020-01-05', durationMin: 60 },
+      { gameId: 1, date: '2020-01-06', durationMin: 60 },
+      { gameId: 1, date: '2020-01-07', durationMin: 60 },
+      { gameId: 1, date: '2020-01-08', durationMin: 60 },
+      ...Array.from({ length: 20 }, (_, i) => ({
+        gameId: 1,
+        date: `2021-01-${String(i + 1).padStart(2, '0')}`,
+        durationMin: 60,
+      })),
+    ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'dimes');
+    expect(result).toBe(1);
+  });
+
+  test('works with hours metric', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had 3 hours in 2020, gets 8 more in 2021 = 11 total (skips fives, lands in dimes)
+    const testPlays = [
+      { gameId: 1, date: '2020-01-01', durationMin: 180 },
+      { gameId: 1, date: '2021-01-01', durationMin: 480 },
+    ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'hours', 'fives');
+    expect(result).toBe(1);
+  });
+
+  test('works with sessions metric', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had 3 sessions in 2020, gets 8 more in 2021 = 11 total (skips fives, lands in dimes)
+    const testPlays = [
+      { gameId: 1, date: '2020-01-01', durationMin: 60 },
+      { gameId: 1, date: '2020-01-02', durationMin: 60 },
+      { gameId: 1, date: '2020-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-01', durationMin: 60 },
+      { gameId: 1, date: '2021-01-02', durationMin: 60 },
+      { gameId: 1, date: '2021-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-04', durationMin: 60 },
+      { gameId: 1, date: '2021-01-05', durationMin: 60 },
+      { gameId: 1, date: '2021-01-06', durationMin: 60 },
+      { gameId: 1, date: '2021-01-07', durationMin: 60 },
+      { gameId: 1, date: '2021-01-08', durationMin: 60 },
+    ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'sessions', 'fives');
+    expect(result).toBe(1);
+  });
+
+  test('does not count games already above threshold in previous year', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had 12 plays in 2020 (already above fives max), gets more in 2021
+    const testPlays = [
+      ...Array.from({ length: 12 }, (_, i) => ({
+        gameId: 1,
+        date: `2020-01-${String(i + 1).padStart(2, '0')}`,
+        durationMin: 60,
+      })),
+      { gameId: 1, date: '2021-01-01', durationMin: 60 },
+    ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    expect(result).toBe(0);
   });
 });
 

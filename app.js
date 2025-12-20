@@ -18,6 +18,7 @@ import {
   getNewHIndexGames,
   calculateMilestoneIncrease,
   getNewMilestoneGames,
+  getSkippedMilestoneCount,
   getTotalBGGEntries,
   getTotalGamesOwned,
   getTotalExpansions,
@@ -2633,14 +2634,17 @@ function showYearReviewDetail(container, statsCache) {
             const entered = newGames.length;
             const graduated = entered - increase;
 
+            // Calculate skipped count (games that jumped over this milestone entirely)
+            const skipped = getSkippedMilestoneCount(gameData.games, gameData.plays, currentYear, def.metric, def.type);
+
             // Build summary text for the expanded section
             let summaryText = '';
-            if (newGames.length > 0) {
-                if (graduated > 0) {
-                    summaryText = `<div class="year-review-milestone-summary">${entered} entered • ${graduated} graduated</div>`;
-                } else {
-                    summaryText = `<div class="year-review-milestone-summary">${entered} entered</div>`;
-                }
+            if (newGames.length > 0 || skipped > 0) {
+                const parts = [];
+                if (entered > 0) parts.push(`${entered} entered`);
+                if (graduated > 0) parts.push(`${graduated} graduated`);
+                if (skipped > 0) parts.push(`${skipped} skipped`);
+                summaryText = `<div class="year-review-milestone-summary">${parts.join(' • ')}</div>`;
             }
 
             milestoneRows.push(`
