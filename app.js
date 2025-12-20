@@ -1958,9 +1958,180 @@ function showYearReviewDetail(container, statsCache) {
     const newSessionsGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'sessions');
     const newPlaysGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'plays');
 
+    // Helper function to format natural language lists ("A, B, and C")
+    const formatNaturalList = (items) => {
+        if (items.length === 0) return '';
+        if (items.length === 1) return items[0];
+        if (items.length === 2) return `${items[0]} and ${items[1]}`;
+        return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+    };
+
+    // Build Summary section bullet points
+    const summaryBullets = [];
+
+    // H-Index Growth summary
+    const hIndexParts = [];
+    if (statsCache.yearReview.hoursHIndexIncrease > 0) {
+        hIndexParts.push(`<span class="metric-name hours">hours</span> h-index by ${statsCache.yearReview.hoursHIndexIncrease} (to ${statsCache.yearReview.hoursHIndexCurrent})`);
+    }
+    if (statsCache.yearReview.sessionsHIndexIncrease > 0) {
+        hIndexParts.push(`<span class="metric-name sessions">sessions</span> h-index by ${statsCache.yearReview.sessionsHIndexIncrease} (to ${statsCache.yearReview.sessionsHIndexCurrent})`);
+    }
+    if (statsCache.yearReview.playsHIndexIncrease > 0) {
+        hIndexParts.push(`<span class="metric-name plays">plays</span> h-index by ${statsCache.yearReview.playsHIndexIncrease} (to ${statsCache.yearReview.playsHIndexCurrent})`);
+    }
+    if (hIndexParts.length > 0) {
+        summaryBullets.push(`Increased ${formatNaturalList(hIndexParts)}`);
+    }
+
+    // Game Highlights summary
+    const topHoursGame = statsCache.yearReview.topGamesByHours[0];
+    const topSessionsGame = statsCache.yearReview.topGamesBySessions[0];
+    const topPlaysGame = statsCache.yearReview.topGamesByPlays[0];
+    if (topHoursGame || topSessionsGame || topPlaysGame) {
+        // Group metrics by game name to consolidate duplicates
+        const gameToMetrics = new Map();
+        const metricOrder = ['hours', 'sessions', 'plays'];
+        const games = [
+            { game: topHoursGame, metric: 'hours' },
+            { game: topSessionsGame, metric: 'sessions' },
+            { game: topPlaysGame, metric: 'plays' },
+        ];
+        games.forEach(({ game, metric }) => {
+            if (game) {
+                const name = game.game.name;
+                if (!gameToMetrics.has(name)) {
+                    gameToMetrics.set(name, []);
+                }
+                gameToMetrics.get(name).push(metric);
+            }
+        });
+
+        // Build parts in metric order (by first metric each game appears in)
+        const gameHighlightParts = [];
+        const processedGames = new Set();
+        metricOrder.forEach(metric => {
+            games.filter(g => g.metric === metric && g.game).forEach(({ game }) => {
+                const name = game.game.name;
+                if (!processedGames.has(name)) {
+                    processedGames.add(name);
+                    const metrics = gameToMetrics.get(name);
+                    const metricSpans = metrics.map(m =>
+                        `<span class="metric-name ${m}">${m}</span>`
+                    );
+                    gameHighlightParts.push(`by ${formatNaturalList(metricSpans)} was <em>${name}</em>`);
+                }
+            });
+        });
+
+        if (gameHighlightParts.length > 0) {
+            summaryBullets.push(`Top game ${formatNaturalList(gameHighlightParts)}`);
+        }
+    }
+
+    // Time & Activity summary
+    const timeAndActivityData = statsCache.yearReview.timeAndActivity;
+    if (timeAndActivityData && timeAndActivityData.totalDays > 0) {
+        const totalHoursExact = timeAndActivityData.totalMinutes / 60;
+        const totalHoursFloor = Math.floor(totalHoursExact);
+        const decimal = totalHoursExact - totalHoursFloor;
+        const hoursStr = decimal < 0.5
+            ? `more than ${totalHoursFloor} hours`
+            : `almost ${totalHoursFloor + 1} hours`;
+        let activityBullet = `Played ${timeAndActivityData.totalDays} days totaling ${hoursStr}`;
+        if (timeAndActivityData.longestStreak > 1) {
+            activityBullet += `, with a ${timeAndActivityData.longestStreak}-day streak`;
+        }
+        summaryBullets.push(activityBullet);
+    }
+
+    // Social & Locations summary (solo stats - show hours or sessions, whichever is greater)
+    const soloStatsData = statsCache.yearReview.soloStats;
+    if (soloStatsData) {
+        const soloHoursExact = soloStatsData.totalSoloMinutes / 60;
+        const soloSessions = soloStatsData.totalSoloSessions;
+        if (soloHoursExact > 0 || soloSessions > 0) {
+            if (soloHoursExact >= soloSessions) {
+                const soloHoursFloor = Math.floor(soloHoursExact);
+                const decimal = soloHoursExact - soloHoursFloor;
+                const soloHoursStr = decimal < 0.5
+                    ? `more than ${soloHoursFloor}`
+                    : `almost ${soloHoursFloor + 1}`;
+                summaryBullets.push(`Logged ${soloHoursStr} solo <span class="metric-name hours">hours</span>`);
+            } else {
+                summaryBullets.push(`Logged ${soloSessions} solo <span class="metric-name sessions">sessions</span>`);
+            }
+        }
+    }
+
+    // Logging Achievements summary (highest threshold per metric)
+    const loggingAchievementsData = statsCache.yearReview.loggingAchievements;
+    if (loggingAchievementsData && loggingAchievementsData.length > 0) {
+        // Find highest threshold for each metric
+        const highestByMetric = {};
+        loggingAchievementsData.forEach(a => {
+            if (!highestByMetric[a.metric] || a.threshold > highestByMetric[a.metric]) {
+                highestByMetric[a.metric] = a.threshold;
+            }
+        });
+        const achievementParts = [];
+        if (highestByMetric.hours) {
+            achievementParts.push(`${highestByMetric.hours.toLocaleString()}th <span class="metric-name hours">hour</span>`);
+        }
+        if (highestByMetric.sessions) {
+            achievementParts.push(`${highestByMetric.sessions.toLocaleString()}th <span class="metric-name sessions">session</span>`);
+        }
+        if (highestByMetric.plays) {
+            achievementParts.push(`${highestByMetric.plays.toLocaleString()}th <span class="metric-name plays">play</span>`);
+        }
+        if (achievementParts.length > 0) {
+            summaryBullets.push(`Logged ${formatNaturalList(achievementParts)}`);
+        }
+    }
+
+    // Milestones summary (highest milestone type with increase > 0 per metric)
+    const milestoneTypes = ['centuries', 'quarters', 'dimes', 'fives']; // highest to lowest
+    const findHighestMilestone = (metric) => {
+        for (const type of milestoneTypes) {
+            const increaseKey = `${type}${metric.charAt(0).toUpperCase() + metric.slice(1)}Increase`;
+            const currentKey = `${type}${metric.charAt(0).toUpperCase() + metric.slice(1)}Current`;
+            if (statsCache.yearReview[increaseKey] > 0) {
+                return { type, increase: statsCache.yearReview[increaseKey], current: statsCache.yearReview[currentKey] };
+            }
+        }
+        return null;
+    };
+    const hoursMilestone = findHighestMilestone('hours');
+    const sessionsMilestone = findHighestMilestone('sessions');
+    const playsMilestone = findHighestMilestone('plays');
+    const milestoneParts = [];
+    if (hoursMilestone) {
+        milestoneParts.push(`<span class="metric-name hours">hour</span> ${hoursMilestone.type} by ${hoursMilestone.increase} (to ${hoursMilestone.current})`);
+    }
+    if (sessionsMilestone) {
+        milestoneParts.push(`<span class="metric-name sessions">session</span> ${sessionsMilestone.type} by ${sessionsMilestone.increase} (to ${sessionsMilestone.current})`);
+    }
+    if (playsMilestone) {
+        milestoneParts.push(`<span class="metric-name plays">play</span> ${playsMilestone.type} by ${playsMilestone.increase} (to ${playsMilestone.current})`);
+    }
+    if (milestoneParts.length > 0) {
+        summaryBullets.push(`Increased ${formatNaturalList(milestoneParts)}`);
+    }
+
+    // Build Summary HTML
+    const summaryHtml = summaryBullets.length > 0
+        ? `<div class="year-review-summary year-review-subsection">
+            <h3 class="year-review-subsection-heading">Summary</h3>
+            <ul>
+                ${summaryBullets.map(bullet => `<li>${bullet}</li>`).join('')}
+            </ul>
+        </div>`
+        : '';
+
     const detailDiv = document.createElement('div');
     detailDiv.className = 'year-review-detail';
     detailDiv.innerHTML = `
+        ${summaryHtml}
         <div class="year-review-subsection">
             <h3 class="year-review-subsection-heading">H-Index Growth</h3>
             <table class="year-review-table">
