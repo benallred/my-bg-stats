@@ -271,14 +271,13 @@ function getSoloStats(plays, selfPlayerId, year = null) {
 }
 
 /**
- * Get top locations by number of sessions (unique play dates)
+ * Get all locations by number of sessions (unique play dates)
  * @param {Array} plays - Array of play objects
  * @param {Array} locations - Array of location objects with locationId and name
  * @param {number|null} year - Year to filter by, or null for all time
- * @param {number} limit - Maximum number of locations to return
  * @returns {Array} Array of { locationId, name, sessions } sorted by sessions descending
  */
-function getTopLocationsBySession(plays, locations, year, limit = 3) {
+function getAllLocationsBySession(plays, locations, year = null) {
   const filteredPlays = year
     ? plays.filter(play => play.date.startsWith(year.toString()))
     : plays;
@@ -302,8 +301,7 @@ function getTopLocationsBySession(plays, locations, year, limit = 3) {
       name: locationMap.get(locationId) || `Location ${locationId}`,
       sessions: dates.size,
     }))
-    .sort((a, b) => b.sessions - a.sessions)
-    .slice(0, limit);
+    .sort((a, b) => b.sessions - a.sessions);
 
   return results;
 }
@@ -312,5 +310,5 @@ export {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
-  getTopLocationsBySession,
+  getAllLocationsBySession,
 };

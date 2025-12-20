@@ -3,7 +3,7 @@ import {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
-  getTopLocationsBySession,
+  getAllLocationsBySession,
 } from './year-review.js';
 
 describe('getTimeAndActivityStats', () => {
@@ -466,7 +466,7 @@ describe('getSoloStats', () => {
   });
 });
 
-describe('getTopLocationsBySession', () => {
+describe('getAllLocationsBySession', () => {
   const locations = [
     { locationId: 1, name: 'Home' },
     { locationId: 2, name: 'Church' },
@@ -474,7 +474,7 @@ describe('getTopLocationsBySession', () => {
     { locationId: 4, name: 'Vacation' },
   ];
 
-  test('returns top 3 locations sorted by session count', () => {
+  test('returns all locations sorted by session count', () => {
     const plays = [
       { gameId: 1, date: '2024-01-01', locationId: 1 },
       { gameId: 1, date: '2024-01-02', locationId: 1 },
@@ -484,7 +484,7 @@ describe('getTopLocationsBySession', () => {
       { gameId: 1, date: '2024-01-06', locationId: 3 },
     ];
 
-    const result = getTopLocationsBySession(plays, locations, null, 3);
+    const result = getAllLocationsBySession(plays, locations);
 
     expect(result).toHaveLength(3);
     expect(result[0]).toEqual({ locationId: 1, name: 'Home', sessions: 3 });
@@ -501,7 +501,7 @@ describe('getTopLocationsBySession', () => {
       { gameId: 2, date: '2024-01-03', locationId: 2 },
     ];
 
-    const result = getTopLocationsBySession(plays, locations, null, 3);
+    const result = getAllLocationsBySession(plays, locations);
 
     expect(result[0]).toEqual({ locationId: 2, name: 'Church', sessions: 2 });
     expect(result[1]).toEqual({ locationId: 1, name: 'Home', sessions: 1 });
@@ -516,7 +516,7 @@ describe('getTopLocationsBySession', () => {
       { gameId: 1, date: '2024-01-03', locationId: 2 },
     ];
 
-    const result = getTopLocationsBySession(plays, locations, 2024, 3);
+    const result = getAllLocationsBySession(plays, locations, 2024);
 
     expect(result).toHaveLength(1);
     expect(result[0]).toEqual({ locationId: 2, name: 'Church', sessions: 3 });
@@ -528,26 +528,15 @@ describe('getTopLocationsBySession', () => {
       { gameId: 1, date: '2024-01-01', locationId: 2 },
     ];
 
-    const result = getTopLocationsBySession(plays, locations, null, 3);
+    const result = getAllLocationsBySession(plays, locations);
 
     expect(result).toHaveLength(2);
   });
 
   test('handles empty plays array', () => {
-    const result = getTopLocationsBySession([], locations, null, 3);
+    const result = getAllLocationsBySession([], locations);
 
     expect(result).toEqual([]);
-  });
-
-  test('returns fewer than limit if insufficient locations', () => {
-    const plays = [
-      { gameId: 1, date: '2024-01-01', locationId: 1 },
-      { gameId: 1, date: '2024-01-02', locationId: 2 },
-    ];
-
-    const result = getTopLocationsBySession(plays, locations, null, 5);
-
-    expect(result).toHaveLength(2);
   });
 
   test('returns empty array when no plays match year filter', () => {
@@ -556,7 +545,7 @@ describe('getTopLocationsBySession', () => {
       { gameId: 1, date: '2023-01-02', locationId: 2 },
     ];
 
-    const result = getTopLocationsBySession(plays, locations, 2024, 3);
+    const result = getAllLocationsBySession(plays, locations, 2024);
 
     expect(result).toEqual([]);
   });
@@ -564,14 +553,14 @@ describe('getTopLocationsBySession', () => {
   test('handles unknown location IDs gracefully', () => {
     const plays = [{ gameId: 1, date: '2024-01-01', locationId: 999 }];
 
-    const result = getTopLocationsBySession(plays, locations, null, 3);
+    const result = getAllLocationsBySession(plays, locations);
 
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('Location 999');
     expect(result[0].sessions).toBe(1);
   });
 
-  test('respects limit parameter', () => {
+  test('returns all locations without any limit', () => {
     const plays = [
       { gameId: 1, date: '2024-01-01', locationId: 1 },
       { gameId: 1, date: '2024-01-02', locationId: 2 },
@@ -579,8 +568,8 @@ describe('getTopLocationsBySession', () => {
       { gameId: 1, date: '2024-01-04', locationId: 4 },
     ];
 
-    const result = getTopLocationsBySession(plays, locations, null, 2);
+    const result = getAllLocationsBySession(plays, locations);
 
-    expect(result).toHaveLength(2);
+    expect(result).toHaveLength(4);
   });
 });

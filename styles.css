@@ -1359,6 +1359,12 @@ footer p {
         gap: 0.25rem;
     }
 
+    .year-review-game-item--inline {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     .year-review-game-name {
         font-size: 0.85rem;
     }

@@ -40,7 +40,7 @@ import {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
-  getTopLocationsBySession,
+  getAllLocationsBySession,
 } from './stats.js';
 
 /**
@@ -672,7 +672,7 @@ function updateAllStats() {
             soloStats: getSoloStats(gameData.plays, gameData.selfPlayerId, currentYear),
 
             // Top locations by session count
-            topLocations: getTopLocationsBySession(gameData.plays, gameData.locations, currentYear, 2),
+            allLocations: getAllLocationsBySession(gameData.plays, gameData.locations, currentYear),
         };
     }
 
@@ -2030,6 +2030,7 @@ function showYearReviewDetail(container, statsCache) {
 
     // Time & Activity summary
     const timeAndActivityData = statsCache.yearReview.timeAndActivity;
+    const allLocationsData = statsCache.yearReview.allLocations;
     if (timeAndActivityData && timeAndActivityData.totalDays > 0) {
         const totalHoursExact = timeAndActivityData.totalMinutes / 60;
         const totalHoursFloor = Math.floor(totalHoursExact);
@@ -2038,6 +2039,9 @@ function showYearReviewDetail(container, statsCache) {
             ? `more than ${totalHoursFloor} hours`
             : `almost ${totalHoursFloor + 1} hours`;
         let activityBullet = `Played ${timeAndActivityData.totalDays} days totaling ${hoursStr}`;
+        if (allLocationsData && allLocationsData.length > 0) {
+            activityBullet += ` at ${allLocationsData.length} location${allLocationsData.length === 1 ? '' : 's'}`;
+        }
         if (timeAndActivityData.longestStreak > 1) {
             activityBullet += `, with a ${timeAndActivityData.longestStreak}-day streak`;
         }
@@ -2484,7 +2488,7 @@ function showYearReviewDetail(container, statsCache) {
 
     // Add Social & Locations subsection
     const soloStats = statsCache.yearReview.soloStats;
-    const topLocations = statsCache.yearReview.topLocations;
+    const allLocations = statsCache.yearReview.allLocations;
     if (soloStats) {
         const socialSubsection = document.createElement('div');
         socialSubsection.className = 'year-review-subsection';
@@ -2493,10 +2497,16 @@ function showYearReviewDetail(container, statsCache) {
         const soloHours = soloStats.totalSoloMinutes / 60;
         const soloHoursDisplay = soloHours.toFixed(1);
 
-        // Format top locations
-        const topLocationsDisplay = topLocations && topLocations.length > 0
-            ? topLocations.map(loc => `${loc.name} (${loc.sessions} days)`).join('<br>')
-            : 'No locations recorded';
+        // Format locations for expandable list
+        const locationCount = allLocations ? allLocations.length : 0;
+        const locationsListHtml = allLocations && allLocations.length > 0
+            ? allLocations.map(loc => `
+                <div class="year-review-game-item year-review-game-item--inline">
+                    <span class="year-review-game-name">${loc.name}</span>
+                    <span class="year-review-game-value">${loc.sessions} <span class="metric-name sessions">sessions</span></span>
+                </div>
+            `).join('')
+            : '<div class="year-review-game-item">No locations recorded</div>';
 
         socialSubsection.innerHTML = `
             <h3 class="year-review-subsection-heading">Social & Locations</h3>
@@ -2514,9 +2524,19 @@ function showYearReviewDetail(container, statsCache) {
                         <td class="year-review-label-detail">Solo <span class="metric-name plays">plays</span>:</td>
                         <td class="year-review-value-detail">${soloStats.totalSoloPlays.toLocaleString()}</td>
                     </tr>
-                    <tr class="year-review-row">
-                        <td class="year-review-label-detail">Top locations:</td>
-                        <td class="year-review-value-detail">${topLocationsDisplay}</td>
+                    <tr class="year-review-row year-review-row-clickable" data-detail="locations">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Locations played at:
+                        </td>
+                        <td class="year-review-value-detail">${locationCount}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-detail="locations" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${locationsListHtml}
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>

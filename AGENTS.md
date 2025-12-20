@@ -204,6 +204,14 @@ const stats = {
 };
 ```
 
+## Year in Review Summary Updates
+
+When adding new details or stats to the Year in Review feature, always ask the user if and how they want the Summary section updated to reflect the new information.
+
+The Summary section provides a high-level overview, so not every detail needs to appear there. Ask the user:
+1. Whether this new stat should be mentioned in the Summary
+2. If yes, how they want it presented (e.g., as a standalone line, incorporated into existing text, etc.)
+
 ## Pre-Commit Requirements
 
 **CRITICAL: Always run the test suite before creating any commit.**
