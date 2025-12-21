@@ -298,6 +298,124 @@ function getLongestSinglePlays(games, plays, year, count) {
 }
 
 /**
+ * Get top games by number of unique players
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to filter by
+ * @param {number} count - Number of games to return
+ * @returns {Array} Array of { game, value } sorted by unique player count descending, then by hours, sessions, plays
+ */
+function getTopGamesByUniquePlayers(games, plays, year, count) {
+  const filteredPlays = plays.filter(
+    play => play.date.startsWith(year.toString())
+  );
+
+  // Create game lookup map
+  const gameMap = new Map(games.map(g => [g.id, g]));
+
+  // Group plays by gameId and collect stats
+  const gameStatsMap = new Map();
+  for (const play of filteredPlays) {
+    if (!gameStatsMap.has(play.gameId)) {
+      gameStatsMap.set(play.gameId, {
+        players: new Set(),
+        minutes: 0,
+        sessions: new Set(),
+        plays: 0,
+      });
+    }
+    const stats = gameStatsMap.get(play.gameId);
+    for (const playerId of play.players) {
+      stats.players.add(playerId);
+    }
+    stats.minutes += play.durationMin;
+    stats.sessions.add(play.date);
+    stats.plays++;
+  }
+
+  // Convert to array with unique player counts and sort
+  const results = Array.from(gameStatsMap.entries())
+    .map(([gameId, stats]) => ({
+      game: gameMap.get(gameId),
+      value: stats.players.size,
+      minutes: stats.minutes,
+      sessions: stats.sessions.size,
+      plays: stats.plays,
+    }))
+    .filter(item => item.game) // Filter out unknown games
+    .sort((a, b) => {
+      // Primary: unique players descending
+      if (b.value !== a.value) return b.value - a.value;
+      // Secondary: hours (minutes) descending
+      if (b.minutes !== a.minutes) return b.minutes - a.minutes;
+      // Tertiary: sessions descending
+      if (b.sessions !== a.sessions) return b.sessions - a.sessions;
+      // Quaternary: plays descending
+      return b.plays - a.plays;
+    });
+
+  return results.slice(0, count);
+}
+
+/**
+ * Get top games by number of unique locations
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to filter by
+ * @param {number} count - Number of games to return
+ * @returns {Array} Array of { game, value } sorted by unique location count descending, then by hours, sessions, plays
+ */
+function getTopGamesByUniqueLocations(games, plays, year, count) {
+  const filteredPlays = plays.filter(
+    play => play.date.startsWith(year.toString())
+  );
+
+  // Create game lookup map
+  const gameMap = new Map(games.map(g => [g.id, g]));
+
+  // Group plays by gameId and collect stats
+  const gameStatsMap = new Map();
+  for (const play of filteredPlays) {
+    if (!gameStatsMap.has(play.gameId)) {
+      gameStatsMap.set(play.gameId, {
+        locations: new Set(),
+        minutes: 0,
+        sessions: new Set(),
+        plays: 0,
+      });
+    }
+    const stats = gameStatsMap.get(play.gameId);
+    stats.locations.add(play.locationId);
+    stats.minutes += play.durationMin;
+    stats.sessions.add(play.date);
+    stats.plays++;
+  }
+
+  // Convert to array with unique location counts and sort
+  const results = Array.from(gameStatsMap.entries())
+    .map(([gameId, stats]) => ({
+      game: gameMap.get(gameId),
+      value: stats.locations.size,
+      minutes: stats.minutes,
+      sessions: stats.sessions.size,
+      plays: stats.plays,
+    }))
+    .filter(item => item.game) // Filter out unknown games
+    .sort((a, b) => {
+      // Primary: unique locations descending
+      if (b.value !== a.value) return b.value - a.value;
+      // Secondary: hours (minutes) descending
+      if (b.minutes !== a.minutes) return b.minutes - a.minutes;
+      // Tertiary: sessions descending
+      if (b.sessions !== a.sessions) return b.sessions - a.sessions;
+      // Quaternary: plays descending
+      return b.plays - a.plays;
+    });
+
+  return results.slice(0, count);
+}
+
+/**
  * Get all locations by number of sessions (unique play dates)
  * @param {Array} plays - Array of play objects
  * @param {Array} locations - Array of location objects with locationId and name
@@ -338,5 +456,7 @@ export {
   getLoggingAchievements,
   getSoloStats,
   getLongestSinglePlays,
+  getTopGamesByUniquePlayers,
+  getTopGamesByUniqueLocations,
   getAllLocationsBySession,
 };

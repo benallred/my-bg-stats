@@ -4,6 +4,8 @@ import {
   getLoggingAchievements,
   getSoloStats,
   getLongestSinglePlays,
+  getTopGamesByUniquePlayers,
+  getTopGamesByUniqueLocations,
   getAllLocationsBySession,
 } from './year-review.js';
 
@@ -690,5 +692,316 @@ describe('getLongestSinglePlays', () => {
     expect(result[1].durationMin).toBe(120);
     expect(result[2].durationMin).toBe(60);
     expect(result.every(r => r.game.name === 'Wingspan')).toBe(true);
+  });
+});
+
+describe('getTopGamesByUniquePlayers', () => {
+  const games = [
+    { id: 1, name: 'Wingspan' },
+    { id: 2, name: 'Catan' },
+    { id: 3, name: 'Azul' },
+    { id: 4, name: 'Ticket to Ride' },
+  ];
+
+  test('returns top 3 games sorted by unique player count descending', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [1, 2, 3] },
+      { gameId: 1, date: '2024-01-16', players: [1, 4] },
+      { gameId: 2, date: '2024-01-17', players: [1, 2] },
+      { gameId: 3, date: '2024-01-18', players: [1, 2, 3, 4, 5] },
+      { gameId: 4, date: '2024-01-19', players: [1] },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(3);
+    expect(result[0].game.name).toBe('Azul');
+    expect(result[0].value).toBe(5);
+    expect(result[1].game.name).toBe('Wingspan');
+    expect(result[1].value).toBe(4);
+    expect(result[2].game.name).toBe('Catan');
+    expect(result[2].value).toBe(2);
+  });
+
+  test('counts unique players across multiple plays of same game', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [1, 2] },
+      { gameId: 1, date: '2024-01-16', players: [2, 3] },
+      { gameId: 1, date: '2024-01-17', players: [3, 4] },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+    expect(result[0].value).toBe(4);
+  });
+
+  test('filters plays by year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-15', players: [1, 2, 3, 4, 5] },
+      { gameId: 2, date: '2024-01-16', players: [1, 2] },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[0].value).toBe(2);
+  });
+
+  test('handles fewer games than requested count', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [1, 2] },
+      { gameId: 2, date: '2024-01-16', players: [1] },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+  });
+
+  test('returns empty array when no plays match year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-15', players: [1, 2] },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('handles empty plays array', () => {
+    const result = getTopGamesByUniquePlayers(games, [], 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('filters out unknown games', () => {
+    const plays = [
+      { gameId: 999, date: '2024-01-15', players: [1, 2, 3] },
+      { gameId: 1, date: '2024-01-16', players: [1, 2] },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+  });
+
+  test('handles empty players array', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [], durationMin: 60 },
+      { gameId: 2, date: '2024-01-16', players: [1, 2], durationMin: 60 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[0].value).toBe(2);
+    expect(result[1].game.name).toBe('Wingspan');
+    expect(result[1].value).toBe(0);
+  });
+
+  test('breaks ties by hours (minutes) descending', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [1, 2], durationMin: 60 },
+      { gameId: 2, date: '2024-01-16', players: [3, 4], durationMin: 120 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].value).toBe(2);
+    expect(result[1].value).toBe(2);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[1].game.name).toBe('Wingspan');
+  });
+
+  test('breaks ties by sessions descending when hours are equal', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [1, 2], durationMin: 60 },
+      { gameId: 2, date: '2024-01-16', players: [3, 4], durationMin: 30 },
+      { gameId: 2, date: '2024-01-17', players: [3, 4], durationMin: 30 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].value).toBe(2);
+    expect(result[1].value).toBe(2);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[1].game.name).toBe('Wingspan');
+  });
+
+  test('breaks ties by plays descending when hours and sessions are equal', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [1, 2], durationMin: 30 },
+      { gameId: 2, date: '2024-01-16', players: [3, 4], durationMin: 15 },
+      { gameId: 2, date: '2024-01-16', players: [3, 4], durationMin: 15 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].value).toBe(2);
+    expect(result[1].value).toBe(2);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[1].game.name).toBe('Wingspan');
+  });
+});
+
+describe('getTopGamesByUniqueLocations', () => {
+  const games = [
+    { id: 1, name: 'Wingspan' },
+    { id: 2, name: 'Catan' },
+    { id: 3, name: 'Azul' },
+    { id: 4, name: 'Ticket to Ride' },
+  ];
+
+  test('returns top 3 games sorted by unique location count descending', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', locationId: 1 },
+      { gameId: 1, date: '2024-01-16', locationId: 2 },
+      { gameId: 1, date: '2024-01-17', locationId: 3 },
+      { gameId: 2, date: '2024-01-18', locationId: 1 },
+      { gameId: 2, date: '2024-01-19', locationId: 2 },
+      { gameId: 3, date: '2024-01-20', locationId: 1 },
+      { gameId: 4, date: '2024-01-21', locationId: 1 },
+      { gameId: 4, date: '2024-01-22', locationId: 2 },
+      { gameId: 4, date: '2024-01-23', locationId: 3 },
+      { gameId: 4, date: '2024-01-24', locationId: 4 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(3);
+    expect(result[0].game.name).toBe('Ticket to Ride');
+    expect(result[0].value).toBe(4);
+    expect(result[1].game.name).toBe('Wingspan');
+    expect(result[1].value).toBe(3);
+    expect(result[2].game.name).toBe('Catan');
+    expect(result[2].value).toBe(2);
+  });
+
+  test('counts unique locations across multiple plays of same game', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', locationId: 1 },
+      { gameId: 1, date: '2024-01-16', locationId: 1 },
+      { gameId: 1, date: '2024-01-17', locationId: 2 },
+      { gameId: 1, date: '2024-01-18', locationId: 2 },
+      { gameId: 1, date: '2024-01-19', locationId: 3 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+    expect(result[0].value).toBe(3);
+  });
+
+  test('filters plays by year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-15', locationId: 1 },
+      { gameId: 1, date: '2023-01-16', locationId: 2 },
+      { gameId: 1, date: '2023-01-17', locationId: 3 },
+      { gameId: 2, date: '2024-01-18', locationId: 1 },
+      { gameId: 2, date: '2024-01-19', locationId: 2 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[0].value).toBe(2);
+  });
+
+  test('handles fewer games than requested count', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', locationId: 1 },
+      { gameId: 2, date: '2024-01-16', locationId: 1 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+  });
+
+  test('returns empty array when no plays match year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-15', locationId: 1 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('handles empty plays array', () => {
+    const result = getTopGamesByUniqueLocations(games, [], 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('filters out unknown games', () => {
+    const plays = [
+      { gameId: 999, date: '2024-01-15', locationId: 1, durationMin: 60 },
+      { gameId: 999, date: '2024-01-16', locationId: 2, durationMin: 60 },
+      { gameId: 999, date: '2024-01-17', locationId: 3, durationMin: 60 },
+      { gameId: 1, date: '2024-01-18', locationId: 1, durationMin: 60 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+  });
+
+  test('breaks ties by hours (minutes) descending', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', locationId: 1, durationMin: 60 },
+      { gameId: 2, date: '2024-01-16', locationId: 2, durationMin: 120 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].value).toBe(1);
+    expect(result[1].value).toBe(1);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[1].game.name).toBe('Wingspan');
+  });
+
+  test('breaks ties by sessions descending when hours are equal', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', locationId: 1, durationMin: 60 },
+      { gameId: 2, date: '2024-01-16', locationId: 2, durationMin: 30 },
+      { gameId: 2, date: '2024-01-17', locationId: 2, durationMin: 30 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].value).toBe(1);
+    expect(result[1].value).toBe(1);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[1].game.name).toBe('Wingspan');
+  });
+
+  test('breaks ties by plays descending when hours and sessions are equal', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', locationId: 1, durationMin: 30 },
+      { gameId: 2, date: '2024-01-16', locationId: 2, durationMin: 15 },
+      { gameId: 2, date: '2024-01-16', locationId: 2, durationMin: 15 },
+    ];
+
+    const result = getTopGamesByUniqueLocations(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].value).toBe(1);
+    expect(result[1].value).toBe(1);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[1].game.name).toBe('Wingspan');
   });
 });

@@ -42,6 +42,8 @@ import {
   getLoggingAchievements,
   getSoloStats,
   getLongestSinglePlays,
+  getTopGamesByUniquePlayers,
+  getTopGamesByUniqueLocations,
   getAllLocationsBySession,
 } from './stats.js';
 
@@ -671,6 +673,12 @@ function updateAllStats() {
 
             // Longest single plays
             longestSinglePlays: getLongestSinglePlays(gameData.games, gameData.plays, currentYear, 3),
+
+            // Top games by unique players (most shared)
+            topGamesByUniquePlayers: getTopGamesByUniquePlayers(gameData.games, gameData.plays, currentYear, 3),
+
+            // Top games by unique locations (most travelled)
+            topGamesByUniqueLocations: getTopGamesByUniqueLocations(gameData.games, gameData.plays, currentYear, 3),
 
             // Logging achievements (cumulative thresholds crossed)
             loggingAchievements: getLoggingAchievements(gameData.plays, currentYear),
@@ -2229,8 +2237,10 @@ function showYearReviewDetail(container, statsCache) {
     const topSessions = statsCache.yearReview.topGamesBySessions;
     const topPlays = statsCache.yearReview.topGamesByPlays;
     const longestSinglePlays = statsCache.yearReview.longestSinglePlays;
+    const topSharedGames = statsCache.yearReview.topGamesByUniquePlayers;
+    const topTravelledGames = statsCache.yearReview.topGamesByUniqueLocations;
 
-    if (topHours.length > 0 || topSessions.length > 0 || topPlays.length > 0 || longestSinglePlays.length > 0) {
+    if (topHours.length > 0 || topSessions.length > 0 || topPlays.length > 0 || longestSinglePlays.length > 0 || topSharedGames.length > 0 || topTravelledGames.length > 0) {
         const formatHoursValue = (minutes) => {
             const hours = minutes / 60;
             return `${hours.toFixed(1)} hours this year`;
@@ -2308,6 +2318,70 @@ function showYearReviewDetail(container, statsCache) {
             `;
         };
 
+        const renderMostSharedGamesRow = () => {
+            if (topSharedGames.length === 0) return '';
+
+            const thumbnails = topSharedGames.map(item => renderGameThumbnailOnly(item.game)).join('');
+            const rankLabels = ['1st', '2nd', '3rd'];
+
+            return `
+                <tr class="year-review-row year-review-row-clickable" data-detail="most-shared">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Top ${topSharedGames.length} most shared games:
+                    </td>
+                    <td class="year-review-value-detail">
+                        <span class="top-games-thumbnails">${thumbnails}</span>
+                    </td>
+                </tr>
+                <tr class="year-review-expanded-content" data-detail="most-shared" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${topSharedGames.map((item, index) => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-rank">${rankLabels[index]}</span>
+                                    <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                    <span class="year-review-game-value">${item.value} unique player${item.value !== 1 ? 's' : ''}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        };
+
+        const renderMostTravelledGamesRow = () => {
+            if (topTravelledGames.length === 0) return '';
+
+            const thumbnails = topTravelledGames.map(item => renderGameThumbnailOnly(item.game)).join('');
+            const rankLabels = ['1st', '2nd', '3rd'];
+
+            return `
+                <tr class="year-review-row year-review-row-clickable" data-detail="most-travelled">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Top ${topTravelledGames.length} most travelled games:
+                    </td>
+                    <td class="year-review-value-detail">
+                        <span class="top-games-thumbnails">${thumbnails}</span>
+                    </td>
+                </tr>
+                <tr class="year-review-expanded-content" data-detail="most-travelled" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${topTravelledGames.map((item, index) => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-rank">${rankLabels[index]}</span>
+                                    <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                    <span class="year-review-game-value">${item.value} location${item.value !== 1 ? 's' : ''}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        };
+
         const gameHighlightsSubsection = document.createElement('div');
         gameHighlightsSubsection.className = 'year-review-subsection';
         gameHighlightsSubsection.innerHTML = `
@@ -2318,6 +2392,8 @@ function showYearReviewDetail(container, statsCache) {
                     ${renderTopGamesRow('sessions', topSessions, formatSessionsValue)}
                     ${renderTopGamesRow('plays', topPlays, formatPlaysValue)}
                     ${renderLongestPlaysRow()}
+                    ${renderMostSharedGamesRow()}
+                    ${renderMostTravelledGamesRow()}
                 </tbody>
             </table>
         `;
