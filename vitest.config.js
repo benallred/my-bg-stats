@@ -6,7 +6,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
-      include: ['stats.js', 'stats/**/*.js'],
+      include: ['stats.js', 'stats/**/*.js', 'utils.js', 'formatting.js'],
       exclude: ['scripts/**', 'tests/**', 'node_modules/**', '**/*.test.js'],
       all: false,
       thresholds: {

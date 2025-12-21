@@ -3,6 +3,7 @@ import {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
+  getLongestSinglePlays,
   getAllLocationsBySession,
 } from './year-review.js';
 
@@ -571,5 +572,123 @@ describe('getAllLocationsBySession', () => {
     const result = getAllLocationsBySession(plays, locations);
 
     expect(result).toHaveLength(4);
+  });
+});
+
+describe('getLongestSinglePlays', () => {
+  const games = [
+    { id: 1, name: 'Wingspan' },
+    { id: 2, name: 'Catan' },
+    { id: 3, name: 'Azul' },
+    { id: 4, name: 'Ticket to Ride' },
+  ];
+
+  test('returns top 3 longest plays sorted by duration descending', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 2, date: '2024-01-16', durationMin: 180 },
+      { gameId: 3, date: '2024-01-17', durationMin: 120 },
+      { gameId: 4, date: '2024-01-18', durationMin: 90 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(3);
+    expect(result[0].durationMin).toBe(180);
+    expect(result[0].game.name).toBe('Catan');
+    expect(result[1].durationMin).toBe(120);
+    expect(result[1].game.name).toBe('Azul');
+    expect(result[2].durationMin).toBe(90);
+    expect(result[2].game.name).toBe('Ticket to Ride');
+  });
+
+  test('includes date in results', () => {
+    const plays = [
+      { gameId: 1, date: '2024-08-11', durationMin: 120 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result[0].date).toBe('2024-08-11');
+  });
+
+  test('filters plays by year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-15', durationMin: 300 },
+      { gameId: 2, date: '2024-01-16', durationMin: 180 },
+      { gameId: 3, date: '2025-01-17', durationMin: 240 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].durationMin).toBe(180);
+  });
+
+  test('handles fewer plays than requested count', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 2, date: '2024-01-16', durationMin: 120 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(2);
+  });
+
+  test('excludes plays with zero duration', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 0 },
+      { gameId: 2, date: '2024-01-16', durationMin: 60 },
+      { gameId: 3, date: '2024-01-17', durationMin: 0 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].durationMin).toBe(60);
+  });
+
+  test('returns empty array when no plays match year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-15', durationMin: 120 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('returns empty array when all plays have zero duration', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 0 },
+      { gameId: 2, date: '2024-01-16', durationMin: 0 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('handles empty plays array', () => {
+    const result = getLongestSinglePlays(games, [], 2024, 3);
+
+    expect(result).toEqual([]);
+  });
+
+  test('handles multiple plays of same game', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 1, date: '2024-01-16', durationMin: 180 },
+      { gameId: 1, date: '2024-01-17', durationMin: 120 },
+    ];
+
+    const result = getLongestSinglePlays(games, plays, 2024, 3);
+
+    expect(result).toHaveLength(3);
+    expect(result[0].durationMin).toBe(180);
+    expect(result[1].durationMin).toBe(120);
+    expect(result[2].durationMin).toBe(60);
+    expect(result.every(r => r.game.name === 'Wingspan')).toBe(true);
   });
 });

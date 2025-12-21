@@ -41,8 +41,11 @@ import {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
+  getLongestSinglePlays,
   getAllLocationsBySession,
 } from './stats.js';
+
+import { formatApproximateHours, formatDateShort, formatDateWithWeekday } from './formatting.js';
 
 /**
  * Helper: Get acquisition date for a game (from first owned or first copy)
@@ -665,6 +668,9 @@ function updateAllStats() {
             topGamesByHours: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.HOURS, 3),
             topGamesBySessions: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, 3),
             topGamesByPlays: getTopGamesByMetric(gameData.games, gameData.plays, currentYear, Metric.PLAYS, 3),
+
+            // Longest single plays
+            longestSinglePlays: getLongestSinglePlays(gameData.games, gameData.plays, currentYear, 3),
 
             // Logging achievements (cumulative thresholds crossed)
             loggingAchievements: getLoggingAchievements(gameData.plays, currentYear),
@@ -2029,17 +2035,17 @@ function showYearReviewDetail(container, statsCache) {
         }
     }
 
+    // Longest single play summary
+    const longestPlay = statsCache.yearReview.longestSinglePlays[0];
+    if (longestPlay) {
+        summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of <em>${longestPlay.game.name}</em>`);
+    }
+
     // Time & Activity summary
     const timeAndActivityData = statsCache.yearReview.timeAndActivity;
     const allLocationsData = statsCache.yearReview.allLocations;
     if (timeAndActivityData && timeAndActivityData.totalDays > 0) {
-        const totalHoursExact = timeAndActivityData.totalMinutes / 60;
-        const totalHoursFloor = Math.floor(totalHoursExact);
-        const decimal = totalHoursExact - totalHoursFloor;
-        const hoursStr = decimal < 0.5
-            ? `more than ${totalHoursFloor} hours`
-            : `almost ${totalHoursFloor + 1} hours`;
-        let activityBullet = `Played ${timeAndActivityData.totalDays} days totaling ${hoursStr}`;
+        let activityBullet = `Played ${timeAndActivityData.totalDays} days totaling ${formatApproximateHours(timeAndActivityData.totalMinutes)} hours`;
         if (allLocationsData && allLocationsData.length > 0) {
             activityBullet += ` at ${allLocationsData.length} location${allLocationsData.length === 1 ? '' : 's'}`;
         }
@@ -2056,12 +2062,7 @@ function showYearReviewDetail(container, statsCache) {
         const soloSessions = soloStatsData.totalSoloSessions;
         if (soloHoursExact > 0 || soloSessions > 0) {
             if (soloHoursExact >= soloSessions) {
-                const soloHoursFloor = Math.floor(soloHoursExact);
-                const decimal = soloHoursExact - soloHoursFloor;
-                const soloHoursStr = decimal < 0.5
-                    ? `more than ${soloHoursFloor}`
-                    : `almost ${soloHoursFloor + 1}`;
-                summaryBullets.push(`Logged ${soloHoursStr} solo <span class="metric-name hours">hours</span>`);
+                summaryBullets.push(`Logged ${formatApproximateHours(soloStatsData.totalSoloMinutes)} solo <span class="metric-name hours">hours</span>`);
             } else {
                 summaryBullets.push(`Logged ${soloSessions} solo <span class="metric-name sessions">sessions</span>`);
             }
@@ -2227,8 +2228,9 @@ function showYearReviewDetail(container, statsCache) {
     const topHours = statsCache.yearReview.topGamesByHours;
     const topSessions = statsCache.yearReview.topGamesBySessions;
     const topPlays = statsCache.yearReview.topGamesByPlays;
+    const longestSinglePlays = statsCache.yearReview.longestSinglePlays;
 
-    if (topHours.length > 0 || topSessions.length > 0 || topPlays.length > 0) {
+    if (topHours.length > 0 || topSessions.length > 0 || topPlays.length > 0 || longestSinglePlays.length > 0) {
         const formatHoursValue = (minutes) => {
             const hours = minutes / 60;
             return `${hours.toFixed(1)} hours this year`;
@@ -2274,6 +2276,38 @@ function showYearReviewDetail(container, statsCache) {
             `;
         };
 
+        const renderLongestPlaysRow = () => {
+            if (longestSinglePlays.length === 0) return '';
+
+            const thumbnails = longestSinglePlays.map(item => renderGameThumbnailOnly(item.game)).join('');
+            const rankLabels = ['1st', '2nd', '3rd'];
+
+            return `
+                <tr class="year-review-row year-review-row-clickable" data-detail="longest-plays">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Top ${longestSinglePlays.length} longest single plays:
+                    </td>
+                    <td class="year-review-value-detail">
+                        <span class="top-games-thumbnails">${thumbnails}</span>
+                    </td>
+                </tr>
+                <tr class="year-review-expanded-content" data-detail="longest-plays" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${longestSinglePlays.map((item, index) => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-rank">${rankLabels[index]}</span>
+                                    <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                    <span class="year-review-game-value">${(item.durationMin / 60).toFixed(1)} hours on ${formatDateWithWeekday(item.date)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        };
+
         const gameHighlightsSubsection = document.createElement('div');
         gameHighlightsSubsection.className = 'year-review-subsection';
         gameHighlightsSubsection.innerHTML = `
@@ -2283,6 +2317,7 @@ function showYearReviewDetail(container, statsCache) {
                     ${renderTopGamesRow('hours', topHours, formatHoursValue)}
                     ${renderTopGamesRow('sessions', topSessions, formatSessionsValue)}
                     ${renderTopGamesRow('plays', topPlays, formatPlaysValue)}
+                    ${renderLongestPlaysRow()}
                 </tbody>
             </table>
         `;
@@ -2300,20 +2335,6 @@ function showYearReviewDetail(container, statsCache) {
                 return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
             }
             return `${mins}m`;
-        };
-
-        const formatDate = (dateString) => {
-            if (!dateString) return '-';
-            const [year, month, day] = dateString.split('-').map(Number);
-            const date = new Date(year, month - 1, day);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        };
-
-        const formatDateWithDay = (dateString) => {
-            if (!dateString) return '-';
-            const [year, month, day] = dateString.split('-').map(Number);
-            const date = new Date(year, month - 1, day);
-            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         };
 
         const timeActivitySubsection = document.createElement('div');
@@ -2356,7 +2377,7 @@ function showYearReviewDetail(container, statsCache) {
                         <span class="year-review-expand-icon">▶</span>
                         Most unique games in one day:
                     </td>
-                    <td class="year-review-value-detail">${timeAndActivity.mostGamesDay} games on <span class="nowrap-date">${formatDateWithDay(timeAndActivity.mostGamesDayDate)}</span></td>
+                    <td class="year-review-value-detail">${timeAndActivity.mostGamesDay} games on <span class="nowrap-date">${formatDateWithWeekday(timeAndActivity.mostGamesDayDate)}</span></td>
                 </tr>
                 <tr class="year-review-expanded-content" data-detail="most-games-day" style="display: none;">
                     <td colspan="2">
@@ -2391,7 +2412,7 @@ function showYearReviewDetail(container, statsCache) {
                         <span class="year-review-expand-icon">▶</span>
                         Longest total playtime in one day:
                     </td>
-                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.longestDayMinutes)} on <span class="nowrap-date">${formatDateWithDay(timeAndActivity.longestDayDate)}</span></td>
+                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.longestDayMinutes)} on <span class="nowrap-date">${formatDateWithWeekday(timeAndActivity.longestDayDate)}</span></td>
                 </tr>
                 <tr class="year-review-expanded-content" data-detail="longest-day" style="display: none;">
                     <td colspan="2">
@@ -2426,7 +2447,7 @@ function showYearReviewDetail(container, statsCache) {
                         <span class="year-review-expand-icon">▶</span>
                         Shortest total playtime in one day:
                     </td>
-                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.shortestDayMinutes)} on <span class="nowrap-date">${formatDateWithDay(timeAndActivity.shortestDayDate)}</span></td>
+                    <td class="year-review-value-detail">${formatMinutes(timeAndActivity.shortestDayMinutes)} on <span class="nowrap-date">${formatDateWithWeekday(timeAndActivity.shortestDayDate)}</span></td>
                 </tr>
                 <tr class="year-review-expanded-content" data-detail="shortest-day" style="display: none;">
                     <td colspan="2">
@@ -2447,9 +2468,9 @@ function showYearReviewDetail(container, statsCache) {
         if (timeAndActivity.longestStreak > 0) {
             let streakValue;
             if (timeAndActivity.longestStreak === 1) {
-                streakValue = `1 day (${formatDate(timeAndActivity.longestStreakStart)})`;
+                streakValue = `1 day (${formatDateShort(timeAndActivity.longestStreakStart)})`;
             } else {
-                streakValue = `${timeAndActivity.longestStreak} days (${formatDate(timeAndActivity.longestStreakStart)} to ${formatDate(timeAndActivity.longestStreakEnd)})`;
+                streakValue = `${timeAndActivity.longestStreak} days (${formatDateShort(timeAndActivity.longestStreakStart)} to ${formatDateShort(timeAndActivity.longestStreakEnd)})`;
             }
             timeActivityRows.push(`
                 <tr class="year-review-row">
@@ -2463,9 +2484,9 @@ function showYearReviewDetail(container, statsCache) {
         if (timeAndActivity.longestDrySpell > 0) {
             let drySpellValue;
             if (timeAndActivity.longestDrySpell === 1) {
-                drySpellValue = `1 day (${formatDate(timeAndActivity.longestDrySpellStart)})`;
+                drySpellValue = `1 day (${formatDateShort(timeAndActivity.longestDrySpellStart)})`;
             } else {
-                drySpellValue = `${timeAndActivity.longestDrySpell} days (${formatDate(timeAndActivity.longestDrySpellStart)} to ${formatDate(timeAndActivity.longestDrySpellEnd)})`;
+                drySpellValue = `${timeAndActivity.longestDrySpell} days (${formatDateShort(timeAndActivity.longestDrySpellStart)} to ${formatDateShort(timeAndActivity.longestDrySpellEnd)})`;
             }
             timeActivityRows.push(`
                 <tr class="year-review-row">
@@ -2548,11 +2569,6 @@ function showYearReviewDetail(container, statsCache) {
     // Add Logging Achievements subsection
     const loggingAchievements = statsCache.yearReview.loggingAchievements;
     if (loggingAchievements && loggingAchievements.length > 0) {
-        const formatAchievementDate = (dateStr) => {
-            const date = new Date(dateStr + 'T00:00:00');
-            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        };
-
         const formatThreshold = (threshold) => {
             return threshold.toLocaleString();
         };
@@ -2569,7 +2585,7 @@ function showYearReviewDetail(container, statsCache) {
         const achievementRows = loggingAchievements.map(achievement => {
             const metricLabel = getMetricLabel(achievement.metric);
             const formattedThreshold = formatThreshold(achievement.threshold);
-            const formattedDate = formatAchievementDate(achievement.date);
+            const formattedDate = formatDateWithWeekday(achievement.date);
 
             return `
                 <tr class="year-review-row" data-metric="${achievement.metric}">

@@ -1,6 +1,6 @@
 /**
  * Utility Functions Module
- * Shared helper functions used across the application
+ * General-purpose helper functions
  */
 
 /**

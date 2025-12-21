@@ -271,6 +271,33 @@ function getSoloStats(plays, selfPlayerId, year = null) {
 }
 
 /**
+ * Get the longest single plays for Year in Review
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to filter by
+ * @param {number} count - Number of plays to return
+ * @returns {Array} Array of { game, durationMin, date } sorted by duration descending
+ */
+function getLongestSinglePlays(games, plays, year, count) {
+  const filteredPlays = plays.filter(
+    play => play.date.startsWith(year.toString()) && play.durationMin > 0
+  );
+
+  // Sort by duration descending
+  const sortedPlays = [...filteredPlays].sort((a, b) => b.durationMin - a.durationMin);
+
+  // Create game lookup map
+  const gameMap = new Map(games.map(g => [g.id, g]));
+
+  // Take top N and map to result format
+  return sortedPlays.slice(0, count).map(play => ({
+    game: gameMap.get(play.gameId),
+    durationMin: play.durationMin,
+    date: play.date,
+  }));
+}
+
+/**
  * Get all locations by number of sessions (unique play dates)
  * @param {Array} plays - Array of play objects
  * @param {Array} locations - Array of location objects with locationId and name
@@ -310,5 +337,6 @@ export {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
+  getLongestSinglePlays,
   getAllLocationsBySession,
 };
