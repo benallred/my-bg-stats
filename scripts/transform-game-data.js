@@ -338,9 +338,19 @@ function processPlays(plays, gamesMap) {
       // playUsedGameCopyType === OTHER_PLAYER_COPY: copyId remains null
     }
 
-    // Extract player IDs from playerScores
+    // Extract player IDs from playerScores, excluding NPCs
     const players = play.playerScores && Array.isArray(play.playerScores)
-      ? play.playerScores.map(ps => ps.playerRefId)
+      ? play.playerScores
+          .filter(ps => {
+            if (!ps.metaData) return true;
+            try {
+              const metadata = JSON.parse(ps.metaData);
+              return metadata.isNpc !== 1;
+            } catch (e) {
+              return true;
+            }
+          })
+          .map(ps => ps.playerRefId)
       : [];
 
     // Extract location ID

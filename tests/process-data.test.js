@@ -247,6 +247,154 @@ describe('process-data.js transformation logic', () => {
     });
   });
 
+  describe('NPC Player Filtering', () => {
+    test('excludes playerScores with isNpc: 1 from play.players', () => {
+      const fixtureWithNpc = {
+        userInfo: { meRefId: 1 },
+        tags: [],
+        players: [
+          { id: 1, name: "Player 1", isAnonymous: false },
+          { id: 2, name: "Player 2", isAnonymous: false },
+        ],
+        locations: [{ id: 1, name: "Home" }],
+        games: [{
+          id: 1,
+          name: "Test Game",
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [],
+          tags: [],
+        }],
+        plays: [{
+          gameRefId: 1,
+          playDate: '2024-01-01 10:00:00',
+          durationMin: 60,
+          locationRefId: 1,
+          playerScores: [
+            { playerRefId: 1 },
+            { playerRefId: 2, metaData: '{"isNpc":1}' },
+          ],
+        }],
+      };
+
+      const output = processData(fixtureWithNpc);
+      expect(output.plays[0].players).toEqual([1]);
+    });
+
+    test('includes playerScores without isNpc flag', () => {
+      const fixtureWithoutNpc = {
+        userInfo: { meRefId: 1 },
+        tags: [],
+        players: [
+          { id: 1, name: "Player 1", isAnonymous: false },
+          { id: 2, name: "Player 2", isAnonymous: false },
+        ],
+        locations: [{ id: 1, name: "Home" }],
+        games: [{
+          id: 1,
+          name: "Test Game",
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [],
+          tags: [],
+        }],
+        plays: [{
+          gameRefId: 1,
+          playDate: '2024-01-01 10:00:00',
+          durationMin: 60,
+          locationRefId: 1,
+          playerScores: [
+            { playerRefId: 1 },
+            { playerRefId: 2, metaData: '{}' },
+          ],
+        }],
+      };
+
+      const output = processData(fixtureWithoutNpc);
+      expect(output.plays[0].players).toEqual([1, 2]);
+    });
+
+    test('same player ID can be NPC in one play and real in another', () => {
+      const fixtureWithMixedNpc = {
+        userInfo: { meRefId: 1 },
+        tags: [],
+        players: [
+          { id: 1, name: "Player 1", isAnonymous: false },
+        ],
+        locations: [{ id: 1, name: "Home" }],
+        games: [{
+          id: 1,
+          name: "Test Game",
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [],
+          tags: [],
+        }],
+        plays: [
+          {
+            gameRefId: 1,
+            playDate: '2024-01-02 10:00:00',
+            durationMin: 60,
+            locationRefId: 1,
+            playerScores: [
+              { playerRefId: 1 },
+            ],
+          },
+          {
+            gameRefId: 1,
+            playDate: '2024-01-01 10:00:00',
+            durationMin: 60,
+            locationRefId: 1,
+            playerScores: [
+              { playerRefId: 1, metaData: '{"isNpc":1}' },
+            ],
+          },
+        ],
+      };
+
+      const output = processData(fixtureWithMixedNpc);
+      // Plays are sorted by date descending
+      expect(output.plays[0].players).toEqual([1]); // 2024-01-02: real player
+      expect(output.plays[1].players).toEqual([]);  // 2024-01-01: NPC
+    });
+
+    test('handles malformed metaData JSON gracefully', () => {
+      const fixtureWithBadJson = {
+        userInfo: { meRefId: 1 },
+        tags: [],
+        players: [
+          { id: 1, name: "Player 1", isAnonymous: false },
+        ],
+        locations: [{ id: 1, name: "Home" }],
+        games: [{
+          id: 1,
+          name: "Test Game",
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [],
+          tags: [],
+        }],
+        plays: [{
+          gameRefId: 1,
+          playDate: '2024-01-01 10:00:00',
+          durationMin: 60,
+          locationRefId: 1,
+          playerScores: [
+            { playerRefId: 1, metaData: '{invalid json' },
+          ],
+        }],
+      };
+
+      const output = processData(fixtureWithBadJson);
+      // Player should be included when metaData is malformed
+      expect(output.plays[0].players).toEqual([1]);
+    });
+  });
+
   describe('Image URL Processing', () => {
     test('preserves thumbnailUrl and coverUrl from source data', () => {
       const testData = {
