@@ -675,7 +675,7 @@ function updateAllStats() {
             longestSinglePlays: getLongestSinglePlays(gameData.games, gameData.plays, currentYear, 3),
 
             // Top games by unique players (most shared)
-            topGamesByUniquePlayers: getTopGamesByUniquePlayers(gameData.games, gameData.plays, currentYear, 3),
+            topGamesByUniquePlayers: getTopGamesByUniquePlayers(gameData.games, gameData.plays, currentYear, 3, gameData.anonymousPlayerId),
 
             // Top games by unique locations (most travelled)
             topGamesByUniqueLocations: getTopGamesByUniqueLocations(gameData.games, gameData.plays, currentYear, 3),

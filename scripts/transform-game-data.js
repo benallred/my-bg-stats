@@ -385,9 +385,10 @@ function processPlays(plays, gamesMap) {
  * @param {Array} players - Array of player objects
  * @param {Array} locations - Array of location objects
  * @param {number} selfPlayerId - Player ID of the owner
+ * @param {number|null} anonymousPlayerId - Player ID for anonymous players
  * @returns {Object} Final output object with games, plays, players, locations, and metadata
  */
-function finalizeOutput(gamesMap, plays, players, locations, selfPlayerId) {
+function finalizeOutput(gamesMap, plays, players, locations, selfPlayerId, anonymousPlayerId) {
   // Convert games map to array and finalize
   const games = Array.from(gamesMap.values()).map(game => ({
     ...game,
@@ -412,11 +413,12 @@ function finalizeOutput(gamesMap, plays, players, locations, selfPlayerId) {
   // Create output data
   return {
     selfPlayerId: selfPlayerId,
+    anonymousPlayerId: anonymousPlayerId,
     games: games,
     plays: plays,
     players: players,
     locations: locations,
-    generatedAt: generatedAt
+    generatedAt: generatedAt,
   };
 }
 
@@ -426,6 +428,10 @@ function processData(bgStatsData) {
   const players = extractPlayers(bgStatsData.players);
   const locations = extractLocations(bgStatsData.locations);
   const selfPlayerId = bgStatsData.userInfo.meRefId;
+
+  // Find anonymous player ID
+  const anonymousPlayer = bgStatsData.players.find(p => p.isAnonymous);
+  const anonymousPlayerId = anonymousPlayer ? anonymousPlayer.id : null;
 
   // Build games map from BG Stats
   const expandaloneTagId = findExpandaloneTagId(bgStatsData.tags);
@@ -439,7 +445,7 @@ function processData(bgStatsData) {
   const plays = processPlays(bgStatsData.plays, gamesMap);
 
   // Finalize output (convert to arrays, sort, add metadata)
-  return finalizeOutput(gamesMap, plays, players, locations, selfPlayerId);
+  return finalizeOutput(gamesMap, plays, players, locations, selfPlayerId, anonymousPlayerId);
 }
 
 export { processData };

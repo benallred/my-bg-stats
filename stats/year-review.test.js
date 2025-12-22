@@ -712,7 +712,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 4, date: '2024-01-19', players: [1] },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(3);
     expect(result[0].game.name).toBe('Azul');
@@ -730,7 +730,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 1, date: '2024-01-17', players: [3, 4] },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(1);
     expect(result[0].game.name).toBe('Wingspan');
@@ -743,7 +743,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 2, date: '2024-01-16', players: [1, 2] },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(1);
     expect(result[0].game.name).toBe('Catan');
@@ -756,7 +756,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 2, date: '2024-01-16', players: [1] },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(2);
   });
@@ -766,13 +766,13 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 1, date: '2023-01-15', players: [1, 2] },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toEqual([]);
   });
 
   test('handles empty plays array', () => {
-    const result = getTopGamesByUniquePlayers(games, [], 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, [], 2024, 3, null);
 
     expect(result).toEqual([]);
   });
@@ -783,7 +783,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 1, date: '2024-01-16', players: [1, 2] },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(1);
     expect(result[0].game.name).toBe('Wingspan');
@@ -795,7 +795,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 2, date: '2024-01-16', players: [1, 2], durationMin: 60 },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(2);
     expect(result[0].game.name).toBe('Catan');
@@ -810,7 +810,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 2, date: '2024-01-16', players: [3, 4], durationMin: 120 },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(2);
     expect(result[0].value).toBe(2);
@@ -826,7 +826,7 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 2, date: '2024-01-17', players: [3, 4], durationMin: 30 },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(2);
     expect(result[0].value).toBe(2);
@@ -842,13 +842,74 @@ describe('getTopGamesByUniquePlayers', () => {
       { gameId: 2, date: '2024-01-16', players: [3, 4], durationMin: 15 },
     ];
 
-    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3);
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
 
     expect(result).toHaveLength(2);
     expect(result[0].value).toBe(2);
     expect(result[1].value).toBe(2);
     expect(result[0].game.name).toBe('Catan');
     expect(result[1].game.name).toBe('Wingspan');
+  });
+
+  test('counts multiple anonymous players in single play', () => {
+    const anonymousPlayerId = 99;
+    const plays = [
+      // Game 1: player 2, three anonymous players, player 3, player 4 = 6 total
+      { gameId: 1, date: '2024-01-15', players: [2, 99, 99, 99, 3, 4], durationMin: 60 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, anonymousPlayerId);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+    expect(result[0].value).toBe(6); // 3 unique named + 3 anonymous
+  });
+
+  test('counts anonymous players per occurrence across multiple plays', () => {
+    const anonymousPlayerId = 99;
+    const plays = [
+      // Game 1 play 1: players 2, 3 + 2 anonymous = 4 people
+      { gameId: 1, date: '2024-01-15', players: [2, 3, 99, 99], durationMin: 60 },
+      // Game 1 play 2: players 2, 4 + 1 anonymous = 3 people (but player 2 already counted)
+      { gameId: 1, date: '2024-01-16', players: [2, 4, 99], durationMin: 60 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, anonymousPlayerId);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+    // 3 unique named (2, 3, 4) + 3 anonymous (2 from first play + 1 from second) = 6
+    expect(result[0].value).toBe(6);
+  });
+
+  test('dedupes named players but not anonymous players', () => {
+    const anonymousPlayerId = 99;
+    const plays = [
+      // Same named player (2) appears in both plays - should only count once
+      // Anonymous player appears in both plays - should count each time
+      { gameId: 1, date: '2024-01-15', players: [2, 99], durationMin: 60 },
+      { gameId: 1, date: '2024-01-16', players: [2, 99], durationMin: 60 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, anonymousPlayerId);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+    // 1 unique named (2) + 2 anonymous = 3
+    expect(result[0].value).toBe(3);
+  });
+
+  test('handles null anonymousPlayerId by treating all players as named', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', players: [1, 1, 1, 2], durationMin: 60 },
+    ];
+
+    const result = getTopGamesByUniquePlayers(games, plays, 2024, 3, null);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Wingspan');
+    // All player IDs deduplicated: {1, 2} = 2
+    expect(result[0].value).toBe(2);
   });
 });
 

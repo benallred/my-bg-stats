@@ -299,13 +299,16 @@ function getLongestSinglePlays(games, plays, year, count) {
 
 /**
  * Get top games by number of unique players
+ * Anonymous players (identified by anonymousPlayerId) are counted per occurrence,
+ * while named players are deduplicated across plays.
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
  * @param {number} year - Year to filter by
  * @param {number} count - Number of games to return
+ * @param {number|null} anonymousPlayerId - Player ID for anonymous players (counted per occurrence)
  * @returns {Array} Array of { game, value } sorted by unique player count descending, then by hours, sessions, plays
  */
-function getTopGamesByUniquePlayers(games, plays, year, count) {
+function getTopGamesByUniquePlayers(games, plays, year, count, anonymousPlayerId) {
   const filteredPlays = plays.filter(
     play => play.date.startsWith(year.toString())
   );
@@ -319,6 +322,7 @@ function getTopGamesByUniquePlayers(games, plays, year, count) {
     if (!gameStatsMap.has(play.gameId)) {
       gameStatsMap.set(play.gameId, {
         players: new Set(),
+        anonymousCount: 0,
         minutes: 0,
         sessions: new Set(),
         plays: 0,
@@ -326,7 +330,11 @@ function getTopGamesByUniquePlayers(games, plays, year, count) {
     }
     const stats = gameStatsMap.get(play.gameId);
     for (const playerId of play.players) {
-      stats.players.add(playerId);
+      if (playerId === anonymousPlayerId) {
+        stats.anonymousCount++;
+      } else {
+        stats.players.add(playerId);
+      }
     }
     stats.minutes += play.durationMin;
     stats.sessions.add(play.date);
@@ -337,7 +345,7 @@ function getTopGamesByUniquePlayers(games, plays, year, count) {
   const results = Array.from(gameStatsMap.entries())
     .map(([gameId, stats]) => ({
       game: gameMap.get(gameId),
-      value: stats.players.size,
+      value: stats.players.size + stats.anonymousCount,
       minutes: stats.minutes,
       sessions: stats.sessions.size,
       plays: stats.plays,
