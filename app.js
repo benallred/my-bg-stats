@@ -17,6 +17,11 @@ import {
   calculateAllTimeHIndexThroughYear,
   calculateHIndexIncrease,
   getNewHIndexGames,
+  calculatePeopleHIndex,
+  calculateAllTimePeopleHIndexThroughYear,
+  calculatePeopleHIndexIncrease,
+  getPeopleHIndexBreakdown,
+  getNewPeopleHIndexGames,
   calculateMilestoneIncrease,
   getNewMilestoneGames,
   getSkippedMilestoneCount,
@@ -601,6 +606,7 @@ function updateAllStats() {
         hourHIndex: calculateHourHIndex(gameData.plays, currentYear),
         traditionalHIndex: calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear),
         playSessionHIndex: calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear),
+        peopleHIndex: calculatePeopleHIndex(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
         totalBGGEntries: getTotalBGGEntries(gameData.games, currentYear),
         totalGamesOwned: getTotalGamesOwned(gameData.games, currentYear),
         expansionsData: getTotalExpansions(gameData.games, currentYear),
@@ -627,12 +633,15 @@ function updateAllStats() {
             hoursHIndexIncrease: calculateHIndexIncrease(gameData.games, gameData.plays, currentYear, Metric.HOURS),
             sessionsHIndexIncrease: calculateHIndexIncrease(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
             playsHIndexIncrease: calculateHIndexIncrease(gameData.games, gameData.plays, currentYear, Metric.PLAYS),
+            peopleHIndexIncrease: calculatePeopleHIndexIncrease(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
             hoursHIndexCurrent: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear, Metric.HOURS),
             sessionsHIndexCurrent: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
             playsHIndexCurrent: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear, Metric.PLAYS),
+            peopleHIndexCurrent: calculateAllTimePeopleHIndexThroughYear(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
             hoursHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.HOURS),
             sessionsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.SESSIONS),
             playsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS),
+            peopleHIndexPrevious: calculateAllTimePeopleHIndexThroughYear(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear - 1),
 
             // Milestone increases - hours
             fivesHoursIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, Metric.HOURS, Milestone.FIVES),
@@ -731,6 +740,9 @@ function updateAllStats() {
 function updateHIndexStats() {
     const hIndexValue = getCurrentHIndex();
     document.querySelector('#h-index .stat-value').textContent = hIndexValue;
+
+    // Update People H-Index
+    document.querySelector('#people-h-index .stat-value').textContent = statsCache.peopleHIndex;
 }
 
 /**
@@ -1116,12 +1128,38 @@ function setupEventListeners() {
         modalClose.addEventListener('click', hideHIndexModal);
     }
 
-    // ESC key to close modal
+    // People H-Index info icon
+    const peopleHIndexInfoIcon = document.getElementById('people-h-index-info-icon');
+    if (peopleHIndexInfoIcon) {
+        peopleHIndexInfoIcon.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click from triggering
+            showPeopleHIndexModal();
+        });
+    }
+
+    // People H-Index modal close handlers
+    const peopleModal = document.getElementById('people-h-index-modal');
+    const peopleModalBackdrop = peopleModal?.querySelector('.modal-backdrop');
+    const peopleModalClose = peopleModal?.querySelector('.modal-close');
+
+    if (peopleModalBackdrop) {
+        peopleModalBackdrop.addEventListener('click', hidePeopleHIndexModal);
+    }
+
+    if (peopleModalClose) {
+        peopleModalClose.addEventListener('click', hidePeopleHIndexModal);
+    }
+
+    // ESC key to close modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            const modal = document.getElementById('h-index-modal');
-            if (modal && modal.style.display === 'flex') {
+            const hIndexModal = document.getElementById('h-index-modal');
+            if (hIndexModal && hIndexModal.style.display === 'flex') {
                 hideHIndexModal();
+            }
+            const peopleHIndexModal = document.getElementById('people-h-index-modal');
+            if (peopleHIndexModal && peopleHIndexModal.style.display === 'flex') {
+                hidePeopleHIndexModal();
             }
         }
     });
@@ -1227,6 +1265,31 @@ function hideHIndexModal() {
 }
 
 /**
+ * Show People H-Index info modal
+ */
+function showPeopleHIndexModal() {
+    const modal = document.getElementById('people-h-index-modal');
+    modal.style.display = 'flex';
+
+    // Update URL to include modal state
+    updateURL();
+}
+
+// Make showPeopleHIndexModal globally accessible for inline onclick handlers
+window.showPeopleHIndexModal = showPeopleHIndexModal;
+
+/**
+ * Hide People H-Index info modal
+ */
+function hidePeopleHIndexModal() {
+    const modal = document.getElementById('people-h-index-modal');
+    modal.style.display = 'none';
+
+    // Update URL to remove modal state
+    updateURL();
+}
+
+/**
  * Configuration map for stat detail handlers
  * Each handler defines how to display title, summary, and content for a stat type
  */
@@ -1249,6 +1312,19 @@ const statDetailHandlers = {
         render: (detailContent, statsCache) => {
             const hIndexValue = getCurrentHIndex();
             showHIndexBreakdown(detailContent, currentBaseMetric, hIndexValue);
+        }
+    },
+    'people-h-index': {
+        getTitle: (currentYear) => {
+            const infoIcon = '<svg class="info-icon" style="margin-left: 0.5rem; cursor: pointer;" width="16" height="16" viewBox="0 0 16 16" aria-label="Show People H-Index information" onclick="window.showPeopleHIndexModal(); event.stopPropagation();"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>';
+            const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
+            return `People H-Index Breakdown ${yearText}${infoIcon}`;
+        },
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.peopleHIndex
+        }),
+        render: (detailContent, statsCache) => {
+            showPeopleHIndexBreakdown(detailContent, statsCache.peopleHIndex);
         }
     },
     'total-bgg-entries': {
@@ -1676,6 +1752,49 @@ function showHIndexBreakdown(container, metric, hIndex) {
                         <td>${rank}</td>
                         <td>${renderGameNameWithThumbnail(item.game)}</td>
                         <td>${displayValue}</td>
+                        <td>${contributesToHIndex ? '✓' : ''}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show People H-Index breakdown table
+ * @param {HTMLElement} container - Container element
+ * @param {number} hIndex - People H-Index value
+ */
+function showPeopleHIndexBreakdown(container, hIndex) {
+    const breakdown = getPeopleHIndexBreakdown(
+        gameData.games,
+        gameData.plays,
+        gameData.selfPlayerId,
+        gameData.anonymousPlayerId,
+        currentYear,
+    );
+
+    const table = document.createElement('table');
+    table.className = 'h-index-table';
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Game</th>
+                <th>Unique Players</th>
+                <th>Contributes to H-Index?</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${breakdown.map((item, index) => {
+                const rank = index + 1;
+                const contributesToHIndex = rank <= item.uniquePlayers && rank <= hIndex;
+                return `
+                    <tr${contributesToHIndex ? ' class="h-index-contributor"' : ''}>
+                        <td>${rank}</td>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
+                        <td>${item.uniquePlayers}</td>
                         <td>${contributesToHIndex ? '✓' : ''}</td>
                     </tr>
                 `;
@@ -2251,6 +2370,7 @@ function showYearReviewDetail(container, statsCache) {
     const newHoursGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'hours');
     const newSessionsGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'sessions');
     const newPlaysGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'plays');
+    const newPeopleGames = getNewPeopleHIndexGames(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear);
 
     // Helper function to format natural language lists ("A, B, and C")
     const formatNaturalList = (items) => {
@@ -2524,6 +2644,32 @@ function showYearReviewDetail(container, statsCache) {
                                         <div class="year-review-game-item">
                                             <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
                                             <span class="year-review-game-value">${item.value} plays (${item.thisYearValue} this year)</span>
+                                        </div>
+                                    `).join('')
+                                    : '<div class="year-review-no-games">No new games added to h-index</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="year-review-row year-review-row-clickable" data-metric="people">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in all-time people h-index:
+                        </td>
+                        <td class="year-review-value-detail">${formatIncrease(
+                            statsCache.yearReview.peopleHIndexIncrease,
+                            statsCache.yearReview.peopleHIndexPrevious,
+                            statsCache.yearReview.peopleHIndexCurrent
+                        )}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-metric="people" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${newPeopleGames.length > 0
+                                    ? newPeopleGames.map(item => `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                            <span class="year-review-game-value">${item.value} players (${item.thisYearValue} this year)</span>
                                         </div>
                                     `).join('')
                                     : '<div class="year-review-no-games">No new games added to h-index</div>'
@@ -3348,6 +3494,8 @@ function loadFromPermalink() {
             // Open modal if specified
             if (modalParam === 'h-index') {
                 showHIndexModal();
+            } else if (modalParam === 'people-h-index') {
+                showPeopleHIndexModal();
             }
 
             // Open stat detail if specified
@@ -3436,6 +3584,12 @@ function updateURL() {
     const modal = document.getElementById('h-index-modal');
     if (modal && modal.style.display === 'flex') {
         params.set('modal', 'h-index');
+    }
+
+    // Add modal parameter if people-h-index modal is open
+    const peopleModal = document.getElementById('people-h-index-modal');
+    if (peopleModal && peopleModal.style.display === 'flex') {
+        params.set('modal', 'people-h-index');
     }
 
     // Update the URL without reloading the page

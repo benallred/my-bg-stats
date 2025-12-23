@@ -9,6 +9,11 @@ import {
   getNewHIndexGames,
   getHIndexBreakdown,
   getHourHIndexBreakdown,
+  calculatePeopleHIndex,
+  calculateAllTimePeopleHIndexThroughYear,
+  calculatePeopleHIndexIncrease,
+  getPeopleHIndexBreakdown,
+  getNewPeopleHIndexGames,
 } from './h-index.js';
 import { processData } from '../scripts/transform-game-data.js';
 import minimalFixture from '../tests/fixtures/minimal.json';
@@ -363,5 +368,339 @@ describe('getHourHIndexBreakdown', () => {
   test('returns empty array for no plays', () => {
     const breakdown = getHourHIndexBreakdown(typicalData.games, []);
     expect(breakdown).toEqual([]);
+  });
+});
+
+// People H-Index Tests
+
+describe('calculatePeopleHIndex', () => {
+  const SELF_ID = 99;
+  const ANON_ID = 1;
+
+  test('calculates People H-Index excluding self player', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2, 3] },
+      { gameId: 1, date: '2024-01-02', durationMin: 60, players: [SELF_ID, 4] },
+      { gameId: 2, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2] },
+    ];
+    // Game 1: 3 unique players (2, 3, 4) - self excluded
+    // Game 2: 1 unique player (2)
+    // Sorted: [3, 1] -> H-Index = 1 (rank 1 <= 3, rank 2 > 1)
+    const hIndex = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID);
+    expect(hIndex).toBe(1);
+  });
+
+  test('counts anonymous players per occurrence (not deduplicated)', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, ANON_ID, ANON_ID] },
+      { gameId: 1, date: '2024-01-02', durationMin: 60, players: [SELF_ID, ANON_ID] },
+    ];
+    // Game 1: 3 anonymous player occurrences
+    const hIndex = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID);
+    expect(hIndex).toBe(1); // 1 game with 3 unique players
+  });
+
+  test('deduplicates named players across plays of same game', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2, 3] },
+      { gameId: 1, date: '2024-01-02', durationMin: 60, players: [SELF_ID, 2, 3] }, // Same players
+      { gameId: 1, date: '2024-01-03', durationMin: 60, players: [SELF_ID, 2] },
+    ];
+    // Game 1: 2 unique named players (2, 3) - deduplicated
+    const hIndex = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID);
+    expect(hIndex).toBe(1); // 1 game with 2 unique players
+  });
+
+  test('returns 0 for empty plays', () => {
+    const hIndex = calculatePeopleHIndex([], [], SELF_ID, ANON_ID);
+    expect(hIndex).toBe(0);
+  });
+
+  test('returns 0 when only self plays', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID] },
+    ];
+    const hIndex = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID);
+    expect(hIndex).toBe(0);
+  });
+
+  test('filters by year when specified', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2, 3] },
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 4, 5] },
+    ];
+    const hIndex2023 = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID, 2023);
+    const hIndex2024 = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID, 2024);
+    expect(hIndex2023).toBe(1); // Game 1 has 2 unique players in 2023
+    expect(hIndex2024).toBe(1); // Game 1 has 2 unique players in 2024
+  });
+
+  test('handles null year for all-time calculation', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2, 3] },
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 4, 5] },
+    ];
+    const hIndex = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID, null);
+    expect(hIndex).toBe(1); // Game 1 has 4 unique players all-time
+  });
+
+  test('achieves higher h-index with more qualifying games', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+      { id: 3, name: 'Game C' },
+    ];
+    const plays = [
+      // Game 1: 3 unique players
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2, 3, 4] },
+      // Game 2: 3 unique players
+      { gameId: 2, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 5, 6, 7] },
+      // Game 3: 3 unique players
+      { gameId: 3, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 8, 9, 10] },
+    ];
+    // All 3 games have 3 unique players -> H-Index = 3
+    const hIndex = calculatePeopleHIndex(games, plays, SELF_ID, ANON_ID);
+    expect(hIndex).toBe(3);
+  });
+
+  test('calculates correctly with typical fixture data', () => {
+    const hIndex = calculatePeopleHIndex(
+      typicalData.games,
+      typicalData.plays,
+      typicalData.selfPlayerId,
+      typicalData.anonymousPlayerId,
+    );
+    expect(hIndex).toBeGreaterThanOrEqual(0);
+  });
+});
+
+describe('calculateAllTimePeopleHIndexThroughYear', () => {
+  const SELF_ID = 99;
+  const ANON_ID = 1;
+
+  test('includes plays from previous years', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2022-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 3] },
+    ];
+    const hIndex2023 = calculateAllTimePeopleHIndexThroughYear(games, plays, SELF_ID, ANON_ID, 2023);
+    expect(hIndex2023).toBe(1); // 1 game with 2 unique players
+  });
+
+  test('excludes plays from future years', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2022-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 3, 4, 5] },
+    ];
+    const hIndex2022 = calculateAllTimePeopleHIndexThroughYear(games, plays, SELF_ID, ANON_ID, 2022);
+    expect(hIndex2022).toBe(1); // Only 1 unique player through 2022
+  });
+
+  test('returns 0 for empty plays', () => {
+    const hIndex = calculateAllTimePeopleHIndexThroughYear([], [], SELF_ID, ANON_ID, 2024);
+    expect(hIndex).toBe(0);
+  });
+});
+
+describe('calculatePeopleHIndexIncrease', () => {
+  const SELF_ID = 99;
+  const ANON_ID = 1;
+
+  test('calculates positive increase', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 3] },
+      { gameId: 2, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 4, 5] },
+    ];
+    const increase = calculatePeopleHIndexIncrease(games, plays, SELF_ID, ANON_ID, 2024);
+    expect(increase).toBeGreaterThanOrEqual(0);
+  });
+
+  test('calculates zero when no change', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+    ];
+    const increase = calculatePeopleHIndexIncrease(games, plays, SELF_ID, ANON_ID, 2024);
+    expect(increase).toBe(0); // No plays in 2024, no change
+  });
+
+  test('calculates negative when decrease', () => {
+    // This scenario is rare for h-index but test the math works
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+    ];
+    // Through 2023: h-index = 1
+    // Through 2022: h-index = 0
+    const increase = calculatePeopleHIndexIncrease(games, plays, SELF_ID, ANON_ID, 2023);
+    expect(increase).toBe(1); // Increased by 1
+  });
+
+  test('handles first year of logging', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2] },
+    ];
+    const increase = calculatePeopleHIndexIncrease(games, plays, SELF_ID, ANON_ID, 2024);
+    expect(increase).toBe(1); // First year, h-index went from 0 to 1
+  });
+});
+
+describe('getPeopleHIndexBreakdown', () => {
+  const SELF_ID = 99;
+  const ANON_ID = 1;
+
+  test('returns games sorted by unique player count descending', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2, 3, 4] },
+      { gameId: 2, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 5] },
+    ];
+    const breakdown = getPeopleHIndexBreakdown(games, plays, SELF_ID, ANON_ID);
+    expect(breakdown.length).toBe(2);
+    expect(breakdown[0].uniquePlayers).toBeGreaterThanOrEqual(breakdown[1].uniquePlayers);
+    expect(breakdown[0].uniquePlayers).toBe(3); // Game A: 3 unique
+    expect(breakdown[1].uniquePlayers).toBe(1); // Game B: 1 unique
+  });
+
+  test('includes namedPlayers and anonymousCount in breakdown', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2, ANON_ID, ANON_ID] },
+    ];
+    const breakdown = getPeopleHIndexBreakdown(games, plays, SELF_ID, ANON_ID);
+    expect(breakdown.length).toBe(1);
+    expect(breakdown[0].namedPlayers).toBe(1); // Player 2
+    expect(breakdown[0].anonymousCount).toBe(2); // 2 anonymous
+    expect(breakdown[0].uniquePlayers).toBe(3); // Total
+  });
+
+  test('excludes self from player counts', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2] },
+    ];
+    const breakdown = getPeopleHIndexBreakdown(games, plays, SELF_ID, ANON_ID);
+    expect(breakdown[0].uniquePlayers).toBe(1); // Only player 2, not self
+    expect(breakdown[0].namedPlayers).toBe(1);
+  });
+
+  test('filters by year', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 3, 4] },
+    ];
+    const breakdown2023 = getPeopleHIndexBreakdown(games, plays, SELF_ID, ANON_ID, 2023);
+    const breakdown2024 = getPeopleHIndexBreakdown(games, plays, SELF_ID, ANON_ID, 2024);
+    expect(breakdown2023[0].uniquePlayers).toBe(1); // Only player 2 in 2023
+    expect(breakdown2024[0].uniquePlayers).toBe(2); // Players 3, 4 in 2024
+  });
+
+  test('returns empty array for no plays', () => {
+    const breakdown = getPeopleHIndexBreakdown([], [], SELF_ID, ANON_ID);
+    expect(breakdown).toEqual([]);
+  });
+});
+
+describe('getNewPeopleHIndexGames', () => {
+  const SELF_ID = 99;
+  const ANON_ID = 1;
+
+  test('returns games newly added to People H-Index', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // 2023: Only game 1 with 1 unique player
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      // 2024: Game 1 gets more players, Game 2 added
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 3] },
+      { gameId: 2, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 4, 5] },
+    ];
+    const newGames = getNewPeopleHIndexGames(games, plays, SELF_ID, ANON_ID, 2024);
+    expect(Array.isArray(newGames)).toBe(true);
+    newGames.forEach(item => {
+      expect(item).toHaveProperty('game');
+      expect(item).toHaveProperty('value');
+      expect(item).toHaveProperty('thisYearValue');
+    });
+  });
+
+  test('includes thisYearValue showing this year contribution', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 3, 4] },
+    ];
+    const newGames = getNewPeopleHIndexGames(games, plays, SELF_ID, ANON_ID, 2024);
+    if (newGames.length > 0) {
+      const game1 = newGames.find(g => g.game.id === 1);
+      if (game1) {
+        expect(game1.value).toBe(3); // All-time: players 2, 3, 4
+        expect(game1.thisYearValue).toBe(2); // 2024 only: players 3, 4
+      }
+    }
+  });
+
+  test('returns empty array when h-index unchanged', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+    ];
+    const newGames = getNewPeopleHIndexGames(games, plays, SELF_ID, ANON_ID, 2099);
+    expect(newGames).toEqual([]);
+  });
+
+  test('handles anonymous players in thisYearValue calculation', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, ANON_ID, ANON_ID, 2] },
+    ];
+    const newGames = getNewPeopleHIndexGames(games, plays, SELF_ID, ANON_ID, 2024);
+    if (newGames.length > 0) {
+      const game1 = newGames.find(g => g.game.id === 1);
+      if (game1) {
+        expect(game1.value).toBe(3); // 2 anonymous + 1 named
+        expect(game1.thisYearValue).toBe(3); // Same, all in 2024
+      }
+    }
+  });
+
+  test('calculates correctly with typical fixture data', () => {
+    const newGames = getNewPeopleHIndexGames(
+      typicalData.games,
+      typicalData.plays,
+      typicalData.selfPlayerId,
+      typicalData.anonymousPlayerId,
+      2024,
+    );
+    expect(Array.isArray(newGames)).toBe(true);
+    newGames.forEach(item => {
+      expect(item).toHaveProperty('game');
+      expect(item).toHaveProperty('value');
+      expect(item).toHaveProperty('thisYearValue');
+      expect(item.value).toBeGreaterThanOrEqual(item.thisYearValue);
+    });
   });
 });

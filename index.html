@@ -63,6 +63,18 @@
                     <div class="stat-value">--</div>
                     <p class="stat-description" id="h-index-description">Games ranked by total hours</p>
                 </div>
+
+                <div class="stat-card clickable" id="people-h-index" data-stat="people-h-index">
+                    <h3 id="people-h-index-title">
+                        People H-Index
+                        <svg class="info-icon" id="people-h-index-info-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Show People H-Index information">
+                            <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text>
+                        </svg>
+                    </h3>
+                    <div class="stat-value">--</div>
+                    <p class="stat-description" id="people-h-index-description">Games ranked by unique players</p>
+                </div>
             </div>
         </section>
 
@@ -345,6 +357,35 @@
                         <li>Games are ranked by the selected metric (hours, sessions, or plays)</li>
                         <li>Each game's rank is compared to its metric value</li>
                         <li>The h-index is the largest rank where rank ≤ value</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- People H-Index Info Modal -->
+    <div id="people-h-index-modal" class="modal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Understanding People H-Index</h3>
+                <button class="modal-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-definition">
+                    The People H-Index, also known as the <strong>Agreeable Ambassador</strong> number, measures how well you spread your gaming across both <strong>games</strong> and <strong>people</strong>. A People H-Index of <strong>N</strong> means you have <strong>N games</strong> that you've played with at least <strong>N unique players</strong> each (excluding yourself).
+                </p>
+                <div class="modal-example" id="people-h-index-modal-example">
+                    <p>For example, if your People H-Index is <strong>5</strong>, you have at least <strong>5 games</strong> where you've played with <strong>5 or more different people</strong> each.</p>
+                    <p>To increase it to <strong>6</strong>, you need <strong>1 more game</strong> with 6+ unique players AND <strong>1 more unique player each</strong> for your existing 5 games.</p>
+                </div>
+                <p class="modal-summary">The higher the number, the more you're sharing diverse gaming experiences with many different people rather than dragging everyone into your favorite game or sticking to the same gaming group.</p>
+                <div class="modal-explanation">
+                    <h4>How it's calculated:</h4>
+                    <ol>
+                        <li>Games are ranked by number of unique players (excluding yourself)</li>
+                        <li>Each game's rank is compared to its unique player count</li>
+                        <li>The People H-Index is the largest rank where rank ≤ unique players</li>
                     </ol>
                 </div>
             </div>
