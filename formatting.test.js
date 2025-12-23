@@ -3,6 +3,7 @@ import {
   formatApproximateHours,
   formatDateShort,
   formatDateWithWeekday,
+  formatLargeNumber,
 } from './formatting.js';
 
 describe('formatApproximateHours', () => {
@@ -58,5 +59,25 @@ describe('formatDateWithWeekday', () => {
     expect(formatDateWithWeekday(null)).toBe('-');
     expect(formatDateWithWeekday(undefined)).toBe('-');
     expect(formatDateWithWeekday('')).toBe('-');
+  });
+});
+
+describe('formatLargeNumber', () => {
+  test('rounds to whole number with commas for values >= 1000', () => {
+    expect(formatLargeNumber(1000)).toBe('1,000');
+    expect(formatLargeNumber(1037.8)).toBe('1,038');
+    expect(formatLargeNumber(1037.2)).toBe('1,037');
+    expect(formatLargeNumber(12345.6)).toBe('12,346');
+  });
+
+  test('shows 1 decimal place for values < 1000', () => {
+    expect(formatLargeNumber(999.9)).toBe('999.9');
+    expect(formatLargeNumber(500)).toBe('500.0');
+    expect(formatLargeNumber(43.25)).toBe('43.3');
+    expect(formatLargeNumber(0.5)).toBe('0.5');
+  });
+
+  test('handles zero', () => {
+    expect(formatLargeNumber(0)).toBe('0.0');
   });
 });

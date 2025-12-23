@@ -40,3 +40,15 @@ export function formatDateWithWeekday(dateString) {
     const date = new Date(year, month - 1, day);
     return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 }
+
+/**
+ * Format a number with commas. If >= 1000, rounds to whole number; otherwise shows 1 decimal.
+ * @param {number} num - The number to format
+ * @returns {string} Formatted number string (e.g., "1,038" or "937.8")
+ */
+export function formatLargeNumber(num) {
+    if (num >= 1000) {
+        return Math.round(num).toLocaleString();
+    }
+    return num.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+}

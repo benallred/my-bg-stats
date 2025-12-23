@@ -53,7 +53,7 @@ import {
   getAllLocationsBySession,
 } from './stats.js';
 
-import { formatApproximateHours, formatDateShort, formatDateWithWeekday } from './formatting.js';
+import { formatApproximateHours, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
 
 /**
  * Helper: Get acquisition date for a game (from first owned or first copy)
@@ -926,8 +926,8 @@ function updatePlayStats() {
  * Update play time statistics
  */
 function updatePlayTimeStats() {
-    const hours = statsCache.playTimeData.totalHours.toFixed(1);
-    const days = (statsCache.playTimeData.totalHours / 24).toFixed(1);
+    const hours = formatLargeNumber(statsCache.playTimeData.totalHours);
+    const days = formatLargeNumber(statsCache.playTimeData.totalHours / 24);
 
     // Add tilde prefix if any durations are estimated
     const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
@@ -1303,8 +1303,8 @@ const statDetailHandlers = {
     'total-play-time': {
         getTitle: (currentYear) => currentYear ? `Play Time by Game in <span style="white-space: nowrap">(${currentYear})</span>` : 'Play Time by Game <span style="white-space: nowrap">(All Time)</span>',
         getSummary: (statsCache) => {
-            const hours = statsCache.playTimeData.totalHours.toFixed(1);
-            const days = (statsCache.playTimeData.totalHours / 24).toFixed(1);
+            const hours = formatLargeNumber(statsCache.playTimeData.totalHours);
+            const days = formatLargeNumber(statsCache.playTimeData.totalHours / 24);
             const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
             return {
                 mainValue: `${prefix}${hours} hours`,
