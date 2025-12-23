@@ -235,8 +235,142 @@ function getSoloGameStats(plays, games, selfPlayerId, year = null) {
   };
 }
 
+/**
+ * Get the top player by a given metric for Year in Review summary
+ * @param {Array} plays - Array of play objects
+ * @param {Array} players - Array of player objects with playerId and name
+ * @param {number} selfPlayerId - The player ID representing the user
+ * @param {number} anonymousPlayerId - The player ID for anonymous players
+ * @param {number} year - Year to filter by
+ * @param {string} metric - 'hours', 'sessions', or 'plays'
+ * @returns {Object|null} Top player with name and value, or null if no players
+ */
+function getTopPlayerByMetric(plays, players, selfPlayerId, anonymousPlayerId, year, metric) {
+  const stats = getPlayerStats(plays, players, selfPlayerId, anonymousPlayerId, year);
+
+  if (stats.playerDetails.length === 0) {
+    return null;
+  }
+
+  // Sort by the requested metric
+  const sorted = [...stats.playerDetails].sort((a, b) => {
+    switch (metric) {
+      case 'sessions':
+        return b.sessions - a.sessions;
+      case 'plays':
+        return b.plays - a.plays;
+      case 'hours':
+      default:
+        return b.minutes - a.minutes;
+    }
+  });
+
+  const top = sorted[0];
+  let value;
+  switch (metric) {
+    case 'sessions':
+      value = top.sessions;
+      break;
+    case 'plays':
+      value = top.plays;
+      break;
+    case 'hours':
+    default:
+      value = top.minutes;
+      break;
+  }
+
+  return {
+    name: top.name,
+    value,
+  };
+}
+
+/**
+ * Get the top location by a given metric for Year in Review summary (excluding home)
+ * @param {Array} plays - Array of play objects
+ * @param {Array} locations - Array of location objects with locationId and name
+ * @param {number} homeLocationId - The location ID for home (to exclude)
+ * @param {number} year - Year to filter by
+ * @param {string} metric - 'hours', 'sessions', or 'plays'
+ * @returns {Object|null} Top location with name and value, or null if no locations
+ */
+function getTopLocationByMetric(plays, locations, homeLocationId, year, metric) {
+  const stats = getLocationStats(plays, locations, year);
+
+  // Filter out home location
+  const nonHomeLocations = stats.locationDetails.filter(
+    loc => loc.locationId !== homeLocationId
+  );
+
+  if (nonHomeLocations.length === 0) {
+    return null;
+  }
+
+  // Sort by the requested metric
+  const sorted = [...nonHomeLocations].sort((a, b) => {
+    switch (metric) {
+      case 'sessions':
+        return b.sessions - a.sessions;
+      case 'plays':
+        return b.plays - a.plays;
+      case 'hours':
+      default:
+        return b.minutes - a.minutes;
+    }
+  });
+
+  const top = sorted[0];
+  let value;
+  switch (metric) {
+    case 'sessions':
+      value = top.sessions;
+      break;
+    case 'plays':
+      value = top.plays;
+      break;
+    case 'hours':
+    default:
+      value = top.minutes;
+      break;
+  }
+
+  return {
+    name: top.name,
+    value,
+  };
+}
+
+/**
+ * Get the top solo game by hours for Year in Review summary
+ * @param {Array} plays - Array of play objects
+ * @param {Array} games - Array of game objects
+ * @param {number} selfPlayerId - The player ID representing the user
+ * @param {number} year - Year to filter by
+ * @returns {Object|null} Top solo game with game object and minutes, or null if no solo plays
+ */
+function getTopSoloGameByHours(plays, games, selfPlayerId, year) {
+  const stats = getSoloGameStats(plays, games, selfPlayerId, year);
+
+  if (stats.gameDetails.length === 0) {
+    return null;
+  }
+
+  // Sort by minutes (hours)
+  const sorted = [...stats.gameDetails].sort((a, b) => b.minutes - a.minutes);
+
+  const top = sorted[0];
+  return {
+    game: top.game,
+    minutes: top.minutes,
+  };
+}
+
 export {
   getPlayerStats,
   getLocationStats,
   getSoloGameStats,
+  getTopPlayerByMetric,
+  getTopLocationByMetric,
+  getTopSoloGameByHours,
 };

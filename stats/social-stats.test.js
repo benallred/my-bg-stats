@@ -3,6 +3,9 @@ import {
   getPlayerStats,
   getLocationStats,
   getSoloGameStats,
+  getTopPlayerByMetric,
+  getTopLocationByMetric,
+  getTopSoloGameByHours,
 } from './social-stats.js';
 
 describe('getPlayerStats', () => {
@@ -362,5 +365,205 @@ describe('getSoloGameStats', () => {
 
     expect(result.totalSoloPlays).toBe(1);
     expect(result.totalSoloMinutes).toBe(30);
+  });
+});
+
+describe('getTopPlayerByMetric', () => {
+  const players = [
+    { playerId: 1, name: 'Anonymous player' },
+    { playerId: 2, name: 'Alice' },
+    { playerId: 3, name: 'Ben' },
+    { playerId: 4, name: 'Charlie' },
+  ];
+  const selfPlayerId = 3;
+  const anonymousPlayerId = 1;
+
+  test('returns top player by hours', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 120, players: [2, 3] },
+      { gameId: 1, date: '2024-01-16', durationMin: 60, players: [4, 3] },
+    ];
+
+    const result = getTopPlayerByMetric(plays, players, selfPlayerId, anonymousPlayerId, 2024, 'hours');
+
+    expect(result.name).toBe('Alice');
+    expect(result.value).toBe(120); // minutes
+  });
+
+  test('returns top player by sessions', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [2, 3] },
+      { gameId: 1, date: '2024-01-16', durationMin: 60, players: [4, 3] },
+      { gameId: 1, date: '2024-01-17', durationMin: 60, players: [4, 3] },
+    ];
+
+    const result = getTopPlayerByMetric(plays, players, selfPlayerId, anonymousPlayerId, 2024, 'sessions');
+
+    expect(result.name).toBe('Charlie');
+    expect(result.value).toBe(2); // 2 unique dates
+  });
+
+  test('returns top player by plays', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [2, 3] },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [4, 3] },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [4, 3] },
+    ];
+
+    const result = getTopPlayerByMetric(plays, players, selfPlayerId, anonymousPlayerId, 2024, 'plays');
+
+    expect(result.name).toBe('Charlie');
+    expect(result.value).toBe(2);
+  });
+
+  test('returns null when no players', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [3] },
+    ];
+
+    const result = getTopPlayerByMetric(plays, players, selfPlayerId, anonymousPlayerId, 2024, 'hours');
+
+    expect(result).toBeNull();
+  });
+
+  test('filters by year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-12-31', durationMin: 120, players: [2, 3] },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [4, 3] },
+    ];
+
+    const result = getTopPlayerByMetric(plays, players, selfPlayerId, anonymousPlayerId, 2024, 'hours');
+
+    expect(result.name).toBe('Charlie');
+    expect(result.value).toBe(60);
+  });
+});
+
+describe('getTopLocationByMetric', () => {
+  const locations = [
+    { locationId: 1, name: 'Home' },
+    { locationId: 2, name: 'Church' },
+    { locationId: 3, name: 'Work' },
+  ];
+  const homeLocationId = 1;
+
+  test('returns top location by hours excluding home', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 300, locationId: 1 },
+      { gameId: 1, date: '2024-01-16', durationMin: 120, locationId: 2 },
+      { gameId: 1, date: '2024-01-17', durationMin: 60, locationId: 3 },
+    ];
+
+    const result = getTopLocationByMetric(plays, locations, homeLocationId, 2024, 'hours');
+
+    expect(result.name).toBe('Church');
+    expect(result.value).toBe(120);
+  });
+
+  test('returns top location by sessions excluding home', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 1 },
+      { gameId: 1, date: '2024-01-16', durationMin: 60, locationId: 2 },
+      { gameId: 1, date: '2024-01-17', durationMin: 60, locationId: 3 },
+      { gameId: 1, date: '2024-01-18', durationMin: 60, locationId: 3 },
+    ];
+
+    const result = getTopLocationByMetric(plays, locations, homeLocationId, 2024, 'sessions');
+
+    expect(result.name).toBe('Work');
+    expect(result.value).toBe(2);
+  });
+
+  test('returns top location by plays excluding home', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 1 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 1 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 2 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 2 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 2 },
+    ];
+
+    const result = getTopLocationByMetric(plays, locations, homeLocationId, 2024, 'plays');
+
+    expect(result.name).toBe('Church');
+    expect(result.value).toBe(3);
+  });
+
+  test('returns null when only home location', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 1 },
+    ];
+
+    const result = getTopLocationByMetric(plays, locations, homeLocationId, 2024, 'hours');
+
+    expect(result).toBeNull();
+  });
+
+  test('filters by year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-12-31', durationMin: 120, locationId: 2 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 3 },
+    ];
+
+    const result = getTopLocationByMetric(plays, locations, homeLocationId, 2024, 'hours');
+
+    expect(result.name).toBe('Work');
+    expect(result.value).toBe(60);
+  });
+});
+
+describe('getTopSoloGameByHours', () => {
+  const games = [
+    { id: 1, name: 'Wingspan' },
+    { id: 2, name: 'Catan' },
+    { id: 3, name: 'Azul' },
+  ];
+  const selfPlayerId = 3;
+
+  test('returns top solo game by hours', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 120, players: [3] },
+      { gameId: 2, date: '2024-01-16', durationMin: 60, players: [3] },
+    ];
+
+    const result = getTopSoloGameByHours(plays, games, selfPlayerId, 2024);
+
+    expect(result.game.name).toBe('Wingspan');
+    expect(result.minutes).toBe(120);
+  });
+
+  test('returns null when no solo plays', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, players: [2, 3] },
+    ];
+
+    const result = getTopSoloGameByHours(plays, games, selfPlayerId, 2024);
+
+    expect(result).toBeNull();
+  });
+
+  test('filters by year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-12-31', durationMin: 120, players: [3] },
+      { gameId: 2, date: '2024-01-15', durationMin: 60, players: [3] },
+    ];
+
+    const result = getTopSoloGameByHours(plays, games, selfPlayerId, 2024);
+
+    expect(result.game.name).toBe('Catan');
+    expect(result.minutes).toBe(60);
+  });
+
+  test('aggregates minutes across multiple plays', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 30, players: [3] },
+      { gameId: 1, date: '2024-01-16', durationMin: 30, players: [3] },
+      { gameId: 2, date: '2024-01-17', durationMin: 50, players: [3] },
+    ];
+
+    const result = getTopSoloGameByHours(plays, games, selfPlayerId, 2024);
+
+    expect(result.game.name).toBe('Wingspan');
+    expect(result.minutes).toBe(60);
   });
 });

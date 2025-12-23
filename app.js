@@ -44,6 +44,9 @@ import {
   getPlayerStats,
   getLocationStats,
   getSoloGameStats,
+  getTopPlayerByMetric,
+  getTopLocationByMetric,
+  getTopSoloGameByHours,
   getLongestSinglePlays,
   getTopGamesByUniquePlayers,
   getTopGamesByUniqueLocations,
@@ -697,6 +700,15 @@ function updateAllStats() {
 
             // Top locations by session count
             allLocations: getAllLocationsBySession(gameData.plays, gameData.locations, currentYear),
+
+            // Top player by hours (for summary)
+            topPlayerByHours: getTopPlayerByMetric(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear, 'hours'),
+
+            // Top location by hours excluding home (for summary)
+            topLocationByHours: getTopLocationByMetric(gameData.plays, gameData.locations, gameData.homeLocationId, currentYear, 'hours'),
+
+            // Top solo game by hours (for summary)
+            topSoloGameByHours: getTopSoloGameByHours(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
         };
     }
 
@@ -2321,27 +2333,51 @@ function showYearReviewDetail(container, statsCache) {
     const allLocationsData = statsCache.yearReview.allLocations;
     if (timeAndActivityData && timeAndActivityData.totalDays > 0) {
         let activityBullet = `Played ${timeAndActivityData.totalDays} days totaling ${formatApproximateHours(timeAndActivityData.totalMinutes)} hours`;
-        if (allLocationsData && allLocationsData.length > 0) {
-            activityBullet += ` at ${allLocationsData.length} location${allLocationsData.length === 1 ? '' : 's'}`;
-        }
         if (timeAndActivityData.longestStreak > 1) {
-            activityBullet += `, with a ${timeAndActivityData.longestStreak}-day streak`;
+            activityBullet += ` with a ${timeAndActivityData.longestStreak}-day streak`;
         }
         summaryBullets.push(activityBullet);
     }
 
     // Social & Locations summary (solo stats - show hours or sessions, whichever is greater)
     const soloStatsData = statsCache.yearReview.soloStats;
+    const topSoloGame = statsCache.yearReview.topSoloGameByHours;
     if (soloStatsData) {
         const soloHoursExact = soloStatsData.totalSoloMinutes / 60;
         const soloSessions = soloStatsData.totalSoloSessions;
         if (soloHoursExact > 0 || soloSessions > 0) {
+            let soloBullet;
             if (soloHoursExact >= soloSessions) {
-                summaryBullets.push(`Logged ${formatApproximateHours(soloStatsData.totalSoloMinutes)} solo <span class="metric-name hours">hours</span>`);
+                soloBullet = `Logged ${formatApproximateHours(soloStatsData.totalSoloMinutes)} solo <span class="metric-name hours">hours</span>`;
             } else {
-                summaryBullets.push(`Logged ${soloSessions} solo <span class="metric-name sessions">sessions</span>`);
+                soloBullet = `Logged ${soloSessions} solo <span class="metric-name sessions">sessions</span>`;
             }
+            if (topSoloGame) {
+                soloBullet += ` with the top solo game being <em>${topSoloGame.game.name}</em>`;
+            }
+            summaryBullets.push(soloBullet);
         }
+    }
+
+    // Players summary (count + top by hours)
+    const topPlayerHours = statsCache.yearReview.topPlayerByHours;
+    const playerCount = statsCache.playerStats?.uniquePlayerCount || 0;
+    if (playerCount > 0) {
+        let playerBullet = `Played with more than ${playerCount} player${playerCount === 1 ? '' : 's'}`;
+        if (topPlayerHours) {
+            playerBullet += ` with the top being ${topPlayerHours.name} (${formatApproximateHours(topPlayerHours.value)} <span class="metric-name hours">hours</span>)`;
+        }
+        summaryBullets.push(playerBullet);
+    }
+
+    // Locations summary (count + top outside home by hours)
+    const topLocationHours = statsCache.yearReview.topLocationByHours;
+    if (allLocationsData && allLocationsData.length > 0) {
+        let locationBullet = `Played at ${allLocationsData.length} location${allLocationsData.length === 1 ? '' : 's'}`;
+        if (topLocationHours) {
+            locationBullet += ` with the top outside home being ${topLocationHours.name} (${formatApproximateHours(topLocationHours.value)} <span class="metric-name hours">hours</span>)`;
+        }
+        summaryBullets.push(locationBullet);
     }
 
     // Logging Achievements summary (highest threshold per metric)
