@@ -1389,6 +1389,55 @@ footer p {
     transform: scale(1.1);
 }
 
+/* Experimental Badge */
+.experimental-badge {
+    position: relative;
+    display: inline-block;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    cursor: help;
+}
+
+.experimental-icon {
+    display: block;
+    opacity: 0.6;
+    transition: opacity var(--transition-hover), transform var(--transition-hover);
+}
+
+.experimental-badge:hover .experimental-icon {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.experimental-badge::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: normal;
+    white-space: normal;
+    width: 200px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+
+.experimental-badge:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
 /* Modal */
 .modal {
     position: fixed;
