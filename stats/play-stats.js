@@ -4,6 +4,7 @@
 
 import { calculateMedian } from '../utils.js';
 import { Metric } from './constants.js';
+import { isPlayInYear, filterPlaysByYear } from './play-helpers.js';
 
 /**
  * Get total plays logged
@@ -12,8 +13,7 @@ import { Metric } from './constants.js';
  * @returns {number} count
  */
 function getTotalPlays(plays, year = null) {
-  if (!year) return plays.length;
-  return plays.filter(play => play.date.startsWith(year.toString())).length;
+  return filterPlaysByYear(plays, year).length;
 }
 
 /**
@@ -25,7 +25,7 @@ function getTotalPlays(plays, year = null) {
 function getTotalDaysPlayed(plays, year = null) {
   const uniqueDays = new Set();
   plays.forEach(play => {
-    if (!year || play.date.startsWith(year.toString())) {
+    if (isPlayInYear(play, year)) {
       uniqueDays.add(play.date);
     }
   });
@@ -42,7 +42,7 @@ function getDailySessionStats(plays, year) {
   const dailyTotals = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     const currentTotal = dailyTotals.get(play.date) || 0;
     dailyTotals.set(play.date, currentTotal + play.durationMin);
@@ -77,7 +77,7 @@ function getTotalGamesPlayed(games, plays, year = null) {
 
   // Find all games played and their first play date
   plays.forEach(play => {
-    if (!year || play.date.startsWith(year.toString())) {
+    if (isPlayInYear(play, year)) {
       gamesPlayedIds.add(play.gameId);
     }
 
@@ -138,7 +138,7 @@ function getTotalPlayTime(plays, year = null) {
   let totalPlays = 0;
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     totalPlays++;
 
@@ -174,7 +174,7 @@ function getPlayTimeByGame(games, plays, year = null) {
   const gameTimeMap = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     if (!gameTimeMap.has(play.gameId)) {
       gameTimeMap.set(play.gameId, {
@@ -243,7 +243,7 @@ function getDaysPlayedByGame(games, plays, year = null) {
   const gameDaysMap = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     if (!gameDaysMap.has(play.gameId)) {
       gameDaysMap.set(play.gameId, {
@@ -331,7 +331,7 @@ function getTopGamesByMetric(games, plays, year, metric, limit = 3) {
   // Build plays breakdown inline to avoid circular dependency with h-index.js
   const playCountsPerGame = new Map();
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
     const count = playCountsPerGame.get(play.gameId) || 0;
     playCountsPerGame.set(play.gameId, count + 1);
   });

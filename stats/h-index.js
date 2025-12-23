@@ -3,6 +3,7 @@
  */
 
 import { Metric } from './constants.js';
+import { isPlayInYear } from './play-helpers.js';
 
 /**
  * Helper: Calculate h-index from sorted values
@@ -33,7 +34,7 @@ function calculateTraditionalHIndex(games, plays, year = null) {
   const playCountsPerGame = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     const count = playCountsPerGame.get(play.gameId) || 0;
     playCountsPerGame.set(play.gameId, count + 1);
@@ -57,7 +58,7 @@ function calculatePlaySessionHIndex(games, plays, year = null) {
   const uniqueDaysPerGame = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     if (!uniqueDaysPerGame.has(play.gameId)) {
       uniqueDaysPerGame.set(play.gameId, new Set());
@@ -84,7 +85,7 @@ function calculateHourHIndex(plays, year = null) {
   const minutesPerGame = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     const total = minutesPerGame.get(play.gameId) || 0;
     minutesPerGame.set(play.gameId, total + play.durationMin);
@@ -154,7 +155,7 @@ function getHIndexBreakdown(games, plays, year = null, usePlaySessions = false) 
     // Count unique days per game
     const uniqueDaysPerGame = new Map();
     plays.forEach(play => {
-      if (year && !play.date.startsWith(year.toString())) return;
+      if (!isPlayInYear(play, year)) return;
       if (!uniqueDaysPerGame.has(play.gameId)) {
         uniqueDaysPerGame.set(play.gameId, new Set());
       }
@@ -166,7 +167,7 @@ function getHIndexBreakdown(games, plays, year = null, usePlaySessions = false) 
   } else {
     // Count all plays per game
     plays.forEach(play => {
-      if (year && !play.date.startsWith(year.toString())) return;
+      if (!isPlayInYear(play, year)) return;
       const count = countsPerGame.get(play.gameId) || 0;
       countsPerGame.set(play.gameId, count + 1);
     });
@@ -199,7 +200,7 @@ function getHourHIndexBreakdown(games, plays, year = null) {
 
   // Sum minutes per game
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
     const total = minutesPerGame.get(play.gameId) || 0;
     minutesPerGame.set(play.gameId, total + play.durationMin);
   });

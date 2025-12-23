@@ -5,6 +5,7 @@
 
 export * from './stats/constants.js';
 export * from './stats/game-helpers.js';
+export * from './stats/play-helpers.js';
 export * from './stats/h-index.js';
 export * from './stats/play-stats.js';
 export * from './stats/collection-stats.js';

@@ -9,6 +9,7 @@ import {
   Milestone,
   isGameOwned,
   wasGameAcquiredInYear,
+  isPlayInYear,
   getAvailableYears,
   calculateHourHIndex,
   calculateTraditionalHIndex,
@@ -1852,7 +1853,7 @@ function showGamesPlayed(container) {
     const ownedGamesInYear = new Set();
 
     gameData.plays.forEach(play => {
-        if (currentYear && !play.date.startsWith(currentYear.toString())) return;
+        if (!isPlayInYear(play, currentYear)) return;
         const count = playCountsPerGame.get(play.gameId) || 0;
         playCountsPerGame.set(play.gameId, count + 1);
 

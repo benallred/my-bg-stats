@@ -3,6 +3,7 @@
  */
 
 import { Metric } from './constants.js';
+import { filterPlaysByYear } from './play-helpers.js';
 
 /**
  * Get time and activity statistics for Gaming Year in Review
@@ -12,10 +13,7 @@ import { Metric } from './constants.js';
  */
 function getTimeAndActivityStats(plays, year = null) {
   // Filter plays by year
-  const filteredPlays = plays.filter(play => {
-    if (!year) return true;
-    return play.date.startsWith(year.toString());
-  });
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   if (filteredPlays.length === 0) {
     return {
@@ -252,9 +250,7 @@ function getLoggingAchievements(plays, year) {
  * @returns {Object} Solo statistics: totalSoloMinutes, totalSoloSessions, totalSoloPlays
  */
 function getSoloStats(plays, selfPlayerId, year = null) {
-  const filteredPlays = year
-    ? plays.filter(play => play.date.startsWith(year.toString()))
-    : plays;
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   const soloPlays = filteredPlays.filter(
     play => play.players.length === 1 && play.players[0] === selfPlayerId
@@ -279,8 +275,8 @@ function getSoloStats(plays, selfPlayerId, year = null) {
  * @returns {Array} Array of { game, durationMin, date } sorted by duration descending
  */
 function getLongestSinglePlays(games, plays, year, count) {
-  const filteredPlays = plays.filter(
-    play => play.date.startsWith(year.toString()) && play.durationMin > 0
+  const filteredPlays = filterPlaysByYear(plays, year).filter(
+    play => play.durationMin > 0
   );
 
   // Sort by duration descending
@@ -309,9 +305,7 @@ function getLongestSinglePlays(games, plays, year, count) {
  * @returns {Array} Array of { game, value } sorted by unique player count descending, then by hours, sessions, plays
  */
 function getTopGamesByUniquePlayers(games, plays, year, count, anonymousPlayerId) {
-  const filteredPlays = plays.filter(
-    play => play.date.startsWith(year.toString())
-  );
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   // Create game lookup map
   const gameMap = new Map(games.map(g => [g.id, g]));
@@ -374,9 +368,7 @@ function getTopGamesByUniquePlayers(games, plays, year, count, anonymousPlayerId
  * @returns {Array} Array of { game, value } sorted by unique location count descending, then by hours, sessions, plays
  */
 function getTopGamesByUniqueLocations(games, plays, year, count) {
-  const filteredPlays = plays.filter(
-    play => play.date.startsWith(year.toString())
-  );
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   // Create game lookup map
   const gameMap = new Map(games.map(g => [g.id, g]));
@@ -431,9 +423,7 @@ function getTopGamesByUniqueLocations(games, plays, year, count) {
  * @returns {Array} Array of { locationId, name, sessions } sorted by sessions descending
  */
 function getAllLocationsBySession(plays, locations, year = null) {
-  const filteredPlays = year
-    ? plays.filter(play => play.date.startsWith(year.toString()))
-    : plays;
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   // Create location lookup map
   const locationMap = new Map(locations.map(loc => [loc.locationId, loc.name]));

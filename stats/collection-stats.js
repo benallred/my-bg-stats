@@ -4,6 +4,7 @@
 
 import { Metric } from './constants.js';
 import { isGameOwned, wasGameAcquiredInYear } from './game-helpers.js';
+import { isPlayInYear } from './play-helpers.js';
 
 /**
  * Get total BGG entries owned (includes expansions and expandalones)
@@ -104,7 +105,7 @@ function getMilestones(games, plays, year, metric) {
   const metricValuesPerGame = new Map();
 
   plays.forEach(play => {
-    if (year && !play.date.startsWith(year.toString())) return;
+    if (!isPlayInYear(play, year)) return;
 
     const currentValue = metricValuesPerGame.get(play.gameId) || {
       playCount: 0,

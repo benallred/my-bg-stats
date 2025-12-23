@@ -2,6 +2,8 @@
  * Social & Locations statistics - players, locations, solo play data
  */
 
+import { filterPlaysByYear } from './play-helpers.js';
+
 /**
  * Get player statistics for Social & Locations section
  * @param {Array} plays - Array of play objects
@@ -12,9 +14,7 @@
  * @returns {Object} Player statistics with count and details
  */
 function getPlayerStats(plays, players, selfPlayerId, anonymousPlayerId, year = null) {
-  const filteredPlays = year
-    ? plays.filter(play => play.date.startsWith(year.toString()))
-    : plays;
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   // Create player lookup map
   const playerMap = new Map(players.map(p => [p.playerId, p.name]));
@@ -81,9 +81,7 @@ function getPlayerStats(plays, players, selfPlayerId, anonymousPlayerId, year = 
  * @returns {Object} Location statistics with count and details including percentages
  */
 function getLocationStats(plays, locations, year = null) {
-  const filteredPlays = year
-    ? plays.filter(play => play.date.startsWith(year.toString()))
-    : plays;
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   // Create location lookup map
   const locationMap = new Map(locations.map(loc => [loc.locationId, loc.name]));
@@ -144,9 +142,7 @@ function getLocationStats(plays, locations, year = null) {
  * @returns {Object} Solo statistics with totals, percentages, and game breakdown
  */
 function getSoloGameStats(plays, games, selfPlayerId, year = null) {
-  const filteredPlays = year
-    ? plays.filter(play => play.date.startsWith(year.toString()))
-    : plays;
+  const filteredPlays = filterPlaysByYear(plays, year);
 
   // Create game lookup map
   const gameMap = new Map(games.map(g => [g.id, g]));
