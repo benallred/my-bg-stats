@@ -204,6 +204,38 @@
             </div>
         </section>
 
+        <!-- Social & Locations Section -->
+        <section id="social-locations-section" class="stat-section">
+            <h2 class="section-heading">Social & Locations</h2>
+            <div class="section-grid">
+                <div class="stat-card clickable" id="players-card" data-stat="players">
+                    <h3>Players</h3>
+                    <div class="stat-value">> --</div>
+                    <p class="stat-description">Excludes strangers</p>
+                </div>
+
+                <div class="stat-card clickable" id="solo-card" data-stat="solo">
+                    <h3>Solo</h3>
+                    <div class="stat-value">--</div>
+                    <div class="stat-substats">
+                        <div class="substat">
+                            <span class="substat-label">% of total:</span>
+                            <span class="substat-value" id="solo-percent">--</span>
+                        </div>
+                        <div class="substat" id="solo-only-days-container" style="display: none;">
+                            <span class="substat-label">Solo-only days:</span>
+                            <span class="substat-value" id="solo-only-days">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card clickable" id="locations-card" data-stat="locations">
+                    <h3>Locations</h3>
+                    <div class="stat-value">--</div>
+                </div>
+            </div>
+        </section>
+
         <!-- Insights Section -->
         <section id="insights-section" class="stat-section">
             <h2 class="section-heading">Insights</h2>

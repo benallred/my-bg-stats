@@ -41,6 +41,9 @@ import {
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
+  getPlayerStats,
+  getLocationStats,
+  getSoloGameStats,
   getLongestSinglePlays,
   getTopGamesByUniquePlayers,
   getTopGamesByUniqueLocations,
@@ -570,6 +573,7 @@ function updateSectionVisibility() {
     const hIndexSection = document.getElementById('h-index-section');
     const playStatsSection = document.getElementById('play-statistics-section');
     const milestoneSection = document.getElementById('milestone-section');
+    const socialLocationsSection = document.getElementById('social-locations-section');
 
     // Check if current year is pre-logging
     const isPreLogging = currentYear && yearDataCache
@@ -581,6 +585,7 @@ function updateSectionVisibility() {
     if (hIndexSection) hIndexSection.style.display = displayValue;
     if (playStatsSection) playStatsSection.style.display = displayValue;
     if (milestoneSection) milestoneSection.style.display = displayValue;
+    if (socialLocationsSection) socialLocationsSection.style.display = displayValue;
 }
 
 /**
@@ -605,7 +610,11 @@ function updateAllStats() {
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
-        dailySessionStats: getDailySessionStats(gameData.plays, currentYear)
+        dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
+        // Social & Locations stats
+        playerStats: getPlayerStats(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
+        locationStats: getLocationStats(gameData.plays, gameData.locations, currentYear),
+        soloGameStats: getSoloGameStats(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
     };
 
     // Calculate year-in-review stats when year filter is active
@@ -698,6 +707,7 @@ function updateAllStats() {
     updateMilestoneStats();
     updateMilestoneCardLabels();
     updateMilestoneCumulativeSubstats();
+    updateSocialLocationStats();
     updateDiagnosticsSection();
     updateYearInReview();
 }
@@ -922,6 +932,63 @@ function updateMilestoneStats() {
     document.querySelector('#dimes .stat-value').textContent = milestones.dimes.length;
     document.querySelector('#quarters .stat-value').textContent = milestones.quarters.length;
     document.querySelector('#centuries .stat-value').textContent = milestones.centuries.length;
+}
+
+/**
+ * Update Social & Locations section
+ */
+function updateSocialLocationStats() {
+    const playerStats = statsCache.playerStats;
+    const locationStats = statsCache.locationStats;
+    const soloGameStats = statsCache.soloGameStats;
+
+    // Update Players card
+    document.querySelector('#players-card .stat-value').textContent = `> ${playerStats.uniquePlayerCount}`;
+
+    // Update Solo card based on current metric
+    const soloCard = document.getElementById('solo-card');
+    const soloValue = soloCard.querySelector('.stat-value');
+    const soloPercent = document.getElementById('solo-percent');
+    const soloOnlyDaysContainer = document.getElementById('solo-only-days-container');
+    const soloOnlyDays = document.getElementById('solo-only-days');
+
+    let mainValue, percentValue;
+    switch (currentBaseMetric) {
+        case Metric.SESSIONS:
+            mainValue = `${soloGameStats.totalSoloSessions.toLocaleString()} sessions`;
+            percentValue = soloGameStats.totalSessions > 0
+                ? ((soloGameStats.totalSoloSessions / soloGameStats.totalSessions) * 100).toFixed(1) + '%'
+                : '0%';
+            // Show solo-only days substat for sessions
+            soloOnlyDaysContainer.style.display = '';
+            const soloOnlyPercent = soloGameStats.totalSessions > 0
+                ? ((soloGameStats.soloOnlyDays / soloGameStats.totalSessions) * 100).toFixed(1) + '%'
+                : '0%';
+            soloOnlyDays.textContent = `${soloGameStats.soloOnlyDays} (${soloOnlyPercent})`;
+            break;
+        case Metric.PLAYS:
+            mainValue = `${soloGameStats.totalSoloPlays.toLocaleString()} plays`;
+            percentValue = soloGameStats.totalPlays > 0
+                ? ((soloGameStats.totalSoloPlays / soloGameStats.totalPlays) * 100).toFixed(1) + '%'
+                : '0%';
+            soloOnlyDaysContainer.style.display = 'none';
+            break;
+        case Metric.HOURS:
+        default:
+            const soloHours = soloGameStats.totalSoloMinutes / 60;
+            mainValue = `${soloHours.toFixed(1)} hours`;
+            percentValue = soloGameStats.totalMinutes > 0
+                ? ((soloGameStats.totalSoloMinutes / soloGameStats.totalMinutes) * 100).toFixed(1) + '%'
+                : '0%';
+            soloOnlyDaysContainer.style.display = 'none';
+            break;
+    }
+
+    soloValue.textContent = mainValue;
+    soloPercent.textContent = percentValue;
+
+    // Update Locations card
+    document.querySelector('#locations-card .stat-value').textContent = locationStats.locationCount;
 }
 
 /**
@@ -1351,6 +1418,62 @@ const statDetailHandlers = {
         }),
         render: (detailContent) => {
             showSuggestedGames(detailContent);
+        }
+    },
+    'players': {
+        getTitle: (currentYear) => currentYear ? `Players <span style="white-space: nowrap">(${currentYear})</span>` : 'Players <span style="white-space: nowrap">(All Time)</span>',
+        getSummary: (statsCache) => ({
+            mainValue: `> ${statsCache.playerStats.uniquePlayerCount}`
+        }),
+        render: (detailContent) => {
+            showPlayersBreakdown(detailContent);
+        }
+    },
+    'solo': {
+        getTitle: (currentYear) => currentYear ? `Solo <span style="white-space: nowrap">(${currentYear})</span>` : 'Solo <span style="white-space: nowrap">(All Time)</span>',
+        getSummary: (statsCache) => {
+            const soloGameStats = statsCache.soloGameStats;
+            let mainValue, percentValue;
+            switch (currentBaseMetric) {
+                case Metric.SESSIONS:
+                    mainValue = soloGameStats.totalSoloSessions.toLocaleString() + ' sessions';
+                    percentValue = soloGameStats.totalSessions > 0
+                        ? ((soloGameStats.totalSoloSessions / soloGameStats.totalSessions) * 100).toFixed(1) + '%'
+                        : '0%';
+                    break;
+                case Metric.PLAYS:
+                    mainValue = soloGameStats.totalSoloPlays.toLocaleString() + ' plays';
+                    percentValue = soloGameStats.totalPlays > 0
+                        ? ((soloGameStats.totalSoloPlays / soloGameStats.totalPlays) * 100).toFixed(1) + '%'
+                        : '0%';
+                    break;
+                case Metric.HOURS:
+                default:
+                    const soloHours = soloGameStats.totalSoloMinutes / 60;
+                    mainValue = soloHours.toFixed(1) + ' hours';
+                    percentValue = soloGameStats.totalMinutes > 0
+                        ? ((soloGameStats.totalSoloMinutes / soloGameStats.totalMinutes) * 100).toFixed(1) + '%'
+                        : '0%';
+                    break;
+            }
+            return {
+                mainValue: mainValue,
+                substats: [
+                    { label: '% of total:', value: percentValue },
+                ]
+            };
+        },
+        render: (detailContent) => {
+            showSoloBreakdown(detailContent);
+        }
+    },
+    'locations': {
+        getTitle: (currentYear) => currentYear ? `Locations <span style="white-space: nowrap">(${currentYear})</span>` : 'Locations <span style="white-space: nowrap">(All Time)</span>',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.locationStats.locationCount
+        }),
+        render: (detailContent) => {
+            showLocationsBreakdown(detailContent);
         }
     },
     'year-review': {
@@ -1948,6 +2071,150 @@ function showSuggestedGames(container) {
                     </tr>
                 `;
             }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show players breakdown
+ */
+function showPlayersBreakdown(container) {
+    const playerStats = statsCache.playerStats;
+
+    if (playerStats.playerDetails.length === 0) {
+        container.innerHTML = '<p>No players found for this period.</p>';
+        return;
+    }
+
+    // Sort by current metric
+    const sortedPlayers = [...playerStats.playerDetails].sort((a, b) => {
+        switch (currentBaseMetric) {
+            case Metric.SESSIONS:
+                return b.sessions - a.sessions;
+            case Metric.PLAYS:
+                return b.plays - a.plays;
+            case Metric.HOURS:
+            default:
+                return b.minutes - a.minutes;
+        }
+    });
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Hours</th>
+                <th>Sessions</th>
+                <th>Plays</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${sortedPlayers.map(player => `
+                <tr>
+                    <td>${player.name}</td>
+                    <td>${(player.minutes / 60).toFixed(1)} (${player.minutesPercent.toFixed(1)}%)</td>
+                    <td>${player.sessions} (${player.sessionsPercent.toFixed(1)}%)</td>
+                    <td>${player.plays} (${player.playsPercent.toFixed(1)}%)</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show solo games breakdown
+ */
+function showSoloBreakdown(container) {
+    const soloGameStats = statsCache.soloGameStats;
+
+    if (soloGameStats.gameDetails.length === 0) {
+        container.innerHTML = '<p>No solo plays found for this period.</p>';
+        return;
+    }
+
+    // Sort by current metric
+    const sortedGames = [...soloGameStats.gameDetails].sort((a, b) => {
+        switch (currentBaseMetric) {
+            case Metric.SESSIONS:
+                return b.sessions - a.sessions;
+            case Metric.PLAYS:
+                return b.plays - a.plays;
+            case Metric.HOURS:
+            default:
+                return b.minutes - a.minutes;
+        }
+    });
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Hours</th>
+                <th>Sessions</th>
+                <th>Plays</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${sortedGames.map(item => `
+                <tr>
+                    <td>${renderGameNameWithThumbnail(item.game)}</td>
+                    <td>${(item.minutes / 60).toFixed(1)}</td>
+                    <td>${item.sessions}</td>
+                    <td>${item.plays}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show locations breakdown
+ */
+function showLocationsBreakdown(container) {
+    const locationStats = statsCache.locationStats;
+
+    if (locationStats.locationDetails.length === 0) {
+        container.innerHTML = '<p>No locations found for this period.</p>';
+        return;
+    }
+
+    // Sort by current metric
+    const sortedLocations = [...locationStats.locationDetails].sort((a, b) => {
+        switch (currentBaseMetric) {
+            case Metric.SESSIONS:
+                return b.sessions - a.sessions;
+            case Metric.PLAYS:
+                return b.plays - a.plays;
+            case Metric.HOURS:
+            default:
+                return b.minutes - a.minutes;
+        }
+    });
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th>Hours</th>
+                <th>Sessions</th>
+                <th>Plays</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${sortedLocations.map(loc => `
+                <tr>
+                    <td>${loc.name}</td>
+                    <td>${(loc.minutes / 60).toFixed(1)} (${loc.minutesPercent.toFixed(1)}%)</td>
+                    <td>${loc.sessions} (${loc.sessionsPercent.toFixed(1)}%)</td>
+                    <td>${loc.plays} (${loc.playsPercent.toFixed(1)}%)</td>
+                </tr>
+            `).join('')}
         </tbody>
     `;
     container.appendChild(table);
@@ -2582,64 +2849,6 @@ function showYearReviewDetail(container, statsCache) {
         `;
 
         detailDiv.appendChild(timeActivitySubsection);
-    }
-
-    // Add Social & Locations subsection
-    const soloStats = statsCache.yearReview.soloStats;
-    const allLocations = statsCache.yearReview.allLocations;
-    if (soloStats) {
-        const socialSubsection = document.createElement('div');
-        socialSubsection.className = 'year-review-subsection';
-
-        // Format hours from minutes
-        const soloHours = soloStats.totalSoloMinutes / 60;
-        const soloHoursDisplay = soloHours.toFixed(1);
-
-        // Format locations for expandable list
-        const locationCount = allLocations ? allLocations.length : 0;
-        const locationsListHtml = allLocations && allLocations.length > 0
-            ? allLocations.map(loc => `
-                <div class="year-review-game-item year-review-game-item--inline">
-                    <span class="year-review-game-name">${loc.name}</span>
-                    <span class="year-review-game-value">${loc.sessions} <span class="metric-name sessions">sessions</span></span>
-                </div>
-            `).join('')
-            : '<div class="year-review-game-item">No locations recorded</div>';
-
-        socialSubsection.innerHTML = `
-            <h3 class="year-review-subsection-heading">Social & Locations</h3>
-            <table class="year-review-table">
-                <tbody>
-                    <tr class="year-review-row" data-metric="hours">
-                        <td class="year-review-label-detail">Solo <span class="metric-name hours">hours</span>:</td>
-                        <td class="year-review-value-detail">${soloHoursDisplay}</td>
-                    </tr>
-                    <tr class="year-review-row" data-metric="sessions">
-                        <td class="year-review-label-detail">Solo <span class="metric-name sessions">sessions</span>:</td>
-                        <td class="year-review-value-detail">${soloStats.totalSoloSessions.toLocaleString()}</td>
-                    </tr>
-                    <tr class="year-review-row" data-metric="plays">
-                        <td class="year-review-label-detail">Solo <span class="metric-name plays">plays</span>:</td>
-                        <td class="year-review-value-detail">${soloStats.totalSoloPlays.toLocaleString()}</td>
-                    </tr>
-                    <tr class="year-review-row year-review-row-clickable" data-detail="locations">
-                        <td class="year-review-label-detail">
-                            <span class="year-review-expand-icon">▶</span>
-                            Locations played at:
-                        </td>
-                        <td class="year-review-value-detail">${locationCount}</td>
-                    </tr>
-                    <tr class="year-review-expanded-content" data-detail="locations" style="display: none;">
-                        <td colspan="2">
-                            <div class="year-review-games-list">
-                                ${locationsListHtml}
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        `;
-        detailDiv.appendChild(socialSubsection);
     }
 
     // Add Logging Achievements subsection
