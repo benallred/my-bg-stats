@@ -44,6 +44,7 @@ import {
   getPlayTimeByGame,
   getDaysPlayedByGame,
   getTopGamesByMetric,
+  getTopNewToMeGame,
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
@@ -719,6 +720,9 @@ function updateAllStats() {
 
             // Top solo game by hours (for summary)
             topSoloGameByHours: getTopSoloGameByHours(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
+
+            // Top new-to-me game by sessions (for summary)
+            topNewToMeGameBySessions: getTopNewToMeGame(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
         };
     }
 
@@ -2475,6 +2479,12 @@ function showYearReviewDetail(container, statsCache) {
     const longestPlay = statsCache.yearReview.longestSinglePlays[0];
     if (longestPlay) {
         summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of <em>${longestPlay.game.name}</em>`);
+    }
+
+    // Biggest hit among new games (by sessions)
+    const topNewGame = statsCache.yearReview.topNewToMeGameBySessions;
+    if (topNewGame) {
+        summaryBullets.push(`Biggest hit among new games was <em>${topNewGame.game.name}</em> (${topNewGame.sessions} <span class="metric-name sessions">sessions</span>)`);
     }
 
     // Solo stats summary (show hours or sessions, whichever is greater)
