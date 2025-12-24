@@ -45,6 +45,7 @@ import {
   getDaysPlayedByGame,
   getTopGamesByMetric,
   getTopNewToMeGame,
+  getTopReturningGame,
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
@@ -723,6 +724,9 @@ function updateAllStats() {
 
             // Top new-to-me game by sessions (for summary)
             topNewToMeGameBySessions: getTopNewToMeGame(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
+
+            // Top returning game by sessions (for summary)
+            topReturningGameBySessions: getTopReturningGame(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
         };
     }
 
@@ -2485,6 +2489,12 @@ function showYearReviewDetail(container, statsCache) {
     const topNewGame = statsCache.yearReview.topNewToMeGameBySessions;
     if (topNewGame) {
         summaryBullets.push(`Biggest hit among new games was <em>${topNewGame.game.name}</em> (${topNewGame.sessions} <span class="metric-name sessions">sessions</span>)`);
+    }
+
+    // Returning favorite (top returning game by sessions)
+    const topReturningGame = statsCache.yearReview.topReturningGameBySessions;
+    if (topReturningGame) {
+        summaryBullets.push(`Returning favorite was <em>${topReturningGame.game.name}</em> (${topReturningGame.sessions} <span class="metric-name sessions">sessions</span>)`);
     }
 
     // Solo stats summary (show hours or sessions, whichever is greater)

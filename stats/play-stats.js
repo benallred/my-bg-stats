@@ -495,6 +495,103 @@ function getTopNewToMeGame(games, plays, year, metric) {
   return combined[0];
 }
 
+/**
+ * Get the top "returning" game (first played before year) by a specific metric
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to filter by (required)
+ * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
+ * @returns {Object|null} { game, value, hours, sessions, plays } or null if no returning games
+ */
+function getTopReturningGame(games, plays, year, metric) {
+  if (!year) return null;
+
+  // Find first play date for each game
+  const firstPlayDates = new Map();
+  plays.forEach(play => {
+    if (!firstPlayDates.has(play.gameId)) {
+      firstPlayDates.set(play.gameId, play.date);
+    } else {
+      const currentFirst = firstPlayDates.get(play.gameId);
+      if (play.date < currentFirst) {
+        firstPlayDates.set(play.gameId, play.date);
+      }
+    }
+  });
+
+  // Get games that are "returning" (first played before this year)
+  const returningGameIds = new Set();
+  firstPlayDates.forEach((firstDate, gameId) => {
+    if (!firstDate.startsWith(year.toString())) {
+      returningGameIds.add(gameId);
+    }
+  });
+
+  if (returningGameIds.size === 0) return null;
+
+  // Get metrics for all games played in the year
+  const hoursBreakdown = getPlayTimeByGame(games, plays, year);
+  const sessionsBreakdown = getDaysPlayedByGame(games, plays, year);
+
+  // Build plays breakdown
+  const playCountsPerGame = new Map();
+  plays.forEach(play => {
+    if (!isPlayInYear(play, year)) return;
+    const count = playCountsPerGame.get(play.gameId) || 0;
+    playCountsPerGame.set(play.gameId, count + 1);
+  });
+
+  // Create lookup maps
+  const hoursMap = new Map(hoursBreakdown.map(item => [item.game.id, item.totalMinutes]));
+  const sessionsMap = new Map(sessionsBreakdown.map(item => [item.game.id, item.uniqueDays]));
+
+  // Build combined data only for returning games that were played this year
+  const combined = [];
+  returningGameIds.forEach(gameId => {
+    const game = games.find(g => g.id === gameId);
+    // Only include if the game was actually played in this year
+    if (game && (hoursMap.has(gameId) || sessionsMap.has(gameId) || playCountsPerGame.has(gameId))) {
+      const hours = hoursMap.get(gameId) || 0;
+      const sessions = sessionsMap.get(gameId) || 0;
+      const gamePlays = playCountsPerGame.get(gameId) || 0;
+
+      let value;
+      switch (metric) {
+        case Metric.SESSIONS:
+          value = sessions;
+          break;
+        case Metric.PLAYS:
+          value = gamePlays;
+          break;
+        case Metric.HOURS:
+        default:
+          value = hours;
+          break;
+      }
+
+      combined.push({
+        game,
+        value,
+        hours,
+        sessions,
+        plays: gamePlays,
+      });
+    }
+  });
+
+  if (combined.length === 0) return null;
+
+  // Sort by: metric value desc, then hours desc, then sessions desc, then plays desc
+  combined.sort((a, b) => {
+    if (b.value !== a.value) return b.value - a.value;
+    if (b.hours !== a.hours) return b.hours - a.hours;
+    if (b.sessions !== a.sessions) return b.sessions - a.sessions;
+    return b.plays - a.plays;
+  });
+
+  return combined[0];
+}
+
 export {
   getTotalPlays,
   getTotalDaysPlayed,
@@ -505,4 +602,5 @@ export {
   getDaysPlayedByGame,
   getTopGamesByMetric,
   getTopNewToMeGame,
+  getTopReturningGame,
 };

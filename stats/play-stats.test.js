@@ -9,6 +9,7 @@ import {
   getDaysPlayedByGame,
   getTopGamesByMetric,
   getTopNewToMeGame,
+  getTopReturningGame,
 } from './play-stats.js';
 import { processData } from '../scripts/transform-game-data.js';
 import minimalFixture from '../tests/fixtures/minimal.json';
@@ -668,6 +669,193 @@ describe('getTopNewToMeGame', () => {
       { gameId: 2, date: '2024-02-02', durationMin: 20 },
     ];
     const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
+    expect(result.game.id).toBe(2);
+    expect(result.plays).toBe(3);
+  });
+});
+
+describe('getTopReturningGame', () => {
+  test('returns null when year is null', () => {
+    const result = getTopReturningGame(typicalData.games, typicalData.plays, null, 'sessions');
+    expect(result).toBeNull();
+  });
+
+  test('returns null when no returning games exist (all games are new-to-me)', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-02-01', durationMin: 60 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result).toBeNull();
+  });
+
+  test('returns the correct returning game when multiple exist', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+      { id: 3, name: 'Game C' },
+    ];
+    const plays = [
+      // Game A: first played 2023, 3 sessions in 2024 - should win
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-02', durationMin: 60 },
+      { gameId: 1, date: '2024-01-03', durationMin: 60 },
+      // Game B: first played 2023, 2 sessions in 2024
+      { gameId: 2, date: '2023-06-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-02', durationMin: 30 },
+      // Game C: first played 2024, new-to-me (not returning)
+      { gameId: 3, date: '2024-03-01', durationMin: 120 },
+      { gameId: 3, date: '2024-03-02', durationMin: 120 },
+      { gameId: 3, date: '2024-03-03', durationMin: 120 },
+      { gameId: 3, date: '2024-03-04', durationMin: 120 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result).not.toBeNull();
+    expect(result.game.id).toBe(1);
+    expect(result.sessions).toBe(3);
+  });
+
+  test('correctly breaks ties using secondary metrics', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // Game A: first played 2023, 2 sessions in 2024, 60 total minutes
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-02', durationMin: 30 },
+      // Game B: first played 2023, 2 sessions in 2024, 120 total minutes - should win on hours tiebreaker
+      { gameId: 2, date: '2023-06-01', durationMin: 60 },
+      { gameId: 2, date: '2024-02-01', durationMin: 60 },
+      { gameId: 2, date: '2024-02-02', durationMin: 60 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result).not.toBeNull();
+    expect(result.game.id).toBe(2);
+    expect(result.hours).toBe(120);
+  });
+
+  test('returns correct structure with all metrics', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-02', durationMin: 45 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result).toHaveProperty('game');
+    expect(result).toHaveProperty('value');
+    expect(result).toHaveProperty('hours');
+    expect(result).toHaveProperty('sessions');
+    expect(result).toHaveProperty('plays');
+    expect(result.sessions).toBe(2);
+    expect(result.plays).toBe(3);
+    expect(result.hours).toBe(135);
+    expect(result.value).toBe(2);
+  });
+
+  test('works with hours metric', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-02-01', durationMin: 120 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'hours');
+    expect(result.game.id).toBe(2);
+    expect(result.value).toBe(120);
+  });
+
+  test('works with plays metric', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'plays');
+    expect(result.game.id).toBe(2);
+    expect(result.value).toBe(3);
+  });
+
+  test('only considers plays within the specified year for metrics', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-02', durationMin: 60 },
+      { gameId: 1, date: '2025-01-01', durationMin: 60 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result.sessions).toBe(2);
+    expect(result.plays).toBe(2);
+  });
+
+  test('handles out-of-order plays when determining first play date', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      // Plays in non-chronological order - later play first in array
+      { gameId: 1, date: '2024-03-01', durationMin: 60 },
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result).not.toBeNull();
+    expect(result.game.id).toBe(1);
+  });
+
+  test('excludes returning games not played in the target year', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // Game A: first played 2022, played in 2023 but not 2024
+      { gameId: 1, date: '2022-01-01', durationMin: 60 },
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      // Game B: first played 2023, played in 2024 - should be the only result
+      { gameId: 2, date: '2023-06-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result).not.toBeNull();
+    expect(result.game.id).toBe(2);
+  });
+
+  test('tiebreaker falls through sessions to plays', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // Game A: first played 2023, 2 sessions in 2024, 60 minutes, 2 plays
+      { gameId: 1, date: '2023-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-02', durationMin: 30 },
+      // Game B: first played 2023, 2 sessions in 2024, 60 minutes, 3 plays - should win on plays tiebreaker
+      { gameId: 2, date: '2023-01-01', durationMin: 20 },
+      { gameId: 2, date: '2024-02-01', durationMin: 20 },
+      { gameId: 2, date: '2024-02-01', durationMin: 20 },
+      { gameId: 2, date: '2024-02-02', durationMin: 20 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
     expect(result.game.id).toBe(2);
     expect(result.plays).toBe(3);
   });
