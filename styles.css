@@ -41,6 +41,11 @@
     --color-metric-sessions: #3498db;
     --color-metric-plays: #f39c12;
 
+    /* Muted metric colors (for summary text) */
+    --color-metric-hours-muted: #4a9a6a;
+    --color-metric-sessions-muted: #5a8ab0;
+    --color-metric-plays-muted: #b8893a;
+
     /* Borders */
     --border-primary: #ddd;
     --border-secondary: #dee2e6;
@@ -106,6 +111,11 @@
     --color-metric-hours: #2ecc71;
     --color-metric-sessions: #5dade2;
     --color-metric-plays: #f39c12;
+
+    /* Muted metric colors (for summary text) */
+    --color-metric-hours-muted: #7dbf96;
+    --color-metric-sessions-muted: #8bbfd9;
+    --color-metric-plays-muted: #d4b068;
 
     /* Borders */
     --border-primary: #404040;
@@ -1097,6 +1107,22 @@ footer p {
 
 .year-review-summary li:last-child {
     margin-bottom: 0;
+}
+
+.year-review-summary .metric-name {
+    font-weight: 400;
+}
+
+.year-review-summary .metric-name.hours {
+    color: var(--color-metric-hours-muted);
+}
+
+.year-review-summary .metric-name.sessions {
+    color: var(--color-metric-sessions-muted);
+}
+
+.year-review-summary .metric-name.plays {
+    color: var(--color-metric-plays-muted);
 }
 
 .year-review-detail .year-review-subsection-heading {
