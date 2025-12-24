@@ -1227,25 +1227,27 @@ function showHIndexModal() {
     const modal = document.getElementById('h-index-modal');
     const exampleDiv = document.getElementById('h-index-modal-example');
 
-    // Get current base metric
+    // Get current base metric and actual h-index value
     const baseMetric = document.getElementById('base-metric-select').value;
+    const n = getCurrentHIndex();
+    const next = n + 1;
 
-    // Generate metric-specific example text
+    // Generate metric-specific example text using actual h-index value
     let exampleText = '';
     let improveText = '';
     switch (baseMetric) {
         case 'sessions':
-            exampleText = 'For example, if your sessions h-index is <strong>8</strong>, you have at least <strong>8 games</strong> that you\'ve played on <strong>8 or more different days</strong>.';
-            improveText = 'To increase it to <strong>9</strong>, you need <strong>1 more game</strong> with 9+ sessions (breadth) AND <strong>1 more session each</strong> for your existing 8 games (depth).';
+            exampleText = `For example, if your sessions h-index is <strong>${n}</strong>, you have at least <strong>${n} games</strong> that you've played on <strong>${n} or more different days</strong>.`;
+            improveText = `To increase it to <strong>${next}</strong>, you need <strong>1 more game</strong> with ${next}+ sessions (breadth) AND <strong>1 more session each</strong> for your existing ${n} games (depth).`;
             break;
         case 'plays':
-            exampleText = 'For example, if your plays h-index is <strong>12</strong>, you have at least <strong>12 games</strong> that you\'ve played <strong>12 or more times</strong>.';
-            improveText = 'To increase it to <strong>13</strong>, you need <strong>1 more game</strong> with 13+ plays (breadth) AND <strong>1 more play each</strong> for your existing 12 games (depth).';
+            exampleText = `For example, if your plays h-index is <strong>${n}</strong>, you have at least <strong>${n} games</strong> that you've played <strong>${n} or more times</strong>.`;
+            improveText = `To increase it to <strong>${next}</strong>, you need <strong>1 more game</strong> with ${next}+ plays (breadth) AND <strong>1 more play each</strong> for your existing ${n} games (depth).`;
             break;
         case 'hours':
         default:
-            exampleText = 'For example, if your hours h-index is <strong>5</strong>, you have at least <strong>5 games</strong> that you\'ve played for <strong>5 or more hours</strong> each.';
-            improveText = 'To increase it to <strong>6</strong>, you need <strong>1 more game</strong> with 6+ hours (breadth) AND <strong>1 more hour each</strong> for your existing 5 games (depth).';
+            exampleText = `For example, if your hours h-index is <strong>${n}</strong>, you have at least <strong>${n} games</strong> that you've played for <strong>${n} or more hours</strong> each.`;
+            improveText = `To increase it to <strong>${next}</strong>, you need <strong>1 more game</strong> with ${next}+ hours (breadth) AND <strong>1 more hour each</strong> for your existing ${n} games (depth).`;
             break;
     }
 
@@ -1277,6 +1279,18 @@ function hideHIndexModal() {
  */
 function showPeopleHIndexModal() {
     const modal = document.getElementById('people-h-index-modal');
+    const exampleDiv = document.getElementById('people-h-index-modal-example');
+
+    // Get actual People H-Index value
+    const n = statsCache?.peopleHIndex || 0;
+    const next = n + 1;
+
+    // Generate example text using actual value
+    exampleDiv.innerHTML = `
+        <p>For example, if your People H-Index is <strong>${n}</strong>, you have at least <strong>${n} games</strong> where you've played with <strong>${n} or more different people</strong> each.</p>
+        <p>To increase it to <strong>${next}</strong>, you need <strong>1 more game</strong> with ${next}+ unique players AND <strong>1 more unique player each</strong> for your existing ${n} games.</p>
+    `;
+
     modal.style.display = 'flex';
 
     // Update URL to include modal state
