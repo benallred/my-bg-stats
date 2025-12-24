@@ -2394,19 +2394,36 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(uniqueGamesBullet);
     }
 
-    // H-Index Growth summary
-    const hIndexParts = [];
-    if (statsCache.yearReview.hoursHIndexIncrease > 0) {
-        hIndexParts.push(`<span class="metric-name hours">hours</span> h-index by ${statsCache.yearReview.hoursHIndexIncrease} (to ${statsCache.yearReview.hoursHIndexCurrent})`);
+    // Time & Activity summary
+    const timeAndActivityData = statsCache.yearReview.timeAndActivity;
+    const allLocationsData = statsCache.yearReview.allLocations;
+    if (timeAndActivityData && timeAndActivityData.totalDays > 0) {
+        let activityBullet = `Played ${timeAndActivityData.totalDays} days totaling ${formatApproximateHours(timeAndActivityData.totalMinutes)} hours`;
+        if (timeAndActivityData.longestStreak > 1) {
+            activityBullet += ` with a ${timeAndActivityData.longestStreak}-day streak`;
+        }
+        summaryBullets.push(activityBullet);
     }
-    if (statsCache.yearReview.sessionsHIndexIncrease > 0) {
-        hIndexParts.push(`<span class="metric-name sessions">sessions</span> h-index by ${statsCache.yearReview.sessionsHIndexIncrease} (to ${statsCache.yearReview.sessionsHIndexCurrent})`);
+
+    // Players summary (count + top by hours)
+    const topPlayerHours = statsCache.yearReview.topPlayerByHours;
+    const playerCount = statsCache.playerStats?.uniquePlayerCount || 0;
+    if (playerCount > 0) {
+        let playerBullet = `Played with more than ${playerCount} player${playerCount === 1 ? '' : 's'}`;
+        if (topPlayerHours) {
+            playerBullet += ` with the top being ${topPlayerHours.name} (${formatApproximateHours(topPlayerHours.value)} <span class="metric-name hours">hours</span>)`;
+        }
+        summaryBullets.push(playerBullet);
     }
-    if (statsCache.yearReview.playsHIndexIncrease > 0) {
-        hIndexParts.push(`<span class="metric-name plays">plays</span> h-index by ${statsCache.yearReview.playsHIndexIncrease} (to ${statsCache.yearReview.playsHIndexCurrent})`);
-    }
-    if (hIndexParts.length > 0) {
-        summaryBullets.push(`Increased ${formatNaturalList(hIndexParts)}`);
+
+    // Locations summary (count + top outside home by hours)
+    const topLocationHours = statsCache.yearReview.topLocationByHours;
+    if (allLocationsData && allLocationsData.length > 0) {
+        let locationBullet = `Played at ${allLocationsData.length} location${allLocationsData.length === 1 ? '' : 's'}`;
+        if (topLocationHours) {
+            locationBullet += ` with the top outside home being ${topLocationHours.name} (${formatApproximateHours(topLocationHours.value)} <span class="metric-name hours">hours</span>)`;
+        }
+        summaryBullets.push(locationBullet);
     }
 
     // Game Highlights summary
@@ -2460,18 +2477,7 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of <em>${longestPlay.game.name}</em>`);
     }
 
-    // Time & Activity summary
-    const timeAndActivityData = statsCache.yearReview.timeAndActivity;
-    const allLocationsData = statsCache.yearReview.allLocations;
-    if (timeAndActivityData && timeAndActivityData.totalDays > 0) {
-        let activityBullet = `Played ${timeAndActivityData.totalDays} days totaling ${formatApproximateHours(timeAndActivityData.totalMinutes)} hours`;
-        if (timeAndActivityData.longestStreak > 1) {
-            activityBullet += ` with a ${timeAndActivityData.longestStreak}-day streak`;
-        }
-        summaryBullets.push(activityBullet);
-    }
-
-    // Social & Locations summary (solo stats - show hours or sessions, whichever is greater)
+    // Solo stats summary (show hours or sessions, whichever is greater)
     const soloStatsData = statsCache.yearReview.soloStats;
     const topSoloGame = statsCache.yearReview.topSoloGameByHours;
     if (soloStatsData) {
@@ -2491,25 +2497,19 @@ function showYearReviewDetail(container, statsCache) {
         }
     }
 
-    // Players summary (count + top by hours)
-    const topPlayerHours = statsCache.yearReview.topPlayerByHours;
-    const playerCount = statsCache.playerStats?.uniquePlayerCount || 0;
-    if (playerCount > 0) {
-        let playerBullet = `Played with more than ${playerCount} player${playerCount === 1 ? '' : 's'}`;
-        if (topPlayerHours) {
-            playerBullet += ` with the top being ${topPlayerHours.name} (${formatApproximateHours(topPlayerHours.value)} <span class="metric-name hours">hours</span>)`;
-        }
-        summaryBullets.push(playerBullet);
+    // H-Index Growth summary
+    const hIndexParts = [];
+    if (statsCache.yearReview.hoursHIndexIncrease > 0) {
+        hIndexParts.push(`<span class="metric-name hours">hours</span> h-index by ${statsCache.yearReview.hoursHIndexIncrease} (to ${statsCache.yearReview.hoursHIndexCurrent})`);
     }
-
-    // Locations summary (count + top outside home by hours)
-    const topLocationHours = statsCache.yearReview.topLocationByHours;
-    if (allLocationsData && allLocationsData.length > 0) {
-        let locationBullet = `Played at ${allLocationsData.length} location${allLocationsData.length === 1 ? '' : 's'}`;
-        if (topLocationHours) {
-            locationBullet += ` with the top outside home being ${topLocationHours.name} (${formatApproximateHours(topLocationHours.value)} <span class="metric-name hours">hours</span>)`;
-        }
-        summaryBullets.push(locationBullet);
+    if (statsCache.yearReview.sessionsHIndexIncrease > 0) {
+        hIndexParts.push(`<span class="metric-name sessions">sessions</span> h-index by ${statsCache.yearReview.sessionsHIndexIncrease} (to ${statsCache.yearReview.sessionsHIndexCurrent})`);
+    }
+    if (statsCache.yearReview.playsHIndexIncrease > 0) {
+        hIndexParts.push(`<span class="metric-name plays">plays</span> h-index by ${statsCache.yearReview.playsHIndexIncrease} (to ${statsCache.yearReview.playsHIndexCurrent})`);
+    }
+    if (hIndexParts.length > 0) {
+        summaryBullets.push(`Increased ${formatNaturalList(hIndexParts)}`);
     }
 
     // Logging Achievements summary (highest threshold per metric)
