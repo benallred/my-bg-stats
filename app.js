@@ -2384,6 +2384,16 @@ function showYearReviewDetail(container, statsCache) {
     // Build Summary section bullet points
     const summaryBullets = [];
 
+    // Unique games played summary
+    const gamesPlayedData = statsCache.gamesPlayedData;
+    if (gamesPlayedData && gamesPlayedData.total > 0) {
+        let uniqueGamesBullet = `Played ${gamesPlayedData.total} unique game${gamesPlayedData.total === 1 ? '' : 's'}`;
+        if (gamesPlayedData.newToMe > 0) {
+            uniqueGamesBullet += `, ${gamesPlayedData.newToMe} of which ${gamesPlayedData.newToMe === 1 ? 'was' : 'were'} new to me`;
+        }
+        summaryBullets.push(uniqueGamesBullet);
+    }
+
     // H-Index Growth summary
     const hIndexParts = [];
     if (statsCache.yearReview.hoursHIndexIncrease > 0) {
