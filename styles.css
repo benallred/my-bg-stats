@@ -37,9 +37,9 @@
     --color-warning: #ffc107;
 
     /* Metric colors */
-    --color-metric-hours: #f39c12;
+    --color-metric-hours: #27ae60;
     --color-metric-sessions: #3498db;
-    --color-metric-plays: #27ae60;
+    --color-metric-plays: #f39c12;
 
     /* Borders */
     --border-primary: #ddd;
@@ -103,9 +103,9 @@
     --color-warning: #f39c12;
 
     /* Metric colors */
-    --color-metric-hours: #f39c12;
+    --color-metric-hours: #2ecc71;
     --color-metric-sessions: #5dade2;
-    --color-metric-plays: #2ecc71;
+    --color-metric-plays: #f39c12;
 
     /* Borders */
     --border-primary: #404040;
