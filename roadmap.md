@@ -2,9 +2,13 @@
 
 *Note: Items are numbered for reference only. Order does not represent priority.*
 
-1. Add price-per-play statistics: cheapest game per play, most expensive game per play, average price-per-play
-2. Year in Review - Biggest Jumps: Games with most increased play count vs previous year
-3. Year in Review - Game Statistics: Most played game by days, most played game by hours, longest single play (game + duration), most time-efficient game (most plays per hour), marathon game (highest total hours), unique games played, new-to-me games played, highest rated new-to-me game, oldest game played (by publication year), newest game played (by publication year)
-4. Year in Review - Social & Locations: Most common player count, most common day to play, biggest gaming session (most players in single session/day)
-5. Year in Review - Collection & Variety: Shelf of shame progress (games played for the first time, regardless of acquisition date), shelf of shame additions (games acquired this year still unplayed), resurrected games (not played previous year, played this year), dormant games (played previous year, not played this year), play concentration (% of plays from top 10 games), new vs familiar ratio (plays of new-to-me vs previously played)
-6. Year in Review - Records & Comparisons: Personal records broken (all-time highs achieved this year), personal records set (all-time lows achieved this year), this year vs last year (plays, unique games, hours with % changes), speed gaming day (most games in shortest time), variety day (most unique games in one day), average play duration for the year, average rating of games played, weekend vs weekday play percentage
+1. Price-per-play statistics: cheapest game per play, most expensive game per play, average price-per-play
+2. Year in Review - Publication year extremes: oldest and newest games played by publication year
+3. Year in Review - Ratings: highest rated new-to-me game, average rating of games played
+4. Year in Review - Efficiency stats: most time-efficient game (most plays per hour), average play duration
+5. Year in Review - Year-over-year: games with biggest play count increase vs previous year, this year vs last year comparison (plays, unique games, hours with % changes)
+6. Year in Review - Play patterns: most common player count, most common day to play, biggest gaming session (most players in one day), speed gaming day (most games in shortest time), weekend vs weekday play percentage
+7. Year in Review - Shelf of shame: games played for the first time this year, games acquired this year still unplayed
+8. Year in Review - Game turnover: resurrected games (not played previous year, played this year), dormant games (played previous year, not played this year)
+9. Year in Review - Play distribution: play concentration (% of plays from top 10 games), new vs familiar ratio (plays of new-to-me vs previously played)
+10. Year in Review - Personal records: all-time highs achieved this year, all-time lows achieved this year
