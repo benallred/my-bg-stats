@@ -2483,7 +2483,7 @@ function showYearReviewDetail(container, statsCache) {
                     const metricSpans = metrics.map(m =>
                         `<span class="metric-name ${m}">${m}</span>`
                     );
-                    gameHighlightParts.push(`by ${formatNaturalList(metricSpans)} was <em>${name}</em>`);
+                    gameHighlightParts.push(`by ${formatNaturalList(metricSpans)} was <strong><em>${name}</em></strong>`);
                 }
             });
         });
@@ -2496,19 +2496,19 @@ function showYearReviewDetail(container, statsCache) {
     // Longest single play summary
     const longestPlay = statsCache.yearReview.longestSinglePlays[0];
     if (longestPlay) {
-        summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of <em>${longestPlay.game.name}</em>`);
+        summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of <strong><em>${longestPlay.game.name}</em></strong>`);
     }
 
     // Biggest hit among new games (by sessions)
     const topNewGame = statsCache.yearReview.topNewToMeGameBySessions;
     if (topNewGame) {
-        summaryBullets.push(`Biggest hit among new games was <em>${topNewGame.game.name}</em> (${topNewGame.sessions} <span class="metric-name sessions">sessions</span>)`);
+        summaryBullets.push(`Biggest hit among new games was <strong><em>${topNewGame.game.name}</em></strong> (${topNewGame.sessions} <span class="metric-name sessions">sessions</span>)`);
     }
 
     // Returning favorite (top returning game by sessions)
     const topReturningGame = statsCache.yearReview.topReturningGameBySessions;
     if (topReturningGame) {
-        summaryBullets.push(`Returning favorite was <em>${topReturningGame.game.name}</em> (${topReturningGame.sessions} <span class="metric-name sessions">sessions</span>)`);
+        summaryBullets.push(`Returning favorite was <strong><em>${topReturningGame.game.name}</em></strong> (${topReturningGame.sessions} <span class="metric-name sessions">sessions</span>)`);
     }
 
     // Solo stats summary (show hours or sessions, whichever is greater)
@@ -2525,7 +2525,7 @@ function showYearReviewDetail(container, statsCache) {
                 soloBullet = `Logged ${soloSessions} solo <span class="metric-name sessions">sessions</span>`;
             }
             if (topSoloGame) {
-                soloBullet += ` with the top solo game being <em>${topSoloGame.game.name}</em>`;
+                soloBullet += ` with the top solo game being <strong><em>${topSoloGame.game.name}</em></strong>`;
             }
             summaryBullets.push(soloBullet);
         }
