@@ -510,6 +510,21 @@ describe('getTopLocationByMetric', () => {
     expect(result.name).toBe('Work');
     expect(result.value).toBe(60);
   });
+
+  test('sorts multiple locations by plays correctly', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 2 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 2 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60, locationId: 3 },
+      { gameId: 1, date: '2024-01-16', durationMin: 60, locationId: 3 },
+      { gameId: 1, date: '2024-01-17', durationMin: 60, locationId: 3 },
+    ];
+
+    const result = getTopLocationByMetric(plays, locations, homeLocationId, 2024, 'plays');
+
+    expect(result.name).toBe('Work');
+    expect(result.value).toBe(3);
+  });
 });
 
 describe('getTopSoloGameByHours', () => {

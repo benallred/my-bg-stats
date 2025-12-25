@@ -360,9 +360,9 @@ function getTopGamesByMetric(games, plays, year, metric, limit = 3) {
   allGameIds.forEach(gameId => {
     const game = games.find(g => g.id === gameId);
     if (game) {
-      const hours = hoursMap.get(gameId) || 0;
-      const sessions = sessionsMap.get(gameId) || 0;
-      const gamePlays = playsMap.get(gameId) || 0;
+      const hours = hoursMap.get(gameId);
+      const sessions = sessionsMap.get(gameId);
+      const gamePlays = playsMap.get(gameId);
 
       let value;
       switch (metric) {
@@ -454,9 +454,9 @@ function getTopNewToMeGame(games, plays, year, metric) {
   newToMeGameIds.forEach(gameId => {
     const game = games.find(g => g.id === gameId);
     if (game) {
-      const hours = hoursMap.get(gameId) || 0;
-      const sessions = sessionsMap.get(gameId) || 0;
-      const gamePlays = playCountsPerGame.get(gameId) || 0;
+      const hours = hoursMap.get(gameId);
+      const sessions = sessionsMap.get(gameId);
+      const gamePlays = playCountsPerGame.get(gameId);
 
       let value;
       switch (metric) {
@@ -550,10 +550,10 @@ function getTopReturningGame(games, plays, year, metric) {
   returningGameIds.forEach(gameId => {
     const game = games.find(g => g.id === gameId);
     // Only include if the game was actually played in this year
-    if (game && (hoursMap.has(gameId) || sessionsMap.has(gameId) || playCountsPerGame.has(gameId))) {
-      const hours = hoursMap.get(gameId) || 0;
-      const sessions = sessionsMap.get(gameId) || 0;
-      const gamePlays = playCountsPerGame.get(gameId) || 0;
+    if (game && playCountsPerGame.has(gameId)) {
+      const hours = hoursMap.get(gameId);
+      const sessions = sessionsMap.get(gameId);
+      const gamePlays = playCountsPerGame.get(gameId);
 
       let value;
       switch (metric) {

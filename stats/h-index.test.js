@@ -338,6 +338,18 @@ describe('getHIndexBreakdown', () => {
     expect(Array.isArray(breakdown2023)).toBe(true);
   });
 
+  test('filters by year with usePlaySessions', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    const testPlays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2023-01-02', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+    ];
+    const breakdown2024 = getHIndexBreakdown(testGames, testPlays, 2024, true);
+    expect(breakdown2024).toHaveLength(1);
+    expect(breakdown2024[0].count).toBe(1);
+  });
+
   test('returns empty array for no plays', () => {
     const breakdown = getHIndexBreakdown(typicalData.games, []);
     expect(breakdown).toEqual([]);

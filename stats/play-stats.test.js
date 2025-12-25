@@ -508,6 +508,40 @@ describe('getTopGamesByMetric', () => {
 
     expect(result.length).toBe(3);
   });
+
+  test('handles games with zero duration (fallback to 0 in maps)', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 0 },
+    ];
+    const result = getTopGamesByMetric(games, plays, 2024, 'plays', 2);
+    expect(result.length).toBe(2);
+    const game2 = result.find(r => r.game.id === 2);
+    expect(game2.hours).toBe(0);
+    expect(game2.plays).toBe(1);
+  });
+
+  test('tiebreaker uses sessions when value and hours tie', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // Game A: 2 plays, 60 minutes, 1 session
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      // Game B: 2 plays, 60 minutes, 2 sessions - should win on sessions
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-02', durationMin: 30 },
+    ];
+    const result = getTopGamesByMetric(games, plays, 2024, 'plays', 2);
+    expect(result[0].game.id).toBe(2);
+    expect(result[0].sessions).toBe(2);
+  });
 });
 
 describe('getTopNewToMeGame', () => {
@@ -671,6 +705,54 @@ describe('getTopNewToMeGame', () => {
     const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
     expect(result.game.id).toBe(2);
     expect(result.plays).toBe(3);
+  });
+
+  test('returns null when new-to-me games exist but are not in games array', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 999, date: '2024-01-01', durationMin: 60 },
+    ];
+    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
+    expect(result).toBeNull();
+  });
+
+  test('tiebreaker uses sessions when value and hours tie', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // Game A: 2 plays, 60 minutes, 1 session
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      // Game B: 2 plays, 60 minutes, 2 sessions - should win on sessions
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-02', durationMin: 30 },
+    ];
+    const result = getTopNewToMeGame(games, plays, 2024, 'plays');
+    expect(result.game.id).toBe(2);
+    expect(result.sessions).toBe(2);
+  });
+
+  test('handles games with zero duration (fallback to 0 in maps)', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 0 },
+    ];
+    const result = getTopNewToMeGame(games, plays, 2024, 'plays');
+    expect(result.length).toBeUndefined();
+    const game2Result = getTopNewToMeGame(
+      [{ id: 2, name: 'Game B' }],
+      [{ gameId: 2, date: '2024-01-01', durationMin: 0 }],
+      2024,
+      'plays',
+    );
+    expect(game2Result.hours).toBe(0);
   });
 });
 
@@ -858,5 +940,46 @@ describe('getTopReturningGame', () => {
     const result = getTopReturningGame(games, plays, 2024, 'sessions');
     expect(result.game.id).toBe(2);
     expect(result.plays).toBe(3);
+  });
+
+  test('returns null when returning games exist but are not in games array', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 999, date: '2023-01-01', durationMin: 60 },
+      { gameId: 999, date: '2024-01-01', durationMin: 60 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'sessions');
+    expect(result).toBeNull();
+  });
+
+  test('tiebreaker uses sessions when value and hours tie', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // Game A: first played 2023, 2 plays in 2024, 60 minutes, 1 session
+      { gameId: 1, date: '2023-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      // Game B: first played 2023, 2 plays in 2024, 60 minutes, 2 sessions - should win on sessions
+      { gameId: 2, date: '2023-01-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-01', durationMin: 30 },
+      { gameId: 2, date: '2024-02-02', durationMin: 30 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'plays');
+    expect(result.game.id).toBe(2);
+    expect(result.sessions).toBe(2);
+  });
+
+  test('handles games with zero duration (fallback to 0 in maps)', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 0 },
+    ];
+    const result = getTopReturningGame(games, plays, 2024, 'plays');
+    expect(result.hours).toBe(0);
   });
 });

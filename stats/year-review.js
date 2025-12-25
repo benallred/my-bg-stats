@@ -76,7 +76,7 @@ function getTimeAndActivityStats(plays, year = null) {
       longestDayDate = date;
       longestDayGamesList = Array.from(data.games).map(gameId => ({
         gameId: gameId,
-        minutes: data.gameMinutes.get(gameId) || 0,
+        minutes: data.gameMinutes.get(gameId),
       }));
     }
     if (data.minutes < shortestDayMinutes) {
@@ -84,7 +84,7 @@ function getTimeAndActivityStats(plays, year = null) {
       shortestDayDate = date;
       shortestDayGamesList = Array.from(data.games).map(gameId => ({
         gameId: gameId,
-        minutes: data.gameMinutes.get(gameId) || 0,
+        minutes: data.gameMinutes.get(gameId),
       }));
     }
   });
@@ -149,7 +149,7 @@ function getTimeAndActivityStats(plays, year = null) {
       mostGamesDayDate = date;
       mostGamesDayGamesList = Array.from(data.games).map(gameId => ({
         gameId: gameId,
-        playCount: data.gamePlays.get(gameId) || 1,
+        playCount: data.gamePlays.get(gameId),
       }));
     }
   });

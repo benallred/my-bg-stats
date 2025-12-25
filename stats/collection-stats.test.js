@@ -156,6 +156,17 @@ describe('getMilestones', () => {
       expect(result.quarters).toEqual([]);
       expect(result.centuries).toEqual([]);
     });
+
+    test('ignores plays for games not in games array', () => {
+      const testGames = [{ id: 1, name: 'Game 1' }];
+      const testPlays = [
+        ...Array.from({ length: 5 }, (_, i) => ({ gameId: 1, date: `2020-01-0${i + 1}`, durationMin: 60 })),
+        ...Array.from({ length: 5 }, (_, i) => ({ gameId: 999, date: `2020-01-0${i + 1}`, durationMin: 60 })),
+      ];
+      const result = getMilestones(testGames, testPlays, null, 'plays');
+      expect(result.fives).toHaveLength(1);
+      expect(result.fives[0].game.id).toBe(1);
+    });
   });
 
   describe('sessions metric', () => {
@@ -677,6 +688,19 @@ describe('getSkippedMilestoneCount', () => {
     ];
     const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
     expect(result).toBe(0);
+  });
+
+  test('ignores plays for games not in games array', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game 1 skips fives, Game 999 would skip too but isn't in games array
+    const testPlays = [
+      ...Array.from({ length: 3 }, (_, i) => ({ gameId: 1, date: `2020-01-0${i + 1}`, durationMin: 60 })),
+      ...Array.from({ length: 10 }, (_, i) => ({ gameId: 1, date: `2021-01-${String(i + 1).padStart(2, '0')}`, durationMin: 60 })),
+      ...Array.from({ length: 3 }, (_, i) => ({ gameId: 999, date: `2020-01-0${i + 1}`, durationMin: 60 })),
+      ...Array.from({ length: 10 }, (_, i) => ({ gameId: 999, date: `2021-01-${String(i + 1).padStart(2, '0')}`, durationMin: 60 })),
+    ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    expect(result).toBe(1);
   });
 });
 
