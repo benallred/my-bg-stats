@@ -3432,11 +3432,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 2,
+      "playCount": 6,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/fbX3QFrAWR2LsYEkSyYzcQ__small/img/tfRZUlmTdCW_gGjQqg0_Dyowfqk=/fit-in/200x150/filters:strip_icc()/pic8815900.jpg",
       "coverUrl": "https://cf.geekdo-images.com/fbX3QFrAWR2LsYEkSyYzcQ__original/img/I_SLJPO38VcIgvmn3HMZcqZSKfs=/0x0/filters:format(jpeg)/pic8815900.jpg",
-      "typicalPlayTimeMinutes": 68
+      "typicalPlayTimeMinutes": 69
     },
     {
       "id": 590,
@@ -6144,11 +6144,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 14,
-      "uniquePlayDays": 13,
+      "playCount": 15,
+      "uniquePlayDays": 14,
       "thumbnailUrl": "https://cf.geekdo-images.com/eLR3tCinIy9Sm1cP20JNeg__thumb/img/RhpLLYYUkBuKrcrVk2H91JDXxv0=/fit-in/200x150/filters:strip_icc()/pic7692093.png",
       "coverUrl": "https://cf.geekdo-images.com/eLR3tCinIy9Sm1cP20JNeg__original/img/s4KBtEUmvW70K0t42tavn65afyM=/0x0/filters:format(png)/pic7692093.png",
-      "typicalPlayTimeMinutes": 11
+      "typicalPlayTimeMinutes": 12
     },
     {
       "id": 494,
@@ -7499,8 +7499,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 20,
-      "uniquePlayDays": 10,
+      "playCount": 23,
+      "uniquePlayDays": 11,
       "thumbnailUrl": "https://cf.geekdo-images.com/2DyxMVASynw87LRULZuyqA__thumb/img/yIUSMoN8O5FeDZjXa4vreKj5Ogw=/fit-in/200x150/filters:strip_icc()/pic4657706.jpg",
       "coverUrl": "https://cf.geekdo-images.com/2DyxMVASynw87LRULZuyqA__original/img/IHLuH9f5dB6jJn74cdVdMixAUKg=/0x0/filters:format(jpeg)/pic4657706.jpg",
       "typicalPlayTimeMinutes": 8
@@ -11964,8 +11964,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 26,
-      "uniquePlayDays": 11,
+      "playCount": 28,
+      "uniquePlayDays": 12,
       "thumbnailUrl": "https://cf.geekdo-images.com/un5yundwtC6q1U9gWTY8Yw__thumb/img/I4QR01ZS6TTIHgW3UpdOYvePRxQ=/fit-in/200x150/filters:strip_icc()/pic6883492.png",
       "coverUrl": "https://cf.geekdo-images.com/un5yundwtC6q1U9gWTY8Yw__original/img/wFqPVYmL1i9rc426afzYana7ZnE=/0x0/filters:format(png)/pic6883492.png",
       "typicalPlayTimeMinutes": 20
@@ -12051,11 +12051,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/Zp0x_lURkRrHcLyyYv2aSw__thumb/img/d9luLahO6n0itCfqpjpLexz24OE=/fit-in/200x150/filters:strip_icc()/pic5536142.jpg",
       "coverUrl": "https://cf.geekdo-images.com/Zp0x_lURkRrHcLyyYv2aSw__original/img/xk-EPbXMZ8ut9LAMobKNsro6cSw=/0x0/filters:format(jpeg)/pic5536142.jpg",
-      "typicalPlayTimeMinutes": 54
+      "typicalPlayTimeMinutes": 50
     },
     {
       "id": 238,
@@ -12770,11 +12770,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 16,
-      "uniquePlayDays": 15,
+      "playCount": 17,
+      "uniquePlayDays": 16,
       "thumbnailUrl": "https://cf.geekdo-images.com/BryJNSSDbCohXeaJPx3tpw__thumb/img/5fmJlAM307xX3zozMnStTuWYphI=/fit-in/200x150/filters:strip_icc()/pic4232048.png",
       "coverUrl": "https://cf.geekdo-images.com/BryJNSSDbCohXeaJPx3tpw__original/img/pgmg83e1lUqNo7FTLdscWNDwlPE=/0x0/filters:format(png)/pic4232048.png",
-      "typicalPlayTimeMinutes": 43.5
+      "typicalPlayTimeMinutes": 44
     },
     {
       "id": 463,
@@ -13643,6 +13643,151 @@
   ],
   "plays": [
     {
+      "gameId": 243,
+      "copyId": "d81dae06-2a2d-4570-8639-8edee196df21",
+      "date": "2025-12-23",
+      "timestamp": "2025-12-23 21:29:51",
+      "durationMin": 64,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 70,
+      "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
+      "date": "2025-12-22",
+      "timestamp": "2025-12-22 19:33:07",
+      "durationMin": 8,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 70,
+      "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
+      "date": "2025-12-22",
+      "timestamp": "2025-12-22 19:25:48",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 70,
+      "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
+      "date": "2025-12-22",
+      "timestamp": "2025-12-22 19:09:13",
+      "durationMin": 16,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 467,
+      "copyId": "fc278d76-564b-476b-a541-2bb6a4007383",
+      "date": "2025-12-22",
+      "timestamp": "2025-12-22 18:38:11",
+      "durationMin": 16,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 589,
+      "copyId": "4cf7c224-be35-4263-a864-95f1e0d1b667",
+      "date": "2025-12-21",
+      "timestamp": "2025-12-21 22:04:40",
+      "durationMin": 70,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 564,
+      "copyId": "12c26600-47e6-4454-be0e-679f1d26479b",
+      "date": "2025-12-21",
+      "timestamp": "2025-12-21 15:05:24",
+      "durationMin": 46,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 589,
+      "copyId": "4cf7c224-be35-4263-a864-95f1e0d1b667",
+      "date": "2025-12-20",
+      "timestamp": "2025-12-20 16:22:24",
+      "durationMin": 130,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 172,
+      "copyId": "b2ff281b-92ce-4226-8bf0-b64fd4fbdb92",
+      "date": "2025-12-19",
+      "timestamp": "2025-12-19 18:39:27",
+      "durationMin": 23,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 172,
+      "copyId": "b2ff281b-92ce-4226-8bf0-b64fd4fbdb92",
+      "date": "2025-12-19",
+      "timestamp": "2025-12-19 18:23:18",
+      "durationMin": 15,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 589,
+      "copyId": "4cf7c224-be35-4263-a864-95f1e0d1b667",
+      "date": "2025-12-16",
+      "timestamp": "2025-12-16 18:23:22",
+      "durationMin": 53,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
       "gameId": 589,
       "copyId": "4cf7c224-be35-4263-a864-95f1e0d1b667",
       "date": "2025-12-14",
@@ -13688,7 +13833,6 @@
       "durationEstimated": false,
       "players": [
         2,
-        1,
         3,
         4
       ],
@@ -13916,7 +14060,7 @@
       "players": [
         93,
         3,
-        94,
+        46,
         18,
         32,
         96,
@@ -41073,7 +41217,7 @@
     },
     {
       "playerId": 18,
-      "name": "Cathy"
+      "name": "Aunt Cathy"
     },
     {
       "playerId": 19,
@@ -41368,10 +41512,6 @@
       "name": "Ally"
     },
     {
-      "playerId": 94,
-      "name": "Bill"
-    },
-    {
       "playerId": 95,
       "name": "Tammy"
     },
@@ -41430,5 +41570,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2025-12-15T04:21:29.000Z"
+  "generatedAt": "2025-12-24T04:29:51.000Z"
 }
