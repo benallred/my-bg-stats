@@ -3643,13 +3643,54 @@ function updateURL() {
 }
 
 /**
+ * Toggle experimental features flag in localStorage with visual feedback
+ * @param {HTMLElement} element - Element to color based on flag state
+ */
+function toggleExperimentalFeatures(element) {
+    const current = localStorage.getItem('experimentalFeatures') === 'true';
+    const newValue = !current;
+    localStorage.setItem('experimentalFeatures', newValue);
+
+    // Persistent color indicates flag state
+    element.style.color = newValue ? 'var(--color-primary)' : '';
+}
+
+/**
+ * Check if experimental features are enabled
+ * @returns {boolean} True if experimental features are enabled
+ */
+function isExperimentalEnabled() {
+    return localStorage.getItem('experimentalFeatures') === 'true';
+}
+
+/**
  * Update footer with generation timestamp
  */
 function updateFooter() {
     if (gameData && gameData.generatedAt) {
         const date = new Date(gameData.generatedAt);
-        document.getElementById('last-updated').textContent =
+        const lastUpdatedEl = document.getElementById('last-updated');
+        lastUpdatedEl.textContent =
             `Last updated: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+        // Set initial color if experimental features already enabled
+        if (isExperimentalEnabled()) {
+            lastUpdatedEl.style.color = 'var(--color-primary)';
+        }
+
+        // Hidden feature flag activation - 5 taps to toggle
+        let tapCount = 0;
+        let tapTimeout;
+        lastUpdatedEl.addEventListener('click', () => {
+            tapCount++;
+            clearTimeout(tapTimeout);
+            if (tapCount >= 5) {
+                toggleExperimentalFeatures(lastUpdatedEl);
+                tapCount = 0;
+            } else {
+                tapTimeout = setTimeout(() => tapCount = 0, 1500);
+            }
+        });
     }
 }
 
