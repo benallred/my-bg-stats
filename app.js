@@ -531,6 +531,10 @@ function setupBaseMetricFilter() {
         updateMilestoneCardLabels();
         updateMilestoneCumulativeSubstats();
 
+        // Recalculate cost club data for new metric and update UI
+        statsCache.fiveDollarClubData = getCostClubGames(gameData.games, gameData.plays, currentBaseMetric, CostClub.FIVE_DOLLAR, currentYear);
+        updateCostAnalysisStats();
+
         // Only refresh sections if not loading from permalink
         if (!isLoadingFromPermalink) {
             // Refresh h-index detail section if open
@@ -542,6 +546,11 @@ function setupBaseMetricFilter() {
             const milestoneStats = ['fives', 'dimes', 'quarters', 'centuries'];
             if (milestoneStats.includes(currentlyOpenStatType)) {
                 showDetailSection(currentlyOpenStatType);
+            }
+
+            // Refresh five-dollar-club detail section if open
+            if (currentlyOpenStatType === 'five-dollar-club') {
+                showDetailSection('five-dollar-club');
             }
 
             // Update year-review filter if open and toggle is not checked
