@@ -13,6 +13,16 @@ function isGameOwned(game) {
 }
 
 /**
+ * Helper: Check if a copy was acquired in a specific year
+ * @param {Object} copy - Copy object
+ * @param {number} year - Year to check
+ * @returns {boolean} true if the copy was acquired in the year
+ */
+function wasCopyAcquiredInYear(copy, year) {
+  return copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString());
+}
+
+/**
  * Helper: Check if a game was acquired in a specific year
  * @param {Object} game - Game object
  * @param {number} year - Year to check
@@ -20,9 +30,7 @@ function isGameOwned(game) {
  */
 function wasGameAcquiredInYear(game, year) {
   if (!game.copies || game.copies.length === 0) return false;
-  return game.copies.some(copy =>
-    copy.acquisitionDate && copy.acquisitionDate.startsWith(year.toString())
-  );
+  return game.copies.some(copy => wasCopyAcquiredInYear(copy, year));
 }
 
-export { isGameOwned, wasGameAcquiredInYear };
+export { isGameOwned, wasCopyAcquiredInYear, wasGameAcquiredInYear };

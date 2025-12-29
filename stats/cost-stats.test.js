@@ -193,6 +193,102 @@ describe('getTotalCost', () => {
     expect(result.totalCost).toBe(0);
     expect(result.gamesWithoutPrice).toBe(1);
   });
+
+  test('returns all-time cost when year is null', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30, acquisitionDate: '2023-01-15' },
+        { statusOwned: true, pricePaid: 20, acquisitionDate: '2024-06-01' },
+      ],
+    }];
+    const result = getTotalCost(games, null);
+    expect(result.totalCost).toBe(50);
+  });
+
+  test('filters by acquisition year when year is specified', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30, acquisitionDate: '2023-01-15' },
+        { statusOwned: true, pricePaid: 20, acquisitionDate: '2024-06-01' },
+      ],
+    }];
+    const result = getTotalCost(games, 2024);
+    expect(result.totalCost).toBe(20);
+    expect(result.games.length).toBe(1);
+  });
+
+  test('returns 0 when no copies acquired in specified year', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30, acquisitionDate: '2023-01-15' },
+      ],
+    }];
+    const result = getTotalCost(games, 2024);
+    expect(result.totalCost).toBe(0);
+    expect(result.games.length).toBe(0);
+  });
+
+  test('skips copies without acquisitionDate when year filter is active', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30, acquisitionDate: null },
+        { statusOwned: true, pricePaid: 20, acquisitionDate: '2024-06-01' },
+      ],
+    }];
+    const result = getTotalCost(games, 2024);
+    expect(result.totalCost).toBe(20);
+  });
+
+  test('includes copies without acquisitionDate when year is null', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30, acquisitionDate: null },
+        { statusOwned: true, pricePaid: 20, acquisitionDate: '2024-06-01' },
+      ],
+    }];
+    const result = getTotalCost(games, null);
+    expect(result.totalCost).toBe(50);
+  });
+
+  test('counts gamesWithoutPrice correctly with year filter', () => {
+    const games = [
+      {
+        id: 1,
+        name: 'Game With Price',
+        isBaseGame: true,
+        copies: [
+          { statusOwned: true, pricePaid: 30, acquisitionDate: '2024-01-15' },
+        ],
+      },
+      {
+        id: 2,
+        name: 'Game Without Price',
+        isBaseGame: true,
+        copies: [
+          { statusOwned: true, pricePaid: null, acquisitionDate: '2024-06-01' },
+        ],
+      },
+    ];
+    const result = getTotalCost(games, 2024);
+    expect(result.totalCost).toBe(30);
+    expect(result.gamesWithoutPrice).toBe(1);
+    expect(result.games.length).toBe(2);
+  });
 });
 
 describe('calculateMetricValuesPerGame', () => {

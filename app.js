@@ -631,7 +631,7 @@ function updateAllStats() {
         locationStats: getLocationStats(gameData.plays, gameData.locations, currentYear),
         soloGameStats: getSoloGameStats(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
         // Cost Analysis stats (experimental)
-        totalCostData: getTotalCost(gameData.games),
+        totalCostData: getTotalCost(gameData.games, currentYear),
         fiveDollarClubData: getCostClubGames(gameData.games, gameData.plays, currentBaseMetric, CostClub.FIVE_DOLLAR, currentYear),
     };
 
@@ -1666,9 +1666,12 @@ const statDetailHandlers = {
         }
     },
     'total-cost': {
-        getTitle: () => {
+        getTitle: (currentYear) => {
             const experimentalIcon = '<span class="experimental-badge" data-tooltip="Experimental: This feature is under evaluation and may be modified or removed." onclick="event.stopPropagation();"><svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature"><path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="10.5" r="1" fill="currentColor"/><circle cx="9" cy="11.5" r="0.7" fill="currentColor"/></svg></span>';
-            return `Total Cost <span style="white-space: nowrap">(All Time)</span>${experimentalIcon}`;
+            const yearText = currentYear
+                ? `<span style="white-space: nowrap">(${currentYear})</span>`
+                : '<span style="white-space: nowrap">(All Time)</span>';
+            return `Total Cost ${yearText}${experimentalIcon}`;
         },
         getSummary: (statsCache) => {
             const suffix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '+' : '';

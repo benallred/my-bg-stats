@@ -3,7 +3,7 @@
  */
 
 import { Metric } from './constants.js';
-import { isGameOwned } from './game-helpers.js';
+import { isGameOwned, wasCopyAcquiredInYear } from './game-helpers.js';
 import { isPlayInYear } from './play-helpers.js';
 
 /**
@@ -16,9 +16,10 @@ const CostClub = {
 /**
  * Get total cost of all owned copies
  * @param {Array} games - Array of game objects
+ * @param {number|null} year - Optional year filter (by acquisition date)
  * @returns {Object} { totalCost, games, gamesWithoutPrice }
  */
-function getTotalCost(games) {
+function getTotalCost(games, year = null) {
   const result = {
     totalCost: 0,
     games: [],
@@ -31,15 +32,18 @@ function getTotalCost(games) {
 
     if (!game.copies || game.copies.length === 0) return;
 
-    // Get owned copies only
-    const ownedCopies = game.copies.filter(copy => copy.statusOwned === true);
-    if (ownedCopies.length === 0) return;
+    // Get owned copies, filtered by acquisition year if specified
+    let relevantCopies = game.copies.filter(copy => copy.statusOwned === true);
+    if (year) {
+      relevantCopies = relevantCopies.filter(copy => wasCopyAcquiredInYear(copy, year));
+    }
+    if (relevantCopies.length === 0) return;
 
-    // Sum price paid across owned copies
+    // Sum price paid across relevant copies
     let totalPricePaid = 0;
     let hasPriceData = false;
 
-    ownedCopies.forEach(copy => {
+    relevantCopies.forEach(copy => {
       if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
         totalPricePaid += copy.pricePaid;
         hasPriceData = true;
