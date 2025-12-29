@@ -212,7 +212,7 @@ describe('Suggestion Algorithms', () => {
         s => s.reasons.includes('Closest to a five') || s.reasons.includes('Almost a five')
       );
       if (milestoneSuggestion) {
-        expect(milestoneSuggestion.stats).toContain('4 total days');
+        expect(milestoneSuggestion.stats).toContain('4 total sessions');
       }
     });
   });

@@ -336,7 +336,7 @@ function suggestForNextMilestone(gamePlayData, metric) {
     statText = `${candidate.currentValue.toFixed(1)} total hours`;
   } else if (metric === Metric.SESSIONS) {
     const sessionCount = Math.floor(candidate.currentValue);
-    statText = sessionCount === 1 ? '1 total day' : `${sessionCount} total days`;
+    statText = sessionCount === 1 ? '1 total session' : `${sessionCount} total sessions`;
   } else {
     const playCount = Math.floor(candidate.currentValue);
     statText = playCount === 1 ? '1 total play' : `${playCount} total plays`;
