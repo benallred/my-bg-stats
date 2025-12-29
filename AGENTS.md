@@ -212,6 +212,19 @@ The Summary section provides a high-level overview, so not every detail needs to
 1. Whether this new stat should be mentioned in the Summary
 2. If yes, how they want it presented (e.g., as a standalone line, incorporated into existing text, etc.)
 
+## Play Next Suggestion Metric Coverage
+
+Play next suggestions are NOT metric-aware (they don't respond to the currentBaseMetric filter). When a suggestion algorithm is metric-based, it should generate separate suggestions for ALL THREE metric types (hours, sessions, plays), following the metric ordering convention.
+
+**Example - Milestone suggestions:**
+```javascript
+suggestForNextMilestone(gamePlayData, Metric.HOURS),
+suggestForNextMilestone(gamePlayData, Metric.SESSIONS),
+suggestForNextMilestone(gamePlayData, Metric.PLAYS),
+```
+
+This ensures users see relevant suggestions regardless of which metric filter they have selected.
+
 ## Pre-Commit Requirements
 
 **CRITICAL: Always run the test suite before creating any commit.**

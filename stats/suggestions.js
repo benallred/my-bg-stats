@@ -9,6 +9,7 @@ import {
   calculatePlaySessionHIndex,
   calculateHourHIndex,
 } from './h-index.js';
+import { CostClub } from './cost-stats.js';
 
 /**
  * Helper: Calculate days since a date
@@ -349,6 +350,94 @@ function suggestForNextMilestone(gamePlayData, metric) {
 }
 
 /**
+ * Suggestion Algorithm: Game closest to joining the cost club
+ * @param {Map} gamePlayData - Map of game play data (enriched with pricePaid)
+ * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
+ * @param {number} threshold - Cost per metric threshold
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForCostClub(gamePlayData, metric, threshold) {
+  const candidates = [];
+
+  gamePlayData.forEach((data) => {
+    // Must have price data
+    if (data.pricePaid === null || data.pricePaid === undefined) return;
+
+    // Get metric value
+    let metricValue;
+    switch (metric) {
+      case Metric.SESSIONS:
+        metricValue = data.uniqueDays.size;
+        break;
+      case Metric.PLAYS:
+        metricValue = data.playCount;
+        break;
+      case Metric.HOURS:
+      default:
+        metricValue = data.totalMinutes / 60;
+        break;
+    }
+
+    // Must have at least some play data
+    if (metricValue === 0) return;
+
+    const costPerMetric = data.pricePaid / metricValue;
+
+    // Only include games not yet in club (above threshold)
+    if (costPerMetric <= threshold) return;
+
+    // Calculate how much more metric is needed to reach threshold
+    const neededMetricForClub = data.pricePaid / threshold;
+    const additionalNeeded = neededMetricForClub - metricValue;
+
+    candidates.push({
+      game: data.game,
+      costPerMetric,
+      metricValue,
+      additionalNeeded,
+      pricePaid: data.pricePaid,
+    });
+  });
+
+  if (candidates.length === 0) return null;
+
+  // Find the minimum floored additionalNeeded value
+  const minFlooredNeeded = Math.min(...candidates.map(c => Math.floor(c.additionalNeeded)));
+
+  // Get all candidates that share this floored value (like milestones finding closest to target)
+  const closestCandidates = candidates.filter(c => Math.floor(c.additionalNeeded) === minFlooredNeeded);
+
+  // Select using weighted random (group by threshold/target)
+  const selected = selectRandomWeightedBySqrtRarity(
+    closestCandidates,
+    () => threshold,
+  );
+
+  if (!selected) return null;
+
+  // Format metric label
+  let metricLabel;
+  switch (metric) {
+    case Metric.SESSIONS:
+      metricLabel = 'session';
+      break;
+    case Metric.PLAYS:
+      metricLabel = 'play';
+      break;
+    case Metric.HOURS:
+    default:
+      metricLabel = 'hour';
+      break;
+  }
+
+  return {
+    game: selected.game,
+    reason: `Join the $${threshold}/${metricLabel} club`,
+    stat: `$${selected.costPerMetric.toFixed(2)}/${metricLabel}`,
+  };
+}
+
+/**
  * Suggestion Algorithm 7: Add never-played game as suggestion
  * @param {Map} gamePlayData - Map of game play data
  * @returns {Object|null} Suggestion object or null
@@ -373,9 +462,10 @@ function suggestNeverPlayedGame(gamePlayData) {
  * Get suggested games to play next based on play patterns
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
+ * @param {boolean} isExperimental - Whether experimental features are enabled
  * @returns {Array} Array of {game, reasons, stats} in priority order
  */
-function getSuggestedGames(games, plays) {
+function getSuggestedGames(games, plays, isExperimental = false) {
   // Filter to owned base games only
   const ownedBaseGames = games.filter(game => game.isBaseGame && isGameOwned(game));
 
@@ -389,6 +479,7 @@ function getSuggestedGames(games, plays) {
       uniqueDays: new Set(),
       totalMinutes: 0,
       lastPlayDate: null,
+      pricePaid: null,
     });
   });
 
@@ -407,6 +498,25 @@ function getSuggestedGames(games, plays) {
     }
   });
 
+  // Enrich with pricePaid when experimental features enabled
+  if (isExperimental) {
+    gamePlayData.forEach((data) => {
+      const game = data.game;
+      const ownedCopies = game.copies?.filter(c => c.statusOwned === true) || [];
+      let totalPricePaid = 0;
+      let hasPriceData = false;
+
+      ownedCopies.forEach(copy => {
+        if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
+          totalPricePaid += copy.pricePaid;
+          hasPriceData = true;
+        }
+      });
+
+      data.pricePaid = hasPriceData ? totalPricePaid : null;
+    });
+  }
+
   // Collect suggestions from each algorithm (in priority order)
   const suggestions = [
     suggestRecentlyPlayedWithLowSessions(gamePlayData),        // Fresh and recent
@@ -416,6 +526,10 @@ function getSuggestedGames(games, plays) {
     suggestForNextMilestone(gamePlayData, Metric.HOURS),        // Almost a milestone (hours)
     suggestForNextMilestone(gamePlayData, Metric.SESSIONS),    // Almost a milestone (sessions)
     suggestForNextMilestone(gamePlayData, Metric.PLAYS),       // Almost a milestone (plays)
+    // Cost club suggestions (experimental) - one per metric type
+    isExperimental ? suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR) : null,
+    isExperimental ? suggestForCostClub(gamePlayData, Metric.SESSIONS, CostClub.FIVE_DOLLAR) : null,
+    isExperimental ? suggestForCostClub(gamePlayData, Metric.PLAYS, CostClub.FIVE_DOLLAR) : null,
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData),                       // Shelf of shame
   ].filter(suggestion => suggestion !== null);
@@ -455,6 +569,7 @@ export {
   suggestForNextTraditionalHIndex,
   suggestForNextHourHIndex,
   suggestForNextMilestone,
+  suggestForCostClub,
   suggestNeverPlayedGame,
   getSuggestedGames,
 };

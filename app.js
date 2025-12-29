@@ -59,6 +59,9 @@ import {
   getTopGamesByUniquePlayers,
   getTopGamesByUniqueLocations,
   getAllLocationsBySession,
+  CostClub,
+  getTotalCost,
+  getCostClubGames,
 } from './stats.js';
 
 import { formatApproximateHours, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
@@ -621,12 +624,15 @@ function updateAllStats() {
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
-        suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
+        suggestedGames: getSuggestedGames(gameData.games, gameData.plays, isExperimentalEnabled()),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
         // Social & Locations stats
         playerStats: getPlayerStats(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
         locationStats: getLocationStats(gameData.plays, gameData.locations, currentYear),
         soloGameStats: getSoloGameStats(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
+        // Cost Analysis stats (experimental)
+        totalCostData: getTotalCost(gameData.games),
+        fiveDollarClubData: getCostClubGames(gameData.games, gameData.plays, currentBaseMetric, CostClub.FIVE_DOLLAR, currentYear),
     };
 
     // Calculate year-in-review stats when year filter is active
@@ -739,6 +745,7 @@ function updateAllStats() {
     updateMilestoneCumulativeSubstats();
     updateSocialLocationStats();
     updateDiagnosticsSection();
+    updateCostAnalysisStats();
     updateYearInReview();
 }
 
@@ -1039,6 +1046,41 @@ function updateDiagnosticsSection() {
     // Update missing price paid card
     const missingPriceCard = document.querySelector('[data-stat="missing-price-paid"]');
     missingPriceCard.querySelector('.stat-value').textContent = statsCache.missingPricePaidGames.length;
+}
+
+/**
+ * Update Cost Analysis section (experimental)
+ */
+function updateCostAnalysisStats() {
+    const section = document.getElementById('cost-analysis-section');
+    if (!section) return;
+
+    // Show/hide section based on experimental flag
+    if (!isExperimentalEnabled()) {
+        section.style.display = 'none';
+        return;
+    }
+    section.style.display = 'block';
+
+    // Update Total Cost card
+    const totalCostValue = statsCache.totalCostData.totalCost;
+    const suffix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '+' : '';
+    document.querySelector('#total-cost .stat-value').textContent =
+        `$${totalCostValue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}${suffix}`;
+
+    // Update $5 Club card
+    const clubCount = statsCache.fiveDollarClubData.count;
+    document.querySelector('#five-dollar-club .stat-value').textContent =
+        `${clubCount} game${clubCount === 1 ? '' : 's'}`;
+
+    // Update $5 Club description based on metric
+    const descriptions = {
+        hours: 'Games at $5 or less per hour',
+        sessions: 'Games at $5 or less per session',
+        plays: 'Games at $5 or less per play',
+    };
+    document.getElementById('five-dollar-club-description').textContent =
+        descriptions[currentBaseMetric] || descriptions.hours;
 }
 
 /**
@@ -1622,7 +1664,43 @@ const statDetailHandlers = {
         render: (detailContent, statsCache) => {
             showYearReviewDetail(detailContent, statsCache);
         }
-    }
+    },
+    'total-cost': {
+        getTitle: () => {
+            const experimentalIcon = '<span class="experimental-badge" data-tooltip="Experimental: This feature is under evaluation and may be modified or removed." onclick="event.stopPropagation();"><svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature"><path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="10.5" r="1" fill="currentColor"/><circle cx="9" cy="11.5" r="0.7" fill="currentColor"/></svg></span>';
+            return `Total Cost <span style="white-space: nowrap">(All Time)</span>${experimentalIcon}`;
+        },
+        getSummary: (statsCache) => {
+            const suffix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '+' : '';
+            return {
+                mainValue: `$${statsCache.totalCostData.totalCost.toLocaleString()}${suffix}`,
+            };
+        },
+        render: (detailContent) => {
+            showTotalCostBreakdown(detailContent);
+        },
+    },
+    'five-dollar-club': {
+        getTitle: (currentYear) => {
+            const metricLabels = {
+                hours: '$5 Club (Per Hour)',
+                sessions: '$5 Club (Per Session)',
+                plays: '$5 Club (Per Play)',
+            };
+            const label = metricLabels[currentBaseMetric] || metricLabels.hours;
+            const experimentalIcon = '<span class="experimental-badge" data-tooltip="Experimental: This feature is under evaluation and may be modified or removed." onclick="event.stopPropagation();"><svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature"><path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="10.5" r="1" fill="currentColor"/><circle cx="9" cy="11.5" r="0.7" fill="currentColor"/></svg></span>';
+            const yearText = currentYear
+                ? `<span style="white-space: nowrap">(${currentYear})</span>`
+                : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${label} ${yearText}${experimentalIcon}`;
+        },
+        getSummary: (statsCache) => ({
+            mainValue: `${statsCache.fiveDollarClubData.count} game${statsCache.fiveDollarClubData.count === 1 ? '' : 's'}`,
+        }),
+        render: (detailContent) => {
+            showFiveDollarClubBreakdown(detailContent);
+        },
+    },
 };
 
 /**
@@ -2223,6 +2301,100 @@ function showSuggestedGames(container) {
                         <td>${renderGameNameWithThumbnail(suggestion.game)}</td>
                         <td>${reasonsDisplay}</td>
                         <td>${statsDisplay}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show total cost breakdown
+ */
+function showTotalCostBreakdown(container) {
+    const { games, gamesWithoutPrice } = statsCache.totalCostData;
+
+    if (games.length === 0) {
+        container.innerHTML = '<p>No owned games found.</p>';
+        return;
+    }
+
+    // Sort by price descending (null/unknown sorts as 0)
+    const sortedGames = [...games].sort((a, b) => (b.totalPricePaid ?? 0) - (a.totalPricePaid ?? 0));
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Price Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${sortedGames.map(item => {
+                const priceDisplay = item.totalPricePaid !== null
+                    ? `$${item.totalPricePaid.toFixed(2)}`
+                    : 'unknown';
+                return `
+                    <tr>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
+                        <td>${priceDisplay}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+
+    if (gamesWithoutPrice > 0) {
+        const note = document.createElement('p');
+        note.className = 'detail-note';
+        note.textContent = `Note: ${gamesWithoutPrice} game${gamesWithoutPrice === 1 ? '' : 's'} with unknown price not included in total.`;
+        container.appendChild(note);
+    }
+}
+
+/**
+ * Show $5 club breakdown
+ */
+function showFiveDollarClubBreakdown(container) {
+    const { games } = statsCache.fiveDollarClubData;
+
+    if (games.length === 0) {
+        container.innerHTML = '<p>No games in the $5 club yet. Keep playing to get your cost per game down!</p>';
+        return;
+    }
+
+    const metricLabel = currentBaseMetric === 'hours' ? 'Hours'
+        : currentBaseMetric === 'sessions' ? 'Sessions' : 'Plays';
+    const metricLabelSingular = currentBaseMetric === 'hours' ? 'Hour'
+        : currentBaseMetric === 'sessions' ? 'Session' : 'Play';
+
+    // Sort by costPerMetric ascending (best value games at top)
+    const sortedGames = [...games].sort((a, b) => a.costPerMetric - b.costPerMetric);
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>${metricLabel}</th>
+                <th>Cost/${metricLabelSingular}</th>
+                <th>Price Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${sortedGames.map(item => {
+                const metricDisplay = currentBaseMetric === 'hours'
+                    ? item.metricValue.toFixed(1)
+                    : Math.floor(item.metricValue);
+                return `
+                    <tr>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
+                        <td>${metricDisplay}</td>
+                        <td>$${item.costPerMetric.toFixed(2)}</td>
+                        <td>$${item.pricePaid.toFixed(2)}</td>
                     </tr>
                 `;
             }).join('')}

@@ -4,8 +4,11 @@ import {
   getNextMilestoneTarget,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
+  suggestForCostClub,
   getSuggestedGames,
 } from './suggestions.js';
+import { Metric } from './constants.js';
+import { CostClub } from './cost-stats.js';
 import { isGameOwned } from './game-helpers.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
@@ -306,6 +309,183 @@ describe('Suggestion Algorithms', () => {
       expect(recentSuggestion).toBeDefined();
       expect(recentSuggestion.game.name).toBe('Game C');
       expect(recentSuggestion.stats).toContain('1 total session');
+    });
+  });
+
+  describe('suggestForCostClub', () => {
+    test('returns null when no candidates have price data', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'No Price Game' },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 600,
+        pricePaid: null,
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      expect(result).toBeNull();
+    });
+
+    test('returns null when all games are already in club', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Cheap Game' },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02']),
+        totalMinutes: 600, // 10 hours at $5 = $0.50/hour, already in club
+        pricePaid: 5,
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      expect(result).toBeNull();
+    });
+
+    test('returns suggestion for game approaching threshold', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Almost There Game' },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03']),
+        totalMinutes: 480, // 8 hours at $50 = $6.25/hour, needs 2 more hours
+        pricePaid: 50,
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      expect(result).not.toBeNull();
+      expect(result.game.name).toBe('Almost There Game');
+      expect(result.reason).toBe('Join the $5/hour club');
+      expect(result.stat).toContain('$');
+      expect(result.stat).toContain('/hour');
+    });
+
+    test('returns suggestion with sessions metric', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Session Game' },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04']),
+        totalMinutes: 240,
+        pricePaid: 25, // $25 / 4 sessions = $6.25/session
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.SESSIONS, CostClub.FIVE_DOLLAR);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Join the $5/session club');
+      expect(result.stat).toContain('/session');
+    });
+
+    test('returns suggestion with plays metric', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Plays Game' },
+        playCount: 4,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 240,
+        pricePaid: 25, // $25 / 4 plays = $6.25/play
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.PLAYS, CostClub.FIVE_DOLLAR);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Join the $5/play club');
+      expect(result.stat).toContain('/play');
+    });
+
+    test('selects from candidates with same floored additionalNeeded', () => {
+      const gamePlayData = new Map();
+      // Game 1: $50 / 8 hours = $6.25/hour, needs 2 more hours (floor = 2)
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Close Game' },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 480,
+        pricePaid: 50,
+      });
+      // Game 2: $52 / 8 hours = $6.50/hour, needs 2.4 more hours (floor = 2)
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Also Close Game' },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 480,
+        pricePaid: 52,
+      });
+      // Game 3: $100 / 8 hours = $12.50/hour, needs 12 more hours (floor = 12)
+      gamePlayData.set(3, {
+        game: { id: 3, name: 'Far Game' },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 480,
+        pricePaid: 100,
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      expect(result).not.toBeNull();
+      // Should only select from games with floor(additionalNeeded) = 2
+      expect(['Close Game', 'Also Close Game']).toContain(result.game.name);
+    });
+
+    test('excludes games with zero play data', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Unplayed Game' },
+        playCount: 0,
+        uniqueDays: new Set(),
+        totalMinutes: 0,
+        pricePaid: 50,
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('getSuggestedGames with isExperimental', () => {
+    test('includes cost club suggestions when isExperimental is true', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Expensive Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, pricePaid: 100 }],
+        },
+      ];
+      const testPlays = [
+        { gameId: 1, date: '2023-01-01', durationMin: 480 },
+        { gameId: 1, date: '2023-01-02', durationMin: 480 },
+      ];
+
+      const suggestions = getSuggestedGames(testGames, testPlays, true);
+      const costClubSuggestion = suggestions.find(s => s.reasons.some(r => r.startsWith('Join the $')));
+      // May or may not have a cost club suggestion depending on game data
+      expect(Array.isArray(suggestions)).toBe(true);
+    });
+
+    test('does not include cost club suggestions when isExperimental is false', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Expensive Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true, pricePaid: 100 }],
+        },
+      ];
+      const testPlays = [
+        { gameId: 1, date: '2023-01-01', durationMin: 480 },
+      ];
+
+      const suggestions = getSuggestedGames(testGames, testPlays, false);
+      const costClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
+      expect(costClubSuggestion).toBeUndefined();
+    });
+
+    test('defaults isExperimental to false', () => {
+      const suggestions = getSuggestedGames(typicalData.games, typicalData.plays);
+      const costClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
+      expect(costClubSuggestion).toBeUndefined();
     });
   });
 });

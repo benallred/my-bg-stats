@@ -256,6 +256,34 @@
             </div>
         </section>
 
+        <!-- Cost Analysis Section (experimental) -->
+        <section id="cost-analysis-section" class="stat-section" style="display: none;">
+            <h2 class="section-heading">
+                Cost Analysis
+                <span class="experimental-badge" data-tooltip="Experimental: This feature is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
+                    <svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature">
+                        <path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                        <circle cx="6.5" cy="10.5" r="1" fill="currentColor"/>
+                        <circle cx="9" cy="11.5" r="0.7" fill="currentColor"/>
+                    </svg>
+                </span>
+            </h2>
+            <div class="section-grid">
+                <div class="stat-card clickable" id="total-cost" data-stat="total-cost">
+                    <h3><span class="stat-label">Total Cost</span></h3>
+                    <div class="stat-value">--</div>
+                    <p class="stat-description">Sum of all owned copies</p>
+                </div>
+
+                <div class="stat-card clickable" id="five-dollar-club" data-stat="five-dollar-club">
+                    <h3><span class="stat-label">$5 Club</span></h3>
+                    <div class="stat-value">--</div>
+                    <p class="stat-description" id="five-dollar-club-description">Games at $5 or less per hour</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Insights Section -->
         <section id="insights-section" class="stat-section">
             <h2 class="section-heading">Insights</h2>
