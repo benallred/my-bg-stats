@@ -475,6 +475,63 @@ describe('getCostClubGames', () => {
     const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
     expect(result.count).toBe(0);
   });
+
+  test('year filter includes plays from current and previous years (cumulative)', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 50 }],
+    }];
+    // Plays across multiple years - 5 hours in 2022, 5 hours in 2023
+    const plays = [
+      { gameId: 1, date: '2022-06-15', durationMin: 300 }, // 5 hours
+      { gameId: 1, date: '2023-06-15', durationMin: 300 }, // 5 hours
+    ];
+    // With just 2023 plays (5 hours), cost would be $10/hour - not in club
+    // With cumulative through 2023 (10 hours), cost is $5/hour - in club
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 2023);
+    expect(result.count).toBe(1);
+    expect(result.games[0].metricValue).toBe(10); // 10 hours total
+    expect(result.games[0].costPerMetric).toBe(5); // $5/hour
+  });
+
+  test('year filter excludes plays from future years', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 50 }],
+    }];
+    // 5 hours in 2023, 5 hours in 2024
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 300 }, // 5 hours
+      { gameId: 1, date: '2024-06-15', durationMin: 300 }, // 5 hours
+    ];
+    // Through 2023 only gets 5 hours ($10/hour) - not in club
+    const result2023 = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 2023);
+    expect(result2023.count).toBe(0);
+
+    // Through 2024 gets all 10 hours ($5/hour) - in club
+    const result2024 = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 2024);
+    expect(result2024.count).toBe(1);
+  });
+
+  test('year filter null returns all plays', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 50 }],
+    }];
+    const plays = [
+      { gameId: 1, date: '2022-06-15', durationMin: 300 },
+      { gameId: 1, date: '2023-06-15', durationMin: 300 },
+    ];
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, null);
+    expect(result.count).toBe(1);
+    expect(result.games[0].metricValue).toBe(10);
+  });
 });
 
 describe('getGamesApproachingCostClub', () => {

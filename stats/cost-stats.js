@@ -4,7 +4,7 @@
 
 import { Metric } from './constants.js';
 import { isGameOwned, wasCopyAcquiredInYear } from './game-helpers.js';
-import { isPlayInYear } from './play-helpers.js';
+import { isPlayInOrBeforeYear } from './play-helpers.js';
 
 /**
  * Cost club thresholds (cost per metric unit)
@@ -82,7 +82,7 @@ function calculateMetricValuesPerGame(games, plays, year = null) {
   const metricValuesPerGame = new Map();
 
   plays.forEach(play => {
-    if (!isPlayInYear(play, year)) return;
+    if (!isPlayInOrBeforeYear(play, year)) return;
 
     const currentValue = metricValuesPerGame.get(play.gameId) || {
       playCount: 0,

@@ -14,6 +14,18 @@ function isPlayInYear(play, year) {
 }
 
 /**
+ * Check if a play occurred in or before a specific year
+ * @param {Object} play - Play object with date property
+ * @param {number|null} year - Year to check, or null for all years
+ * @returns {boolean} true if play is in or before the year (or year is null)
+ */
+function isPlayInOrBeforeYear(play, year) {
+  if (!year) return true;
+  const playYear = parseInt(play.date.substring(0, 4));
+  return playYear <= year;
+}
+
+/**
  * Filter plays by year
  * @param {Array} plays - Array of play objects
  * @param {number|null} year - Year to filter by, or null for all plays
@@ -24,4 +36,4 @@ function filterPlaysByYear(plays, year) {
   return plays.filter(play => isPlayInYear(play, year));
 }
 
-export { isPlayInYear, filterPlaysByYear };
+export { isPlayInYear, isPlayInOrBeforeYear, filterPlaysByYear };

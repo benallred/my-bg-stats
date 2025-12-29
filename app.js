@@ -795,28 +795,29 @@ function updateHIndexCardLabels() {
 }
 
 /**
- * Update milestone card labels based on current base metric
+ * Update milestone card labels based on current base metric and year
  */
 function updateMilestoneCardLabels() {
+    const yearSuffix = currentYear ? ` in ${currentYear}` : ' total';
     const labels = {
         hours: {
-            fives: 'Games played 5-9 hours total',
-            dimes: 'Games played 10-24 hours total',
-            quarters: 'Games played 25-99 hours total',
-            centuries: 'Games played 100 or more hours total'
+            fives: `Games played 5-9 hours${yearSuffix}`,
+            dimes: `Games played 10-24 hours${yearSuffix}`,
+            quarters: `Games played 25-99 hours${yearSuffix}`,
+            centuries: `Games played 100 or more hours${yearSuffix}`,
         },
         sessions: {
-            fives: 'Games played 5-9 days total',
-            dimes: 'Games played 10-24 days total',
-            quarters: 'Games played 25-99 days total',
-            centuries: 'Games played 100 or more days total'
+            fives: `Games played 5-9 sessions${yearSuffix}`,
+            dimes: `Games played 10-24 sessions${yearSuffix}`,
+            quarters: `Games played 25-99 sessions${yearSuffix}`,
+            centuries: `Games played 100 or more sessions${yearSuffix}`,
         },
         plays: {
-            fives: 'Games played 5-9 times',
-            dimes: 'Games played 10-24 times',
-            quarters: 'Games played 25-99 times',
-            centuries: 'Games played 100 or more times'
-        }
+            fives: `Games played 5-9 times${yearSuffix}`,
+            dimes: `Games played 10-24 times${yearSuffix}`,
+            quarters: `Games played 25-99 times${yearSuffix}`,
+            centuries: `Games played 100 or more times${yearSuffix}`,
+        },
     };
 
     const currentLabels = labels[currentBaseMetric] || labels.hours;
@@ -1073,11 +1074,12 @@ function updateCostAnalysisStats() {
     document.querySelector('#five-dollar-club .stat-value').textContent =
         `${clubCount} game${clubCount === 1 ? '' : 's'}`;
 
-    // Update $5 Club description based on metric
+    // Update $5 Club description based on metric and year
+    const yearSuffix = currentYear ? ` through ${currentYear}` : '';
     const descriptions = {
-        hours: 'Games at $5 or less per hour',
-        sessions: 'Games at $5 or less per session',
-        plays: 'Games at $5 or less per play',
+        hours: `Games at $5 or less per hour${yearSuffix}`,
+        sessions: `Games at $5 or less per session${yearSuffix}`,
+        plays: `Games at $5 or less per play${yearSuffix}`,
     };
     document.getElementById('five-dollar-club-description').textContent =
         descriptions[currentBaseMetric] || descriptions.hours;

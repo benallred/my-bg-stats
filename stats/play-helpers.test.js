@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { isPlayInYear, filterPlaysByYear } from './play-helpers.js';
+import { isPlayInYear, isPlayInOrBeforeYear, filterPlaysByYear } from './play-helpers.js';
 
 describe('isPlayInYear', () => {
   const play2023 = { date: '2023-06-15', gameId: 1 };
@@ -26,6 +26,42 @@ describe('isPlayInYear', () => {
 
   test('returns true when year is 0', () => {
     expect(isPlayInYear(play2023, 0)).toBe(true);
+  });
+});
+
+describe('isPlayInOrBeforeYear', () => {
+  const play2022 = { date: '2022-03-10', gameId: 1 };
+  const play2023 = { date: '2023-06-15', gameId: 2 };
+  const play2024 = { date: '2024-01-20', gameId: 3 };
+
+  test('returns true when play is in specified year', () => {
+    expect(isPlayInOrBeforeYear(play2023, 2023)).toBe(true);
+    expect(isPlayInOrBeforeYear(play2024, 2024)).toBe(true);
+  });
+
+  test('returns true when play is before specified year', () => {
+    expect(isPlayInOrBeforeYear(play2022, 2023)).toBe(true);
+    expect(isPlayInOrBeforeYear(play2022, 2024)).toBe(true);
+    expect(isPlayInOrBeforeYear(play2023, 2024)).toBe(true);
+  });
+
+  test('returns false when play is after specified year', () => {
+    expect(isPlayInOrBeforeYear(play2024, 2023)).toBe(false);
+    expect(isPlayInOrBeforeYear(play2024, 2022)).toBe(false);
+    expect(isPlayInOrBeforeYear(play2023, 2022)).toBe(false);
+  });
+
+  test('returns true when year is null', () => {
+    expect(isPlayInOrBeforeYear(play2023, null)).toBe(true);
+    expect(isPlayInOrBeforeYear(play2024, null)).toBe(true);
+  });
+
+  test('returns true when year is undefined', () => {
+    expect(isPlayInOrBeforeYear(play2023, undefined)).toBe(true);
+  });
+
+  test('returns true when year is 0', () => {
+    expect(isPlayInOrBeforeYear(play2023, 0)).toBe(true);
   });
 });
 
