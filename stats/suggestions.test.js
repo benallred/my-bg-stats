@@ -437,6 +437,44 @@ describe('Suggestion Algorithms', () => {
       const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
       expect(result).toBeNull();
     });
+
+    test('excludes non-replayable games', () => {
+      const gamePlayData = new Map();
+      // Non-replayable game that would otherwise qualify
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03']),
+        totalMinutes: 480,
+        pricePaid: 50,
+      });
+      // Regular game that qualifies
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Regular Game', isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03']),
+        totalMinutes: 480,
+        pricePaid: 50,
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      expect(result).not.toBeNull();
+      expect(result.game.name).toBe('Regular Game');
+    });
+
+    test('returns null when only non-replayable games would qualify', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03']),
+        totalMinutes: 480,
+        pricePaid: 50,
+      });
+
+      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      expect(result).toBeNull();
+    });
   });
 
   describe('getSuggestedGames with isExperimental', () => {

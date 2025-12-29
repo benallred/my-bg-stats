@@ -96,6 +96,15 @@ function findExpandaloneTagId(tags) {
 }
 
 /**
+ * Finds the "One Time" tag ID from the tags array.
+ * @param {Array} tags - Array of tag objects from BG Stats
+ * @returns {number|undefined} Tag ID if found, undefined otherwise
+ */
+function findOneTimeTagId(tags) {
+  return tags.find(t => t.name.toLowerCase() === 'one time')?.id;
+}
+
+/**
  * Extracts players from players array.
  * @param {Array} players - Array of player objects from BG Stats
  * @returns {Array} Array of player objects with playerId and name
@@ -159,14 +168,17 @@ function classifyGame(game, isExpandalone) {
  * Modifies map in place by adding games.
  * @param {Array} games - Array of game objects from BG Stats
  * @param {number|undefined} expandaloneTagId - ID of the expandalone tag
+ * @param {number|undefined} oneTimeTagId - ID of the "One Time" tag
  * @returns {Map} Map of game ID to enhanced game object
  */
-function buildGamesMap(games, expandaloneTagId) {
+function buildGamesMap(games, expandaloneTagId, oneTimeTagId) {
   const gamesMap = new Map();
 
   games.forEach(game => {
     // Check if game has expandalone tag
     const isExpandalone = expandaloneTagId && game.tags?.some(tag => tag.tagRefId === expandaloneTagId) || false;
+    // Check if game has "One Time" tag (legacy games, escape rooms, etc.)
+    const isNonReplayable = oneTimeTagId && game.tags?.some(tag => tag.tagRefId === oneTimeTagId) || false;
 
     // Extract copies metadata
     const copies = extractCopyMetadata(game.copies);
@@ -202,11 +214,12 @@ function buildGamesMap(games, expandaloneTagId) {
       isBaseGame: classification.isBaseGame,
       isExpansion: classification.isExpansion,
       isExpandalone: classification.isExpandalone,
+      isNonReplayable: isNonReplayable,
       copies: copies,
       playCount: 0,
       uniquePlayDays: new Set(),
       thumbnailUrl: thumbnailUrl,
-      coverUrl: coverUrl
+      coverUrl: coverUrl,
     });
   });
 
@@ -441,7 +454,8 @@ function processData(bgStatsData) {
 
   // Build games map from BG Stats
   const expandaloneTagId = findExpandaloneTagId(bgStatsData.tags);
-  const gamesMap = buildGamesMap(bgStatsData.games, expandaloneTagId);
+  const oneTimeTagId = findOneTimeTagId(bgStatsData.tags);
+  const gamesMap = buildGamesMap(bgStatsData.games, expandaloneTagId, oneTimeTagId);
 
   // Calculate typical play times for all games
   const gameDurationsMap = collectGameDurations(bgStatsData.plays);

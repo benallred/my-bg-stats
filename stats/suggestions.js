@@ -360,6 +360,9 @@ function suggestForCostClub(gamePlayData, metric, threshold) {
   const candidates = [];
 
   gamePlayData.forEach((data) => {
+    // Skip non-replayable games (legacy games, escape rooms, etc.)
+    if (data.game.isNonReplayable) return;
+
     // Must have price data
     if (data.pricePaid === null || data.pricePaid === undefined) return;
 

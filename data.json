@@ -11,6 +11,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -26,6 +27,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "12b18d88-a516-4461-bb17-1d7e229aa1e0",
@@ -50,6 +52,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -65,6 +68,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0e1d82ca-ebb5-4190-b3e5-65cfd33ba089",
@@ -89,6 +93,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8d016c00-a623-413c-9968-fad93c08725d",
@@ -113,6 +118,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e86bab74-a41a-4b72-9314-7ebd1c147187",
@@ -137,6 +143,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0a4827bd-acd7-472b-a356-1706bf0e7e70",
@@ -161,6 +168,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -176,6 +184,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 2,
@@ -191,6 +200,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a4ec2124-66f3-4259-a9f2-8cc1b4615507",
@@ -215,6 +225,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0f4495e1-1b39-405b-9f20-e34312a688ec",
@@ -239,6 +250,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "cdb2593b-89b9-4fad-9872-9fa4662a7b76",
@@ -263,6 +275,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2cc1e5a6-abee-41c7-a175-3dc6013d302f",
@@ -287,6 +300,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "84d91eab-1fcd-4811-a4aa-717ed99ae4c7",
@@ -311,6 +325,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2621bd83-eaa3-421a-b75d-95f05be2d986",
@@ -335,6 +350,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1cacd56f-103b-4025-b1b6-e90d26fbd6cc",
@@ -359,6 +375,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -374,6 +391,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -389,6 +407,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "340734ee-4316-4d20-ac77-f4c27a0745a0",
@@ -413,6 +432,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "927d1ae4-0e9e-4714-8500-1bdbf6a4f949",
@@ -437,6 +457,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "96c7a857-e1a1-42dc-b139-f36dca8bb079",
@@ -461,6 +482,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a45af9f6-57ce-429b-b1bd-1f4f5fcf2785",
@@ -485,6 +507,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3ffae14e-1a98-4b1d-b7ce-b3311472a6d3",
@@ -509,6 +532,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "09a560d8-6e4d-4a7e-b7e8-688536ec9565",
@@ -533,6 +557,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "dcd72b90-ea0d-4a37-91e7-ff9ddbb7e553",
@@ -557,6 +582,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "509c11be-f159-4755-9623-9c8727b78fdf",
@@ -581,6 +607,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "09fa944b-d45f-4b5d-866e-7a4d36b96d65",
@@ -605,6 +632,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6a401b9b-dfc7-4314-99d1-e3c5c29d876e",
@@ -629,6 +657,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "67095d5b-c0f7-4c39-8574-49ed6f656b71",
@@ -653,6 +682,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "679433a7-d08d-4e78-899a-f54d73f3a046",
@@ -677,6 +707,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8bdc0e91-8996-4dbb-8765-c0b79ea12dee",
@@ -701,6 +732,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c03d1e82-c4b5-4bfd-9278-af87cf73c585",
@@ -725,6 +757,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c4e24bc2-26ef-4050-93aa-04fd6f9ac782",
@@ -749,6 +782,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7b0ac88a-5f77-489f-8572-873de043efec",
@@ -773,6 +807,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8f1b4c7f-d097-47d3-aa5b-807011ad2360",
@@ -797,6 +832,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8488323e-1e84-4a8a-81a4-6e00d5da7e4b",
@@ -821,6 +857,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "af360ef7-aeeb-4f25-8699-98f837403469",
@@ -845,6 +882,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "bc3ee316-4d5f-4878-8503-ab6c57f8f781",
@@ -869,6 +907,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "55b1ef3f-bfc7-45f2-acc6-e800fddf1732",
@@ -893,6 +932,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5794950d-4b7a-4a7f-ad48-40d70df3eb7f",
@@ -917,6 +957,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6cd1464e-82dd-4e9c-be67-7c924116f585",
@@ -941,6 +982,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "eed4b7fa-1bc4-4d4e-a880-9db44d5708d3",
@@ -965,6 +1007,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7d94747d-96bd-4cd7-9974-56304f505954",
@@ -989,6 +1032,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "748bb766-778e-4d7d-8581-5bc31a9a1706",
@@ -1013,6 +1057,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "28887b8a-7121-4484-a6b8-7f12c2fc76a4",
@@ -1037,6 +1082,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8d2b1ad6-7a9e-4d26-b2ba-34e79f8ad150",
@@ -1061,6 +1107,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "59142def-1032-440e-9dc9-ac642a5c0dd1",
@@ -1085,6 +1132,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b6ffd333-0842-4be2-bcd3-ced48a56cc22",
@@ -1109,6 +1157,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6f3c9fdd-c980-4aa8-85cb-1ea6efa50776",
@@ -1133,6 +1182,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8ba2ddb4-6e80-45a0-b8a5-c5efc441b1af",
@@ -1157,6 +1207,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2a3444c8-3daf-4007-97a0-a0214127fc8a",
@@ -1181,6 +1232,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "654287fa-5337-4035-9fd9-466f45ab5dc4",
@@ -1205,6 +1257,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1accb51e-3a27-4273-a0a5-984ef9c85d63",
@@ -1229,6 +1282,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7daea328-9096-41c6-9f6a-65231c6cf0cc",
@@ -1253,6 +1307,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "94e56c44-9b5e-487c-a8ec-b00e5f098371",
@@ -1277,6 +1332,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5145aba8-fd96-4853-8a4e-ea0ae96a8f89",
@@ -1301,6 +1357,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4274782e-f1fa-4c6f-914e-3077b48273d8",
@@ -1325,6 +1382,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1340,6 +1398,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1355,6 +1414,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "44929039-9f1e-406c-a47f-a0ffa6262263",
@@ -1379,6 +1439,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ecb76fd4-3bff-41c5-bb5f-f6cc87ea11ef",
@@ -1411,6 +1472,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "447e3f5f-9263-4239-9170-f24fea39eb9a",
@@ -1435,6 +1497,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 8,
       "uniquePlayDays": 2,
@@ -1450,6 +1513,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "060cbd12-859c-426e-92fc-e213074a7217",
@@ -1474,6 +1538,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d526a314-5556-40ca-a3d7-43f5ce27fef5",
@@ -1498,6 +1563,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3d4da575-37cf-4568-b02e-a87f8a7cc30f",
@@ -1522,6 +1588,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3839b299-e746-43b5-8691-6845c56004b5",
@@ -1546,6 +1613,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a80ce5c4-4773-436a-b535-d327589271e5",
@@ -1570,6 +1638,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "9850826c-de98-44e7-95fa-ead30d1d7eca",
@@ -1594,6 +1663,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "56ed61a0-6146-4cb8-92fd-c9403dac23f0",
@@ -1618,6 +1688,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "504e88fa-555e-4759-833d-e3189a27d37f",
@@ -1642,6 +1713,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b8c0e825-6b27-4606-acbd-6b8ed41fc1be",
@@ -1666,6 +1738,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "61f3bf04-0811-4a2d-a542-4d33ff031c8f",
@@ -1690,6 +1763,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "890fcca1-1705-475a-b8e0-e60a0de43863",
@@ -1714,6 +1788,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "37e648db-e6cb-4f6e-9f46-aab3aab8700e",
@@ -1738,6 +1813,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1753,6 +1829,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "303321af-801c-443f-b9f5-ff0f36895db9",
@@ -1777,6 +1854,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2d8fc041-0ebd-4fc8-89f9-0f05c2c190fe",
@@ -1801,6 +1879,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e556cb21-7e09-49dc-adbd-9ef558cec2e9",
@@ -1825,6 +1904,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7d5784fd-f9db-4ce3-8a37-c2ab7e55cb54",
@@ -1849,6 +1929,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0c164710-81e3-4c27-8e42-da769678a7cd",
@@ -1873,6 +1954,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "964f9381-03ff-406b-a4d6-2c3ba2780651",
@@ -1897,6 +1979,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6b53db09-cf32-4ee5-ab1b-cc702ba160e1",
@@ -1921,6 +2004,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1936,6 +2020,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "dd0e10a1-031e-46a4-9493-0d5b8610b286",
@@ -1960,6 +2045,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -1975,6 +2061,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "151b8f28-9462-40df-b65e-c5c6332bb632",
@@ -1999,6 +2086,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -2014,6 +2102,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4c5a9dde-0d88-48d9-b223-b4796cb3d54c",
@@ -2038,6 +2127,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -2053,6 +2143,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c47cd766-0dcd-4c1e-a618-7d40351aa54c",
@@ -2077,6 +2168,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -2092,6 +2184,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4fb2ccee-a12f-4cdc-8087-abd9d581e0d9",
@@ -2116,6 +2209,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -2131,6 +2225,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "abb4d931-3081-4542-9224-86f991abaa6d",
@@ -2155,6 +2250,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f473b365-0de3-4020-ac37-96e5cb22ff2e",
@@ -2179,6 +2275,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "dfe7bcae-fc95-427f-a646-be88357094d5",
@@ -2219,6 +2316,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b7e4ee8f-e9a7-44d5-9a9b-35974405e60a",
@@ -2243,6 +2341,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0129cb6e-07b6-4ee1-9b45-a8119d2d3220",
@@ -2267,6 +2366,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -2282,6 +2382,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -2297,6 +2398,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -2312,6 +2414,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2e6ae32a-728d-4035-b91b-3d9bb764f4d0",
@@ -2336,6 +2439,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "99dae8fa-c6b2-4162-a83a-63ee39945d98",
@@ -2360,6 +2464,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -2375,6 +2480,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 2,
@@ -2390,6 +2496,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "de38a814-3a58-4730-a2cf-0ad9a24a3da5",
@@ -2414,6 +2521,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2993507a-f317-4cc8-8a03-b359aa2272e6",
@@ -2438,6 +2546,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6c80e256-d4fe-4056-8877-0f35b5bdb022",
@@ -2462,6 +2571,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "558e8728-e913-42f9-be75-4fe8ab2cac11",
@@ -2486,6 +2596,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "df8c177b-df70-44d4-9e6b-55894600cfdd",
@@ -2510,6 +2621,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f4069d04-7758-4ebc-9f7b-e3d9b62a1575",
@@ -2534,6 +2646,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "78f86c37-5496-43a2-9190-3b0757beaca6",
@@ -2558,6 +2671,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "97705d8d-6cca-401d-8d2c-233df0b82778",
@@ -2582,6 +2696,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b9889092-59ba-4a15-99ca-111bf456024f",
@@ -2606,6 +2721,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0fa7a4f4-948f-4e43-b31b-14ee530b73ca",
@@ -2630,6 +2746,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b15b2d5e-12a2-40cd-8eba-88d22c41394f",
@@ -2654,6 +2771,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c91cb411-a1d6-4d99-9718-407f5d23466e",
@@ -2678,6 +2796,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "cd5370e6-2a20-458d-aac0-73969b88e9e8",
@@ -2702,6 +2821,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "521e4882-09df-414c-bc15-9116928636b0",
@@ -2726,6 +2846,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3ca86396-cd23-4115-b1ca-f39b00ff65de",
@@ -2750,6 +2871,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4d1303da-9c48-4b19-9969-43efa8d8f130",
@@ -2774,6 +2896,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9f6d0147-981c-47df-9b43-e784131d2a52",
@@ -2798,6 +2921,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6ddc48ac-b293-4473-bd3b-be4c88ab240a",
@@ -2822,6 +2946,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4c712075-73d0-44fc-8def-88c0a7816d14",
@@ -2846,6 +2971,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d72fc335-e9ef-4e77-83f4-f6604ad5a26f",
@@ -2870,6 +2996,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a5416918-f28d-4a81-b464-bb574a3ffbd9",
@@ -2894,6 +3021,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ab242350-bdc4-484b-8f87-665b34c61036",
@@ -2918,6 +3046,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d7ae51eb-0031-4269-83bb-acbc9d4312fa",
@@ -2942,6 +3071,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "de23af2c-9f6a-4bba-83a5-0d7416251f25",
@@ -2966,6 +3096,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "fb323297-4003-49f5-ab55-a50722dc8c09",
@@ -2990,6 +3121,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "19f65e8b-54fa-4842-9481-9e26a8171f19",
@@ -3014,6 +3146,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b1977f69-97af-4d0b-b7d1-80e0fcfcc0d5",
@@ -3038,6 +3171,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c8722558-20af-49e2-82a8-2da0596dc1b6",
@@ -3062,6 +3196,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7468ae95-d342-435a-8d28-b2a2d88e91b3",
@@ -3086,6 +3221,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "bb176c28-3f8b-462b-bdf6-640534d3c707",
@@ -3110,6 +3246,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b60f43c2-47a4-4c12-8377-94674c94b69f",
@@ -3134,6 +3271,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7587ddcf-1216-416f-8eca-fcab170a1e07",
@@ -3158,6 +3296,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "469335b9-2f08-46be-a120-4ce817ced583",
@@ -3182,6 +3321,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3c04e2cd-5d6a-4440-8a6b-f10b7b232711",
@@ -3206,6 +3346,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "38a514c3-e69c-4a78-bc3b-77fc07a9e184",
@@ -3230,6 +3371,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "13b77fb0-4905-41c1-90ac-2d65987d8c78",
@@ -3254,6 +3396,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3b3b797a-6db5-42b6-9715-87421c25a754",
@@ -3278,6 +3421,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b04a013b-0e70-4ea3-945e-c934c63b87cc",
@@ -3302,6 +3446,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "bf1aaa52-c7ee-406f-bac7-d68de436686d",
@@ -3326,6 +3471,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ce0478d5-c5f0-413a-a22d-ff5543df5049",
@@ -3350,6 +3496,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0b822cad-4617-448e-bd73-0bdfb028990e",
@@ -3374,6 +3521,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ad25432e-6459-411a-9afc-2048d6b1e072",
@@ -3398,6 +3546,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c65302e7-2e04-468f-bb40-9946aad0f7af",
@@ -3422,6 +3571,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4cf7c224-be35-4263-a864-95f1e0d1b667",
@@ -3446,6 +3596,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2ede3422-df84-41b9-bd67-367c64bf183f",
@@ -3470,6 +3621,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f722f6d9-d964-4681-8acc-fb668f857d70",
@@ -3494,6 +3646,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8dfdd56b-2252-46a2-97ef-e4bf546dab61",
@@ -3518,6 +3671,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3533,6 +3687,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b27f6a13-e766-43b7-ba01-cfb1d50e37af",
@@ -3557,6 +3712,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ae57b87d-5b76-4ca6-86e4-e76160e4a0db",
@@ -3581,6 +3737,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7ad18423-bb0a-4303-a8e0-0e3b821ae0f0",
@@ -3605,6 +3762,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3620,6 +3778,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6b81185f-7b0b-4db6-af77-1c86a8924376",
@@ -3644,6 +3803,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "51c8791c-5877-49c6-b105-59fbaa61a15f",
@@ -3668,6 +3828,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ca8fc46b-90b8-4e9b-9047-db16e0ac2407",
@@ -3692,6 +3853,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "503d36f5-1775-4f0b-aec6-8a9951eb13ed",
@@ -3716,6 +3878,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2f397d9a-5d0e-4542-8775-cb4df0e85f36",
@@ -3740,6 +3903,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3755,6 +3919,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -3770,6 +3935,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f85b784f-3f55-418c-991b-6863469dd955",
@@ -3794,6 +3960,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "51d03419-175b-4a2a-bee8-60e8163d4718",
@@ -3818,6 +3985,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0ff60830-506d-45ff-9a4c-295a353d9e05",
@@ -3842,6 +4010,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d819bda7-20b1-4f2d-8fb8-df6a2526100a",
@@ -3866,6 +4035,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ea94005b-c2c5-4664-bbaf-242263abbdb4",
@@ -3890,6 +4060,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7bed5f2d-a026-4d26-9a6a-2fa3903e1b1d",
@@ -3914,6 +4085,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a3eb9d3b-fe9a-458a-a5e0-f09c22d333ad",
@@ -3938,6 +4110,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "dd5c10b7-dc15-411b-b01f-d376aab8dad5",
@@ -3962,6 +4135,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d4a7129a-6273-409f-9743-f1889bbdc16b",
@@ -3986,6 +4160,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1cdbfbd4-b8d4-4224-877f-2b605708e891",
@@ -4010,6 +4185,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3243e989-a004-40cc-b71a-2dfe51187b31",
@@ -4034,6 +4210,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b9de3d92-1063-43b6-a4c1-9c15073423a3",
@@ -4058,6 +4235,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a59f2f4b-9d3a-4e42-a8b0-cc1380b18e7f",
@@ -4082,6 +4260,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "35fd0775-5dce-4d24-897e-fe8f6abc04d8",
@@ -4106,6 +4285,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "763fa2b5-e25a-4921-9160-7ad4ceace82f",
@@ -4130,6 +4310,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7dfaffab-98d9-43c2-96fa-3053e13c0b84",
@@ -4154,6 +4335,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "72976013-d0e3-4c59-8abc-a05b0f1564d8",
@@ -4178,6 +4360,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b511eecd-f97e-40dd-9bc4-04cc60afdaaf",
@@ -4202,6 +4385,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f7b93581-e4f6-4678-b836-d913e456635a",
@@ -4226,6 +4410,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3da5041f-e7b8-4d5f-a1fe-a86eb77e10bb",
@@ -4250,6 +4435,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4e225667-a3da-4383-9061-bbaf3f5a8501",
@@ -4274,6 +4460,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6d093666-6cee-431a-850c-f90c9825fa5e",
@@ -4298,6 +4485,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5a21d963-68bd-4fd4-adae-7a495118eb42",
@@ -4322,6 +4510,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5bb9b975-3f80-4afe-aa23-8e514478cf45",
@@ -4346,6 +4535,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "50eaa9ce-83d0-4c11-986f-de521a55f425",
@@ -4370,6 +4560,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "54937451-ab2b-4b4c-b0fb-ea56331a3c6e",
@@ -4394,6 +4585,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4eb78382-345c-49d1-a959-3ac8de643413",
@@ -4418,6 +4610,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "34748d1d-c2cf-4d13-a7ab-e92a7ae922e3",
@@ -4442,6 +4635,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "77944502-00b4-487f-bf9c-8e903089ab98",
@@ -4466,6 +4660,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4f1bf6d6-471c-4fa8-bffc-7972da1f6703",
@@ -4490,6 +4685,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4d60e988-0de5-48e8-86f6-fce437b6bcf0",
@@ -4514,6 +4710,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6ec45261-1a77-4266-bc17-a4150a7fd6e5",
@@ -4538,6 +4735,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0530575b-817d-47b1-ba3f-0d26460859ad",
@@ -4562,6 +4760,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a9ad40ff-c736-4229-90b4-e7ad4758af5d",
@@ -4586,6 +4785,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "339449f0-9460-4136-9488-38bbb3c1b1e9",
@@ -4610,6 +4810,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "419d6204-f350-436b-9868-6a4c2585caed",
@@ -4634,6 +4835,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "849b7b80-034f-46ba-8b97-d802cc77b497",
@@ -4658,6 +4860,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "bbe8e574-6b39-4471-9431-10c26c022783",
@@ -4682,6 +4885,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2e9f0d95-0cb1-4c75-b5a7-15c7e0d96a8a",
@@ -4706,6 +4910,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "77a53062-afb9-44b2-b1f4-54fd9d1d2d6d",
@@ -4730,6 +4935,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c013dcfe-0dc7-4637-a859-a742f3e44b4b",
@@ -4754,6 +4960,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6040ea7f-eac9-4914-b5c6-2a0a1c5b03cb",
@@ -4778,6 +4985,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7f2a1b1a-bc73-48e2-a143-6137cea0f1ba",
@@ -4802,6 +5010,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ad604cf1-7886-403a-90d8-3e2a28e0229b",
@@ -4826,6 +5035,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f21a24c5-a8cd-450a-8527-265bc05c8c93",
@@ -4850,6 +5060,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5a8a8015-8969-4f5c-b7b7-d6e15aa57390",
@@ -4874,6 +5085,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 7,
       "uniquePlayDays": 3,
@@ -4889,6 +5101,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c84b126d-d8cf-4271-a185-d2208ae44d30",
@@ -4913,6 +5126,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a0ee5fd5-9cff-401c-9438-71caeb7d5fab",
@@ -4937,6 +5151,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d4ef1bce-7282-4559-9a44-5e138265ff9d",
@@ -4961,6 +5176,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6cfa8391-9894-43af-b55a-682b5016509d",
@@ -4985,6 +5201,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "410dc2f3-df99-4f36-bcf0-51af53e9c3b2",
@@ -5009,6 +5226,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "da35443e-bb7d-4eb1-b9be-8a7c0a487af5",
@@ -5033,6 +5251,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ee04f507-18f3-4f3c-ba85-24e985958e75",
@@ -5057,6 +5276,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b5d7d0dd-9edd-4d90-ad83-3652405de829",
@@ -5081,6 +5301,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "62e5ea9f-bbfd-4573-9426-554ac031863b",
@@ -5105,6 +5326,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "03fa4a56-3e97-4f71-bed4-491099e8e6e5",
@@ -5129,6 +5351,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f0a23772-60dc-4f65-9642-6608c92f2099",
@@ -5153,6 +5376,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "917a0353-9b9a-49cb-b103-bdddeab7bac0",
@@ -5177,6 +5401,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e4ae1bde-0fbd-481e-8b29-2726be220f9c",
@@ -5201,6 +5426,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0e576faf-646e-4712-ba29-84d900281239",
@@ -5225,6 +5451,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7360926a-0071-4bbf-bd29-bbe2d1558a43",
@@ -5249,6 +5476,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4d084e16-ac14-4141-895f-3fb5e38f5df7",
@@ -5273,6 +5501,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c19539c8-94a7-466f-bad6-89961ef1a6ca",
@@ -5297,6 +5526,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f9acea93-c705-438d-a046-dc501181757c",
@@ -5321,6 +5551,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0b4081fe-71cf-415d-8f5b-1aa412f3a6ed",
@@ -5345,6 +5576,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8d8219bf-bbdb-4359-8f13-433c76fe0f4e",
@@ -5369,6 +5601,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7fb4b161-0750-43c8-b54a-c01c85f6c944",
@@ -5393,6 +5626,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c639f28a-8eec-4fba-bbb4-41727345742f",
@@ -5417,6 +5651,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5a6eac49-ef20-4b1d-a0da-86480fab89a6",
@@ -5441,6 +5676,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -5456,6 +5692,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a3cf6418-29f0-4142-a62c-bfc201dbfaf3",
@@ -5480,6 +5717,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a93e0de3-f07d-4023-a0fb-b08eac160e38",
@@ -5504,6 +5742,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1fb7e893-78be-470b-bd6c-38186ec7073e",
@@ -5528,6 +5767,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2e16439f-01e5-43d5-9547-0c2ff2f3f842",
@@ -5552,6 +5792,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0efb9a8c-6ff7-4192-bf61-6c28e598ef6d",
@@ -5576,6 +5817,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f6374ed2-5323-4a76-90e1-5031f26324e5",
@@ -5600,6 +5842,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "ca2dad62-8272-42c7-8cd7-5500052c9662",
@@ -5624,6 +5867,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "f9c33318-cea9-4f1c-b48b-a67acaff67bc",
@@ -5648,6 +5892,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "d15d62e1-79c6-4249-b2db-8bc6bd59ab01",
@@ -5672,6 +5917,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "3e3014ee-2ccf-4159-a3bc-596e072d8304",
@@ -5696,6 +5942,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "2a90d2b1-7edc-4faa-a2e2-7a2e06e58e4f",
@@ -5720,6 +5967,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "3f3a6b16-12af-4bfa-8153-a7995b7b5b4f",
@@ -5744,6 +5992,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "716d3e4c-e1bf-4bc9-a411-a193278fcf99",
@@ -5768,6 +6017,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -5783,6 +6033,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6af9f663-cce5-48f2-8d85-ea501fb02ccd",
@@ -5807,6 +6058,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "803b66d4-a153-4bcb-8d65-d051ebf3df5f",
@@ -5831,6 +6083,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "edd66ec6-9a51-412a-8db6-2d1e9e8d2271",
@@ -5855,6 +6108,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0ca18127-73c1-4f1f-ba3f-1644022864b7",
@@ -5879,6 +6133,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -5894,6 +6149,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "66e2fe89-65e3-460f-8f8c-949fca6505d2",
@@ -5918,6 +6174,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7cdf5b99-2582-4f33-b554-c1043714ad5e",
@@ -5942,6 +6199,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ed4dbeca-bd7e-4cef-9cc3-365effe804ca",
@@ -5966,6 +6224,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "42a9ed7c-7320-42bb-bce6-62e3d582ed9f",
@@ -5990,6 +6249,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "679409e8-6b38-4f37-a097-63daa4ebd430",
@@ -6014,6 +6274,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9d75134d-d8a2-4596-832f-727169caf683",
@@ -6038,6 +6299,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "763c7871-f1b2-48e1-9476-4e80c1bf842a",
@@ -6062,6 +6324,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a7f44ad5-27d8-4101-8840-06c51a9b177b",
@@ -6086,6 +6349,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a88d65dd-4c0d-42a6-b1cd-858aeea09444",
@@ -6110,6 +6374,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "447b2cad-a552-45ef-9784-2e112df0964f",
@@ -6134,6 +6399,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fc278d76-564b-476b-a541-2bb6a4007383",
@@ -6158,6 +6424,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
@@ -6182,6 +6449,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2671c329-a067-48f3-9f06-9b7fb6de7271",
@@ -6206,6 +6474,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -6221,6 +6490,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4aa5615d-469b-44d2-a323-10438803ce0c",
@@ -6245,6 +6515,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ac25e910-1c6c-45de-8fb9-ccaa294bac6c",
@@ -6269,6 +6540,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3c4e06c2-c403-4bda-91fd-05c939d50101",
@@ -6293,6 +6565,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7235ebd1-1534-4255-9bcd-66143449d02a",
@@ -6317,6 +6590,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b468e49a-bbed-4eb7-92df-38c4c9450d5e",
@@ -6341,6 +6615,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "78498999-2b5b-4dc1-95d4-3f542aa7667a",
@@ -6365,6 +6640,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 1,
@@ -6380,6 +6656,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -6395,6 +6672,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -6410,6 +6688,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
@@ -6434,6 +6713,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e06bb0dc-d3a7-4e4b-bf2b-efb381b4f5a1",
@@ -6458,6 +6738,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "da88eb92-19ef-449e-b3e2-e226864dd785",
@@ -6482,6 +6763,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -6497,6 +6779,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "43fc3a47-2a1f-49fc-8136-40be97639538",
@@ -6521,6 +6804,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "92a2252e-9835-4e59-ba97-eff7a5083dbd",
@@ -6545,6 +6829,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "789bc145-bc39-42f7-aacf-e64f0997971b",
@@ -6569,6 +6854,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3ac18e50-a53a-481d-8155-0595a5b664ed",
@@ -6593,6 +6879,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "25149510-ba46-40b2-a5ef-3bff3d2161f1",
@@ -6617,6 +6904,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7769b7b9-c37f-4cb8-b4f4-e85aa1096ef4",
@@ -6641,6 +6929,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4816147a-aeb5-4497-819d-18ab7f10110f",
@@ -6665,6 +6954,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "74cf8138-9842-417d-8a75-502f41919939",
@@ -6689,6 +6979,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4e7f05d3-72f5-4088-9283-703c4c88241f",
@@ -6713,6 +7004,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "aefd4b8a-2b74-4917-b716-5c3b44786d23",
@@ -6737,6 +7029,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "cd75e591-fcab-4472-ab46-22d01cac0bf0",
@@ -6761,6 +7054,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "285b8ac3-34bf-475d-95bc-3b52d3dd14b8",
@@ -6785,6 +7079,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0953a25e-6cc7-4e00-8d00-f87174379196",
@@ -6809,6 +7104,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d442d4bc-4c18-4bed-b931-c53a8ef854a7",
@@ -6833,6 +7129,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fb301501-7a5c-47cb-ab58-214116646c21",
@@ -6857,6 +7154,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "44dca3a5-7ea2-44d3-a3fa-654ed956fea6",
@@ -6881,6 +7179,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f5fe7be0-6e50-46f5-93b2-d9a80116b68d",
@@ -6905,6 +7204,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8b8ed62c-db0d-4c26-8c04-7369b048da9b",
@@ -6929,6 +7229,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4ab55f31-8a2c-47c1-aed0-b3a3a877d2c5",
@@ -6953,6 +7254,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1aa0ebe9-7986-4cea-b59e-9dc4e511f17d",
@@ -6977,6 +7279,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d6852059-1a97-49a7-b336-6f395269e11b",
@@ -7001,6 +7304,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3625b01d-d9f0-4270-9948-711a12e432fe",
@@ -7025,6 +7329,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c41c9a57-fe09-4280-9581-968ceb99c488",
@@ -7049,6 +7354,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6c069b45-fcbe-4fe3-85c5-edab9e54b1ff",
@@ -7073,6 +7379,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "751b9d81-797e-4a0a-9044-b60e8632a414",
@@ -7097,6 +7404,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "89ea2aee-1359-4d5c-b9d7-6a38931f1333",
@@ -7121,6 +7429,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8055f8b6-fcb9-4a65-a981-56be3cebb8d9",
@@ -7145,6 +7454,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "322a1150-085b-47a4-bf91-04209bcbef9f",
@@ -7169,6 +7479,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "960a6e35-1f23-4101-a976-75addd67bbf4",
@@ -7193,6 +7504,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2378d06c-4cf2-4b5b-aba9-5d90849c061c",
@@ -7217,6 +7529,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "56496ae5-adc1-4c63-9be8-14945bf27f3a",
@@ -7241,6 +7554,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f5530642-bb54-4050-80da-89aab9fb11da",
@@ -7265,6 +7579,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "17a8a741-e29a-479e-8a50-d1e78ab328d6",
@@ -7289,6 +7604,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6f8aaa4c-d981-4469-b30e-f9059b207f66",
@@ -7313,6 +7629,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "42586cb9-43f1-4644-a662-9e1938720da6",
@@ -7345,6 +7662,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4a4bdb29-5d5f-427d-9708-6fde7444589d",
@@ -7369,6 +7687,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0765a519-3698-4c10-a6cf-c43366fb72a9",
@@ -7393,6 +7712,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "459aeb79-77d5-4348-9d51-f80db2f0a7ca",
@@ -7417,6 +7737,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f0fccb4a-42a4-46c2-93a9-6f6fdaaa21cc",
@@ -7441,6 +7762,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "99ffe0a0-5f64-4189-9dba-6e182412f8bb",
@@ -7465,6 +7787,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "96be22c5-dec1-4cec-acd0-0de2e44d60cc",
@@ -7489,6 +7812,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
@@ -7513,6 +7837,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8bd6f531-23a9-462b-a74f-88720879dcdb",
@@ -7537,6 +7862,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "91ef0289-233d-4464-ae48-9e6e93c7f822",
@@ -7561,6 +7887,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b6b223d9-4650-4667-a613-fa857a8c1cb9",
@@ -7585,6 +7912,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8569f72c-eb6b-4400-8b94-673c6239d780",
@@ -7609,6 +7937,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6ac8150f-41ec-4295-9d73-a6be7b7528e1",
@@ -7633,6 +7962,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9f182aa1-cd1d-4079-8983-b3b92c7c785e",
@@ -7657,6 +7987,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a67dafac-c7c1-49c6-825a-8b2821de8f96",
@@ -7681,6 +8012,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "744d87c4-4fd7-4b6e-9b2a-5ccb247f2f6a",
@@ -7705,6 +8037,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "6b35b1cd-70c8-43fa-b770-09b0873c22f2",
@@ -7729,6 +8062,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "c9dd5c94-fe65-420b-b090-9eff6377fa60",
@@ -7753,6 +8087,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "22f21635-52e9-4982-b1de-dbb5b798d9e8",
@@ -7777,6 +8112,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "86084cca-a484-45ba-b038-c819bde5af70",
@@ -7801,6 +8137,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -7816,6 +8153,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6edea0bf-eb93-4b3a-998b-3909871e9fcf",
@@ -7848,6 +8186,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -7863,6 +8202,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7123fbff-2834-4eee-9ca9-15b1b7ed42e9",
@@ -7887,6 +8227,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e1b64712-ea80-41b5-8d3d-55e2b2568112",
@@ -7911,6 +8252,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -7926,6 +8268,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "db634ef2-6921-415b-a9da-a70e40defde3",
@@ -7950,6 +8293,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d74da117-ddfd-4620-b118-ad4cc06727e5",
@@ -7974,6 +8318,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "325f0ed7-b5b2-4207-95d1-3595f2422bd8",
@@ -7998,6 +8343,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 2,
@@ -8013,6 +8359,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -8028,6 +8375,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -8043,6 +8391,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b3cc7f56-7cbb-4c0a-ab3a-fe84a2876ba8",
@@ -8067,6 +8416,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2694014e-770c-4c22-9c59-1aad823a7b5a",
@@ -8091,6 +8441,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f2ebf412-f61b-4a41-9f1a-7a16d3715bfb",
@@ -8115,6 +8466,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ebf5ca16-8f92-44a9-a942-d472390b67b1",
@@ -8139,6 +8491,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "bc2a018d-31b0-4474-a692-1437d68deeb0",
@@ -8163,6 +8516,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "18d11942-ee9f-4efe-b2d5-020755e5cdc6",
@@ -8187,6 +8541,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1e0ac506-eff2-4c74-9e99-529fff209e83",
@@ -8211,6 +8566,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5b8499c6-1536-4dab-8deb-3b62259b9249",
@@ -8235,6 +8591,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "33e77c6d-195a-4e59-a87b-fe095aeae973",
@@ -8259,6 +8616,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fa2ddd50-56c8-46b5-920a-2e1776c8a740",
@@ -8283,6 +8641,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "53c0d066-f128-4706-a24b-6fb7b4c0e26d",
@@ -8307,6 +8666,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d363c06a-cf76-4a71-942f-0d6e03b2690a",
@@ -8331,6 +8691,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "84540d40-a3af-4550-9719-a6166dc9fc57",
@@ -8355,6 +8716,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b0ac3aa3-a279-4057-a006-b2ef775fca70",
@@ -8379,6 +8741,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "95897d51-56d8-4b7c-b2d8-60019054bfdb",
@@ -8403,6 +8766,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1508459b-4d23-49f3-b82f-5d2f34a41ca7",
@@ -8427,6 +8791,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c663fe49-585b-43a4-971d-cd844fe63be0",
@@ -8451,6 +8816,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6934b0e7-8508-4528-84fa-94c31f47687d",
@@ -8475,6 +8841,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6e874119-3257-460d-8eac-d89e6d163e07",
@@ -8499,6 +8866,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a859e551-25f6-4656-84df-693f156da439",
@@ -8523,6 +8891,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "00e003a1-d044-4c8c-8c8d-643e5220e9a9",
@@ -8547,6 +8916,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ac5f88a6-d70f-4180-97dc-fa82f5e988c2",
@@ -8571,6 +8941,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c5ad867c-55f3-40e1-bc33-995c1af8fb22",
@@ -8595,6 +8966,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "25d26b06-0808-4ea3-a30e-60a27d8afbf5",
@@ -8619,6 +8991,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4b7b68b7-7c40-4174-825c-e6a48e7ec559",
@@ -8643,6 +9016,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9218b921-7318-473a-b769-987677ac3024",
@@ -8667,6 +9041,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0da39d34-3d80-44f5-a954-111d473adf00",
@@ -8691,6 +9066,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "606379c5-5c6a-469b-a89d-6a50e0e4bf4b",
@@ -8715,6 +9091,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "71f95dec-30f7-4561-bddc-f062c0821400",
@@ -8739,6 +9116,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "66ff7ddb-9d94-4edc-ac2f-c947c698fdf5",
@@ -8763,6 +9141,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "94f92ee8-13fa-4b71-a470-3205fe620058",
@@ -8787,6 +9166,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "bfdb9d12-1f3f-4d20-a286-3c4d3f2d0261",
@@ -8811,6 +9191,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "361efbd1-62a2-4c75-874c-5df3fc813047",
@@ -8835,6 +9216,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "86c7b916-931f-4ea2-b598-a96a84c64aad",
@@ -8859,6 +9241,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "438ab1ef-5eec-4195-bfa5-3fbfc093cc68",
@@ -8883,6 +9266,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f6ebfba1-11a8-45f3-9c1d-edea7c8d6d1a",
@@ -8907,6 +9291,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "86720702-8d9b-41ec-9703-6bc6c13f6039",
@@ -8931,6 +9316,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d541f4c2-eaa1-4c6d-a540-82afd9190059",
@@ -8955,6 +9341,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9f20e23c-e5a2-451f-a399-217f121516c3",
@@ -8979,6 +9366,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "10b0683b-01b7-48bc-92a5-478bd039b061",
@@ -9003,6 +9391,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "697ee482-a4e3-477c-9c11-73edd751db06",
@@ -9027,6 +9416,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e89f1014-cf29-4d45-bad8-532686ee0a05",
@@ -9051,6 +9441,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -9066,6 +9457,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -9081,6 +9473,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7127ce77-45aa-4bbe-b7af-31d3b851f6b2",
@@ -9105,6 +9498,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b700bb61-c78a-4889-8b56-58fb48f4bd20",
@@ -9129,6 +9523,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d34103c3-4a9f-415e-b4bd-d2179b1a4435",
@@ -9153,6 +9548,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ed8b10d2-26b5-48ad-a244-5be8fecdac40",
@@ -9177,6 +9573,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "29c22389-d184-441b-87dd-829e6c2bd7aa",
@@ -9201,6 +9598,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -9216,6 +9614,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7c42ec1b-7c05-454f-a922-5102a19373f6",
@@ -9240,6 +9639,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0005c8ed-dd99-4201-9b25-721246068fe1",
@@ -9264,6 +9664,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -9279,6 +9680,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b1a97c11-3127-4c9a-8b62-8430335172b9",
@@ -9303,6 +9705,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "93db8ed9-9557-45e5-b21e-5855bae151f5",
@@ -9327,6 +9730,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "34edb700-da82-4213-bde6-05afcb7668ca",
@@ -9351,6 +9755,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5c2edeea-6d15-48f3-914c-e3ade873e546",
@@ -9375,6 +9780,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7b4280eb-8601-46d8-87ce-91da98d4379f",
@@ -9399,6 +9805,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7f660ca2-fa95-4a0d-81b9-c35520490af7",
@@ -9423,6 +9830,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 3,
@@ -9438,6 +9846,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d404bca9-32a6-4109-95f9-aac7baa65b5b",
@@ -9462,6 +9871,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9e2dd842-439d-4331-b41d-2185484e18fd",
@@ -9486,6 +9896,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a1a38e7b-3253-493c-b0a5-6149c213c2c9",
@@ -9510,6 +9921,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8f2754b4-992c-4605-931a-74cf4ae470aa",
@@ -9534,6 +9946,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2915330e-3f68-4ff4-8b6e-6ba391949da3",
@@ -9558,6 +9971,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "ac37619f-a692-4b26-8be1-d9cd349855b1",
@@ -9582,6 +9996,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -9597,6 +10012,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8ed0c570-7e7d-45f1-86c3-ec7f028bcfde",
@@ -9653,6 +10069,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "dab694f1-c5f3-4dd7-a817-8bb8352c84b6",
@@ -9677,6 +10094,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 2,
@@ -9692,6 +10110,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "58f2dac9-82d5-440e-89b5-6d850cd65f31",
@@ -9716,6 +10135,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7174464e-ff44-49ec-b4b8-fb422574381b",
@@ -9740,6 +10160,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "467400e6-fb50-4f66-a426-18ec260f53b2",
@@ -9764,6 +10185,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2a978a05-70a3-4784-88ce-f59db474a6fe",
@@ -9788,6 +10210,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "7fb9a6d9-a7e1-4e90-9b56-4c83133d7848",
@@ -9812,6 +10235,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "388720c4-f164-48bb-8286-c7beccdb8383",
@@ -9836,6 +10260,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c615cbb6-5fac-4928-9d59-701a6ca27e8e",
@@ -9860,6 +10285,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "52304ded-4648-4fa3-9338-daf65b47bf07",
@@ -9884,6 +10310,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "005a22c4-3efc-4fe6-9522-a711c60d971d",
@@ -9908,6 +10335,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "891d2253-2249-42f3-8551-cb4cdc2385ec",
@@ -9932,6 +10360,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -9947,6 +10376,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a9d8c0db-0f24-4d0e-92e9-de408f246442",
@@ -9971,6 +10401,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a3e2a212-aa17-4d13-a866-323884bb237b",
@@ -9995,6 +10426,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f6c1ea21-b06a-46e0-b1f6-69bf27834c70",
@@ -10019,6 +10451,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e3b9e0ac-a08e-46d1-9afa-506a403f5a42",
@@ -10043,6 +10476,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d8f7a95a-bb2c-48d4-b316-19aacf8db783",
@@ -10067,6 +10501,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4d75b063-8c7f-4dd2-b751-3deace540790",
@@ -10091,6 +10526,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "89cfc9b1-2120-4782-816a-76499eb3b7b7",
@@ -10115,6 +10551,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "bf5c5a77-b0a9-406e-a934-38bec56254d2",
@@ -10139,6 +10576,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e3be0ddc-eeb7-4c2c-bfdb-c3eb6f39a18c",
@@ -10163,6 +10601,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "591aa4ef-8340-4909-b6a0-2a578954c5ce",
@@ -10187,6 +10626,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b6028168-4a48-4fff-83b3-b6d92c6d2d01",
@@ -10211,6 +10651,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1fc86160-d5b1-4af1-bb57-eacf6bbe611e",
@@ -10235,6 +10676,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "77906a2b-7756-40be-bcf4-09fef51a8326",
@@ -10259,6 +10701,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "cbf2cffc-615b-4c4c-b31a-947c8626e103",
@@ -10283,6 +10726,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "19b5e9ef-d998-4317-93ce-fc1d0d020dc9",
@@ -10307,6 +10751,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3ef1c308-bcce-47cf-9556-32d26d3222a9",
@@ -10331,6 +10776,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "604c811d-d7af-4760-aca9-c488265c8bb4",
@@ -10355,6 +10801,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -10370,6 +10817,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5e26c3b0-b701-40f6-90e2-8b8a8702f17e",
@@ -10394,6 +10842,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "475973e8-4992-4229-9bf6-75343a80cb76",
@@ -10418,6 +10867,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b36ffae0-b363-4fd2-b112-851f62323c35",
@@ -10442,6 +10892,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c5633e4d-b5c3-4632-9591-968a5cb1cc97",
@@ -10466,6 +10917,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1eca0a0a-9f97-458c-b1ee-4d5cd7f8a479",
@@ -10490,6 +10942,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a0729369-268f-40f2-b81c-e124f0d8bf1b",
@@ -10514,6 +10967,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ecdc432e-8d47-457e-8d24-23aebd52d69f",
@@ -10538,6 +10992,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b74e57af-5320-4c5b-878b-c52a82c4c0e7",
@@ -10562,6 +11017,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "019eadce-0470-4c54-9c1b-2312ad3d7961",
@@ -10586,6 +11042,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a71df48d-86eb-4f27-ae7a-b1c6b4269cc2",
@@ -10610,6 +11067,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "833ac138-19bc-460e-a1b5-cf740c5d2f5d",
@@ -10634,6 +11092,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e461f937-74fb-40c4-8589-a7cb953f0041",
@@ -10658,6 +11117,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4f7c504a-4b69-4886-b1a3-08cd2692bc51",
@@ -10682,6 +11142,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f194224d-70a6-437b-a8f3-86ab868e5513",
@@ -10706,6 +11167,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0f69085c-89c8-4d5f-a3be-73663a748a84",
@@ -10730,6 +11192,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "13d49576-2539-43db-88ba-7dfc950a36d2",
@@ -10754,6 +11217,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -10769,6 +11233,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -10784,6 +11249,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "251bc315-a776-4317-8474-f3100a3c0373",
@@ -10808,6 +11274,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -10823,6 +11290,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -10838,6 +11306,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d277aca3-7fc2-4b10-92f9-3a56077b6693",
@@ -10862,6 +11331,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -10877,6 +11347,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fc8253e3-f063-4c85-a998-509f6f8b6187",
@@ -10901,6 +11372,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ceb9f959-da08-4bc2-a90a-ec6162946355",
@@ -10925,6 +11397,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -10940,6 +11413,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b3875ea6-6001-4b8f-b7a8-699321acc7d9",
@@ -10964,6 +11438,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "60e96618-ab8c-4dd0-b9ce-e4ff95246e4f",
@@ -10988,6 +11463,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e45c9513-b47e-47e4-b4ca-22a799e23e5c",
@@ -11012,6 +11488,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -11027,6 +11504,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "783ce4ea-e492-4988-8430-52f01401e091",
@@ -11051,6 +11529,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8e15f7fd-04e5-46c4-91e4-c579fd33035e",
@@ -11075,6 +11554,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fa5c4c7e-40f7-4429-85e0-5afbe62082d2",
@@ -11099,6 +11579,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -11114,6 +11595,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
@@ -11138,6 +11620,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -11153,6 +11636,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "88f3096e-8640-4541-9017-4862cac5e6ae",
@@ -11177,6 +11661,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9a4e8c94-11ae-4c42-8376-c15b01eaf72e",
@@ -11201,6 +11686,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8c2b2483-90af-4679-9e51-494233f9f538",
@@ -11225,6 +11711,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 3,
@@ -11240,6 +11727,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "97dc3524-f43a-4b0e-9fab-d2f7d12a68bf",
@@ -11264,6 +11752,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2f79a75d-3125-4e93-9337-fa4d29c5e398",
@@ -11288,6 +11777,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f5453af7-c7b7-49b8-a830-b45603047007",
@@ -11312,6 +11802,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a3c30050-fc04-4056-a797-a1e329e3a4b6",
@@ -11336,6 +11827,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -11351,6 +11843,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -11366,6 +11859,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "f1c41f0a-a801-4358-a94e-61a237d3749f",
@@ -11390,6 +11884,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ba1045d0-1cdb-438d-92a5-2cad2280ffcf",
@@ -11414,6 +11909,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "675fc833-95cf-4282-9f9c-dfbda6c70545",
@@ -11438,6 +11934,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ec84fba0-3ae1-4e5f-b415-9144676e3ee1",
@@ -11462,6 +11959,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c35181a7-24fd-4117-8e34-595b1d25d29a",
@@ -11486,6 +11984,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "cf0c6045-f84d-444d-a16a-e4c06d0c03e8",
@@ -11510,6 +12009,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "632248e0-b9aa-4ea6-b094-1bf3909b4d12",
@@ -11534,6 +12034,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "05e15509-0f7f-408b-bf05-4de168c58d5a",
@@ -11558,6 +12059,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a401ce9f-0c79-4c3e-8cb0-6cf444a7f75e",
@@ -11582,6 +12084,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "b0c1763f-b71b-4f30-b00d-458c768370f8",
@@ -11606,6 +12109,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ec58c30e-f0eb-4054-ade9-8539768970e1",
@@ -11630,6 +12134,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -11645,6 +12150,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ccc69eed-ba0f-46c1-bd44-5607660055ee",
@@ -11669,6 +12175,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ee57cab4-9d59-43f6-925a-89ee163bc0ac",
@@ -11693,6 +12200,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fee88055-5196-42f1-857b-fc65d4f97b79",
@@ -11717,6 +12225,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "77399955-69cd-4a0c-8f23-b1c542ddfc31",
@@ -11741,6 +12250,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "dc738c0d-6598-468a-a16f-b7bea626ecd2",
@@ -11765,6 +12275,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -11780,6 +12291,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "eae5b090-a95d-4871-af2f-45a465dcd16f",
@@ -11804,6 +12316,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8b757673-906e-4e57-9b03-124e520ddbdb",
@@ -11828,6 +12341,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5bc57f36-f7a8-4a4e-bf45-2304ab534042",
@@ -11852,6 +12366,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a2688f74-a069-44dd-92ca-0df90a963690",
@@ -11876,6 +12391,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6dba0935-9df7-461c-a2df-7c3b6d8fd7f6",
@@ -11900,6 +12416,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -11915,6 +12432,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5334f887-41e5-4190-8a73-d289c02a8c22",
@@ -11939,6 +12457,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 2,
@@ -11954,6 +12473,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b2ff281b-92ce-4226-8bf0-b64fd4fbdb92",
@@ -11978,6 +12498,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -11993,6 +12514,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "27b9cb5e-afec-40c0-b72a-ee6578c33354",
@@ -12017,6 +12539,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "402e0351-93d2-4d71-99c3-fee5f25ba37a",
@@ -12041,6 +12564,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "12c26600-47e6-4454-be0e-679f1d26479b",
@@ -12065,6 +12589,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "ceda1217-f4a9-447e-b783-c2bf02c22e16",
@@ -12089,6 +12614,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fa91e038-af0f-49a5-bd95-d5204ba74858",
@@ -12113,6 +12639,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e862050f-60b8-4098-befc-e86d2f0b3381",
@@ -12137,6 +12664,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "e8ebd5d9-e524-44cb-84d4-096d2a1db52e",
@@ -12161,6 +12689,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "197dc4cc-5a34-4b27-9d1b-ec8d04869361",
@@ -12185,6 +12714,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "dbc12af3-8732-4de1-849b-0d192b4956c9",
@@ -12209,6 +12739,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "02f234ba-5811-454b-9bb4-845fd45d5419",
@@ -12233,6 +12764,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d15bbbaa-8ff2-44d0-9d31-eca9774b04e0",
@@ -12257,6 +12789,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "df68773b-33b5-4216-9e37-d498f7442257",
@@ -12281,6 +12814,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "c7aca66a-ea1d-4f08-9f7c-86f67b065bb3",
@@ -12305,6 +12839,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "d217ed6f-59b2-49bd-8e66-dd8882074a41",
@@ -12329,6 +12864,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "d84442c0-dac0-4a5b-bf38-2e0f9e19d677",
@@ -12353,6 +12889,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "e3722f5c-98ff-4682-8788-d88085cd9614",
@@ -12377,6 +12914,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "3f7dea95-111e-4472-9d70-b4960bf71282",
@@ -12401,6 +12939,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fb229c87-9497-4a94-93b5-5fd97cf4963f",
@@ -12425,6 +12964,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": true,
       "copies": [
         {
           "copyId": "dad78083-e2e3-450b-a21a-33803ebfd560",
@@ -12449,6 +12989,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b0515003-2656-4c6e-8819-158abc892654",
@@ -12481,6 +13022,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0bf327a9-2968-4608-9b00-2d4c0ce58c73",
@@ -12505,6 +13047,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d72c30a9-9c39-4971-ab4d-429b2e36c91c",
@@ -12529,6 +13072,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "841c2f4c-97fe-4d1a-9f88-3e99e042f177",
@@ -12553,6 +13097,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -12568,6 +13113,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a12fc081-e352-4904-932e-d1c468bcd5ed",
@@ -12592,6 +13138,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4e5ff938-4b34-4eff-bfbd-83a1333e3f03",
@@ -12616,6 +13163,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "1ea8bd37-43ff-41a5-b472-28e8e36c2e01",
@@ -12640,6 +13188,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "5bebe75d-b389-433a-9f60-e2a90f49ec16",
@@ -12664,6 +13213,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9b9431d1-02ef-47cc-9573-66fc0a16f487",
@@ -12688,6 +13238,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "34a2a5ad-0232-4ddc-9958-cf75a6a9cecd",
@@ -12712,6 +13263,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "c2e98dd4-373f-47ac-8c09-3a098364f3b3",
@@ -12736,6 +13288,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b4cfafb0-a01c-4973-a0da-7632b6557381",
@@ -12760,6 +13313,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d81dae06-2a2d-4570-8639-8edee196df21",
@@ -12784,6 +13338,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "791ec730-2840-4c29-9540-e9bd9b75d256",
@@ -12808,6 +13363,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "65148630-a29b-40f9-9eaf-e2a589902890",
@@ -12832,6 +13388,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "2b2cf54e-caea-49c1-a563-37cf33b70571",
@@ -12856,6 +13413,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9ad40acf-671f-4d46-9541-6bc9bda96465",
@@ -12880,6 +13438,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3a301a3b-c6f8-4cf2-8b50-4a94de72edc7",
@@ -12904,6 +13463,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "767e2f69-db7b-4466-934a-f7a257c5be1d",
@@ -12928,6 +13488,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "74ac12ff-9798-4e45-8a2c-6cbe759f64c6",
@@ -12952,6 +13513,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "892389fc-b0e4-44b6-8889-35ad23e9461a",
@@ -12976,6 +13538,7 @@
       "isBaseGame": false,
       "isExpansion": false,
       "isExpandalone": true,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a2edc938-b866-4588-80b5-f573ce6ccde7",
@@ -13000,6 +13563,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3e468798-ca70-4798-9c37-3741ff82e085",
@@ -13024,6 +13588,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "421b0985-ace6-44dc-8f8a-7ef2291c0463",
@@ -13048,6 +13613,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "6a959275-a6b0-4013-bfff-6a037e21d0b7",
@@ -13072,6 +13638,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a73c673b-a9ad-4402-8240-e56798c61916",
@@ -13096,6 +13663,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9fa49e1c-3173-4811-bc77-d7eb31f46614",
@@ -13120,6 +13688,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3929e901-3dfc-4559-94bb-9cc7ec418d8c",
@@ -13144,6 +13713,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "b2d708a4-de0e-44d1-9391-44545431f9ee",
@@ -13168,6 +13738,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "4574a1f0-1cfd-4a89-81ff-8988637df005",
@@ -13192,6 +13763,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ad0d0150-8c3e-43be-b650-0f2e33ea9837",
@@ -13216,6 +13788,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d46fda64-9cd7-45b0-a66e-a30df48e8834",
@@ -13240,6 +13813,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "25bce607-ea4d-467b-acec-9aee2c47a305",
@@ -13264,6 +13838,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "262ce425-1e53-4887-a89a-fa132c2c270e",
@@ -13288,6 +13863,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "cecf65b4-b1d5-451c-98b3-599ddcd646d4",
@@ -13312,6 +13888,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "872dbf66-904b-4b56-a88e-0e1e16906adf",
@@ -13336,6 +13913,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "9fb7f852-1e98-4884-a405-28288a199f1a",
@@ -13360,6 +13938,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "01ffbfec-f099-428b-a929-a7a7cb01c188",
@@ -13384,6 +13963,7 @@
       "isBaseGame": false,
       "isExpansion": true,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "407513af-4a52-49b3-bcf9-29e48a6fca19",
@@ -13408,6 +13988,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "3a58f50b-26c4-43ca-995a-91aea4f346d6",
@@ -13432,6 +14013,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "8325a908-0f34-470d-9066-94f0bc0a8c2c",
@@ -13456,6 +14038,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0fed4105-15ef-4ef2-92ba-bdb7c7e4052b",
@@ -13480,6 +14063,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "999488b8-a091-47e6-a8b9-a4aa6d6b1499",
@@ -13504,6 +14088,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "fec783cd-e7da-4d1f-9772-86463bcb4df2",
@@ -13528,6 +14113,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "d19abe4f-3ef7-490e-9bb7-60e509a0fc67",
@@ -13552,6 +14138,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "a6be0f96-3efb-41f3-a649-107364c91b99",
@@ -13576,6 +14163,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "ddc692aa-1636-4eed-bdd8-bd87897e63ec",
@@ -13600,6 +14188,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "81068284-1428-4718-836d-92afabba1c29",
@@ -13624,6 +14213,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
+      "isNonReplayable": false,
       "copies": [
         {
           "copyId": "0b6a5b7e-20a9-46c7-9b9d-0dda0a78b7d8",
