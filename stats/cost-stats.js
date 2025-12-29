@@ -159,7 +159,8 @@ function getCostClubGames(games, plays, metric, threshold, year = null) {
     const metricValue = getMetricValue(playData, metric);
     if (metricValue === 0) return;
 
-    const costPerMetric = totalPricePaid / metricValue;
+    // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
+    const costPerMetric = Math.min(totalPricePaid / metricValue, totalPricePaid);
 
     // Include if cost per metric is at or below threshold
     if (costPerMetric <= threshold) {
@@ -223,7 +224,8 @@ function getGamesApproachingCostClub(games, plays, metric, threshold, topN, year
     const metricValue = getMetricValue(playData, metric);
     if (metricValue === 0) return;
 
-    const costPerMetric = totalPricePaid / metricValue;
+    // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
+    const costPerMetric = Math.min(totalPricePaid / metricValue, totalPricePaid);
 
     // Only include games not yet in club (above threshold)
     if (costPerMetric <= threshold) return;

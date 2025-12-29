@@ -391,9 +391,28 @@ describe('getCostClubGames', () => {
   test('calculates costPerMetric correctly', () => {
     const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
     result.games.forEach(item => {
-      const expectedCost = item.pricePaid / item.metricValue;
+      // costPerMetric is capped at pricePaid (handles metric < 1)
+      const expectedCost = Math.min(item.pricePaid / item.metricValue, item.pricePaid);
       expect(item.costPerMetric).toBeCloseTo(expectedCost, 5);
     });
+  });
+
+  test('caps costPerMetric at pricePaid when metric < 1', () => {
+    const games = [{
+      id: 1,
+      name: 'Short Play Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 1 }],
+    }];
+    // 12 minutes = 0.2 hours, without cap would be $1/0.2 = $5/hour
+    // With cap, should be $1/hour (price paid)
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 12 },
+    ];
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    expect(result.count).toBe(1);
+    expect(result.games[0].metricValue).toBeCloseTo(0.2, 5);
+    expect(result.games[0].costPerMetric).toBe(1); // Capped at pricePaid, not $5
   });
 
   test('sorts by costPerMetric descending', () => {
@@ -675,5 +694,23 @@ describe('getGamesApproachingCostClub', () => {
     ];
     const result = getGamesApproachingCostClub(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 5);
     expect(result.length).toBe(0); // Excluded because 0 hours
+  });
+
+  test('caps costPerMetric at pricePaid when metric < 1', () => {
+    const games = [{
+      id: 1,
+      name: 'Short Play Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 10 }],
+    }];
+    // 12 minutes = 0.2 hours, without cap would be $10/0.2 = $50/hour
+    // With cap, should be $10/hour (price paid)
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 12 },
+    ];
+    const result = getGamesApproachingCostClub(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 5);
+    expect(result.length).toBe(1);
+    expect(result[0].metricValue).toBeCloseTo(0.2, 5);
+    expect(result[0].costPerMetric).toBe(10); // Capped at pricePaid, not $50
   });
 });
