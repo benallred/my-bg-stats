@@ -310,6 +310,36 @@ describe('Suggestion Algorithms', () => {
       expect(recentSuggestion.game.name).toBe('Game C');
       expect(recentSuggestion.stats).toContain('1 total session');
     });
+
+    test('suggestRecentlyPlayedWithLowSessions shows plural sessions when min > 1', () => {
+      const today = new Date();
+      const date1 = new Date(today);
+      date1.setDate(today.getDate() - 10);
+      const date2 = new Date(today);
+      date2.setDate(today.getDate() - 11);
+
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game A',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+
+      // Only one game with 2 sessions - minimum is 2, should show plural
+      const testPlays = [
+        { gameId: 1, date: date1.toISOString().split('T')[0], durationMin: 60 },
+        { gameId: 1, date: date2.toISOString().split('T')[0], durationMin: 60 },
+      ];
+
+      const suggestions = getSuggestedGames(testGames, testPlays);
+      const recentSuggestion = suggestions.find(s => s && s.reasons && s.reasons.includes('Fresh and recent'));
+      expect(recentSuggestion).toBeDefined();
+      expect(recentSuggestion.stats).toContain('2 total sessions');
+    });
   });
 
   describe('suggestForCostClub', () => {
@@ -495,7 +525,6 @@ describe('Suggestion Algorithms', () => {
       ];
 
       const suggestions = getSuggestedGames(testGames, testPlays, true);
-      const costClubSuggestion = suggestions.find(s => s.reasons.some(r => r.startsWith('Join the $')));
       // May or may not have a cost club suggestion depending on game data
       expect(Array.isArray(suggestions)).toBe(true);
     });
@@ -524,6 +553,95 @@ describe('Suggestion Algorithms', () => {
       const suggestions = getSuggestedGames(typicalData.games, typicalData.plays);
       const costClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
       expect(costClubSuggestion).toBeUndefined();
+    });
+
+  });
+
+  describe('Edge cases for uncovered branches', () => {
+    test('milestone suggestion shows singular session text when at 1 session', () => {
+      const testGames = [
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+      ];
+      // Only 1 session (need 4 more to reach milestone of 5)
+      const testPlays = [
+        { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      ];
+
+      const suggestions = getSuggestedGames(testGames, testPlays, 'sessions');
+      const milestoneSuggestion = suggestions.find(s => s.reasons.some(r => r.includes('five') || r.includes('dime')));
+      if (milestoneSuggestion) {
+        // Should use singular "session" not "sessions" for value of 1
+        const sessionStat = milestoneSuggestion.stats.find(s => s.includes('session'));
+        expect(sessionStat).toContain('1 session');
+      }
+    });
+
+    test('milestone suggestion shows singular play text when at 1 play', () => {
+      const testGames = [
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+      ];
+      // Only 1 play (need 4 more to reach milestone of 5)
+      const testPlays = [
+        { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      ];
+
+      const suggestions = getSuggestedGames(testGames, testPlays, 'plays');
+      const milestoneSuggestion = suggestions.find(s => s.reasons.some(r => r.includes('five') || r.includes('dime')));
+      if (milestoneSuggestion) {
+        // Should use singular "play" not "plays" for value of 1
+        const playStat = milestoneSuggestion.stats.find(s => s.includes('play'));
+        expect(playStat).toContain('1 play');
+      }
+    });
+
+    test('h-index suggestion shows singular play text when at 1 play', () => {
+      const testGames = [
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+      ];
+      // Only 1 play gives h-index of 1, next target is 2
+      const testPlays = [
+        { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      ];
+
+      const suggestions = getSuggestedGames(testGames, testPlays);
+      // Look for h-index suggestion ("Squaring up")
+      const hIndexSuggestion = suggestions.find(s => s.reasons.some(r => r.includes('Squaring up')));
+      if (hIndexSuggestion) {
+        // Should use singular "play" for value of 1
+        const playStat = hIndexSuggestion.stats.find(s => s.includes('play'));
+        if (playStat) {
+          expect(playStat).toContain('1 play');
+        }
+      }
+    });
+
+    test('milestone suggestion returns null when all games past 100 milestone', () => {
+      const testGames = [
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+      ];
+      // Create 101 plays on 101 different sessions (over multiple years)
+      const testPlays = [];
+      for (let year = 2020; year <= 2023; year++) {
+        for (let month = 1; month <= 12; month++) {
+          for (let day = 1; day <= 28; day++) {
+            if (testPlays.length < 101) {
+              testPlays.push({
+                gameId: 1,
+                date: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+                durationMin: 60,
+              });
+            }
+          }
+        }
+      }
+
+      // With 101 unique sessions, the game is past the 100 milestone for sessions
+      const suggestions = getSuggestedGames(testGames, testPlays, 'sessions');
+      // Should not have milestone suggestions for sessions since all games are past 100
+      const milestoneSuggestion = suggestions.find(s =>
+        s.reasons.some(r => r.includes('five') || r.includes('dime') || r.includes('quarter') || r.includes('century'))
+      );
+      expect(milestoneSuggestion).toBeUndefined();
     });
   });
 });

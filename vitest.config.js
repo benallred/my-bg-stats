@@ -6,14 +6,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
-      include: ['stats.js', 'stats/**/*.js', 'utils.js', 'formatting.js'],
+      include: ['stats/**/*.js', 'utils.js', 'formatting.js'],
       exclude: ['scripts/**', 'tests/**', 'node_modules/**', '**/*.test.js'],
-      all: false,
       thresholds: {
-        lines: 99.87,
+        lines: 100,
         functions: 100,
-        branches: 98.82,
-        statements: 99.87,
+        branches: 100,
+        statements: 100,
       },
     },
   },

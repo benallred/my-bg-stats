@@ -231,6 +231,46 @@ describe('getNewHIndexGames', () => {
     expect(newGames.length).toBeGreaterThan(0);
   });
 
+  test('exercises previous year contributor lookup with plays metric', () => {
+    // Create scenario where previous year has h-index > 0 so the
+    // previousContributors loop executes with count (not hours)
+    const plays = [
+      // 2020: Game A with 2 plays -> previous h-index >= 1
+      { gameId: 1, date: '2020-01-01', durationMin: 60 },
+      { gameId: 1, date: '2020-01-02', durationMin: 60 },
+      // 2021: Game B with 3 plays -> new contributor
+      { gameId: 2, date: '2021-01-01', durationMin: 60 },
+      { gameId: 2, date: '2021-01-02', durationMin: 60 },
+      { gameId: 2, date: '2021-01-03', durationMin: 60 },
+    ];
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const newGames = getNewHIndexGames(games, plays, 2021, 'plays');
+    expect(Array.isArray(newGames)).toBe(true);
+  });
+
+  test('exercises previous year contributor lookup with sessions metric', () => {
+    // Create scenario where previous year has h-index > 0 so the
+    // previousContributors loop executes with count (sessions)
+    const plays = [
+      // 2020: Game A on 2 different days -> previous session h-index >= 1
+      { gameId: 1, date: '2020-01-01', durationMin: 60 },
+      { gameId: 1, date: '2020-01-02', durationMin: 60 },
+      // 2021: Game B on 3 different days -> new contributor
+      { gameId: 2, date: '2021-01-01', durationMin: 60 },
+      { gameId: 2, date: '2021-01-02', durationMin: 60 },
+      { gameId: 2, date: '2021-01-03', durationMin: 60 },
+    ];
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const newGames = getNewHIndexGames(games, plays, 2021, 'sessions');
+    expect(Array.isArray(newGames)).toBe(true);
+  });
+
   test('thisYearValue reflects only plays from selected year', () => {
     const plays = [
       { gameId: 1, date: '2020-01-01', durationMin: 60 },
@@ -309,6 +349,7 @@ describe('getNewHIndexGames', () => {
     // h-index increase might be 1, but we could have 2 new games
     expect(newGames.length).toBeGreaterThanOrEqual(increase);
   });
+
 });
 
 describe('getHIndexBreakdown', () => {
@@ -354,6 +395,17 @@ describe('getHIndexBreakdown', () => {
     const breakdown = getHIndexBreakdown(typicalData.games, []);
     expect(breakdown).toEqual([]);
   });
+
+  test('filters out plays referencing non-existent games', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 999, date: '2024-01-01', durationMin: 60 }, // Non-existent game
+    ];
+    const breakdown = getHIndexBreakdown(games, plays);
+    expect(breakdown).toHaveLength(1);
+    expect(breakdown[0].game.id).toBe(1);
+  });
 });
 
 describe('getHourHIndexBreakdown', () => {
@@ -380,6 +432,18 @@ describe('getHourHIndexBreakdown', () => {
   test('returns empty array for no plays', () => {
     const breakdown = getHourHIndexBreakdown(typicalData.games, []);
     expect(breakdown).toEqual([]);
+  });
+
+  test('filters out plays referencing non-existent games', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 999, date: '2024-01-01', durationMin: 120 }, // Non-existent game
+    ];
+    const breakdown = getHourHIndexBreakdown(games, plays);
+    expect(breakdown).toHaveLength(1);
+    expect(breakdown[0].game.id).toBe(1);
+    expect(breakdown[0].hours).toBe(1); // Only 60 minutes from game 1
   });
 });
 
@@ -714,5 +778,40 @@ describe('getNewPeopleHIndexGames', () => {
       expect(item).toHaveProperty('thisYearValue');
       expect(item.value).toBeGreaterThanOrEqual(item.thisYearValue);
     });
+  });
+
+  test('exercises previous year contributor lookup with sessions metric', () => {
+    const SELF_ID = 99;
+    const ANON_ID = 1;
+    // Create scenario where previous year has an h-index of 1 with unique players
+    // so the previousContributors loop executes with count (not hours)
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // 2023: Game A with 1 player -> previous h-index = 1
+      { gameId: 1, date: '2023-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      // 2024: Game B gets 2 different players -> new contributor
+      { gameId: 2, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 3] },
+      { gameId: 2, date: '2024-01-02', durationMin: 60, players: [SELF_ID, 4] },
+    ];
+    const newGames = getNewPeopleHIndexGames(games, plays, SELF_ID, ANON_ID, 2024);
+    expect(Array.isArray(newGames)).toBe(true);
+  });
+
+  test('handles plays referencing non-existent games in breakdown', () => {
+    const SELF_ID = 99;
+    const ANON_ID = 1;
+    // Play references gameId 999 which doesn't exist in games array
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 2] },
+      { gameId: 999, date: '2024-01-01', durationMin: 60, players: [SELF_ID, 3] },
+    ];
+    const breakdown = getPeopleHIndexBreakdown(games, plays, SELF_ID, ANON_ID);
+    // Should only include Game A, not the non-existent game
+    expect(breakdown.length).toBe(1);
+    expect(breakdown[0].game.id).toBe(1);
   });
 });

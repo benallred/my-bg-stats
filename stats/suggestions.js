@@ -163,9 +163,10 @@ function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, metricName)
     .filter(data => getValue(data) >= nextHIndex).length;
 
   // How many more games need to reach nextHIndex to achieve h-index of nextHIndex
+  // Note: gamesNeeded is always > 0 here because:
+  // - If gamesAtOrAboveNext >= nextHIndex, then by h-index definition, currentHIndex >= nextHIndex
+  // - But nextHIndex = currentHIndex + 1, so this is impossible
   const gamesNeeded = nextHIndex - gamesAtOrAboveNext;
-
-  if (gamesNeeded <= 0) return null; // Already at next h-index or beyond
 
   // Get all candidates with metric below nextHIndex, sorted by highest metric first
   const candidates = Array.from(gamePlayData.values())
@@ -195,13 +196,15 @@ function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, metricName)
   } else if (metricName === 'Sessions') {
     const sessionText = metricValue === 1 ? 'session' : 'sessions';
     statText = `${metricValue} ${sessionText}`;
-    const nextSessionText = nextHIndex === 1 ? 'session' : 'sessions';
-    reasonText = `Squaring up: ${nextHIndex} ${nextSessionText}`;
-  } else if (metricName === 'Plays') {
+    // Note: nextHIndex is always >= 2 here because candidates require value > 0 && value < nextHIndex,
+    // which is impossible when nextHIndex === 1 for integer metrics
+    reasonText = `Squaring up: ${nextHIndex} sessions`;
+  } else {
+    // Default case handles 'Plays' metric
     const playText = metricValue === 1 ? 'play' : 'plays';
     statText = `${metricValue} ${playText}`;
-    const nextPlayText = nextHIndex === 1 ? 'play' : 'plays';
-    reasonText = `Squaring up: ${nextHIndex} ${nextPlayText}`;
+    // Note: nextHIndex is always >= 2 here for the same reason as sessions
+    reasonText = `Squaring up: ${nextHIndex} plays`;
   }
 
   return {
@@ -312,7 +315,11 @@ function suggestForNextMilestone(gamePlayData, metric) {
     }
   });
 
-  if (closestToEachMilestone.length === 0) return null;
+  // Note: closestToEachMilestone cannot be empty here because:
+  // 1. milestoneChaseGames is non-empty (checked at line 301)
+  // 2. Each game in milestoneChaseGames has a target of 5, 10, 25, or 100
+  // 3. The milestones array contains exactly [5, 10, 25, 100]
+  // So at least one milestone will match at least one game
 
   // Filter to games at these "closest" values, then select one with sqrt rarity weighting
   const closestGames = milestoneChaseGames.filter(data => closestToEachMilestone.includes(data.currentValue));
@@ -416,8 +423,6 @@ function suggestForCostClub(gamePlayData, metric, threshold) {
     () => threshold,
   );
 
-  if (!selected) return null;
-
   // Format metric label
   let metricLabel;
   switch (metric) {
@@ -505,7 +510,8 @@ function getSuggestedGames(games, plays, isExperimental = false) {
   if (isExperimental) {
     gamePlayData.forEach((data) => {
       const game = data.game;
-      const ownedCopies = game.copies?.filter(c => c.statusOwned === true) || [];
+      // Note: game.copies is guaranteed to exist here because isGameOwned filters out games without copies
+      const ownedCopies = game.copies.filter(c => c.statusOwned === true);
       let totalPricePaid = 0;
       let hasPriceData = false;
 

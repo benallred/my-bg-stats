@@ -158,6 +158,31 @@ describe('getTotalGamesPlayed', () => {
     const result2024 = getTotalGamesPlayed(typicalData.games, typicalData.plays, 2024);
     expect(result2024.newToMe).toBeGreaterThanOrEqual(0);
   });
+
+  test('handles out-of-order plays when determining first play date', () => {
+    // Plays are intentionally not in chronological order
+    const plays = [
+      { gameId: 1, date: '2024-06-15', durationMin: 60, copyId: 1 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60, copyId: 1 }, // Earlier date, processed later
+      { gameId: 1, date: '2024-03-15', durationMin: 60, copyId: 1 },
+    ];
+    const games = [{ id: 1, name: 'Test Game' }];
+    const result = getTotalGamesPlayed(games, plays, 2024);
+    // Game should be counted as new-to-me in 2024 based on earliest date (Jan 1)
+    expect(result.total).toBe(1);
+    expect(result.newToMe).toBe(1);
+  });
+
+  test('handles plays referencing non-existent games', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60, copyId: 1 },
+      { gameId: 999, date: '2024-01-01', durationMin: 60, copyId: null }, // Non-existent game
+    ];
+    const games = [{ id: 1, name: 'Test Game' }];
+    const result = getTotalGamesPlayed(games, plays);
+    // Should only count games that exist
+    expect(result.myGames).toBe(1);
+  });
 });
 
 describe('getTotalPlayTime', () => {
@@ -194,6 +219,19 @@ describe('getTotalPlayTime', () => {
   test('filters by year', () => {
     const result2024 = getTotalPlayTime(durationData.plays, 2024);
     expect(result2024.totalPlays).toBeGreaterThanOrEqual(0);
+  });
+
+  test('excludes plays outside specified year', () => {
+    const plays = [
+      { date: '2023-01-01', durationMin: 60, durationEstimated: false },
+      { date: '2024-01-01', durationMin: 120, durationEstimated: false },
+      { date: '2024-01-02', durationMin: 90, durationEstimated: true },
+    ];
+    const result2024 = getTotalPlayTime(plays, 2024);
+    expect(result2024.totalPlays).toBe(2);
+    expect(result2024.totalMinutes).toBe(210); // 120 + 90
+    expect(result2024.playsWithActualDuration).toBe(1);
+    expect(result2024.playsWithEstimatedDuration).toBe(1);
   });
 
   test('returns zeros for empty plays', () => {

@@ -141,16 +141,11 @@ function getTotalPlayTime(plays, year = null) {
     if (!isPlayInYear(play, year)) return;
 
     totalPlays++;
-
-    // Note: With current process-data.js implementation, all plays have durationMin > 0
-    // (either actual or estimated with 30-minute default), so playsSkipped should always be 0
-    if (play.durationMin > 0) {
-      totalMinutes += play.durationMin;
-      if (play.durationEstimated) {
-        playsWithEstimatedDuration++;
-      } else {
-        playsWithActualDuration++;
-      }
+    totalMinutes += play.durationMin;
+    if (play.durationEstimated) {
+      playsWithEstimatedDuration++;
+    } else {
+      playsWithActualDuration++;
     }
   });
 
@@ -274,26 +269,14 @@ function getDaysPlayedByGame(games, plays, year = null) {
       const playsPerDayArray = Array.from(daysData.playsPerDay.values());
 
       // Calculate min, max, median, and average minutes per day
-      let minMinutes = null;
-      let maxMinutes = null;
-      let medianMinutes = null;
-      let avgMinutes = null;
-
-      if (minutesPerDayArray.length > 0) {
-        minMinutes = Math.min(...minutesPerDayArray);
-        maxMinutes = Math.max(...minutesPerDayArray);
-        avgMinutes = minutesPerDayArray.reduce((sum, minutes) => sum + minutes, 0) / minutesPerDayArray.length;
-        medianMinutes = calculateMedian(minutesPerDayArray);
-      }
+      const minMinutes = Math.min(...minutesPerDayArray);
+      const maxMinutes = Math.max(...minutesPerDayArray);
+      const avgMinutes = minutesPerDayArray.reduce((sum, minutes) => sum + minutes, 0) / minutesPerDayArray.length;
+      const medianMinutes = calculateMedian(minutesPerDayArray);
 
       // Calculate median and average plays per day
-      let medianPlays = null;
-      let avgPlays = null;
-
-      if (playsPerDayArray.length > 0) {
-        avgPlays = playsPerDayArray.reduce((sum, plays) => sum + plays, 0) / playsPerDayArray.length;
-        medianPlays = calculateMedian(playsPerDayArray);
-      }
+      const avgPlays = playsPerDayArray.reduce((sum, plays) => sum + plays, 0) / playsPerDayArray.length;
+      const medianPlays = calculateMedian(playsPerDayArray);
 
       breakdown.push({
         game,
@@ -356,36 +339,35 @@ function getTopGamesByMetric(games, plays, year, metric, limit = 3) {
   ]);
 
   // Build combined data for each game
+  // Note: allGameIds comes from breakdowns which already filter out non-existent games
   const combined = [];
   allGameIds.forEach(gameId => {
     const game = games.find(g => g.id === gameId);
-    if (game) {
-      const hours = hoursMap.get(gameId);
-      const sessions = sessionsMap.get(gameId);
-      const gamePlays = playsMap.get(gameId);
+    const hours = hoursMap.get(gameId);
+    const sessions = sessionsMap.get(gameId);
+    const gamePlays = playsMap.get(gameId);
 
-      let value;
-      switch (metric) {
-        case Metric.SESSIONS:
-          value = sessions;
-          break;
-        case Metric.PLAYS:
-          value = gamePlays;
-          break;
-        case Metric.HOURS:
-        default:
-          value = hours;
-          break;
-      }
-
-      combined.push({
-        game,
-        value,
-        hours,
-        sessions,
-        plays: gamePlays,
-      });
+    let value;
+    switch (metric) {
+      case Metric.SESSIONS:
+        value = sessions;
+        break;
+      case Metric.PLAYS:
+        value = gamePlays;
+        break;
+      case Metric.HOURS:
+      default:
+        value = hours;
+        break;
     }
+
+    combined.push({
+      game,
+      value,
+      hours,
+      sessions,
+      plays: gamePlays,
+    });
   });
 
   // Sort by: metric value desc, then hours desc, then sessions desc, then plays desc

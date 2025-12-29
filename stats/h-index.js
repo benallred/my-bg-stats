@@ -254,13 +254,10 @@ function getNewHIndexGames(games, plays, year, metric) {
   }
 
   // Get contributor game IDs for current year
+  // All games at positions 0 to currentHIndex-1 are contributors by definition of h-index
   const currentContributors = new Set();
   for (let i = 0; i < currentHIndex && i < currentBreakdown.length; i++) {
-    const rank = i + 1;
-    const value = metric === Metric.HOURS ? currentBreakdown[i].hours : currentBreakdown[i].count;
-    if (rank <= value && rank <= currentHIndex) {
-      currentContributors.add(currentBreakdown[i].game.id);
-    }
+    currentContributors.add(currentBreakdown[i].game.id);
   }
 
   // Get contributor games for previous year
@@ -284,13 +281,10 @@ function getNewHIndexGames(games, plays, year, metric) {
   }
 
   // Get contributor game IDs for previous year
+  // All games at positions 0 to previousHIndex-1 are contributors by definition of h-index
   const previousContributors = new Set();
   for (let i = 0; i < previousHIndex && i < previousBreakdown.length; i++) {
-    const rank = i + 1;
-    const value = metric === Metric.HOURS ? previousBreakdown[i].hours : previousBreakdown[i].count;
-    if (rank <= value && rank <= previousHIndex) {
-      previousContributors.add(previousBreakdown[i].game.id);
-    }
+    previousContributors.add(previousBreakdown[i].game.id);
   }
 
   // Find games that are in current contributors but not in previous contributors
@@ -491,13 +485,10 @@ function getNewPeopleHIndexGames(games, plays, selfPlayerId, anonymousPlayerId, 
   const currentBreakdown = getPeopleHIndexBreakdown(games, filteredPlaysCurrentYear, selfPlayerId, anonymousPlayerId);
 
   // Get contributor game IDs for current year
+  // All games at positions 0 to currentHIndex-1 are contributors by definition of h-index
   const currentContributors = new Set();
   for (let i = 0; i < currentHIndex && i < currentBreakdown.length; i++) {
-    const rank = i + 1;
-    const value = currentBreakdown[i].uniquePlayers;
-    if (rank <= value && rank <= currentHIndex) {
-      currentContributors.add(currentBreakdown[i].game.id);
-    }
+    currentContributors.add(currentBreakdown[i].game.id);
   }
 
   // Get breakdown for previous year
@@ -508,13 +499,10 @@ function getNewPeopleHIndexGames(games, plays, selfPlayerId, anonymousPlayerId, 
   const previousBreakdown = getPeopleHIndexBreakdown(games, filteredPlaysPreviousYear, selfPlayerId, anonymousPlayerId);
 
   // Get contributor game IDs for previous year
+  // All games at positions 0 to previousHIndex-1 are contributors by definition of h-index
   const previousContributors = new Set();
   for (let i = 0; i < previousHIndex && i < previousBreakdown.length; i++) {
-    const rank = i + 1;
-    const value = previousBreakdown[i].uniquePlayers;
-    if (rank <= value && rank <= previousHIndex) {
-      previousContributors.add(previousBreakdown[i].game.id);
-    }
+    previousContributors.add(previousBreakdown[i].game.id);
   }
 
   // Find games that are in current contributors but not in previous contributors

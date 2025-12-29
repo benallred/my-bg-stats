@@ -574,6 +574,53 @@ describe('getNewMilestoneGames', () => {
     const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
     expect(result.length).toBe(1);
   });
+
+  test('handles game first played this year (no previous year data)', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had no plays in previous year, reaches 5 plays this year
+    const testPlays = [
+      { gameId: 1, date: '2021-01-01', durationMin: 60 },
+      { gameId: 1, date: '2021-01-02', durationMin: 60 },
+      { gameId: 1, date: '2021-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-04', durationMin: 60 },
+      { gameId: 1, date: '2021-01-05', durationMin: 60 },
+    ];
+    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+    expect(result.length).toBe(1);
+    expect(result[0].game.id).toBe(1);
+    expect(result[0].thisYearValue).toBe(5);
+  });
+
+  test('sorts multiple new milestone games by value descending', () => {
+    const testGames = [
+      { id: 1, name: 'Game 1' },
+      { id: 2, name: 'Game 2' },
+    ];
+    // Both games reach fives milestone this year, Game 2 has more plays
+    const testPlays = [
+      // Game 1: 5 plays
+      { gameId: 1, date: '2021-01-01', durationMin: 60 },
+      { gameId: 1, date: '2021-01-02', durationMin: 60 },
+      { gameId: 1, date: '2021-01-03', durationMin: 60 },
+      { gameId: 1, date: '2021-01-04', durationMin: 60 },
+      { gameId: 1, date: '2021-01-05', durationMin: 60 },
+      // Game 2: 7 plays
+      { gameId: 2, date: '2021-01-01', durationMin: 60 },
+      { gameId: 2, date: '2021-01-02', durationMin: 60 },
+      { gameId: 2, date: '2021-01-03', durationMin: 60 },
+      { gameId: 2, date: '2021-01-04', durationMin: 60 },
+      { gameId: 2, date: '2021-01-05', durationMin: 60 },
+      { gameId: 2, date: '2021-01-06', durationMin: 60 },
+      { gameId: 2, date: '2021-01-07', durationMin: 60 },
+    ];
+    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+    expect(result.length).toBe(2);
+    // Should be sorted by value descending (Game 2 first with 7, then Game 1 with 5)
+    expect(result[0].game.id).toBe(2);
+    expect(result[0].value).toBe(7);
+    expect(result[1].game.id).toBe(1);
+    expect(result[1].value).toBe(5);
+  });
 });
 
 describe('getSkippedMilestoneCount', () => {
@@ -699,6 +746,18 @@ describe('getSkippedMilestoneCount', () => {
       ...Array.from({ length: 3 }, (_, i) => ({ gameId: 999, date: `2020-01-0${i + 1}`, durationMin: 60 })),
       ...Array.from({ length: 10 }, (_, i) => ({ gameId: 999, date: `2021-01-${String(i + 1).padStart(2, '0')}`, durationMin: 60 })),
     ];
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    expect(result).toBe(1);
+  });
+
+  test('handles game first played this year that skips milestone (no previous year data)', () => {
+    const testGames = [{ id: 1, name: 'Game 1' }];
+    // Game had 0 plays before 2021, reaches 12 plays in 2021 (skips fives)
+    const testPlays = Array.from({ length: 12 }, (_, i) => ({
+      gameId: 1,
+      date: `2021-01-${String(i + 1).padStart(2, '0')}`,
+      durationMin: 60,
+    }));
     const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
     expect(result).toBe(1);
   });
@@ -859,6 +918,31 @@ describe('Year Functions', () => {
     test('returns empty array for games with no acquisition dates', () => {
       const games = [{ copies: [{ acquisitionDate: null }] }];
       expect(getAllAcquisitionYears(games)).toEqual([]);
+    });
+
+    test('handles games with no copies property', () => {
+      const games = [{ id: 1, name: 'Game without copies' }];
+      expect(getAllAcquisitionYears(games)).toEqual([]);
+    });
+
+    test('handles games with empty copies array', () => {
+      const games = [{ id: 1, name: 'Game A', copies: [] }];
+      expect(getAllAcquisitionYears(games)).toEqual([]);
+    });
+
+    test('extracts years from copies with acquisition dates', () => {
+      const games = [
+        {
+          id: 1,
+          name: 'Game A',
+          copies: [
+            { acquisitionDate: '2023-05-15' },
+            { acquisitionDate: '2024-01-01' },
+          ],
+        },
+      ];
+      const years = getAllAcquisitionYears(games);
+      expect(years).toEqual([2024, 2023]);
     });
 
     test('handles empty games array', () => {
