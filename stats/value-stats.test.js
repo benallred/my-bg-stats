@@ -1163,9 +1163,110 @@ describe('getCostPerMetricStats', () => {
     const result = getCostPerMetricStats(games, plays, Metric.HOURS);
     expect(result.games.length).toBe(2);
     // Unplayed: $10 (pricePaid), Played: $10/hour
-    // Both have costPerMetric of 10, sorted ascending by costPerMetric
+    // Both have costPerMetric of 10, but Played has 10 hours vs 0 hours
     expect(result.games[0].costPerMetric).toBe(10);
     expect(result.games[1].costPerMetric).toBe(10);
+    expect(result.games[0].game.name).toBe('Played'); // More hours sorts first
+    expect(result.games[1].game.name).toBe('Unplayed');
+  });
+
+  test('secondary sort by hours > sessions > plays when costPerMetric is equal', () => {
+    const games = [
+      { id: 1, name: 'LowHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'HighHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },  // 1 hour = $10/hr
+      { gameId: 2, date: '2023-01-01', durationMin: 120 }, // 2 hours = $5/hr
+      { gameId: 2, date: '2023-01-02', durationMin: 0 },   // Bump to 2 sessions, still 2 hours = $5/hr
+    ];
+    // Different costPerMetric - LowHours $10/hr, HighHours $5/hr
+    // HighHours should sort first (lower cost)
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.games[0].game.name).toBe('HighHours');
+    expect(result.games[1].game.name).toBe('LowHours');
+  });
+
+  test('secondary sort breaks tie by current metric first', () => {
+    const games = [
+      { id: 1, name: 'LowerMetric', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'HigherMetric', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 20 }] },
+    ];
+    const plays = [
+      // LowerMetric: 1 hour = $10/hr
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      // HigherMetric: 2 hours = $10/hr (same cost, more hours)
+      { gameId: 2, date: '2023-01-01', durationMin: 120 },
+    ];
+    // Both: $10/hr (same cost)
+    // HigherMetric has 2 hours vs 1 hour - should sort first
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.games[0].game.name).toBe('HigherMetric');
+    expect(result.games[1].game.name).toBe('LowerMetric');
+  });
+
+  test('secondary sort breaks tie by hours when current metric is equal', () => {
+    const games = [
+      { id: 1, name: 'FewerHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'MoreHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+    ];
+    const plays = [
+      // FewerHours: 5 sessions, 1 hour total = $2/session
+      { gameId: 1, date: '2023-01-01', durationMin: 12 },
+      { gameId: 1, date: '2023-01-02', durationMin: 12 },
+      { gameId: 1, date: '2023-01-03', durationMin: 12 },
+      { gameId: 1, date: '2023-01-04', durationMin: 12 },
+      { gameId: 1, date: '2023-01-05', durationMin: 12 },
+      // MoreHours: 5 sessions, 2 hours total = $2/session
+      { gameId: 2, date: '2023-01-01', durationMin: 24 },
+      { gameId: 2, date: '2023-01-02', durationMin: 24 },
+      { gameId: 2, date: '2023-01-03', durationMin: 24 },
+      { gameId: 2, date: '2023-01-04', durationMin: 24 },
+      { gameId: 2, date: '2023-01-05', durationMin: 24 },
+    ];
+    // Both: $2/session (same cost), same sessions (5)
+    // MoreHours has 2 hours vs 1 hour - should sort first
+    const result = getCostPerMetricStats(games, plays, Metric.SESSIONS);
+    expect(result.games[0].game.name).toBe('MoreHours');
+    expect(result.games[1].game.name).toBe('FewerHours');
+  });
+
+  test('secondary sort breaks tie by sessions when current metric and hours are equal', () => {
+    const games = [
+      { id: 1, name: 'FewerSessions', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'MoreSessions', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+    ];
+    const plays = [
+      // FewerSessions: 1 hour, 1 session, 1 play = $10/hr
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      // MoreSessions: 1 hour, 2 sessions, 2 plays = $10/hr
+      { gameId: 2, date: '2023-01-01', durationMin: 30 },
+      { gameId: 2, date: '2023-01-02', durationMin: 30 },
+    ];
+    // Using HOURS metric: both $10/hr, same hours (1)
+    // MoreSessions has 2 sessions vs 1 - should sort first
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.games[0].game.name).toBe('MoreSessions');
+    expect(result.games[1].game.name).toBe('FewerSessions');
+  });
+
+  test('secondary sort breaks tie by plays when current metric, hours, and sessions are equal', () => {
+    const games = [
+      { id: 1, name: 'FewerPlays', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'MorePlays', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+    ];
+    const plays = [
+      // FewerPlays: 1 hour, 1 session, 1 play
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      // MorePlays: 1 hour, 1 session, 2 plays
+      { gameId: 2, date: '2023-01-01', durationMin: 30 },
+      { gameId: 2, date: '2023-01-01', durationMin: 30 },
+    ];
+    // Using HOURS metric: both $10/hr, same hours (1), same sessions (1)
+    // MorePlays has 2 plays vs 1 - should sort first
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.games[0].game.name).toBe('MorePlays');
+    expect(result.games[1].game.name).toBe('FewerPlays');
   });
 });
 

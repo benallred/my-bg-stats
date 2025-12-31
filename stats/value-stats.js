@@ -301,6 +301,11 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
     const playData = metricValues.get(game.id);
     const metricValue = playData ? getMetricValueFromPlayData(playData, metric) : 0;
 
+    // Calculate all metric values for secondary sorting
+    const hours = playData ? playData.totalMinutes / 60 : 0;
+    const sessions = playData ? playData.uniqueDates.size : 0;
+    const plays = playData ? playData.playCount : 0;
+
     // For unplayed games (metricValue === 0), apply acquisition year filter if year specified
     if (metricValue === 0) {
       if (year) {
@@ -316,6 +321,9 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
         pricePaid,
         metricValue: 0,
         costPerMetric: pricePaid,
+        hours,
+        sessions,
+        plays,
       });
     } else {
       // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
@@ -326,12 +334,26 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
         pricePaid,
         metricValue,
         costPerMetric,
+        hours,
+        sessions,
+        plays,
       });
     }
   });
 
   // Sort by costPerMetric ascending (best value first)
-  eligibleGames.sort((a, b) => a.costPerMetric - b.costPerMetric);
+  // Secondary sort: current metric > hours > sessions > plays (descending - more is better)
+  eligibleGames.sort((a, b) => {
+    const costDiff = a.costPerMetric - b.costPerMetric;
+    if (costDiff !== 0) return costDiff;
+    const metricDiff = b.metricValue - a.metricValue;
+    if (metricDiff !== 0) return metricDiff;
+    const hoursDiff = b.hours - a.hours;
+    if (hoursDiff !== 0) return hoursDiff;
+    const sessionsDiff = b.sessions - a.sessions;
+    if (sessionsDiff !== 0) return sessionsDiff;
+    return b.plays - a.plays;
+  });
 
   const costPerMetricValues = eligibleGames.map(g => g.costPerMetric);
   const totalCost = eligibleGames.reduce((sum, g) => sum + g.pricePaid, 0);
