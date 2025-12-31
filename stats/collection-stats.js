@@ -4,7 +4,7 @@
 
 import { Metric, Milestone } from './constants.js';
 import { isGameOwned, wasGameAcquiredInYear } from './game-helpers.js';
-import { isPlayInYear, getMetricValuesThroughYear } from './play-helpers.js';
+import { isPlayInYear, isPlayInOrBeforeYear, getMetricValuesThroughYear } from './play-helpers.js';
 
 /**
  * Get total BGG entries owned (includes expansions and expandalones)
@@ -163,20 +163,20 @@ function getMilestones(games, plays, year, metric) {
 }
 
 /**
- * Get cumulative count of games within a milestone range
+ * Get count of games within a milestone range through a given year
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
- * @param {number|null} year - Year filter, or null for all time
+ * @param {number|null} year - Include plays through this year (inclusive), or null for all time
  * @param {string} metric - Metric to use ('hours', 'sessions', or 'plays')
  * @param {number} milestoneType - Milestone tier value (e.g., Milestone.FIVES, Milestone.DIMES)
  * @returns {number} Count of games within the milestone range
  */
-function getCumulativeMilestoneCount(games, plays, year, metric, milestoneType) {
+function getMilestoneCountThroughYear(games, plays, year, metric, milestoneType) {
   // Calculate metric values per game
   const metricValuesPerGame = new Map();
 
   plays.forEach(play => {
-    if (year && parseInt(play.date.substring(0, 4)) > year) return;
+    if (!isPlayInOrBeforeYear(play, year)) return;
 
     const currentValue = metricValuesPerGame.get(play.gameId) || {
       playCount: 0,
@@ -218,10 +218,10 @@ function getCumulativeMilestoneCount(games, plays, year, metric, milestoneType) 
  */
 function calculateMilestoneIncrease(games, plays, year, metric, milestoneType) {
   // Calculate current year count
-  const currentYearCount = getCumulativeMilestoneCount(games, plays, year, metric, milestoneType);
+  const currentYearCount = getMilestoneCountThroughYear(games, plays, year, metric, milestoneType);
 
   // Calculate previous year count
-  const previousYearCount = getCumulativeMilestoneCount(games, plays, year - 1, metric, milestoneType);
+  const previousYearCount = getMilestoneCountThroughYear(games, plays, year - 1, metric, milestoneType);
 
   return currentYearCount - previousYearCount;
 }
@@ -474,7 +474,7 @@ export {
   getTotalGamesOwned,
   getTotalExpansions,
   getMilestones,
-  getCumulativeMilestoneCount,
+  getMilestoneCountThroughYear,
   calculateMilestoneIncrease,
   getNewMilestoneGames,
   getSkippedMilestoneCount,

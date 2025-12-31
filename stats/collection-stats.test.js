@@ -4,7 +4,7 @@ import {
   getTotalGamesOwned,
   getTotalExpansions,
   getMilestones,
-  getCumulativeMilestoneCount,
+  getMilestoneCountThroughYear,
   calculateMilestoneIncrease,
   getNewMilestoneGames,
   getSkippedMilestoneCount,
@@ -263,7 +263,7 @@ describe('Milestone.getThreshold', () => {
   });
 });
 
-describe('getCumulativeMilestoneCount', () => {
+describe('getMilestoneCountThroughYear', () => {
   describe('plays metric', () => {
     test('counts games with 5+ plays', () => {
       const testGames = [
@@ -291,7 +291,7 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 3, date: '2020-01-09', durationMin: 60 },
         { gameId: 3, date: '2020-01-10', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
+      const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'plays', 5);
       expect(result).toBe(1);
     });
 
@@ -301,7 +301,7 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 1, date: '2020-01-01', durationMin: 60 },
         { gameId: 1, date: '2020-01-02', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
+      const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'plays', 5);
       expect(result).toBe(0);
     });
   });
@@ -312,7 +312,7 @@ describe('getCumulativeMilestoneCount', () => {
       const testPlays = [
         { gameId: 1, date: '2020-01-01', durationMin: 300 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 5);
+      const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'hours', 5);
       expect(result).toBe(1);
     });
 
@@ -321,7 +321,7 @@ describe('getCumulativeMilestoneCount', () => {
       const testPlays = [
         { gameId: 1, date: '2020-01-01', durationMin: 240 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 5);
+      const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'hours', 5);
       expect(result).toBe(0);
     });
   });
@@ -336,7 +336,7 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 1, date: '2020-01-04', durationMin: 60 },
         { gameId: 1, date: '2020-01-05', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 5);
+      const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'sessions', 5);
       expect(result).toBe(1);
     });
 
@@ -348,14 +348,14 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 1, date: '2020-01-02', durationMin: 60 },
         { gameId: 1, date: '2020-01-03', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 5);
+      const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'sessions', 5);
       expect(result).toBe(0);
     });
   });
 
   test('returns 0 for empty plays array', () => {
     const testGames = [{ id: 1, name: 'Game 1' }];
-    const result = getCumulativeMilestoneCount(testGames, [], null, 'plays', 5);
+    const result = getMilestoneCountThroughYear(testGames, [], null, 'plays', 5);
     expect(result).toBe(0);
   });
 
@@ -369,7 +369,7 @@ describe('getCumulativeMilestoneCount', () => {
       { gameId: 1, date: '2020-01-05', durationMin: 60 },
       { gameId: 999, date: '2020-01-01', durationMin: 60 },
     ];
-    const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
+    const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'plays', 5);
     expect(result).toBe(1);
   });
 
@@ -382,7 +382,7 @@ describe('getCumulativeMilestoneCount', () => {
       { gameId: 1, date: '2020-01-04' },
       { gameId: 1, date: '2020-01-05' },
     ];
-    const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
+    const result = getMilestoneCountThroughYear(testGames, testPlays, null, 'plays', 5);
     expect(result).toBe(1);
   });
 });
