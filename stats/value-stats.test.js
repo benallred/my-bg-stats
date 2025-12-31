@@ -942,10 +942,10 @@ describe('getCostPerMetricStats', () => {
     expect(result).toHaveProperty('games');
   });
 
-  test('only includes games with metric > 0', () => {
+  test('includes games with metric >= 0 (including unplayed)', () => {
     const result = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.HOURS);
     result.games.forEach(item => {
-      expect(item.metricValue).toBeGreaterThan(0);
+      expect(item.metricValue).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -1100,7 +1100,7 @@ describe('getCostPerMetricStats', () => {
     expect(result.games[0].game.name).toBe('HasPrice');
   });
 
-  test('excludes games with no play data', () => {
+  test('includes unplayed games with costPerMetric = pricePaid', () => {
     const games = [
       { id: 1, name: 'Played', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
       { id: 2, name: 'Unplayed', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
@@ -1110,11 +1110,15 @@ describe('getCostPerMetricStats', () => {
       // No plays for game 2
     ];
     const result = getCostPerMetricStats(games, plays, Metric.HOURS);
-    expect(result.gameCount).toBe(1);
-    expect(result.games[0].game.name).toBe('Played');
+    expect(result.gameCount).toBe(2);
+    // Sorted by costPerMetric ascending - played game first
+    expect(result.games[0].game.name).toBe('Unplayed');
+    expect(result.games[0].metricValue).toBe(0);
+    expect(result.games[0].costPerMetric).toBe(30); // pricePaid
+    expect(result.games[1].game.name).toBe('Played');
   });
 
-  test('excludes games with zero metric value (zero duration plays)', () => {
+  test('includes games with zero metric value (zero duration plays) with costPerMetric = pricePaid', () => {
     const games = [
       { id: 1, name: 'HasHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
       { id: 2, name: 'ZeroHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
@@ -1124,8 +1128,44 @@ describe('getCostPerMetricStats', () => {
       { gameId: 2, date: '2023-01-01', durationMin: 0 }, // Zero duration
     ];
     const result = getCostPerMetricStats(games, plays, Metric.HOURS);
-    expect(result.gameCount).toBe(1);
-    expect(result.games[0].game.name).toBe('HasHours');
+    expect(result.gameCount).toBe(2);
+    // ZeroHours has costPerMetric = pricePaid (30), sorted ascending
+    const zeroHoursGame = result.games.find(g => g.game.name === 'ZeroHours');
+    expect(zeroHoursGame.metricValue).toBe(0);
+    expect(zeroHoursGame.costPerMetric).toBe(30);
+  });
+
+  test('unplayed games with year filter use acquisition date filter', () => {
+    const games = [
+      { id: 1, name: 'OldUnplayed', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+      { id: 2, name: 'NewUnplayed', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30, acquisitionDate: '2024-06-01' }] },
+    ];
+    const plays = [];
+
+    // 2022: Only includes OldUnplayed (acquired 2020)
+    const result2022 = getCostPerMetricStats(games, plays, Metric.HOURS, 2022);
+    expect(result2022.gameCount).toBe(1);
+    expect(result2022.games[0].game.name).toBe('OldUnplayed');
+
+    // 2024: Includes both
+    const result2024 = getCostPerMetricStats(games, plays, Metric.HOURS, 2024);
+    expect(result2024.gameCount).toBe(2);
+  });
+
+  test('unplayed games sort by costPerMetric (their pricePaid) alongside played games', () => {
+    const games = [
+      { id: 1, name: 'Played', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 100 }] },
+      { id: 2, name: 'Unplayed', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 600 }, // 10 hours = $10/hour
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.games.length).toBe(2);
+    // Unplayed: $10 (pricePaid), Played: $10/hour
+    // Both have costPerMetric of 10, sorted ascending by costPerMetric
+    expect(result.games[0].costPerMetric).toBe(10);
+    expect(result.games[1].costPerMetric).toBe(10);
   });
 });
 

@@ -279,11 +279,12 @@ function getSkippedValueClubCount(games, plays, year, metric, threshold, nextLow
 }
 
 /**
- * Calculate cost-per-metric statistics for played games
+ * Calculate cost-per-metric statistics for owned games
+ * Includes both played games (cost/metric) and unplayed games (cost = price paid)
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
  * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
- * @param {number|null} year - Optional year filter (cumulative through year)
+ * @param {number|null} year - Optional year filter (cumulative through year for plays, acquired through year for unplayed)
  * @returns {Object} { median, gameAverage, overallRate, gameCount, games }
  */
 function getCostPerMetricStats(games, plays, metric, year = null) {
@@ -298,20 +299,35 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
     if (pricePaid === null) return;
 
     const playData = metricValues.get(game.id);
-    if (!playData) return;
+    const metricValue = playData ? getMetricValueFromPlayData(playData, metric) : 0;
 
-    const metricValue = getMetricValueFromPlayData(playData, metric);
-    if (metricValue === 0) return;
+    // For unplayed games (metricValue === 0), apply acquisition year filter if year specified
+    if (metricValue === 0) {
+      if (year) {
+        // Check if any owned copy was acquired in or before the year
+        const hasRelevantCopy = game.copies.some(copy =>
+          copy.statusOwned === true && wasCopyAcquiredInOrBeforeYear(copy, year)
+        );
+        if (!hasRelevantCopy) return;
+      }
+      // Unplayed games have costPerMetric = pricePaid (worst possible value)
+      eligibleGames.push({
+        game,
+        pricePaid,
+        metricValue: 0,
+        costPerMetric: pricePaid,
+      });
+    } else {
+      // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
+      const costPerMetric = Math.min(pricePaid / metricValue, pricePaid);
 
-    // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
-    const costPerMetric = Math.min(pricePaid / metricValue, pricePaid);
-
-    eligibleGames.push({
-      game,
-      pricePaid,
-      metricValue,
-      costPerMetric,
-    });
+      eligibleGames.push({
+        game,
+        pricePaid,
+        metricValue,
+        costPerMetric,
+      });
+    }
   });
 
   // Sort by costPerMetric ascending (best value first)

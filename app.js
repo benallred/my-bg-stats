@@ -1160,7 +1160,7 @@ function updateAvgCostPerMetricCard() {
     const yearSuffix = currentYear ? ` through ${currentYear}` : '';
     const unit = metricUnits[currentBaseMetric] || 'hour';
     document.getElementById('avg-cost-description').textContent =
-        `Median cost per ${unit} (of ${data.gameCount} owned games played${yearSuffix})`;
+        `Median cost per ${unit} (of ${data.gameCount} owned games${yearSuffix})`;
 
     // Update substats with < prefix
     const gameAvgEl = document.getElementById('avg-cost-game-average');
@@ -2743,7 +2743,7 @@ function showCostPerMetricBreakdown(container) {
     const { games } = statsCache.costPerMetricData;
 
     if (games.length === 0) {
-        container.innerHTML = '<p>No played games with price data found.</p>';
+        container.innerHTML = '<p>No owned games with price data found.</p>';
         return;
     }
 
@@ -2757,8 +2757,6 @@ function showCostPerMetricBreakdown(container) {
     const explanationDiv = document.createElement('div');
     explanationDiv.className = 'detail-explanation';
     explanationDiv.innerHTML = `
-        <p><strong>Note:</strong> Values shown as "< $X" because some games may have been played before logging began, meaning actual costs could be lower.</p>
-        <p><strong>Median:</strong> The middle value when all games' cost-per-${metricLabelLower} are sorted. Less affected by outliers.</p>
         <p><strong>Game Average:</strong> Average of each game's cost-per-${metricLabelLower}. Every game weighted equally.</p>
         <p><strong>Overall Rate:</strong> Total cost ÷ total ${metricLabel.toLowerCase()}. High-activity games weighted more heavily.</p>
     `;
