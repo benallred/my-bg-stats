@@ -746,7 +746,7 @@ function updateAllStats() {
             // Top returning game by sessions (for summary)
             topReturningGameBySessions: getTopReturningGame(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
 
-            // Cost club milestones - $5 club (hours, sessions, plays order)
+            // Cost club tiers - $5 club (hours, sessions, plays order)
             fiveDollarHoursIncrease: calculateCostClubIncrease(gameData.games, gameData.plays, currentYear, Metric.HOURS, CostClub.FIVE_DOLLAR),
             fiveDollarSessionsIncrease: calculateCostClubIncrease(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, CostClub.FIVE_DOLLAR),
             fiveDollarPlaysIncrease: calculateCostClubIncrease(gameData.games, gameData.plays, currentYear, Metric.PLAYS, CostClub.FIVE_DOLLAR),
@@ -3421,7 +3421,7 @@ function showYearReviewDetail(container, statsCache) {
         detailDiv.appendChild(milestonesSubsection);
     }
 
-    // Build cost club milestone rows (only if experimental features enabled)
+    // Build cost club rows (only if experimental features enabled)
     if (isExperimentalEnabled()) {
         const costClubRows = [];
         const costClubDefinitions = [
@@ -3502,7 +3502,7 @@ function showYearReviewDetail(container, statsCache) {
             const costClubSubsection = document.createElement('div');
             costClubSubsection.className = 'year-review-subsection';
             costClubSubsection.innerHTML = `
-                <h3 class="year-review-subsection-heading">Cost Club Milestones</h3>
+                <h3 class="year-review-subsection-heading">Value Clubs</h3>
                 <table class="year-review-table">
                     <tbody>
                         ${costClubRows.join('')}
