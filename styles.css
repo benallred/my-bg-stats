@@ -302,6 +302,14 @@ header.sticky-scrolled h1 {
     border-bottom: 2px solid var(--color-primary);
 }
 
+.section-subtitle {
+    display: block;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
 .section-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

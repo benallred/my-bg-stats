@@ -540,6 +540,7 @@ function setupBaseMetricFilter() {
         statsCache.oneDollarClubData = getCostClubGames(gameData.games, gameData.plays, currentBaseMetric, CostClub.ONE_DOLLAR, currentYear);
         statsCache.fiftyCentClubData = getCostClubGames(gameData.games, gameData.plays, currentBaseMetric, CostClub.FIFTY_CENTS, currentYear);
         updateCostAnalysisStats();
+        updateValueClubsStats();
 
         // Only refresh sections if not loading from permalink
         if (!isLoadingFromPermalink) {
@@ -773,6 +774,7 @@ function updateAllStats() {
     updateSocialLocationStats();
     updateDiagnosticsSection();
     updateCostAnalysisStats();
+    updateValueClubsStats();
     updateYearInReview();
 }
 
@@ -1101,6 +1103,21 @@ function updateCostAnalysisStats() {
         ? `Sum of copies acquired in ${currentYear}`
         : 'Sum of all owned copies';
     document.getElementById('total-cost-description').textContent = totalCostDescription;
+}
+
+/**
+ * Update Value Clubs section (experimental)
+ */
+function updateValueClubsStats() {
+    const section = document.getElementById('value-clubs-section');
+    if (!section) return;
+
+    // Show/hide section based on experimental flag
+    if (!isExperimentalEnabled()) {
+        section.style.display = 'none';
+        return;
+    }
+    section.style.display = 'block';
 
     // Update cost club cards
     const clubData = [
