@@ -1215,12 +1215,14 @@ function updateValueClubCumulativeSubstats() {
 }
 
 /**
- * Update Gaming Year in Review card visibility
+ * Update Gaming Year in Review card visibility and quick link
  */
 function updateYearInReview() {
     const yearReviewCard = document.getElementById('year-review-card');
+    const yearReviewLink = document.getElementById('year-review-link');
+    const yearReviewLinkYear = document.getElementById('year-review-link-year');
 
-    // Only show card when year filter is active and not a pre-logging year
+    // Only show card and link when year filter is active and not a pre-logging year
     if (currentYear !== null && statsCache.yearReview) {
         // Check if this is a pre-logging year
         const yearInfo = yearDataCache && yearDataCache.find(y => y.year === currentYear);
@@ -1228,11 +1230,15 @@ function updateYearInReview() {
 
         if (!isPreLogging) {
             yearReviewCard.style.display = 'block';
+            yearReviewLink.style.display = 'block';
+            yearReviewLinkYear.textContent = currentYear;
         } else {
             yearReviewCard.style.display = 'none';
+            yearReviewLink.style.display = 'none';
         }
     } else {
         yearReviewCard.style.display = 'none';
+        yearReviewLink.style.display = 'none';
     }
 }
 
@@ -1270,6 +1276,12 @@ function setupEventListeners() {
 
     // Detail section close button
     document.getElementById('close-detail').addEventListener('click', closeDetailSection);
+
+    // Year in Review quick link
+    document.getElementById('year-review-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        showDetailSection('year-review');
+    });
 
     // Diagnostic detail section close button
     document.getElementById('close-diagnostic-detail').addEventListener('click', closeDiagnosticDetail);

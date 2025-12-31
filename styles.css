@@ -276,6 +276,19 @@ header.sticky-scrolled h1 {
     max-height: 20px;
 }
 
+.year-review-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color var(--transition-hover);
+}
+
+.year-review-link:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
 /* Stats Grid */
 .stats-grid {
     display: grid;
