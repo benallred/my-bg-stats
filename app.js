@@ -2171,7 +2171,7 @@ function showHIndexBreakdown(container, metric, hIndex) {
             <tr>
                 <th>Rank</th>
                 <th>Game</th>
-                <th>${columnHeader}</th>
+                <th class="sorted-desc">${columnHeader}</th>
                 <th>Contributes to H-Index?</th>
             </tr>
         </thead>
@@ -2216,7 +2216,7 @@ function showPeopleHIndexBreakdown(container, hIndex) {
             <tr>
                 <th>Rank</th>
                 <th>Game</th>
-                <th>Unique Players</th>
+                <th class="sorted-desc">Unique Players</th>
                 <th>Contributes to H-Index?</th>
             </tr>
         </thead>
@@ -2294,7 +2294,7 @@ function showBGGEntries(container) {
     table.innerHTML = `
         <thead>
             <tr>
-                <th>Name</th>
+                <th class="sorted-asc">Name</th>
                 <th>Type</th>
                 <th>Acquisition Date</th>
             </tr>
@@ -2380,7 +2380,7 @@ function showExpansions(container) {
     table.innerHTML = `
         <thead>
             <tr>
-                <th>Name</th>
+                <th class="sorted-asc">Name</th>
                 <th>Type</th>
                 <th>Acquisition Date</th>
             </tr>
@@ -2429,7 +2429,7 @@ function showGamesPlayed(container) {
         <thead>
             <tr>
                 <th>Game</th>
-                <th>Plays</th>
+                <th class="sorted-desc">Plays</th>
                 <th>Owned</th>
             </tr>
         </thead>
@@ -2465,7 +2465,7 @@ function showMilestoneGames(container, milestone, milestonesData) {
         <thead>
             <tr>
                 <th>Game</th>
-                <th>${columnHeader}</th>
+                <th class="sorted-desc">${columnHeader}</th>
             </tr>
         </thead>
         <tbody>
@@ -2500,7 +2500,7 @@ function showDaysPlayedBreakdown(container) {
         <thead>
             <tr>
                 <th>Game</th>
-                <th>Days Played</th>
+                <th class="sorted-desc">Days Played</th>
                 <th>Median/Avg Plays Per Day</th>
                 <th>Min/Max Time Per Day</th>
                 <th>Median/Avg Time Per Day</th>
@@ -2555,7 +2555,7 @@ function showPlayTimeBreakdown(container) {
         <thead>
             <tr>
                 <th>Game</th>
-                <th>Time Played</th>
+                <th class="sorted-desc">Time Played</th>
                 <th>Min/Max Play Time</th>
                 <th>Median/Avg Play Time</th>
                 <th>Play Durations</th>
@@ -2661,7 +2661,7 @@ function showTotalCostBreakdown(container) {
         <thead>
             <tr>
                 <th>Game</th>
-                <th>Price Paid</th>
+                <th class="sorted-desc">Price Paid</th>
             </tr>
         </thead>
         <tbody>
@@ -2713,7 +2713,7 @@ function showValueClubBreakdown(container, clubData, clubLabel) {
             <tr>
                 <th>Game</th>
                 <th>${metricLabel}</th>
-                <th>Cost/${metricLabelSingular}</th>
+                <th class="sorted-asc">Cost/${metricLabelSingular}</th>
                 <th>Price Paid</th>
             </tr>
         </thead>
@@ -2769,7 +2769,7 @@ function showCostPerMetricBreakdown(container) {
             <tr>
                 <th>Game</th>
                 <th>${metricLabel}</th>
-                <th>Cost/${metricLabelSingular}</th>
+                <th class="sorted-asc">Cost/${metricLabelSingular}</th>
                 <th>Price Paid</th>
             </tr>
         </thead>
@@ -2818,7 +2818,7 @@ function showShelfOfShameBreakdown(container) {
         <thead>
             <tr>
                 <th>Game</th>
-                <th>Price Paid</th>
+                <th class="sorted-desc">Price Paid</th>
             </tr>
         </thead>
         <tbody>
@@ -2862,14 +2862,18 @@ function showPlayersBreakdown(container) {
         }
     });
 
+    const hoursClass = currentBaseMetric === Metric.HOURS ? ' class="sorted-desc"' : '';
+    const sessionsClass = currentBaseMetric === Metric.SESSIONS ? ' class="sorted-desc"' : '';
+    const playsClass = currentBaseMetric === Metric.PLAYS ? ' class="sorted-desc"' : '';
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
             <tr>
                 <th>Player</th>
-                <th>Hours</th>
-                <th>Sessions</th>
-                <th>Plays</th>
+                <th${hoursClass}>Hours</th>
+                <th${sessionsClass}>Sessions</th>
+                <th${playsClass}>Plays</th>
             </tr>
         </thead>
         <tbody>
@@ -2910,14 +2914,18 @@ function showSoloBreakdown(container) {
         }
     });
 
+    const hoursClass = currentBaseMetric === Metric.HOURS ? ' class="sorted-desc"' : '';
+    const sessionsClass = currentBaseMetric === Metric.SESSIONS ? ' class="sorted-desc"' : '';
+    const playsClass = currentBaseMetric === Metric.PLAYS ? ' class="sorted-desc"' : '';
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
             <tr>
                 <th>Game</th>
-                <th>Hours</th>
-                <th>Sessions</th>
-                <th>Plays</th>
+                <th${hoursClass}>Hours</th>
+                <th${sessionsClass}>Sessions</th>
+                <th${playsClass}>Plays</th>
             </tr>
         </thead>
         <tbody>
@@ -2958,14 +2966,18 @@ function showLocationsBreakdown(container) {
         }
     });
 
+    const hoursClass = currentBaseMetric === Metric.HOURS ? ' class="sorted-desc"' : '';
+    const sessionsClass = currentBaseMetric === Metric.SESSIONS ? ' class="sorted-desc"' : '';
+    const playsClass = currentBaseMetric === Metric.PLAYS ? ' class="sorted-desc"' : '';
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
             <tr>
                 <th>Location</th>
-                <th>Hours</th>
-                <th>Sessions</th>
-                <th>Plays</th>
+                <th${hoursClass}>Hours</th>
+                <th${sessionsClass}>Sessions</th>
+                <th${playsClass}>Plays</th>
             </tr>
         </thead>
         <tbody>
@@ -3988,7 +4000,10 @@ function applyYearReviewMetricFilter(detailDiv, showAll) {
 function createGameTable(container, games, columns, filterYear = null) {
     const table = document.createElement('table');
 
-    const headerRow = columns.map(col => `<th>${col}</th>`).join('');
+    const headerRow = columns.map(col => {
+        const sortClass = col === 'Name' ? ' class="sorted-asc"' : '';
+        return `<th${sortClass}>${col}</th>`;
+    }).join('');
 
     const rows = games.map(game => {
         const cells = [];

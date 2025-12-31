@@ -590,6 +590,22 @@ table th {
     background: var(--bg-table-header); /* Ensure background stays opaque */
 }
 
+/* Sort indicators for table headers */
+th.sorted-asc::after,
+th.sorted-desc::after {
+    margin-left: 0.5em;
+    font-size: 0.7em;
+    color: var(--text-muted);
+}
+
+th.sorted-asc::after {
+    content: '▲';
+}
+
+th.sorted-desc::after {
+    content: '▼';
+}
+
 table td {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--border-tertiary);
