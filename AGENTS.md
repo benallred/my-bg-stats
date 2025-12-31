@@ -231,7 +231,7 @@ This ensures users see relevant suggestions regardless of which metric filter th
 
 Before committing changes:
 
-1. **Run tests**: Execute `npm test` to ensure all tests pass and coverage thresholds are met
+1. **Run tests with coverage**: Execute `npm run test:coverage` to ensure all tests pass and coverage thresholds are met
 2. **Verify output**: Confirm no test failures and coverage meets configured thresholds
 3. **Fix issues**: If tests fail or coverage drops, resolve issues before committing
 

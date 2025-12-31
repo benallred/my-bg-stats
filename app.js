@@ -62,6 +62,9 @@ import {
   CostClub,
   getTotalCost,
   getCostClubGames,
+  calculateCostClubIncrease,
+  getNewCostClubGames,
+  getSkippedCostClubCount,
 } from './stats.js';
 
 import { formatApproximateHours, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
@@ -742,6 +745,17 @@ function updateAllStats() {
 
             // Top returning game by sessions (for summary)
             topReturningGameBySessions: getTopReturningGame(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
+
+            // Cost club milestones - $5 club (hours, sessions, plays order)
+            fiveDollarHoursIncrease: calculateCostClubIncrease(gameData.games, gameData.plays, currentYear, Metric.HOURS, CostClub.FIVE_DOLLAR),
+            fiveDollarSessionsIncrease: calculateCostClubIncrease(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, CostClub.FIVE_DOLLAR),
+            fiveDollarPlaysIncrease: calculateCostClubIncrease(gameData.games, gameData.plays, currentYear, Metric.PLAYS, CostClub.FIVE_DOLLAR),
+            fiveDollarHoursCurrent: getCostClubGames(gameData.games, gameData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR, currentYear).count,
+            fiveDollarSessionsCurrent: getCostClubGames(gameData.games, gameData.plays, Metric.SESSIONS, CostClub.FIVE_DOLLAR, currentYear).count,
+            fiveDollarPlaysCurrent: getCostClubGames(gameData.games, gameData.plays, Metric.PLAYS, CostClub.FIVE_DOLLAR, currentYear).count,
+            fiveDollarHoursPrevious: getCostClubGames(gameData.games, gameData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR, currentYear - 1).count,
+            fiveDollarSessionsPrevious: getCostClubGames(gameData.games, gameData.plays, Metric.SESSIONS, CostClub.FIVE_DOLLAR, currentYear - 1).count,
+            fiveDollarPlaysPrevious: getCostClubGames(gameData.games, gameData.plays, Metric.PLAYS, CostClub.FIVE_DOLLAR, currentYear - 1).count,
         };
     }
 
@@ -1678,11 +1692,10 @@ const statDetailHandlers = {
     },
     'total-cost': {
         getTitle: (currentYear) => {
-            const experimentalIcon = '<span class="experimental-badge" data-tooltip="Experimental: This feature is under evaluation and may be modified or removed." onclick="event.stopPropagation();"><svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature"><path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="10.5" r="1" fill="currentColor"/><circle cx="9" cy="11.5" r="0.7" fill="currentColor"/></svg></span>';
             const yearText = currentYear
                 ? `<span style="white-space: nowrap">(${currentYear})</span>`
                 : '<span style="white-space: nowrap">(All Time)</span>';
-            return `Total Cost ${yearText}${experimentalIcon}`;
+            return `Total Cost ${yearText}`;
         },
         getSummary: (statsCache) => {
             const suffix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '+' : '';
@@ -1702,11 +1715,10 @@ const statDetailHandlers = {
                 plays: '$5 Club (Per Play)',
             };
             const label = metricLabels[currentBaseMetric] || metricLabels.hours;
-            const experimentalIcon = '<span class="experimental-badge" data-tooltip="Experimental: This feature is under evaluation and may be modified or removed." onclick="event.stopPropagation();"><svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature"><path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="10.5" r="1" fill="currentColor"/><circle cx="9" cy="11.5" r="0.7" fill="currentColor"/></svg></span>';
             const yearText = currentYear
                 ? `<span style="white-space: nowrap">(${currentYear})</span>`
                 : '<span style="white-space: nowrap">(All Time)</span>';
-            return `${label} ${yearText}${experimentalIcon}`;
+            return `${label} ${yearText}`;
         },
         getSummary: (statsCache) => ({
             mainValue: `${statsCache.fiveDollarClubData.count} game${statsCache.fiveDollarClubData.count === 1 ? '' : 's'}`,
@@ -3407,6 +3419,98 @@ function showYearReviewDetail(container, statsCache) {
             </table>
         `;
         detailDiv.appendChild(milestonesSubsection);
+    }
+
+    // Build cost club milestone rows (only if experimental features enabled)
+    if (isExperimentalEnabled()) {
+        const costClubRows = [];
+        const costClubDefinitions = [
+            { threshold: 'fiveDollar', label: '$5', metric: 'hours', unit: 'hour' },
+            { threshold: 'fiveDollar', label: '$5', metric: 'sessions', unit: 'session' },
+            { threshold: 'fiveDollar', label: '$5', metric: 'plays', unit: 'play' },
+        ];
+
+        costClubDefinitions.forEach((def) => {
+            const increaseKey = `${def.threshold}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Increase`;
+            const currentKey = `${def.threshold}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Current`;
+            const previousKey = `${def.threshold}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Previous`;
+
+            const increase = statsCache.yearReview[increaseKey];
+            const current = statsCache.yearReview[currentKey];
+            const previous = statsCache.yearReview[previousKey];
+
+            // Only show rows where increase > 0
+            if (increase > 0) {
+                const rowId = `cost-club-${def.threshold}-${def.metric}`;
+                const displayValue = `+${increase} (from ${previous} to ${current})`;
+
+                // Get new cost club games
+                const newGames = getNewCostClubGames(gameData.games, gameData.plays, currentYear, def.metric, CostClub.FIVE_DOLLAR);
+
+                // Calculate graduated count (games that entered but went to a lower threshold)
+                // With only $5 threshold currently, graduated = 0
+                const entered = newGames.length;
+                const graduated = entered - increase;
+
+                // Calculate skipped count (no lower threshold yet, so always 0)
+                const skipped = getSkippedCostClubCount(gameData.games, gameData.plays, currentYear, def.metric, CostClub.FIVE_DOLLAR, null);
+
+                // Build summary text for the expanded section
+                let summaryText = '';
+                if (newGames.length > 0 || skipped > 0) {
+                    const parts = [];
+                    if (entered > 0) parts.push(`${entered} entered`);
+                    if (graduated > 0) parts.push(`${graduated} graduated`);
+                    if (skipped > 0) parts.push(`${skipped} skipped`);
+                    summaryText = `<div class="year-review-milestone-summary">${parts.join(' • ')}</div>`;
+                }
+
+                costClubRows.push(`
+                    <tr class="year-review-row year-review-row-clickable" data-cost-club="${rowId}" data-metric="${def.metric}">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in ${def.label}/<span class="metric-name ${def.metric}">${def.unit}</span> club:
+                        </td>
+                        <td class="year-review-value-detail">${displayValue}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-cost-club="${rowId}" data-metric="${def.metric}" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${summaryText}
+                                ${newGames.length > 0
+                                    ? newGames.map(item => {
+                                        const metricValue = def.metric === 'hours' ? item.metricValue.toFixed(1) : item.metricValue;
+                                        const thisYearValue = def.metric === 'hours' ? item.thisYearMetricValue.toFixed(1) : item.thisYearMetricValue;
+                                        return `
+                                            <div class="year-review-game-item">
+                                                <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                                <span class="year-review-game-value">$${item.costPerMetric.toFixed(2)}/${def.unit} (${metricValue} ${def.unit}s total, ${thisYearValue} this year)</span>
+                                            </div>
+                                        `;
+                                    }).join('')
+                                    : '<div class="year-review-no-games">No new games joined this cost club</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                `);
+            }
+        });
+
+        // Add cost club subsection if there are any rows to show
+        if (costClubRows.length > 0) {
+            const costClubSubsection = document.createElement('div');
+            costClubSubsection.className = 'year-review-subsection';
+            costClubSubsection.innerHTML = `
+                <h3 class="year-review-subsection-heading">Cost Club Milestones</h3>
+                <table class="year-review-table">
+                    <tbody>
+                        ${costClubRows.join('')}
+                    </tbody>
+                </table>
+            `;
+            detailDiv.appendChild(costClubSubsection);
+        }
     }
 
     // Add click handlers for expandable rows

@@ -36,4 +36,32 @@ function filterPlaysByYear(plays, year) {
   return plays.filter(play => isPlayInYear(play, year));
 }
 
-export { isPlayInYear, isPlayInOrBeforeYear, filterPlaysByYear };
+/**
+ * Calculate metric values (plays, sessions, hours) per game through a given year
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Include plays through this year (inclusive), or null for all time
+ * @returns {Map} Map of gameId -> { playCount, totalMinutes, uniqueDates }
+ */
+function getMetricValuesThroughYear(plays, year = null) {
+  const metricValues = new Map();
+
+  plays.forEach(play => {
+    if (!isPlayInOrBeforeYear(play, year)) return;
+
+    const currentValue = metricValues.get(play.gameId) || {
+      playCount: 0,
+      totalMinutes: 0,
+      uniqueDates: new Set(),
+    };
+
+    currentValue.playCount += 1;
+    currentValue.totalMinutes += (play.durationMin || 0);
+    currentValue.uniqueDates.add(play.date);
+
+    metricValues.set(play.gameId, currentValue);
+  });
+
+  return metricValues;
+}
+
+export { isPlayInYear, isPlayInOrBeforeYear, filterPlaysByYear, getMetricValuesThroughYear };

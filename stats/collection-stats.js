@@ -4,7 +4,7 @@
 
 import { Metric } from './constants.js';
 import { isGameOwned, wasGameAcquiredInYear } from './game-helpers.js';
-import { isPlayInYear } from './play-helpers.js';
+import { isPlayInYear, getMetricValuesThroughYear } from './play-helpers.js';
 
 /**
  * Get total BGG entries owned (includes expansions and expandalones)
@@ -253,33 +253,6 @@ function calculateMilestoneIncrease(games, plays, year, metric, milestoneType) {
   const previousYearCount = getCumulativeMilestoneCount(games, plays, year - 1, metric, milestoneType);
 
   return currentYearCount - previousYearCount;
-}
-
-/**
- * Calculate metric values (plays, sessions, hours) per game through a given year
- * @param {Array} plays - Array of play objects
- * @param {number} throughYear - Include plays through this year (inclusive)
- * @returns {Map} Map of gameId -> { playCount, totalMinutes, uniqueDates }
- */
-function getMetricValuesThroughYear(plays, throughYear) {
-  const metricValues = new Map();
-  plays.forEach(play => {
-    const playYear = parseInt(play.date.substring(0, 4));
-    if (playYear > throughYear) return;
-
-    const currentValue = metricValues.get(play.gameId) || {
-      playCount: 0,
-      totalMinutes: 0,
-      uniqueDates: new Set(),
-    };
-
-    currentValue.playCount += 1;
-    currentValue.totalMinutes += (play.durationMin || 0);
-    currentValue.uniqueDates.add(play.date);
-
-    metricValues.set(play.gameId, currentValue);
-  });
-  return metricValues;
 }
 
 /**
