@@ -441,6 +441,56 @@ function suggestForNextValueClub(gamePlayData, metric) {
 }
 
 /**
+ * Suggestion Algorithm: Game with highest cost per metric (justify the cost)
+ * Finds the highest cost/metric game for each metric type and randomly selects one.
+ * @param {Map} gamePlayData - Map of game play data (enriched with pricePaid)
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestHighestCostPerMetric(gamePlayData) {
+  // Find highest cost/metric game for each metric type
+  const candidates = [];
+
+  [Metric.HOURS, Metric.SESSIONS, Metric.PLAYS].forEach(metric => {
+    // Filter to games with price data and at least some play time
+    const eligibleGames = Array.from(gamePlayData.values())
+      .filter(data => {
+        if (data.pricePaid === null || data.pricePaid === undefined) return false;
+        const metricValue = getMetricValue(data, metric);
+        return metricValue > 0;
+      })
+      .map(data => {
+        const metricValue = getMetricValue(data, metric);
+        // Cap at pricePaid (consistent with value-stats.js)
+        const costPerMetric = Math.min(data.pricePaid / metricValue, data.pricePaid);
+        return { ...data, metric, metricValue, costPerMetric };
+      });
+
+    if (eligibleGames.length === 0) return;
+
+    // Find highest cost/metric
+    eligibleGames.sort((a, b) => b.costPerMetric - a.costPerMetric);
+    const highest = eligibleGames[0];
+
+    // If tied, add all tied games
+    const maxCost = highest.costPerMetric;
+    const tied = eligibleGames.filter(g => g.costPerMetric === maxCost);
+    candidates.push(...tied);
+  });
+
+  if (candidates.length === 0) return null;
+
+  // Randomly select one candidate
+  const selected = selectRandom(candidates);
+  const metricLabel = getMetricLabel(selected.metric);
+
+  return {
+    game: selected.game,
+    reason: 'Justify the cost',
+    stat: `$${selected.costPerMetric.toFixed(2)}/${metricLabel}`,
+  };
+}
+
+/**
  * Suggestion Algorithm 7: Add never-played game as suggestion
  * @param {Map} gamePlayData - Map of game play data
  * @returns {Object|null} Suggestion object or null
@@ -501,25 +551,23 @@ function getSuggestedGames(games, plays, isExperimental = false) {
     }
   });
 
-  // Enrich with pricePaid when experimental features enabled
-  if (isExperimental) {
-    gamePlayData.forEach((data) => {
-      const game = data.game;
-      // Note: game.copies is guaranteed to exist here because isGameOwned filters out games without copies
-      const ownedCopies = game.copies.filter(c => c.statusOwned === true);
-      let totalPricePaid = 0;
-      let hasPriceData = false;
+  // Enrich with pricePaid (needed for cost-based suggestions)
+  gamePlayData.forEach((data) => {
+    const game = data.game;
+    // Note: game.copies is guaranteed to exist here because isGameOwned filters out games without copies
+    const ownedCopies = game.copies.filter(c => c.statusOwned === true);
+    let totalPricePaid = 0;
+    let hasPriceData = false;
 
-      ownedCopies.forEach(copy => {
-        if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
-          totalPricePaid += copy.pricePaid;
-          hasPriceData = true;
-        }
-      });
-
-      data.pricePaid = hasPriceData ? totalPricePaid : null;
+    ownedCopies.forEach(copy => {
+      if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
+        totalPricePaid += copy.pricePaid;
+        hasPriceData = true;
+      }
     });
-  }
+
+    data.pricePaid = hasPriceData ? totalPricePaid : null;
+  });
 
   // Collect suggestions from each algorithm (in priority order)
   const suggestions = [
@@ -536,6 +584,7 @@ function getSuggestedGames(games, plays, isExperimental = false) {
     isExperimental ? suggestForNextValueClub(gamePlayData, Metric.PLAYS) : null,
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData),                       // Shelf of shame
+    suggestHighestCostPerMetric(gamePlayData),                  // Justify the cost
   ].filter(suggestion => suggestion !== null);
 
   // Merge duplicates by collecting reasons and stats into arrays
@@ -573,6 +622,7 @@ export {
   suggestForNextHourHIndex,
   suggestForNextMilestone,
   suggestForNextValueClub,
+  suggestHighestCostPerMetric,
   suggestNeverPlayedGame,
   getSuggestedGames,
 };

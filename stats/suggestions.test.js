@@ -4,6 +4,7 @@ import {
   selectRandom,
   selectRandomWeightedBySqrtRarity,
   suggestForNextValueClub,
+  suggestHighestCostPerMetric,
   getSuggestedGames,
 } from './suggestions.js';
 import { Metric, Milestone } from './constants.js';
@@ -534,6 +535,209 @@ describe('Suggestion Algorithms', () => {
 
       const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).toBeNull();
+    });
+  });
+
+  describe('suggestHighestCostPerMetric', () => {
+    test('returns null when no games have price data', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'No Price Game' },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 600,
+        pricePaid: null,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('returns null when all games with prices are unplayed', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Unplayed Game' },
+        playCount: 0,
+        uniqueDays: new Set(),
+        totalMinutes: 0,
+        pricePaid: 50,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('correctly identifies highest cost/hour game', () => {
+      const gamePlayData = new Map();
+      // Game 1: $100 / 1 hour = $100/hour (highest)
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Expensive Per Hour' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+        pricePaid: 100,
+      });
+      // Game 2: $100 / 10 hours = $10/hour
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Cheaper Per Hour' },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02']),
+        totalMinutes: 600,
+        pricePaid: 100,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Justify the cost');
+      // Could be any metric, but if hours was selected it should be the expensive one
+      if (result.stat.includes('/hour')) {
+        expect(result.game.name).toBe('Expensive Per Hour');
+        expect(result.stat).toBe('$100.00/hour');
+      }
+    });
+
+    test('correctly identifies highest cost/session game', () => {
+      const gamePlayData = new Map();
+      // Game 1: $100 / 1 session = $100/session (highest)
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Expensive Per Session' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+        pricePaid: 100,
+      });
+      // Game 2: $100 / 10 sessions = $10/session
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Cheaper Per Session' },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-06', '2023-01-07', '2023-01-08', '2023-01-09', '2023-01-10']),
+        totalMinutes: 600,
+        pricePaid: 100,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Justify the cost');
+      // Could be any metric, but if sessions was selected it should be the expensive one
+      if (result.stat.includes('/session')) {
+        expect(result.game.name).toBe('Expensive Per Session');
+        expect(result.stat).toBe('$100.00/session');
+      }
+    });
+
+    test('correctly identifies highest cost/play game', () => {
+      const gamePlayData = new Map();
+      // Game 1: $100 / 1 play = $100/play (highest)
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Expensive Per Play' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+        pricePaid: 100,
+      });
+      // Game 2: $100 / 10 plays = $10/play
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Cheaper Per Play' },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 600,
+        pricePaid: 100,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Justify the cost');
+      // Could be any metric, but if plays was selected it should be the expensive one
+      if (result.stat.includes('/play')) {
+        expect(result.game.name).toBe('Expensive Per Play');
+        expect(result.stat).toBe('$100.00/play');
+      }
+    });
+
+    test('randomly selects from candidates across all three metrics', () => {
+      const gamePlayData = new Map();
+      // All games have the same cost/metric across their respective metrics
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Game A' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+        pricePaid: 100,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.game.name).toBe('Game A');
+      // Should have one of the three metric types
+      expect(result.stat).toMatch(/\$100\.00\/(hour|session|play)/);
+    });
+
+    test('handles ties within a metric', () => {
+      const gamePlayData = new Map();
+      // Two games with identical cost/hour
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Game A' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+        pricePaid: 100,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Game B' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-02']),
+        totalMinutes: 60,
+        pricePaid: 100,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(['Game A', 'Game B']).toContain(result.game.name);
+    });
+
+    test('caps cost at pricePaid for games with less than 1 hour/session/play', () => {
+      const gamePlayData = new Map();
+      // Game with 30 minutes play (0.5 hours)
+      // Without cap: $100 / 0.5 = $200/hour
+      // With cap: $100/hour (capped at pricePaid)
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Short Play Game' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 30,
+        pricePaid: 100,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).not.toBeNull();
+      // If hours metric selected, should be capped at $100
+      if (result.stat.includes('/hour')) {
+        expect(result.stat).toBe('$100.00/hour');
+      }
+    });
+
+    test('excludes games without price data from candidates', () => {
+      const gamePlayData = new Map();
+      // Game without price (should be excluded)
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'No Price' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+        pricePaid: null,
+      });
+      // Game with price (should be selected)
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Has Price' },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+        pricePaid: 50,
+      });
+
+      const result = suggestHighestCostPerMetric(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.game.name).toBe('Has Price');
     });
   });
 
