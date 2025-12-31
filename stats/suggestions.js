@@ -31,6 +31,39 @@ function getMetricValue(data, metric) {
 }
 
 /**
+ * Helper: Get singular metric label
+ * @param {string} metric - Metric type
+ * @returns {string} Singular label ('hour', 'session', or 'play')
+ */
+function getMetricLabel(metric) {
+  switch (metric) {
+    case Metric.SESSIONS:
+      return 'session';
+    case Metric.PLAYS:
+      return 'play';
+    case Metric.HOURS:
+    default:
+      return 'hour';
+  }
+}
+
+/**
+ * Helper: Format a total metric stat string with proper pluralization
+ * @param {number} value - Metric value
+ * @param {string} metric - Metric type
+ * @returns {string} Formatted stat (e.g., "9.5 total hours", "1 total session", "10 total plays")
+ */
+function formatTotalMetricStat(value, metric) {
+  if (metric === Metric.HOURS) {
+    return `${value.toFixed(1)} total hours`;
+  }
+  const intValue = Math.floor(value);
+  const label = getMetricLabel(metric);
+  const pluralLabel = intValue === 1 ? label : `${label}s`;
+  return `${intValue} total ${pluralLabel}`;
+}
+
+/**
  * Helper: Calculate days since a date
  * @param {string} dateString - Date in YYYY-MM-DD format
  * @returns {number} Days since the date
@@ -116,11 +149,10 @@ function suggestRecentlyPlayedWithLowSessions(gamePlayData) {
   const minSessions = recentlyPlayedGames[0].uniqueDays.size;
   const tiedGames = recentlyPlayedGames.filter(data => data.uniqueDays.size === minSessions);
   const candidate = selectRandom(tiedGames);
-  const sessionText = candidate.uniqueDays.size === 1 ? '1 total session' : `${candidate.uniqueDays.size} total sessions`;
   return {
     game: candidate.game,
     reason: 'Fresh and recent',
-    stat: sessionText,
+    stat: formatTotalMetricStat(candidate.uniqueDays.size, Metric.SESSIONS),
   };
 }
 
@@ -330,22 +362,10 @@ function suggestForNextMilestone(gamePlayData, metric) {
   // Determine if within 90% of target (rounded down)
   const prefix = candidate.currentValue >= Math.floor(candidate.target * 0.9) ? 'Almost a' : 'Closest to a';
 
-  // Format stat text based on metric
-  let statText;
-  if (metric === Metric.HOURS) {
-    statText = `${candidate.currentValue.toFixed(1)} total hours`;
-  } else if (metric === Metric.SESSIONS) {
-    const sessionCount = Math.floor(candidate.currentValue);
-    statText = sessionCount === 1 ? '1 total session' : `${sessionCount} total sessions`;
-  } else {
-    const playCount = Math.floor(candidate.currentValue);
-    statText = playCount === 1 ? '1 total play' : `${playCount} total plays`;
-  }
-
   return {
     game: candidate.game,
     reason: `${prefix} ${milestoneName}`,
-    stat: statText,
+    stat: formatTotalMetricStat(candidate.currentValue, metric),
   };
 }
 
@@ -411,20 +431,7 @@ function suggestForNextValueClub(gamePlayData, metric) {
   );
   const selected = selectRandomWeightedBySqrtRarity(closestGames, game => game.target);
 
-  // Format metric label
-  let metricLabel;
-  switch (metric) {
-    case Metric.SESSIONS:
-      metricLabel = 'session';
-      break;
-    case Metric.PLAYS:
-      metricLabel = 'play';
-      break;
-    case Metric.HOURS:
-    default:
-      metricLabel = 'hour';
-      break;
-  }
+  const metricLabel = getMetricLabel(metric);
 
   return {
     game: selected.game,
