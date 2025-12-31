@@ -2,16 +2,24 @@
  * Value statistics - price per play, value clubs
  */
 
-import { ValueClub } from './constants.js';
-import { isGameOwned, wasCopyAcquiredInYear, wasCopyAcquiredInOrBeforeYear } from './game-helpers.js';
-import { getMetricValueFromPlayData, getMetricValuesThroughYear } from './play-helpers.js';
-import { calculateMedian } from '../utils.js';
+import { ValueClub } from "./constants.js";
+import {
+  isGameOwned,
+  wasCopyAcquiredInYear,
+  wasCopyAcquiredInOrBeforeYear,
+} from "./game-helpers.js";
+import {
+  getMetricValueFromPlayData,
+  getMetricValuesThroughYear,
+  isPlayInOrBeforeYear,
+} from "./play-helpers.js";
+import { calculateMedian } from "../utils.js";
 import {
   getGamesInTier,
   calculateTierIncrease,
   getNewTierGames,
   getSkippedTierCount,
-} from './tier-helpers.js';
+} from "./tier-helpers.js";
 
 /**
  * Get total price paid for owned copies of a game
@@ -20,13 +28,17 @@ import {
  * @returns {number|null} Total price paid or null if no price data
  */
 function getGamePricePaid(game) {
-  const ownedCopies = game.copies.filter(copy => copy.statusOwned === true);
+  const ownedCopies = game.copies.filter((copy) => copy.statusOwned === true);
 
   let totalPricePaid = 0;
   let hasPriceData = false;
 
-  ownedCopies.forEach(copy => {
-    if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
+  ownedCopies.forEach((copy) => {
+    if (
+      copy.pricePaid !== null &&
+      copy.pricePaid !== undefined &&
+      copy.pricePaid !== ""
+    ) {
       totalPricePaid += copy.pricePaid;
       hasPriceData = true;
     }
@@ -48,16 +60,20 @@ function getTotalCost(games, year = null) {
     gamesWithoutPrice: 0,
   };
 
-  games.forEach(game => {
+  games.forEach((game) => {
     // Only include base games (not expansions, not expandalones)
     if (!game.isBaseGame) return;
 
     if (!game.copies || game.copies.length === 0) return;
 
     // Get owned copies, filtered by acquisition year if specified
-    let relevantCopies = game.copies.filter(copy => copy.statusOwned === true);
+    let relevantCopies = game.copies.filter(
+      (copy) => copy.statusOwned === true
+    );
     if (year) {
-      relevantCopies = relevantCopies.filter(copy => wasCopyAcquiredInYear(copy, year));
+      relevantCopies = relevantCopies.filter((copy) =>
+        wasCopyAcquiredInYear(copy, year)
+      );
     }
     if (relevantCopies.length === 0) return;
 
@@ -65,8 +81,12 @@ function getTotalCost(games, year = null) {
     let totalPricePaid = 0;
     let hasPriceData = false;
 
-    relevantCopies.forEach(copy => {
-      if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
+    relevantCopies.forEach((copy) => {
+      if (
+        copy.pricePaid !== null &&
+        copy.pricePaid !== undefined &&
+        copy.pricePaid !== ""
+      ) {
         totalPricePaid += copy.pricePaid;
         hasPriceData = true;
       }
@@ -88,7 +108,9 @@ function getTotalCost(games, year = null) {
   });
 
   // Sort by totalPricePaid descending (null/unknown sorts as 0)
-  result.games.sort((a, b) => (b.totalPricePaid ?? 0) - (a.totalPricePaid ?? 0));
+  result.games.sort(
+    (a, b) => (b.totalPricePaid ?? 0) - (a.totalPricePaid ?? 0)
+  );
 
   return result;
 }
@@ -150,9 +172,16 @@ function getValueClubGameDetails(game, playData, costPerMetric, metric) {
  * @param {string} metric - Metric type
  * @returns {number} This year's metric value
  */
-function getValueClubThisYearValue(game, currentPlayData, previousPlayData, metric) {
+function getValueClubThisYearValue(
+  game,
+  currentPlayData,
+  previousPlayData,
+  metric
+) {
   const current = getMetricValueFromPlayData(currentPlayData, metric);
-  const previous = previousPlayData ? getMetricValueFromPlayData(previousPlayData, metric) : 0;
+  const previous = previousPlayData
+    ? getMetricValueFromPlayData(previousPlayData, metric)
+    : 0;
   return current - previous;
 }
 
@@ -165,7 +194,13 @@ function getValueClubThisYearValue(game, currentPlayData, previousPlayData, metr
  * @param {string} metric - Metric type
  * @returns {Object} { game, metricValue, costPerMetric, pricePaid, thisYearMetricValue }
  */
-function getNewValueClubGameDetails(game, playData, costPerMetric, thisYearMetricValue, metric) {
+function getNewValueClubGameDetails(
+  game,
+  playData,
+  costPerMetric,
+  thisYearMetricValue,
+  metric
+) {
   const metricValue = getMetricValueFromPlayData(playData, metric);
   const pricePaid = getGamePricePaid(game);
   return {
@@ -262,7 +297,14 @@ function getNewValueClubGames(games, plays, year, metric, threshold) {
  * @param {number|null} nextLowerThreshold - Next lower threshold (null if none exists)
  * @returns {number} Count of games that skipped this threshold
  */
-function getSkippedValueClubCount(games, plays, year, metric, threshold, nextLowerThreshold = null) {
+function getSkippedValueClubCount(
+  games,
+  plays,
+  year,
+  metric,
+  threshold,
+  nextLowerThreshold = null
+) {
   // If no lower threshold exists, nothing can be skipped
   if (nextLowerThreshold === null) return 0;
 
@@ -291,7 +333,7 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
   const metricValues = getMetricValuesThroughYear(plays, year);
   const eligibleGames = [];
 
-  games.forEach(game => {
+  games.forEach((game) => {
     // Only include owned base games
     if (!valueClubGameFilter(game)) return;
 
@@ -299,7 +341,9 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
     if (pricePaid === null) return;
 
     const playData = metricValues.get(game.id);
-    const metricValue = playData ? getMetricValueFromPlayData(playData, metric) : 0;
+    const metricValue = playData
+      ? getMetricValueFromPlayData(playData, metric)
+      : 0;
 
     // Calculate all metric values for secondary sorting
     const hours = playData ? playData.totalMinutes / 60 : 0;
@@ -310,8 +354,10 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
     if (metricValue === 0) {
       if (year) {
         // Check if any owned copy was acquired in or before the year
-        const hasRelevantCopy = game.copies.some(copy =>
-          copy.statusOwned === true && wasCopyAcquiredInOrBeforeYear(copy, year)
+        const hasRelevantCopy = game.copies.some(
+          (copy) =>
+            copy.statusOwned === true &&
+            wasCopyAcquiredInOrBeforeYear(copy, year)
         );
         if (!hasRelevantCopy) return;
       }
@@ -355,15 +401,17 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
     return b.plays - a.plays;
   });
 
-  const costPerMetricValues = eligibleGames.map(g => g.costPerMetric);
+  const costPerMetricValues = eligibleGames.map((g) => g.costPerMetric);
   const totalCost = eligibleGames.reduce((sum, g) => sum + g.pricePaid, 0);
   const totalMetric = eligibleGames.reduce((sum, g) => sum + g.metricValue, 0);
 
   return {
     median: calculateMedian(costPerMetricValues),
-    gameAverage: costPerMetricValues.length > 0
-      ? costPerMetricValues.reduce((sum, v) => sum + v, 0) / costPerMetricValues.length
-      : null,
+    gameAverage:
+      costPerMetricValues.length > 0
+        ? costPerMetricValues.reduce((sum, v) => sum + v, 0) /
+          costPerMetricValues.length
+        : null,
     overallRate: totalMetric > 0 ? totalCost / totalMetric : null,
     gameCount: eligibleGames.length,
     games: eligibleGames,
@@ -371,32 +419,37 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
 }
 
 /**
- * Get shelf of shame - owned base games with known price but never played
+ * Get shelf of shame - owned base games with known price but not played (through year if specified)
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
- * @param {number|null} year - Optional year filter (games acquired through year)
+ * @param {number|null} year - Optional year filter (games acquired through year, plays through year)
  * @returns {Object} { totalCost, count, games }
  */
 function getShelfOfShame(games, plays, year = null) {
-  // Build set of all played game IDs (ever, no year filter)
-  const playedGameIds = new Set(plays.map(play => play.gameId));
+  // Build set of played game IDs (through year if specified, otherwise all-time)
+  const relevantPlays = plays.filter((p) => isPlayInOrBeforeYear(p, year));
+  const playedGameIds = new Set(relevantPlays.map((play) => play.gameId));
 
   const shameGames = [];
 
-  games.forEach(game => {
+  games.forEach((game) => {
     // Only include base games (not expansions, not expandalones)
     if (!game.isBaseGame) return;
 
     // Only include owned games
     if (!isGameOwned(game)) return;
 
-    // Exclude if ever played
+    // Exclude if played (through year if specified)
     if (playedGameIds.has(game.id)) return;
 
     // Get owned copies, filtered by acquisition year if specified
-    let relevantCopies = game.copies.filter(copy => copy.statusOwned === true);
+    let relevantCopies = game.copies.filter(
+      (copy) => copy.statusOwned === true
+    );
     if (year) {
-      relevantCopies = relevantCopies.filter(copy => wasCopyAcquiredInOrBeforeYear(copy, year));
+      relevantCopies = relevantCopies.filter((copy) =>
+        wasCopyAcquiredInOrBeforeYear(copy, year)
+      );
     }
     if (relevantCopies.length === 0) return;
 
@@ -404,8 +457,12 @@ function getShelfOfShame(games, plays, year = null) {
     let totalPricePaid = 0;
     let hasPriceData = false;
 
-    relevantCopies.forEach(copy => {
-      if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
+    relevantCopies.forEach((copy) => {
+      if (
+        copy.pricePaid !== null &&
+        copy.pricePaid !== undefined &&
+        copy.pricePaid !== ""
+      ) {
         totalPricePaid += copy.pricePaid;
         hasPriceData = true;
       }
@@ -431,6 +488,45 @@ function getShelfOfShame(games, plays, year = null) {
   };
 }
 
+/**
+ * Get shelf of shame changes for a year
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to analyze
+ * @returns {Object} { newShameGames, exitedShameGames }
+ */
+function getShelfOfShameChanges(games, plays, year) {
+  const previousShame = getShelfOfShame(games, plays, year - 1);
+  const currentShame = getShelfOfShame(games, plays, year);
+
+  const currentIds = new Set(currentShame.games.map((g) => g.game.id));
+  const previousIds = new Set(previousShame.games.map((g) => g.game.id));
+
+  // New shame = in current but not in previous (newly acquired unplayed games)
+  const newShameGames = currentShame.games
+    .filter((g) => !previousIds.has(g.game.id))
+    .sort((a, b) => a.game.name.localeCompare(b.game.name));
+
+  // Exited shame = in previous but not in current (got played this year)
+  // Include metric values for cleared games (they were played this year)
+  const metricValues = getMetricValuesThroughYear(plays, year);
+  const exitedShameGames = previousShame.games
+    .filter((g) => !currentIds.has(g.game.id))
+    .map((g) => {
+      // playData must exist for exited games (they were played this year)
+      const playData = metricValues.get(g.game.id);
+      return {
+        ...g,
+        hours: playData.totalMinutes / 60,
+        sessions: playData.uniqueDates.size,
+        plays: playData.playCount,
+      };
+    })
+    .sort((a, b) => a.game.name.localeCompare(b.game.name));
+
+  return { newShameGames, exitedShameGames };
+}
+
 export {
   getTotalCost,
   getValueClubGames,
@@ -439,4 +535,5 @@ export {
   getSkippedValueClubCount,
   getCostPerMetricStats,
   getShelfOfShame,
+  getShelfOfShameChanges,
 };

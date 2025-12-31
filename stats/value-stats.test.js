@@ -7,6 +7,7 @@ import {
   getSkippedValueClubCount,
   getCostPerMetricStats,
   getShelfOfShame,
+  getShelfOfShameChanges,
 } from './value-stats.js';
 import { Metric, ValueClub } from './constants.js';
 import { processData } from '../scripts/transform-game-data.js';
@@ -1370,12 +1371,16 @@ describe('getShelfOfShame', () => {
     expect(result.games[2].game.name).toBe('Cheap');
   });
 
-  test('always uses all plays ever (not filtered by year)', () => {
+  test('filters plays through year when year provided', () => {
     const games = [{ id: 1, name: 'Game', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] }];
-    // Play in an old year - game should still be excluded from shelf of shame
-    const plays = [{ gameId: 1, date: '2015-01-01', durationMin: 60 }];
-    const result = getShelfOfShame(games, plays, 2023);
-    expect(result.count).toBe(0); // Not on shelf because played ever
+    // Play in 2024 - game should be on shelf of shame for 2023
+    const plays = [{ gameId: 1, date: '2024-01-01', durationMin: 60 }];
+    const result2023 = getShelfOfShame(games, plays, 2023);
+    expect(result2023.count).toBe(1); // On shelf for 2023 because not played until 2024
+
+    // But not on shelf when no year filter (all-time)
+    const resultAllTime = getShelfOfShame(games, plays);
+    expect(resultAllTime.count).toBe(0); // Not on shelf because played ever
   });
 
   test('filters by acquisition year when year provided', () => {
@@ -1430,5 +1435,184 @@ describe('getShelfOfShame', () => {
     // 2023: Includes both copies ($50)
     const result2023 = getShelfOfShame(games, plays, 2023);
     expect(result2023.totalCost).toBe(50);
+  });
+});
+
+describe('getShelfOfShameChanges', () => {
+  test('returns object with newShameGames and exitedShameGames', () => {
+    const result = getShelfOfShameChanges([], [], 2023);
+    expect(result).toHaveProperty('newShameGames');
+    expect(result).toHaveProperty('exitedShameGames');
+  });
+
+  test('returns empty arrays when no shame games exist', () => {
+    const result = getShelfOfShameChanges([], [], 2023);
+    expect(result.newShameGames).toEqual([]);
+    expect(result.exitedShameGames).toEqual([]);
+  });
+
+  test('identifies games newly added to shame (acquired this year, unplayed)', () => {
+    const games = [
+      { id: 1, name: 'OldShame', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+      { id: 2, name: 'NewShame', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30, acquisitionDate: '2023-06-01' }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.newShameGames.length).toBe(1);
+    expect(result.newShameGames[0].game.name).toBe('NewShame');
+    expect(result.exitedShameGames.length).toBe(0);
+  });
+
+  test('identifies games exited from shame (played this year) with metric values', () => {
+    const games = [
+      { id: 1, name: 'PlayedOff', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 60 },
+      { gameId: 1, date: '2023-06-16', durationMin: 90 },
+    ];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.exitedShameGames.length).toBe(1);
+    expect(result.exitedShameGames[0].game.name).toBe('PlayedOff');
+    expect(result.exitedShameGames[0].hours).toBe(2.5); // 150 minutes
+    expect(result.exitedShameGames[0].sessions).toBe(2); // 2 unique dates
+    expect(result.exitedShameGames[0].plays).toBe(2);
+    expect(result.newShameGames.length).toBe(0);
+  });
+
+  test('handles both additions and exits in same year', () => {
+    const games = [
+      { id: 1, name: 'PlayedOff', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+      { id: 2, name: 'NewShame', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30, acquisitionDate: '2023-06-01' }] },
+    ];
+    const plays = [{ gameId: 1, date: '2023-06-15', durationMin: 60 }];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.exitedShameGames.length).toBe(1);
+    expect(result.exitedShameGames[0].game.name).toBe('PlayedOff');
+    expect(result.newShameGames.length).toBe(1);
+    expect(result.newShameGames[0].game.name).toBe('NewShame');
+  });
+
+  test('game played in previous year does not appear as exited', () => {
+    const games = [
+      { id: 1, name: 'AlreadyPlayed', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+    ];
+    const plays = [{ gameId: 1, date: '2022-06-15', durationMin: 60 }];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    // Game was already played before 2023, so not on shame at end of 2022
+    // Therefore it can't "exit" in 2023
+    expect(result.exitedShameGames.length).toBe(0);
+    expect(result.newShameGames.length).toBe(0);
+  });
+
+  test('game that stays on shame does not appear in either list', () => {
+    const games = [
+      { id: 1, name: 'StillOnShame', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    // Game was on shame in 2022 and still on shame in 2023
+    expect(result.newShameGames.length).toBe(0);
+    expect(result.exitedShameGames.length).toBe(0);
+  });
+
+  test('excludes expansions and expandalones', () => {
+    const games = [
+      { id: 1, name: 'Expansion', isBaseGame: false, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2023-01-01' }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.newShameGames.length).toBe(0);
+    expect(result.exitedShameGames.length).toBe(0);
+  });
+
+  test('excludes unowned games', () => {
+    const games = [
+      { id: 1, name: 'Unowned', isBaseGame: true, copies: [{ statusOwned: false, pricePaid: 50, acquisitionDate: '2023-01-01' }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.newShameGames.length).toBe(0);
+    expect(result.exitedShameGames.length).toBe(0);
+  });
+
+  test('excludes games without price data', () => {
+    const games = [
+      { id: 1, name: 'NoPrice', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: null, acquisitionDate: '2023-01-01' }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.newShameGames.length).toBe(0);
+    expect(result.exitedShameGames.length).toBe(0);
+  });
+
+  test('includes games with valid price data', () => {
+    const games = [
+      { id: 1, name: 'HasPrice', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2023-01-01' }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.newShameGames.length).toBe(1);
+    expect(result.newShameGames[0].pricePaid).toBe(50);
+  });
+
+  test('sums price across multiple copies', () => {
+    const games = [{
+      id: 1,
+      name: 'MultiCopy',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30, acquisitionDate: '2023-01-01' },
+        { statusOwned: true, pricePaid: 20, acquisitionDate: '2023-06-01' },
+      ],
+    }];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.newShameGames.length).toBe(1);
+    expect(result.newShameGames[0].pricePaid).toBe(50);
+  });
+
+  test('sorts new shame games alphabetically', () => {
+    const games = [
+      { id: 1, name: 'Catan', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 20, acquisitionDate: '2023-01-01' }] },
+      { id: 2, name: 'Azul', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 80, acquisitionDate: '2023-01-01' }] },
+      { id: 3, name: 'Brass', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2023-01-01' }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.newShameGames.length).toBe(3);
+    expect(result.newShameGames[0].game.name).toBe('Azul');
+    expect(result.newShameGames[1].game.name).toBe('Brass');
+    expect(result.newShameGames[2].game.name).toBe('Catan');
+  });
+
+  test('sorts cleared games alphabetically', () => {
+    const games = [
+      { id: 1, name: 'Catan', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+      { id: 2, name: 'Azul', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+      { id: 3, name: 'Brass', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-06-01', durationMin: 60 },
+      { gameId: 2, date: '2023-06-01', durationMin: 180 },
+      { gameId: 3, date: '2023-06-01', durationMin: 30 },
+    ];
+    const result = getShelfOfShameChanges(games, plays, 2023);
+
+    expect(result.exitedShameGames.length).toBe(3);
+    expect(result.exitedShameGames[0].game.name).toBe('Azul');
+    expect(result.exitedShameGames[1].game.name).toBe('Brass');
+    expect(result.exitedShameGames[2].game.name).toBe('Catan');
   });
 });

@@ -225,6 +225,40 @@ suggestForNextMilestone(gamePlayData, Metric.PLAYS),
 
 This ensures users see relevant suggestions regardless of which metric filter they have selected.
 
+## No Defensive Code for Impossible Cases
+
+Do not add defensive code (null checks, fallback values, try/catch) for conditions that cannot occur based on the logic flow.
+
+**Rules:**
+- If the code path guarantees a value exists, access it directly
+- Do not add ternaries or null checks "just in case"
+- Trust the logic that got you there
+
+**Example:**
+```javascript
+// CORRECT - exited games must have play data (that's why they exited)
+const exitedShameGames = previousShame.games
+  .filter(g => !currentIds.has(g.game.id))
+  .map(g => {
+    const playData = metricValues.get(g.game.id);
+    return {
+      ...g,
+      hours: playData.totalMinutes / 60,
+    };
+  });
+
+// INCORRECT - unnecessary defensive check
+const exitedShameGames = previousShame.games
+  .filter(g => !currentIds.has(g.game.id))
+  .map(g => {
+    const playData = metricValues.get(g.game.id);
+    return {
+      ...g,
+      hours: playData ? playData.totalMinutes / 60 : 0,  // playData always exists here
+    };
+  });
+```
+
 ## Pre-Commit Requirements
 
 **CRITICAL: Always run the test suite before creating any commit.**

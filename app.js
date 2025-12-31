@@ -67,6 +67,7 @@ import {
   getSkippedValueClubCount,
   getCostPerMetricStats,
   getShelfOfShame,
+  getShelfOfShameChanges,
 } from './stats.js';
 
 import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
@@ -767,6 +768,8 @@ function updateAllStats() {
                 statsCache.yearReview[`valueClub_${tierValue}_${metric}_previous`] = getValueClubGames(gameData.games, gameData.plays, metric, tierValue, currentYear - 1).count;
             });
         });
+        // Shelf of shame changes
+        statsCache.yearReview.shelfOfShameChanges = getShelfOfShameChanges(gameData.games, gameData.plays, currentYear);
     }
 
     updateHIndexStats();
@@ -3219,6 +3222,26 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(`Increased ${formatNaturalList(milestoneParts)}`);
     }
 
+    // Shelf of Shame summary
+    const shameChanges = statsCache.yearReview.shelfOfShameChanges;
+    if (shameChanges) {
+        const added = shameChanges.newShameGames.length;
+        const removed = shameChanges.exitedShameGames.length;
+
+        let shameBullet;
+        if (removed > 0 && added > 0) {
+            shameBullet = `Cleared ${removed} game${removed !== 1 ? 's' : ''} from the shelf of shame but added ${added} more`;
+        } else if (removed > 0) {
+            shameBullet = `Cleared ${removed} game${removed !== 1 ? 's' : ''} from the shelf of shame!`;
+        } else if (added > 0) {
+            shameBullet = `Added ${added} game${added !== 1 ? 's' : ''} to the shelf of shame`;
+        }
+
+        if (shameBullet) {
+            summaryBullets.push(shameBullet);
+        }
+    }
+
     // Build Summary HTML
     const summaryHtml = summaryBullets.length > 0
         ? `<div class="year-review-summary year-review-subsection">
@@ -3930,6 +3953,85 @@ function showYearReviewDetail(container, statsCache) {
             `;
             detailDiv.appendChild(valueClubSubsection);
         }
+    }
+
+    // Add Shelf of Shame subsection
+    const shameChangesForSubsection = statsCache.yearReview.shelfOfShameChanges;
+    if (shameChangesForSubsection && (shameChangesForSubsection.exitedShameGames.length > 0 || shameChangesForSubsection.newShameGames.length > 0)) {
+        const shelfOfShameSubsection = document.createElement('div');
+        shelfOfShameSubsection.className = 'year-review-subsection';
+
+        let shameRows = '';
+
+        // "Games cleared from the shelf" row (show positive first)
+        if (shameChangesForSubsection.exitedShameGames.length > 0) {
+            const formatClearedGameValue = (item) => {
+                switch (currentBaseMetric) {
+                    case Metric.SESSIONS:
+                        return `${item.sessions} session${item.sessions !== 1 ? 's' : ''}`;
+                    case Metric.PLAYS:
+                        return `${item.plays} play${item.plays !== 1 ? 's' : ''}`;
+                    case Metric.HOURS:
+                    default:
+                        return `${item.hours.toFixed(1)} hours`;
+                }
+            };
+            shameRows += `
+                <tr class="year-review-row year-review-row-clickable" data-shame="exited">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Games cleared from the shelf:
+                    </td>
+                    <td class="year-review-value-detail">${shameChangesForSubsection.exitedShameGames.length}</td>
+                </tr>
+                <tr class="year-review-expanded-content" data-shame="exited" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${shameChangesForSubsection.exitedShameGames.map(item => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                    <span class="year-review-game-value">${formatClearedGameValue(item)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // "Games added to the shelf" row
+        if (shameChangesForSubsection.newShameGames.length > 0) {
+            shameRows += `
+                <tr class="year-review-row year-review-row-clickable" data-shame="new">
+                    <td class="year-review-label-detail">
+                        <span class="year-review-expand-icon">▶</span>
+                        Games added to the shelf:
+                    </td>
+                    <td class="year-review-value-detail">${shameChangesForSubsection.newShameGames.length}</td>
+                </tr>
+                <tr class="year-review-expanded-content" data-shame="new" style="display: none;">
+                    <td colspan="2">
+                        <div class="year-review-games-list">
+                            ${shameChangesForSubsection.newShameGames.map(item => `
+                                <div class="year-review-game-item">
+                                    <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        shelfOfShameSubsection.innerHTML = `
+            <h3 class="year-review-subsection-heading">Shelf of Shame</h3>
+            <table class="year-review-table">
+                <tbody>
+                    ${shameRows}
+                </tbody>
+            </table>
+        `;
+        detailDiv.appendChild(shelfOfShameSubsection);
     }
 
     // Add click handlers for expandable rows
