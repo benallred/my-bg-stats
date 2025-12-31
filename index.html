@@ -266,6 +266,44 @@
                     <div class="stat-value">--</div>
                     <p class="stat-description" id="total-cost-description">Sum of all owned copies</p>
                 </div>
+
+                <div class="stat-card clickable" id="avg-cost-per-metric" data-stat="avg-cost-per-metric">
+                    <h3>
+                        <span class="stat-label" id="avg-cost-label">Cost Per Hour</span>
+                        <span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
+                            <svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature">
+                                <path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                                <circle cx="6.5" cy="10.5" r="1" fill="currentColor"/>
+                                <circle cx="9" cy="11.5" r="0.7" fill="currentColor"/>
+                            </svg>
+                        </span>
+                    </h3>
+                    <div class="stat-value">--</div>
+                    <p class="stat-description" id="avg-cost-description">Median cost per hour</p>
+                    <div class="stat-substats">
+                        <div class="substat">
+                            <span class="substat-label">Game average:</span>
+                            <span class="substat-value" id="avg-cost-game-average">--</span>
+                        </div>
+                        <div class="substat">
+                            <span class="substat-label">Overall rate:</span>
+                            <span class="substat-value" id="avg-cost-overall-rate">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card clickable" id="shelf-of-shame" data-stat="shelf-of-shame">
+                    <h3><span class="stat-label">Shelf of Shame</span></h3>
+                    <div class="stat-value">--</div>
+                    <p class="stat-description" id="shelf-of-shame-description">Owned games never played</p>
+                    <div class="stat-substats">
+                        <div class="substat">
+                            <span class="substat-label">Games:</span>
+                            <span class="substat-value" id="shelf-of-shame-count">--</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 

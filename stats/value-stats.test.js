@@ -5,6 +5,8 @@ import {
   calculateValueClubIncrease,
   getNewValueClubGames,
   getSkippedValueClubCount,
+  getCostPerMetricStats,
+  getShelfOfShame,
 } from './value-stats.js';
 import { Metric, ValueClub } from './constants.js';
 import { processData } from '../scripts/transform-game-data.js';
@@ -927,5 +929,365 @@ describe('getSkippedValueClubCount', () => {
     expect(getSkippedValueClubCount(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2.5)).toBe(1);
     expect(getSkippedValueClubCount(games, plays, 2023, Metric.SESSIONS, ValueClub.FIVE_DOLLAR, 2.5)).toBe(1);
     expect(getSkippedValueClubCount(games, plays, 2023, Metric.PLAYS, ValueClub.FIVE_DOLLAR, 2.5)).toBe(1);
+  });
+});
+
+describe('getCostPerMetricStats', () => {
+  test('returns object with median, gameAverage, overallRate, gameCount, games', () => {
+    const result = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.HOURS);
+    expect(result).toHaveProperty('median');
+    expect(result).toHaveProperty('gameAverage');
+    expect(result).toHaveProperty('overallRate');
+    expect(result).toHaveProperty('gameCount');
+    expect(result).toHaveProperty('games');
+  });
+
+  test('only includes games with metric > 0', () => {
+    const result = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.HOURS);
+    result.games.forEach(item => {
+      expect(item.metricValue).toBeGreaterThan(0);
+    });
+  });
+
+  test('only includes owned base games with price data', () => {
+    const result = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.HOURS);
+    result.games.forEach(item => {
+      expect(item.game.isBaseGame).toBe(true);
+      expect(item.pricePaid).toBeGreaterThan(0);
+    });
+  });
+
+  test('calculates median correctly for odd number of games', () => {
+    const games = [
+      { id: 1, name: 'Game1', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'Game2', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 20 }] },
+      { id: 3, name: 'Game3', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },  // $10/hr
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },  // $20/hr
+      { gameId: 3, date: '2023-01-01', durationMin: 60 },  // $30/hr
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.median).toBe(20); // Middle value
+  });
+
+  test('calculates median correctly for even number of games', () => {
+    const games = [
+      { id: 1, name: 'Game1', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'Game2', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 20 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },  // $10/hr
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },  // $20/hr
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.median).toBe(15); // Average of middle two
+  });
+
+  test('calculates gameAverage correctly', () => {
+    const games = [
+      { id: 1, name: 'Game1', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'Game2', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },  // $10/hr
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },  // $30/hr
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.gameAverage).toBe(20); // (10 + 30) / 2
+  });
+
+  test('calculates overallRate correctly', () => {
+    const games = [
+      { id: 1, name: 'Game1', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] },
+      { id: 2, name: 'Game2', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },   // 1 hr
+      { gameId: 2, date: '2023-01-01', durationMin: 180 },  // 3 hrs
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    // Total cost: $40, Total hours: 4, Rate: $10/hr
+    expect(result.overallRate).toBe(10);
+  });
+
+  test('returns null values for empty data', () => {
+    const result = getCostPerMetricStats([], [], Metric.HOURS);
+    expect(result.median).toBeNull();
+    expect(result.gameAverage).toBeNull();
+    expect(result.overallRate).toBeNull();
+    expect(result.gameCount).toBe(0);
+  });
+
+  test('works with different metrics (hours, sessions, plays)', () => {
+    const hoursResult = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.HOURS);
+    const sessionsResult = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.SESSIONS);
+    const playsResult = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.PLAYS);
+
+    expect(hoursResult.gameCount).toBeGreaterThanOrEqual(0);
+    expect(sessionsResult.gameCount).toBeGreaterThanOrEqual(0);
+    expect(playsResult.gameCount).toBeGreaterThanOrEqual(0);
+  });
+
+  test('respects year filter (cumulative through year)', () => {
+    const games = [{ id: 1, name: 'Game1', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] }];
+    const plays = [
+      { gameId: 1, date: '2022-01-01', durationMin: 60 },
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+    ];
+    const result2022 = getCostPerMetricStats(games, plays, Metric.HOURS, 2022);
+    const result2023 = getCostPerMetricStats(games, plays, Metric.HOURS, 2023);
+
+    expect(result2022.overallRate).toBe(50); // 1 hour
+    expect(result2023.overallRate).toBe(25); // 2 hours
+  });
+
+  test('sorts games by costPerMetric ascending', () => {
+    const result = getCostPerMetricStats(typicalData.games, typicalData.plays, Metric.HOURS);
+    for (let i = 1; i < result.games.length; i++) {
+      expect(result.games[i - 1].costPerMetric).toBeLessThanOrEqual(result.games[i].costPerMetric);
+    }
+  });
+
+  test('caps costPerMetric at pricePaid when metric < 1', () => {
+    const games = [{ id: 1, name: 'Game1', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 10 }] }];
+    const plays = [{ gameId: 1, date: '2023-01-01', durationMin: 12 }]; // 0.2 hours
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    // Without cap: $10/0.2 = $50/hr, With cap: $10 (pricePaid)
+    expect(result.games[0].costPerMetric).toBe(10);
+  });
+
+  test('excludes unowned games', () => {
+    const games = [
+      { id: 1, name: 'Owned', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'NotOwned', isBaseGame: true, copies: [{ statusOwned: false, pricePaid: 30 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.gameCount).toBe(1);
+    expect(result.games[0].game.name).toBe('Owned');
+  });
+
+  test('excludes expansions and expandalones', () => {
+    const games = [
+      { id: 1, name: 'Base', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'Expansion', isBaseGame: false, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.gameCount).toBe(1);
+    expect(result.games[0].game.name).toBe('Base');
+  });
+
+  test('excludes games with no price data', () => {
+    const games = [
+      { id: 1, name: 'HasPrice', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'NoPrice', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: null }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.gameCount).toBe(1);
+    expect(result.games[0].game.name).toBe('HasPrice');
+  });
+
+  test('excludes games with no play data', () => {
+    const games = [
+      { id: 1, name: 'Played', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'Unplayed', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      // No plays for game 2
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.gameCount).toBe(1);
+    expect(result.games[0].game.name).toBe('Played');
+  });
+
+  test('excludes games with zero metric value (zero duration plays)', () => {
+    const games = [
+      { id: 1, name: 'HasHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'ZeroHours', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 0 }, // Zero duration
+    ];
+    const result = getCostPerMetricStats(games, plays, Metric.HOURS);
+    expect(result.gameCount).toBe(1);
+    expect(result.games[0].game.name).toBe('HasHours');
+  });
+});
+
+describe('getShelfOfShame', () => {
+  test('returns object with totalCost, count, games', () => {
+    const result = getShelfOfShame(typicalData.games, typicalData.plays);
+    expect(result).toHaveProperty('totalCost');
+    expect(result).toHaveProperty('count');
+    expect(result).toHaveProperty('games');
+  });
+
+  test('only includes base games', () => {
+    const games = [
+      { id: 1, name: 'Base', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'Expansion', isBaseGame: false, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShame(games, plays);
+    expect(result.count).toBe(1);
+    expect(result.games[0].game.name).toBe('Base');
+  });
+
+  test('only includes owned games', () => {
+    const games = [
+      { id: 1, name: 'Owned', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'NotOwned', isBaseGame: true, copies: [{ statusOwned: false, pricePaid: 30 }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShame(games, plays);
+    expect(result.count).toBe(1);
+    expect(result.games[0].game.name).toBe('Owned');
+  });
+
+  test('only includes games with price data', () => {
+    const games = [
+      { id: 1, name: 'HasPrice', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'NoPrice', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: null }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShame(games, plays);
+    expect(result.count).toBe(1);
+    expect(result.games[0].game.name).toBe('HasPrice');
+  });
+
+  test('excludes played games (ever)', () => {
+    const games = [
+      { id: 1, name: 'Unplayed', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'Played', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [{ gameId: 2, date: '2020-01-01', durationMin: 60 }]; // Played ever
+    const result = getShelfOfShame(games, plays);
+    expect(result.count).toBe(1);
+    expect(result.games[0].game.name).toBe('Unplayed');
+  });
+
+  test('calculates totalCost correctly', () => {
+    const games = [
+      { id: 1, name: 'Game1', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+      { id: 2, name: 'Game2', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30 }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShame(games, plays);
+    expect(result.totalCost).toBe(80);
+  });
+
+  test('sums multiple owned copies for same game', () => {
+    const games = [{
+      id: 1,
+      name: 'MultiCopy',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30 },
+        { statusOwned: true, pricePaid: 20 },
+      ],
+    }];
+    const plays = [];
+    const result = getShelfOfShame(games, plays);
+    expect(result.totalCost).toBe(50);
+    expect(result.games[0].pricePaid).toBe(50);
+  });
+
+  test('returns empty results when no shelf of shame games', () => {
+    const games = [{ id: 1, name: 'Played', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] }];
+    const plays = [{ gameId: 1, date: '2023-01-01', durationMin: 60 }];
+    const result = getShelfOfShame(games, plays);
+    expect(result.totalCost).toBe(0);
+    expect(result.count).toBe(0);
+    expect(result.games).toEqual([]);
+  });
+
+  test('sorts games by pricePaid descending', () => {
+    const games = [
+      { id: 1, name: 'Cheap', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 20 }] },
+      { id: 2, name: 'Expensive', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 100 }] },
+      { id: 3, name: 'Medium', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50 }] },
+    ];
+    const plays = [];
+    const result = getShelfOfShame(games, plays);
+    expect(result.games[0].game.name).toBe('Expensive');
+    expect(result.games[1].game.name).toBe('Medium');
+    expect(result.games[2].game.name).toBe('Cheap');
+  });
+
+  test('always uses all plays ever (not filtered by year)', () => {
+    const games = [{ id: 1, name: 'Game', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] }];
+    // Play in an old year - game should still be excluded from shelf of shame
+    const plays = [{ gameId: 1, date: '2015-01-01', durationMin: 60 }];
+    const result = getShelfOfShame(games, plays, 2023);
+    expect(result.count).toBe(0); // Not on shelf because played ever
+  });
+
+  test('filters by acquisition year when year provided', () => {
+    const games = [
+      { id: 1, name: 'OldGame', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2020-01-01' }] },
+      { id: 2, name: 'NewGame', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30, acquisitionDate: '2023-06-01' }] },
+    ];
+    const plays = [];
+
+    // Filtering to 2022 should only include OldGame (acquired 2020)
+    const result2022 = getShelfOfShame(games, plays, 2022);
+    expect(result2022.count).toBe(1);
+    expect(result2022.games[0].game.name).toBe('OldGame');
+
+    // Filtering to 2023 should include both
+    const result2023 = getShelfOfShame(games, plays, 2023);
+    expect(result2023.count).toBe(2);
+  });
+
+  test('excludes games with no acquisition date when year filter is set', () => {
+    const games = [
+      { id: 1, name: 'HasDate', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 50, acquisitionDate: '2022-01-01' }] },
+      { id: 2, name: 'NoDate', isBaseGame: true, copies: [{ statusOwned: true, pricePaid: 30, acquisitionDate: null }] },
+    ];
+    const plays = [];
+
+    const resultWithYear = getShelfOfShame(games, plays, 2023);
+    expect(resultWithYear.count).toBe(1);
+    expect(resultWithYear.games[0].game.name).toBe('HasDate');
+
+    // Without year filter, includes games without acquisition date
+    const resultNoYear = getShelfOfShame(games, plays);
+    expect(resultNoYear.count).toBe(2);
+  });
+
+  test('sums only copies acquired through year when year filter is set', () => {
+    const games = [{
+      id: 1,
+      name: 'MultiCopy',
+      isBaseGame: true,
+      copies: [
+        { statusOwned: true, pricePaid: 30, acquisitionDate: '2020-01-01' },
+        { statusOwned: true, pricePaid: 20, acquisitionDate: '2023-06-01' },
+      ],
+    }];
+    const plays = [];
+
+    // 2022: Only includes first copy ($30)
+    const result2022 = getShelfOfShame(games, plays, 2022);
+    expect(result2022.totalCost).toBe(30);
+
+    // 2023: Includes both copies ($50)
+    const result2023 = getShelfOfShame(games, plays, 2023);
+    expect(result2023.totalCost).toBe(50);
   });
 });

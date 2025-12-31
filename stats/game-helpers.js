@@ -23,6 +23,18 @@ function wasCopyAcquiredInYear(copy, year) {
 }
 
 /**
+ * Helper: Check if a copy was acquired in or before a specific year
+ * @param {Object} copy - Copy object
+ * @param {number} year - Year to check
+ * @returns {boolean} true if the copy was acquired in or before the year
+ */
+function wasCopyAcquiredInOrBeforeYear(copy, year) {
+  if (!copy.acquisitionDate) return false;
+  const acquisitionYear = parseInt(copy.acquisitionDate.substring(0, 4));
+  return acquisitionYear <= year;
+}
+
+/**
  * Helper: Check if a game was acquired in a specific year
  * @param {Object} game - Game object
  * @param {number} year - Year to check
@@ -33,4 +45,4 @@ function wasGameAcquiredInYear(game, year) {
   return game.copies.some(copy => wasCopyAcquiredInYear(copy, year));
 }
 
-export { isGameOwned, wasCopyAcquiredInYear, wasGameAcquiredInYear };
+export { isGameOwned, wasCopyAcquiredInYear, wasCopyAcquiredInOrBeforeYear, wasGameAcquiredInYear };

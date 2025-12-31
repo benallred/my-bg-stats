@@ -3,8 +3,9 @@
  */
 
 import { ValueClub } from './constants.js';
-import { isGameOwned, wasCopyAcquiredInYear } from './game-helpers.js';
-import { getMetricValueFromPlayData } from './play-helpers.js';
+import { isGameOwned, wasCopyAcquiredInYear, wasCopyAcquiredInOrBeforeYear } from './game-helpers.js';
+import { getMetricValueFromPlayData, getMetricValuesThroughYear } from './play-helpers.js';
+import { calculateMedian } from '../utils.js';
 import {
   getGamesInTier,
   calculateTierIncrease,
@@ -277,10 +278,127 @@ function getSkippedValueClubCount(games, plays, year, metric, threshold, nextLow
   });
 }
 
+/**
+ * Calculate cost-per-metric statistics for played games
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
+ * @param {number|null} year - Optional year filter (cumulative through year)
+ * @returns {Object} { median, gameAverage, overallRate, gameCount, games }
+ */
+function getCostPerMetricStats(games, plays, metric, year = null) {
+  const metricValues = getMetricValuesThroughYear(plays, year);
+  const eligibleGames = [];
+
+  games.forEach(game => {
+    // Only include owned base games
+    if (!valueClubGameFilter(game)) return;
+
+    const pricePaid = getGamePricePaid(game);
+    if (pricePaid === null) return;
+
+    const playData = metricValues.get(game.id);
+    if (!playData) return;
+
+    const metricValue = getMetricValueFromPlayData(playData, metric);
+    if (metricValue === 0) return;
+
+    // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
+    const costPerMetric = Math.min(pricePaid / metricValue, pricePaid);
+
+    eligibleGames.push({
+      game,
+      pricePaid,
+      metricValue,
+      costPerMetric,
+    });
+  });
+
+  // Sort by costPerMetric ascending (best value first)
+  eligibleGames.sort((a, b) => a.costPerMetric - b.costPerMetric);
+
+  const costPerMetricValues = eligibleGames.map(g => g.costPerMetric);
+  const totalCost = eligibleGames.reduce((sum, g) => sum + g.pricePaid, 0);
+  const totalMetric = eligibleGames.reduce((sum, g) => sum + g.metricValue, 0);
+
+  return {
+    median: calculateMedian(costPerMetricValues),
+    gameAverage: costPerMetricValues.length > 0
+      ? costPerMetricValues.reduce((sum, v) => sum + v, 0) / costPerMetricValues.length
+      : null,
+    overallRate: totalMetric > 0 ? totalCost / totalMetric : null,
+    gameCount: eligibleGames.length,
+    games: eligibleGames,
+  };
+}
+
+/**
+ * Get shelf of shame - owned base games with known price but never played
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number|null} year - Optional year filter (games acquired through year)
+ * @returns {Object} { totalCost, count, games }
+ */
+function getShelfOfShame(games, plays, year = null) {
+  // Build set of all played game IDs (ever, no year filter)
+  const playedGameIds = new Set(plays.map(play => play.gameId));
+
+  const shameGames = [];
+
+  games.forEach(game => {
+    // Only include base games (not expansions, not expandalones)
+    if (!game.isBaseGame) return;
+
+    // Only include owned games
+    if (!isGameOwned(game)) return;
+
+    // Exclude if ever played
+    if (playedGameIds.has(game.id)) return;
+
+    // Get owned copies, filtered by acquisition year if specified
+    let relevantCopies = game.copies.filter(copy => copy.statusOwned === true);
+    if (year) {
+      relevantCopies = relevantCopies.filter(copy => wasCopyAcquiredInOrBeforeYear(copy, year));
+    }
+    if (relevantCopies.length === 0) return;
+
+    // Sum price paid across relevant copies
+    let totalPricePaid = 0;
+    let hasPriceData = false;
+
+    relevantCopies.forEach(copy => {
+      if (copy.pricePaid !== null && copy.pricePaid !== undefined && copy.pricePaid !== '') {
+        totalPricePaid += copy.pricePaid;
+        hasPriceData = true;
+      }
+    });
+
+    if (!hasPriceData) return;
+
+    shameGames.push({
+      game,
+      pricePaid: totalPricePaid,
+    });
+  });
+
+  // Sort by pricePaid descending (most expensive first)
+  shameGames.sort((a, b) => b.pricePaid - a.pricePaid);
+
+  const totalCost = shameGames.reduce((sum, g) => sum + g.pricePaid, 0);
+
+  return {
+    totalCost,
+    count: shameGames.length,
+    games: shameGames,
+  };
+}
+
 export {
   getTotalCost,
   getValueClubGames,
   calculateValueClubIncrease,
   getNewValueClubGames,
   getSkippedValueClubCount,
+  getCostPerMetricStats,
+  getShelfOfShame,
 };

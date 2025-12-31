@@ -65,6 +65,8 @@ import {
   calculateValueClubIncrease,
   getNewValueClubGames,
   getSkippedValueClubCount,
+  getCostPerMetricStats,
+  getShelfOfShame,
 } from './stats.js';
 
 import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
@@ -534,7 +536,8 @@ function setupBaseMetricFilter() {
         updateMilestoneCardLabels();
         updateMilestoneCumulativeSubstats();
 
-        // Recalculate value club data for new metric and update UI
+        // Recalculate cost/value club data for new metric and update UI
+        statsCache.costPerMetricData = getCostPerMetricStats(gameData.games, gameData.plays, currentBaseMetric, currentYear);
         statsCache.fiveDollarClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.FIVE_DOLLAR, currentYear);
         statsCache.twoFiftyClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.TWO_FIFTY, currentYear);
         statsCache.oneDollarClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.ONE_DOLLAR, currentYear);
@@ -649,6 +652,8 @@ function updateAllStats() {
         soloGameStats: getSoloGameStats(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
         // Cost Analysis stats (experimental)
         totalCostData: getTotalCost(gameData.games, currentYear),
+        costPerMetricData: getCostPerMetricStats(gameData.games, gameData.plays, currentBaseMetric, currentYear),
+        shelfOfShameData: getShelfOfShame(gameData.games, gameData.plays, currentYear),
         fiveDollarClubData: getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.FIVE_DOLLAR, currentYear),
         twoFiftyClubData: getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.TWO_FIFTY, currentYear),
         oneDollarClubData: getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.ONE_DOLLAR, currentYear),
@@ -1092,17 +1097,99 @@ function updateCostAnalysisStats() {
     }
     section.style.display = 'block';
 
+    // Check if current year is pre-logging
+    const isPreLogging = currentYear && yearDataCache
+        && yearDataCache.find(y => y.year === currentYear)?.isPreLogging;
+
     // Update Total Cost card
     const totalCostValue = statsCache.totalCostData.totalCost;
-    const suffix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '+' : '';
+    const prefix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '> ' : '';
     document.querySelector('#total-cost .stat-value').textContent =
-        `$${totalCostValue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}${suffix}`;
+        `${prefix}$${totalCostValue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
     // Update Total Cost description based on year filter
     const totalCostDescription = currentYear
         ? `Sum of copies acquired in ${currentYear}`
         : 'Sum of all owned copies';
     document.getElementById('total-cost-description').textContent = totalCostDescription;
+
+    // Hide Cost/Hour and Shelf of Shame cards in pre-logging years
+    const avgCostCard = document.getElementById('avg-cost-per-metric');
+    const shelfOfShameCard = document.getElementById('shelf-of-shame');
+    avgCostCard.style.display = isPreLogging ? 'none' : '';
+    shelfOfShameCard.style.display = isPreLogging ? 'none' : '';
+
+    if (!isPreLogging) {
+        // Update Average Cost Per Metric card
+        updateAvgCostPerMetricCard();
+
+        // Update Shelf of Shame card
+        updateShelfOfShameCard();
+    }
+}
+
+/**
+ * Update Average Cost Per Metric card
+ */
+function updateAvgCostPerMetricCard() {
+    const data = statsCache.costPerMetricData;
+
+    // Update label based on current metric
+    const metricLabels = {
+        hours: 'Cost Per Hour',
+        sessions: 'Cost Per Session',
+        plays: 'Cost Per Play',
+    };
+    const metricUnits = {
+        hours: 'hour',
+        sessions: 'session',
+        plays: 'play',
+    };
+
+    document.getElementById('avg-cost-label').textContent = metricLabels[currentBaseMetric] || metricLabels.hours;
+
+    // Update main value (median) with < prefix
+    const mainValueEl = document.querySelector('#avg-cost-per-metric .stat-value');
+    if (data.median !== null) {
+        mainValueEl.textContent = `< $${data.median.toFixed(2)}`;
+    } else {
+        mainValueEl.textContent = '--';
+    }
+
+    // Update description
+    const yearSuffix = currentYear ? ` through ${currentYear}` : '';
+    const unit = metricUnits[currentBaseMetric] || 'hour';
+    document.getElementById('avg-cost-description').textContent =
+        `Median cost per ${unit} (of ${data.gameCount} owned games played${yearSuffix})`;
+
+    // Update substats with < prefix
+    const gameAvgEl = document.getElementById('avg-cost-game-average');
+    const overallRateEl = document.getElementById('avg-cost-overall-rate');
+
+    gameAvgEl.textContent = data.gameAverage !== null ? `< $${data.gameAverage.toFixed(2)}` : '--';
+    overallRateEl.textContent = data.overallRate !== null ? `< $${data.overallRate.toFixed(2)}` : '--';
+}
+
+/**
+ * Update Shelf of Shame card
+ */
+function updateShelfOfShameCard() {
+    const data = statsCache.shelfOfShameData;
+
+    // Main value: total cost with < prefix
+    const mainValueEl = document.querySelector('#shelf-of-shame .stat-value');
+    mainValueEl.textContent = data.totalCost > 0
+        ? `< $${data.totalCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+        : '$0';
+
+    // Substat: game count
+    document.getElementById('shelf-of-shame-count').textContent =
+        `${data.count} game${data.count === 1 ? '' : 's'}`;
+
+    // Update description based on year filter
+    const yearSuffix = currentYear ? ` through ${currentYear}` : '';
+    document.getElementById('shelf-of-shame-description').textContent =
+        `Owned games never played${yearSuffix} (since logging began)`;
 }
 
 /**
@@ -1816,9 +1903,9 @@ const statDetailHandlers = {
             return `Total Cost ${yearText}`;
         },
         getSummary: (statsCache) => {
-            const suffix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '+' : '';
+            const prefix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '> ' : '';
             return {
-                mainValue: `$${statsCache.totalCostData.totalCost.toLocaleString()}${suffix}`,
+                mainValue: `${prefix}$${statsCache.totalCostData.totalCost.toLocaleString()}`,
             };
         },
         render: (detailContent) => {
@@ -1903,6 +1990,48 @@ const statDetailHandlers = {
         }),
         render: (detailContent) => {
             showValueClubBreakdown(detailContent, statsCache.fiftyCentClubData, '50¢');
+        },
+    },
+    'avg-cost-per-metric': {
+        getTitle: (currentYear) => {
+            const experimentalIcon = '<span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();"><svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature"><path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="10.5" r="1" fill="currentColor"/><circle cx="9" cy="11.5" r="0.7" fill="currentColor"/></svg></span>';
+            const metricLabels = {
+                hours: 'Cost Per Hour',
+                sessions: 'Cost Per Session',
+                plays: 'Cost Per Play',
+            };
+            const label = metricLabels[currentBaseMetric] || metricLabels.hours;
+            const yearText = currentYear
+                ? `<span style="white-space: nowrap">(through ${currentYear})</span>`
+                : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${label} ${yearText}${experimentalIcon}`;
+        },
+        getSummary: (statsCache) => {
+            const data = statsCache.costPerMetricData;
+            return {
+                mainValue: data.median !== null ? `< $${data.median.toFixed(2)}` : '--',
+                substats: [
+                    { label: 'Game average:', value: data.gameAverage !== null ? `< $${data.gameAverage.toFixed(2)}` : '--' },
+                    { label: 'Overall rate:', value: data.overallRate !== null ? `< $${data.overallRate.toFixed(2)}` : '--' },
+                ],
+            };
+        },
+        render: (detailContent) => {
+            showCostPerMetricBreakdown(detailContent);
+        },
+    },
+    'shelf-of-shame': {
+        getTitle: () => 'Shelf of Shame',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.shelfOfShameData.totalCost > 0
+                ? `< $${statsCache.shelfOfShameData.totalCost.toLocaleString()}`
+                : '$0',
+            substats: [
+                { label: 'Games:', value: `${statsCache.shelfOfShameData.count}` },
+            ],
+        }),
+        render: (detailContent) => {
+            showShelfOfShameBreakdown(detailContent);
         },
     },
 };
@@ -2605,6 +2734,110 @@ function showValueClubBreakdown(container, clubData, clubLabel) {
         </tbody>
     `;
     container.appendChild(table);
+}
+
+/**
+ * Show cost per metric breakdown
+ */
+function showCostPerMetricBreakdown(container) {
+    const { games } = statsCache.costPerMetricData;
+
+    if (games.length === 0) {
+        container.innerHTML = '<p>No played games with price data found.</p>';
+        return;
+    }
+
+    const metricLabel = currentBaseMetric === 'hours' ? 'Hours'
+        : currentBaseMetric === 'sessions' ? 'Sessions' : 'Plays';
+    const metricLabelSingular = currentBaseMetric === 'hours' ? 'Hour'
+        : currentBaseMetric === 'sessions' ? 'Session' : 'Play';
+    const metricLabelLower = metricLabelSingular.toLowerCase();
+
+    // Explanation section
+    const explanationDiv = document.createElement('div');
+    explanationDiv.className = 'detail-explanation';
+    explanationDiv.innerHTML = `
+        <p><strong>Note:</strong> Values shown as "< $X" because some games may have been played before logging began, meaning actual costs could be lower.</p>
+        <p><strong>Median:</strong> The middle value when all games' cost-per-${metricLabelLower} are sorted. Less affected by outliers.</p>
+        <p><strong>Game Average:</strong> Average of each game's cost-per-${metricLabelLower}. Every game weighted equally.</p>
+        <p><strong>Overall Rate:</strong> Total cost ÷ total ${metricLabel.toLowerCase()}. High-activity games weighted more heavily.</p>
+    `;
+    container.appendChild(explanationDiv);
+
+    // Games already sorted by costPerMetric ascending
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>${metricLabel}</th>
+                <th>Cost/${metricLabelSingular}</th>
+                <th>Price Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${games.map(item => {
+                const metricDisplay = currentBaseMetric === 'hours'
+                    ? item.metricValue.toFixed(1)
+                    : Math.floor(item.metricValue);
+                return `
+                    <tr>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
+                        <td>${metricDisplay}</td>
+                        <td>$${item.costPerMetric.toFixed(2)}</td>
+                        <td>$${item.pricePaid.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show shelf of shame breakdown
+ */
+function showShelfOfShameBreakdown(container) {
+    const { games, totalCost, count } = statsCache.shelfOfShameData;
+
+    if (games.length === 0) {
+        container.innerHTML = '<p>Yay! No unplayed games with known prices. The shelf of shame is empty!</p>';
+        return;
+    }
+
+    // Explanation note
+    const explanationDiv = document.createElement('div');
+    explanationDiv.className = 'detail-explanation';
+    explanationDiv.innerHTML = `
+        <p><strong>Note:</strong> These are owned base games that have never been played since logging began.
+        Some may have been played before logging began, so the actual "shelf of shame" could be smaller.</p>
+    `;
+    container.appendChild(explanationDiv);
+
+    // Games already sorted by price descending
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Price Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${games.map(item => `
+                <tr>
+                    <td>${renderGameNameWithThumbnail(item.game)}</td>
+                    <td>$${item.pricePaid.toFixed(2)}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+
+    const summaryNote = document.createElement('p');
+    summaryNote.className = 'detail-note';
+    summaryNote.innerHTML = `<strong>${count} game${count === 1 ? '' : 's'}</strong> totaling <strong>< $${totalCost.toFixed(2)}</strong> waiting to be played.`;
+    container.appendChild(summaryNote);
 }
 
 /**
