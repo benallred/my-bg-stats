@@ -1,14 +1,12 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   calculateDaysSince,
-  getNextMilestoneTarget,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
   suggestForCostClub,
   getSuggestedGames,
 } from './suggestions.js';
-import { Metric } from './constants.js';
-import { CostClub } from './cost-stats.js';
+import { Metric, Milestone, CostClub } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
@@ -46,30 +44,30 @@ describe('Suggestion Algorithms', () => {
     });
   });
 
-  describe('getNextMilestoneTarget', () => {
+  describe('Milestone.getNextTarget', () => {
     test('returns 5 for counts less than 5', () => {
-      expect(getNextMilestoneTarget(0)).toBe(5);
-      expect(getNextMilestoneTarget(4)).toBe(5);
+      expect(Milestone.getNextTarget(0)).toBe(5);
+      expect(Milestone.getNextTarget(4)).toBe(5);
     });
 
     test('returns 10 for counts 5-9', () => {
-      expect(getNextMilestoneTarget(5)).toBe(10);
-      expect(getNextMilestoneTarget(9)).toBe(10);
+      expect(Milestone.getNextTarget(5)).toBe(10);
+      expect(Milestone.getNextTarget(9)).toBe(10);
     });
 
     test('returns 25 for counts 10-24', () => {
-      expect(getNextMilestoneTarget(10)).toBe(25);
-      expect(getNextMilestoneTarget(24)).toBe(25);
+      expect(Milestone.getNextTarget(10)).toBe(25);
+      expect(Milestone.getNextTarget(24)).toBe(25);
     });
 
     test('returns 100 for counts 25-99', () => {
-      expect(getNextMilestoneTarget(25)).toBe(100);
-      expect(getNextMilestoneTarget(99)).toBe(100);
+      expect(Milestone.getNextTarget(25)).toBe(100);
+      expect(Milestone.getNextTarget(99)).toBe(100);
     });
 
     test('returns null for counts 100+', () => {
-      expect(getNextMilestoneTarget(100)).toBeNull();
-      expect(getNextMilestoneTarget(150)).toBeNull();
+      expect(Milestone.getNextTarget(100)).toBeNull();
+      expect(Milestone.getNextTarget(150)).toBeNull();
     });
   });
 

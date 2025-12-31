@@ -881,9 +881,9 @@ function updateMilestoneCumulativeSubstats() {
     }
 
     // Derive cumulative counts by summing all milestones at or above each threshold
-    const cumulativeFives = milestones.fives.length + milestones.dimes.length + milestones.quarters.length + milestones.centuries.length;
-    const cumulativeDimes = milestones.dimes.length + milestones.quarters.length + milestones.centuries.length;
-    const cumulativeQuarters = milestones.quarters.length + milestones.centuries.length;
+    const cumulativeFives = milestones[Milestone.FIVES].length + milestones[Milestone.DIMES].length + milestones[Milestone.QUARTERS].length + milestones[Milestone.CENTURIES].length;
+    const cumulativeDimes = milestones[Milestone.DIMES].length + milestones[Milestone.QUARTERS].length + milestones[Milestone.CENTURIES].length;
+    const cumulativeQuarters = milestones[Milestone.QUARTERS].length + milestones[Milestone.CENTURIES].length;
 
     // Update labels
     document.getElementById('fives-cumulative-label').textContent = `All games with 5+ ${metricName}:`;
@@ -992,10 +992,10 @@ function updatePlayTimeStats() {
  */
 function updateMilestoneStats() {
     const milestones = getCurrentMilestones();
-    document.querySelector('#fives .stat-value').textContent = milestones.fives.length;
-    document.querySelector('#dimes .stat-value').textContent = milestones.dimes.length;
-    document.querySelector('#quarters .stat-value').textContent = milestones.quarters.length;
-    document.querySelector('#centuries .stat-value').textContent = milestones.centuries.length;
+    document.querySelector('#fives .stat-value').textContent = milestones[Milestone.FIVES].length;
+    document.querySelector('#dimes .stat-value').textContent = milestones[Milestone.DIMES].length;
+    document.querySelector('#quarters .stat-value').textContent = milestones[Milestone.QUARTERS].length;
+    document.querySelector('#centuries .stat-value').textContent = milestones[Milestone.CENTURIES].length;
 }
 
 /**
@@ -1523,11 +1523,11 @@ const statDetailHandlers = {
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
-            return { mainValue: milestones.fives.length };
+            return { mainValue: milestones[Milestone.FIVES].length };
         },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
-            showMilestoneGames(detailContent, 'fives', milestones);
+            showMilestoneGames(detailContent, Milestone.FIVES, milestones);
         }
     },
     'dimes': {
@@ -1543,11 +1543,11 @@ const statDetailHandlers = {
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
-            return { mainValue: milestones.dimes.length };
+            return { mainValue: milestones[Milestone.DIMES].length };
         },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
-            showMilestoneGames(detailContent, 'dimes', milestones);
+            showMilestoneGames(detailContent, Milestone.DIMES, milestones);
         }
     },
     'quarters': {
@@ -1563,11 +1563,11 @@ const statDetailHandlers = {
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
-            return { mainValue: milestones.quarters.length };
+            return { mainValue: milestones[Milestone.QUARTERS].length };
         },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
-            showMilestoneGames(detailContent, 'quarters', milestones);
+            showMilestoneGames(detailContent, Milestone.QUARTERS, milestones);
         }
     },
     'centuries': {
@@ -1583,11 +1583,11 @@ const statDetailHandlers = {
         },
         getSummary: () => {
             const milestones = getCurrentMilestones();
-            return { mainValue: milestones.centuries.length };
+            return { mainValue: milestones[Milestone.CENTURIES].length };
         },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
-            showMilestoneGames(detailContent, 'centuries', milestones);
+            showMilestoneGames(detailContent, Milestone.CENTURIES, milestones);
         }
     },
     'play-next-suggestions': {
@@ -3324,24 +3324,24 @@ function showYearReviewDetail(container, statsCache) {
     // Build milestone rows dynamically - only show rows with increase > 0
     const milestoneRows = [];
     const milestoneDefinitions = [
-        { type: 'fives', label: 'fives', range: '5-9', metric: 'hours', unit: 'hours' },
-        { type: 'dimes', label: 'dimes', range: '10-24', metric: 'hours', unit: 'hours' },
-        { type: 'quarters', label: 'quarters', range: '25-99', metric: 'hours', unit: 'hours' },
-        { type: 'centuries', label: 'centuries', range: '100 or more', metric: 'hours', unit: 'hours' },
-        { type: 'fives', label: 'fives', range: '5-9', metric: 'sessions', unit: 'days' },
-        { type: 'dimes', label: 'dimes', range: '10-24', metric: 'sessions', unit: 'days' },
-        { type: 'quarters', label: 'quarters', range: '25-99', metric: 'sessions', unit: 'days' },
-        { type: 'centuries', label: 'centuries', range: '100 or more', metric: 'sessions', unit: 'days' },
-        { type: 'fives', label: 'fives', range: '5-9', metric: 'plays', unit: 'times' },
-        { type: 'dimes', label: 'dimes', range: '10-24', metric: 'plays', unit: 'times' },
-        { type: 'quarters', label: 'quarters', range: '25-99', metric: 'plays', unit: 'times' },
-        { type: 'centuries', label: 'centuries', range: '100 or more', metric: 'plays', unit: 'times' }
+        { type: Milestone.FIVES, label: 'fives', range: '5-9', metric: 'hours', unit: 'hours' },
+        { type: Milestone.DIMES, label: 'dimes', range: '10-24', metric: 'hours', unit: 'hours' },
+        { type: Milestone.QUARTERS, label: 'quarters', range: '25-99', metric: 'hours', unit: 'hours' },
+        { type: Milestone.CENTURIES, label: 'centuries', range: '100 or more', metric: 'hours', unit: 'hours' },
+        { type: Milestone.FIVES, label: 'fives', range: '5-9', metric: 'sessions', unit: 'days' },
+        { type: Milestone.DIMES, label: 'dimes', range: '10-24', metric: 'sessions', unit: 'days' },
+        { type: Milestone.QUARTERS, label: 'quarters', range: '25-99', metric: 'sessions', unit: 'days' },
+        { type: Milestone.CENTURIES, label: 'centuries', range: '100 or more', metric: 'sessions', unit: 'days' },
+        { type: Milestone.FIVES, label: 'fives', range: '5-9', metric: 'plays', unit: 'times' },
+        { type: Milestone.DIMES, label: 'dimes', range: '10-24', metric: 'plays', unit: 'times' },
+        { type: Milestone.QUARTERS, label: 'quarters', range: '25-99', metric: 'plays', unit: 'times' },
+        { type: Milestone.CENTURIES, label: 'centuries', range: '100 or more', metric: 'plays', unit: 'times' },
     ];
 
     milestoneDefinitions.forEach((def) => {
-        const increaseKey = `${def.type}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Increase`;
-        const currentKey = `${def.type}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Current`;
-        const previousKey = `${def.type}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Previous`;
+        const increaseKey = `${def.label}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Increase`;
+        const currentKey = `${def.label}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Current`;
+        const previousKey = `${def.label}${def.metric.charAt(0).toUpperCase() + def.metric.slice(1)}Previous`;
 
         const increase = statsCache.yearReview[increaseKey];
         const current = statsCache.yearReview[currentKey];
@@ -3349,7 +3349,7 @@ function showYearReviewDetail(container, statsCache) {
 
         // Only show rows where increase > 0
         if (increase > 0) {
-            const rowId = `milestone-${def.type}-${def.metric}`;
+            const rowId = `milestone-${def.label}-${def.metric}`;
             const displayValue = increase === 0
                 ? `+0 (stayed at ${current})`
                 : `+${increase} (from ${previous} to ${current})`;

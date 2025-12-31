@@ -2,14 +2,13 @@
  * Game suggestion algorithms
  */
 
-import { Metric } from './constants.js';
+import { Metric, Milestone, CostClub } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import {
   calculateTraditionalHIndex,
   calculatePlaySessionHIndex,
   calculateHourHIndex,
 } from './h-index.js';
-import { CostClub } from './cost-stats.js';
 
 /**
  * Helper: Calculate days since a date
@@ -20,19 +19,6 @@ function calculateDaysSince(dateString) {
   const today = new Date();
   const date = new Date(dateString);
   return Math.floor((today - date) / (1000 * 60 * 60 * 24));
-}
-
-/**
- * Helper: Get next milestone target for a play count
- * @param {number} count - Current play count
- * @returns {number|null} Next milestone target or null if past 100
- */
-function getNextMilestoneTarget(count) {
-  if (count < 5) return 5;
-  if (count < 10) return 10;
-  if (count < 25) return 25;
-  if (count < 100) return 100;
-  return null;
 }
 
 /**
@@ -289,7 +275,7 @@ function suggestForNextMilestone(gamePlayData, metric) {
   const milestoneChaseGames = allPlayedGames
     .map(data => {
       const currentValue = getValue(data);
-      const target = getNextMilestoneTarget(currentValue);
+      const target = Milestone.getNextTarget(currentValue);
       if (!target) return null;
       return {
         ...data,
@@ -302,11 +288,10 @@ function suggestForNextMilestone(gamePlayData, metric) {
 
   if (milestoneChaseGames.length === 0) return null;
 
-  // Find the highest value below each milestone (5, 10, 25, 100)
-  const milestones = [5, 10, 25, 100];
+  // Find the highest value below each milestone
   const closestToEachMilestone = [];
 
-  milestones.forEach(milestone => {
+  Milestone.values.forEach(milestone => {
     const gamesUnderThisMilestone = milestoneChaseGames.filter(data => data.target === milestone);
     if (gamesUnderThisMilestone.length > 0) {
       // Find the highest value for this milestone
@@ -316,9 +301,8 @@ function suggestForNextMilestone(gamePlayData, metric) {
   });
 
   // Note: closestToEachMilestone cannot be empty here because:
-  // 1. milestoneChaseGames is non-empty (checked at line 301)
-  // 2. Each game in milestoneChaseGames has a target of 5, 10, 25, or 100
-  // 3. The milestones array contains exactly [5, 10, 25, 100]
+  // 1. milestoneChaseGames is non-empty (checked above)
+  // 2. Each game in milestoneChaseGames has a target from Milestone.values
   // So at least one milestone will match at least one game
 
   // Filter to games at these "closest" values, then select one with sqrt rarity weighting
@@ -568,7 +552,6 @@ function getSuggestedGames(games, plays, isExperimental = false) {
 
 export {
   calculateDaysSince,
-  getNextMilestoneTarget,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
   suggestRecentlyPlayedWithLowSessions,

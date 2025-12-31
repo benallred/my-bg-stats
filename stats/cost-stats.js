@@ -7,13 +7,6 @@ import { isGameOwned, wasCopyAcquiredInYear } from './game-helpers.js';
 import { getMetricValuesThroughYear } from './play-helpers.js';
 
 /**
- * Cost club thresholds (cost per metric unit)
- */
-const CostClub = {
-  FIVE_DOLLAR: 5,
-};
-
-/**
  * Get total cost of all owned copies
  * @param {Array} games - Array of game objects
  * @param {number|null} year - Optional year filter (by acquisition date)
@@ -316,7 +309,6 @@ function getSkippedCostClubCount(games, plays, year, metric, threshold, nextLowe
 }
 
 export {
-  CostClub,
   getTotalCost,
   getCostClubGames,
   getGamesApproachingCostClub,

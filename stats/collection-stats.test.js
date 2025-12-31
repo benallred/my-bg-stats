@@ -4,7 +4,6 @@ import {
   getTotalGamesOwned,
   getTotalExpansions,
   getMilestones,
-  getMilestoneThreshold,
   getCumulativeMilestoneCount,
   calculateMilestoneIncrease,
   getNewMilestoneGames,
@@ -15,6 +14,7 @@ import {
   getAllAcquisitionYears,
   getAvailableYears,
 } from './collection-stats.js';
+import { Milestone } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
@@ -111,36 +111,36 @@ describe('getMilestones', () => {
   describe('plays metric', () => {
     test('returns object with fives, dimes, quarters, centuries', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
-      expect(result).toHaveProperty('fives');
-      expect(result).toHaveProperty('dimes');
-      expect(result).toHaveProperty('quarters');
-      expect(result).toHaveProperty('centuries');
+      expect(result).toHaveProperty('5');
+      expect(result).toHaveProperty('10');
+      expect(result).toHaveProperty('25');
+      expect(result).toHaveProperty('100');
     });
 
     test('categorizes games at exactly 5 plays', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
-      expect(result.fives.length).toBeGreaterThan(0);
+      expect(result[5].length).toBeGreaterThan(0);
     });
 
     test('categorizes games at exactly 10 plays', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
-      expect(result.dimes.length).toBeGreaterThan(0);
+      expect(result[10].length).toBeGreaterThan(0);
     });
 
     test('categorizes games at exactly 25 plays', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
-      expect(result.quarters.length).toBeGreaterThan(0);
+      expect(result[25].length).toBeGreaterThan(0);
     });
 
     test('categorizes games at 100 plays', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
-      expect(result.centuries.length).toBeGreaterThan(0);
+      expect(result[100].length).toBeGreaterThan(0);
     });
 
     test('sorts each category by count descending', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'plays');
-      if (result.centuries.length > 1) {
-        expect(result.centuries[0].count).toBeGreaterThanOrEqual(result.centuries[1].count);
+      if (result[100].length > 1) {
+        expect(result[100][0].count).toBeGreaterThanOrEqual(result[100][1].count);
       }
     });
 
@@ -151,10 +151,10 @@ describe('getMilestones', () => {
 
     test('returns empty arrays for no plays', () => {
       const result = getMilestones(typicalData.games, [], null, 'plays');
-      expect(result.fives).toEqual([]);
-      expect(result.dimes).toEqual([]);
-      expect(result.quarters).toEqual([]);
-      expect(result.centuries).toEqual([]);
+      expect(result[5]).toEqual([]);
+      expect(result[10]).toEqual([]);
+      expect(result[25]).toEqual([]);
+      expect(result[100]).toEqual([]);
     });
 
     test('ignores plays for games not in games array', () => {
@@ -164,15 +164,15 @@ describe('getMilestones', () => {
         ...Array.from({ length: 5 }, (_, i) => ({ gameId: 999, date: `2020-01-0${i + 1}`, durationMin: 60 })),
       ];
       const result = getMilestones(testGames, testPlays, null, 'plays');
-      expect(result.fives).toHaveLength(1);
-      expect(result.fives[0].game.id).toBe(1);
+      expect(result[5]).toHaveLength(1);
+      expect(result[5][0].game.id).toBe(1);
     });
   });
 
   describe('sessions metric', () => {
     test('categorizes games by unique days played', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'sessions');
-      expect(result.fives.length).toBeGreaterThan(0);
+      expect(result[5].length).toBeGreaterThan(0);
     });
 
     test('counts unique dates correctly', () => {
@@ -186,8 +186,8 @@ describe('getMilestones', () => {
         { gameId: 1, date: '2020-01-05', durationMin: 60 },
       ];
       const result = getMilestones(testGames, testPlays, null, 'sessions');
-      expect(result.fives).toHaveLength(1);
-      expect(result.fives[0].count).toBe(5);
+      expect(result[5]).toHaveLength(1);
+      expect(result[5][0].count).toBe(5);
     });
 
     test('filters by year for sessions', () => {
@@ -199,15 +199,15 @@ describe('getMilestones', () => {
   describe('hours metric', () => {
     test('categorizes games by total hours played', () => {
       const result = getMilestones(edgeCasesData.games, edgeCasesData.plays, null, 'hours');
-      expect(result.fives.length).toBeGreaterThan(0);
+      expect(result[5].length).toBeGreaterThan(0);
     });
 
     test('calculates hours from durationMin correctly', () => {
       const testGames = [{ id: 1, name: 'Test Game' }];
       const testPlays = [{ gameId: 1, date: '2020-01-01', durationMin: 300 }];
       const result = getMilestones(testGames, testPlays, null, 'hours');
-      expect(result.fives).toHaveLength(1);
-      expect(result.fives[0].count).toBe(5);
+      expect(result[5]).toHaveLength(1);
+      expect(result[5][0].count).toBe(5);
     });
 
     test('sums hours across multiple plays', () => {
@@ -217,15 +217,15 @@ describe('getMilestones', () => {
         { gameId: 1, date: '2020-01-02', durationMin: 180 },
       ];
       const result = getMilestones(testGames, testPlays, null, 'hours');
-      expect(result.fives).toHaveLength(1);
-      expect(result.fives[0].count).toBe(5);
+      expect(result[5]).toHaveLength(1);
+      expect(result[5][0].count).toBe(5);
     });
 
     test('handles missing duration as 0', () => {
       const testGames = [{ id: 1, name: 'Test Game' }];
       const testPlays = [{ gameId: 1, date: '2020-01-01' }];
       const result = getMilestones(testGames, testPlays, null, 'hours');
-      expect(result.fives).toHaveLength(0);
+      expect(result[5]).toHaveLength(0);
     });
 
     test('filters by year for hours', () => {
@@ -241,25 +241,25 @@ describe('getMilestones', () => {
   });
 });
 
-describe('getMilestoneThreshold', () => {
+describe('Milestone.getThreshold', () => {
   test('returns correct thresholds for fives', () => {
-    expect(getMilestoneThreshold('fives')).toEqual({ min: 5, max: 10 });
+    expect(Milestone.getThreshold(5)).toEqual({ threshold: 5, nextThreshold: 10 });
   });
 
   test('returns correct thresholds for dimes', () => {
-    expect(getMilestoneThreshold('dimes')).toEqual({ min: 10, max: 25 });
+    expect(Milestone.getThreshold(10)).toEqual({ threshold: 10, nextThreshold: 25 });
   });
 
   test('returns correct thresholds for quarters', () => {
-    expect(getMilestoneThreshold('quarters')).toEqual({ min: 25, max: 100 });
+    expect(Milestone.getThreshold(25)).toEqual({ threshold: 25, nextThreshold: 100 });
   });
 
   test('returns correct thresholds for centuries', () => {
-    expect(getMilestoneThreshold('centuries')).toEqual({ min: 100, max: null });
+    expect(Milestone.getThreshold(100)).toEqual({ threshold: 100, nextThreshold: null });
   });
 
-  test('returns default thresholds for unknown milestone type', () => {
-    expect(getMilestoneThreshold('unknown')).toEqual({ min: 0, max: null });
+  test('returns null thresholds for unknown milestone type', () => {
+    expect(Milestone.getThreshold(999)).toEqual({ threshold: null, nextThreshold: null });
   });
 });
 
@@ -291,7 +291,7 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 3, date: '2020-01-09', durationMin: 60 },
         { gameId: 3, date: '2020-01-10', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 'fives');
+      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
       expect(result).toBe(1);
     });
 
@@ -301,7 +301,7 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 1, date: '2020-01-01', durationMin: 60 },
         { gameId: 1, date: '2020-01-02', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 'fives');
+      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
       expect(result).toBe(0);
     });
   });
@@ -312,7 +312,7 @@ describe('getCumulativeMilestoneCount', () => {
       const testPlays = [
         { gameId: 1, date: '2020-01-01', durationMin: 300 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 'fives');
+      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 5);
       expect(result).toBe(1);
     });
 
@@ -321,7 +321,7 @@ describe('getCumulativeMilestoneCount', () => {
       const testPlays = [
         { gameId: 1, date: '2020-01-01', durationMin: 240 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 'fives');
+      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'hours', 5);
       expect(result).toBe(0);
     });
   });
@@ -336,7 +336,7 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 1, date: '2020-01-04', durationMin: 60 },
         { gameId: 1, date: '2020-01-05', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 'fives');
+      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 5);
       expect(result).toBe(1);
     });
 
@@ -348,14 +348,14 @@ describe('getCumulativeMilestoneCount', () => {
         { gameId: 1, date: '2020-01-02', durationMin: 60 },
         { gameId: 1, date: '2020-01-03', durationMin: 60 },
       ];
-      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 'fives');
+      const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'sessions', 5);
       expect(result).toBe(0);
     });
   });
 
   test('returns 0 for empty plays array', () => {
     const testGames = [{ id: 1, name: 'Game 1' }];
-    const result = getCumulativeMilestoneCount(testGames, [], null, 'plays', 'fives');
+    const result = getCumulativeMilestoneCount(testGames, [], null, 'plays', 5);
     expect(result).toBe(0);
   });
 
@@ -369,7 +369,7 @@ describe('getCumulativeMilestoneCount', () => {
       { gameId: 1, date: '2020-01-05', durationMin: 60 },
       { gameId: 999, date: '2020-01-01', durationMin: 60 },
     ];
-    const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 'fives');
+    const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
     expect(result).toBe(1);
   });
 
@@ -382,7 +382,7 @@ describe('getCumulativeMilestoneCount', () => {
       { gameId: 1, date: '2020-01-04' },
       { gameId: 1, date: '2020-01-05' },
     ];
-    const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 'fives');
+    const result = getCumulativeMilestoneCount(testGames, testPlays, null, 'plays', 5);
     expect(result).toBe(1);
   });
 });
@@ -406,7 +406,7 @@ describe('calculateMilestoneIncrease', () => {
         { gameId: 2, date: '2020-01-04', durationMin: 60 },
         { gameId: 2, date: '2020-01-05', durationMin: 60 },
       ];
-      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'plays', 'fives');
+      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'plays', 5);
       expect(result).toBe(1);
     });
 
@@ -420,7 +420,7 @@ describe('calculateMilestoneIncrease', () => {
         { gameId: 1, date: '2020-01-05', durationMin: 60 },
         { gameId: 1, date: '2021-01-01', durationMin: 60 },
       ];
-      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'plays', 'fives');
+      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'plays', 5);
       expect(result).toBe(0);
     });
   });
@@ -432,7 +432,7 @@ describe('calculateMilestoneIncrease', () => {
         { gameId: 1, date: '2020-01-01', durationMin: 180 },
         { gameId: 1, date: '2021-01-01', durationMin: 120 },
       ];
-      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'hours', 'fives');
+      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'hours', 5);
       expect(result).toBe(1);
     });
 
@@ -442,7 +442,7 @@ describe('calculateMilestoneIncrease', () => {
         { gameId: 1, date: '2020-01-01', durationMin: 300 },
         { gameId: 1, date: '2021-01-01', durationMin: 60 },
       ];
-      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'hours', 'fives');
+      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'hours', 5);
       expect(result).toBe(0);
     });
   });
@@ -457,7 +457,7 @@ describe('calculateMilestoneIncrease', () => {
         { gameId: 1, date: '2021-01-01', durationMin: 60 },
         { gameId: 1, date: '2021-01-02', durationMin: 60 },
       ];
-      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'sessions', 'fives');
+      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'sessions', 5);
       expect(result).toBe(1);
     });
 
@@ -471,7 +471,7 @@ describe('calculateMilestoneIncrease', () => {
         { gameId: 1, date: '2020-01-05', durationMin: 60 },
         { gameId: 1, date: '2021-01-01', durationMin: 60 },
       ];
-      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'sessions', 'fives');
+      const result = calculateMilestoneIncrease(testGames, testPlays, 2021, 'sessions', 5);
       expect(result).toBe(0);
     });
   });
@@ -496,7 +496,7 @@ describe('getNewMilestoneGames', () => {
         { gameId: 2, date: '2019-01-04', durationMin: 60 },
         { gameId: 2, date: '2019-01-05', durationMin: 60 },
       ];
-      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 5);
       expect(result.length).toBe(1);
       expect(result[0].game.id).toBe(1);
       expect(result[0].value).toBe(5);
@@ -509,7 +509,7 @@ describe('getNewMilestoneGames', () => {
         { gameId: 1, date: '2020-01-01', durationMin: 60 },
         { gameId: 1, date: '2021-01-01', durationMin: 60 },
       ];
-      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 5);
       expect(result).toEqual([]);
     });
   });
@@ -521,7 +521,7 @@ describe('getNewMilestoneGames', () => {
         { gameId: 1, date: '2020-01-01', durationMin: 180 },
         { gameId: 1, date: '2021-01-01', durationMin: 120 },
       ];
-      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'hours', 'fives');
+      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'hours', 5);
       expect(result.length).toBe(1);
       expect(result[0].game.id).toBe(1);
       expect(result[0].value).toBe(5);
@@ -539,7 +539,7 @@ describe('getNewMilestoneGames', () => {
         { gameId: 1, date: '2021-01-01', durationMin: 60 },
         { gameId: 1, date: '2021-01-02', durationMin: 60 },
       ];
-      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'sessions', 'fives');
+      const result = getNewMilestoneGames(testGames, testPlays, 2021, 'sessions', 5);
       expect(result.length).toBe(1);
       expect(result[0].game.id).toBe(1);
       expect(result[0].value).toBe(5);
@@ -557,7 +557,7 @@ describe('getNewMilestoneGames', () => {
       { gameId: 1, date: '2021-01-03', durationMin: 60 },
       { gameId: 999, date: '2021-01-01', durationMin: 60 },
     ];
-    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 5);
     expect(result.length).toBe(1);
     expect(result[0].game.id).toBe(1);
   });
@@ -571,7 +571,7 @@ describe('getNewMilestoneGames', () => {
       { gameId: 1, date: '2021-01-02' },
       { gameId: 1, date: '2021-01-03' },
     ];
-    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 5);
     expect(result.length).toBe(1);
   });
 
@@ -585,7 +585,7 @@ describe('getNewMilestoneGames', () => {
       { gameId: 1, date: '2021-01-04', durationMin: 60 },
       { gameId: 1, date: '2021-01-05', durationMin: 60 },
     ];
-    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 5);
     expect(result.length).toBe(1);
     expect(result[0].game.id).toBe(1);
     expect(result[0].thisYearValue).toBe(5);
@@ -613,7 +613,7 @@ describe('getNewMilestoneGames', () => {
       { gameId: 2, date: '2021-01-06', durationMin: 60 },
       { gameId: 2, date: '2021-01-07', durationMin: 60 },
     ];
-    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getNewMilestoneGames(testGames, testPlays, 2021, 'plays', 5);
     expect(result.length).toBe(2);
     // Should be sorted by value descending (Game 2 first with 7, then Game 1 with 5)
     expect(result[0].game.id).toBe(2);
@@ -642,7 +642,7 @@ describe('getSkippedMilestoneCount', () => {
       { gameId: 1, date: '2021-01-09', durationMin: 60 },
       { gameId: 1, date: '2021-01-10', durationMin: 60 },
     ];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 5);
     expect(result).toBe(1);
   });
 
@@ -658,14 +658,14 @@ describe('getSkippedMilestoneCount', () => {
       { gameId: 1, date: '2021-01-03', durationMin: 60 },
       { gameId: 1, date: '2021-01-04', durationMin: 60 },
     ];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 5);
     expect(result).toBe(0);
   });
 
   test('returns 0 for centuries (cannot be skipped)', () => {
     const testGames = [{ id: 1, name: 'Game 1' }];
     const testPlays = [];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'centuries');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 100);
     expect(result).toBe(0);
   });
 
@@ -687,7 +687,7 @@ describe('getSkippedMilestoneCount', () => {
         durationMin: 60,
       })),
     ];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'dimes');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 10);
     expect(result).toBe(1);
   });
 
@@ -698,7 +698,7 @@ describe('getSkippedMilestoneCount', () => {
       { gameId: 1, date: '2020-01-01', durationMin: 180 },
       { gameId: 1, date: '2021-01-01', durationMin: 480 },
     ];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'hours', 'fives');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'hours', 5);
     expect(result).toBe(1);
   });
 
@@ -718,7 +718,7 @@ describe('getSkippedMilestoneCount', () => {
       { gameId: 1, date: '2021-01-07', durationMin: 60 },
       { gameId: 1, date: '2021-01-08', durationMin: 60 },
     ];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'sessions', 'fives');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'sessions', 5);
     expect(result).toBe(1);
   });
 
@@ -733,7 +733,7 @@ describe('getSkippedMilestoneCount', () => {
       })),
       { gameId: 1, date: '2021-01-01', durationMin: 60 },
     ];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 5);
     expect(result).toBe(0);
   });
 
@@ -746,7 +746,7 @@ describe('getSkippedMilestoneCount', () => {
       ...Array.from({ length: 3 }, (_, i) => ({ gameId: 999, date: `2020-01-0${i + 1}`, durationMin: 60 })),
       ...Array.from({ length: 10 }, (_, i) => ({ gameId: 999, date: `2021-01-${String(i + 1).padStart(2, '0')}`, durationMin: 60 })),
     ];
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 5);
     expect(result).toBe(1);
   });
 
@@ -758,7 +758,7 @@ describe('getSkippedMilestoneCount', () => {
       date: `2021-01-${String(i + 1).padStart(2, '0')}`,
       durationMin: 60,
     }));
-    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 'fives');
+    const result = getSkippedMilestoneCount(testGames, testPlays, 2021, 'plays', 5);
     expect(result).toBe(1);
   });
 });

@@ -1,6 +1,5 @@
 import { describe, test, expect } from 'vitest';
 import {
-  CostClub,
   getTotalCost,
   getCostClubGames,
   getGamesApproachingCostClub,
@@ -9,14 +8,14 @@ import {
   getNewCostClubGames,
   getSkippedCostClubCount,
 } from './cost-stats.js';
-import { Metric } from './constants.js';
+import { Metric, CostClub } from './constants.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
 
 const typicalData = processData(typicalFixture);
 
 describe('CostClub', () => {
-  test('has FIVE_DOLLAR threshold', () => {
+  test('has FIVE_DOLLAR tier value', () => {
     expect(CostClub.FIVE_DOLLAR).toBe(5);
   });
 });
