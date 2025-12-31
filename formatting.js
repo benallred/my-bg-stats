@@ -52,3 +52,18 @@ export function formatLargeNumber(num) {
     }
     return num.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
+
+/**
+ * Format a cost value as a currency label
+ * - Integer dollar values: "$5", "$1"
+ * - Decimal dollar values: "$2.50"
+ * - Sub-dollar values: "50¢"
+ * @param {number} value - Cost value in dollars
+ * @returns {string} Formatted cost label
+ */
+export function formatCostLabel(value) {
+    if (value >= 1) {
+        return Number.isInteger(value) ? `$${value}` : `$${value.toFixed(2)}`;
+    }
+    return `${value * 100}¢`;
+}

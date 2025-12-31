@@ -16,6 +16,33 @@ describe('CostClub', () => {
   test('has FIVE_DOLLAR tier value', () => {
     expect(CostClub.FIVE_DOLLAR).toBe(5);
   });
+
+  test('has TWO_FIFTY tier value', () => {
+    expect(CostClub.TWO_FIFTY).toBe(2.5);
+  });
+
+  test('has ONE_DOLLAR tier value', () => {
+    expect(CostClub.ONE_DOLLAR).toBe(1);
+  });
+
+  test('has FIFTY_CENTS tier value', () => {
+    expect(CostClub.FIFTY_CENTS).toBe(0.5);
+  });
+
+  test('has descending direction', () => {
+    expect(CostClub.direction).toBe('descending');
+  });
+
+  test('has values in descending order', () => {
+    expect(CostClub.values).toEqual([5, 2.5, 1, 0.5]);
+  });
+
+  test('getThreshold returns correct next threshold for each tier', () => {
+    expect(CostClub.getThreshold(CostClub.FIVE_DOLLAR)).toEqual({ threshold: 5, nextThreshold: 2.5 });
+    expect(CostClub.getThreshold(CostClub.TWO_FIFTY)).toEqual({ threshold: 2.5, nextThreshold: 1 });
+    expect(CostClub.getThreshold(CostClub.ONE_DOLLAR)).toEqual({ threshold: 1, nextThreshold: 0.5 });
+    expect(CostClub.getThreshold(CostClub.FIFTY_CENTS)).toEqual({ threshold: 0.5, nextThreshold: null });
+  });
 });
 
 describe('getTotalCost', () => {
@@ -342,11 +369,11 @@ describe('getCostClubGames', () => {
       copies: [{ statusOwned: true, pricePaid: 1 }],
     }];
     // 12 minutes = 0.2 hours, without cap would be $1/0.2 = $5/hour
-    // With cap, should be $1/hour (price paid), which is in the $2.50 tier
+    // With cap, should be $1/hour (price paid), which is in the $1 tier (range $0.50-$1)
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 12 },
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.TWO_FIFTY);
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.ONE_DOLLAR);
     expect(result.count).toBe(1);
     expect(result.games[0].metricValue).toBeCloseTo(0.2, 5);
     expect(result.games[0].costPerMetric).toBe(1); // Capped at pricePaid, not $5
@@ -487,6 +514,96 @@ describe('getCostClubGames', () => {
     const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, null);
     expect(result.count).toBe(1);
     expect(result.games[0].metricValue).toBe(10);
+  });
+
+  test('TWO_FIFTY tier only includes games between $1 and $2.50', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 20 }],
+    }];
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $2/hour
+    ];
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.TWO_FIFTY);
+    expect(result.count).toBe(1);
+    expect(result.games[0].costPerMetric).toBe(2);
+  });
+
+  test('TWO_FIFTY tier excludes games above $2.50', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 30 }],
+    }];
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $3/hour
+    ];
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.TWO_FIFTY);
+    expect(result.count).toBe(0); // $3/hour is in FIVE_DOLLAR tier, not TWO_FIFTY
+  });
+
+  test('ONE_DOLLAR tier only includes games between 50¢ and $1', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 8 }],
+    }];
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.80/hour
+    ];
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.ONE_DOLLAR);
+    expect(result.count).toBe(1);
+    expect(result.games[0].costPerMetric).toBe(0.8);
+  });
+
+  test('FIFTY_CENTS tier only includes games at 50¢ or less', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 5 }],
+    }];
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.50/hour
+    ];
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIFTY_CENTS);
+    expect(result.count).toBe(1);
+    expect(result.games[0].costPerMetric).toBe(0.5);
+  });
+
+  test('FIFTY_CENTS tier excludes games above 50¢', () => {
+    const games = [{
+      id: 1,
+      name: 'Test Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 6 }],
+    }];
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.60/hour
+    ];
+    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIFTY_CENTS);
+    expect(result.count).toBe(0);
+  });
+
+  test('game in lowest tier is only in that tier range', () => {
+    const games = [{
+      id: 1,
+      name: 'Best Value Game',
+      isBaseGame: true,
+      copies: [{ statusOwned: true, pricePaid: 2 }],
+    }];
+    const plays = [
+      { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.20/hour
+    ];
+    // Should only be in FIFTY_CENTS tier (range is 0 to 0.5)
+    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.FIFTY_CENTS).count).toBe(1);
+    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.ONE_DOLLAR).count).toBe(0);
+    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.TWO_FIFTY).count).toBe(0);
+    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR).count).toBe(0);
   });
 });
 

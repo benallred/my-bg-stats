@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import {
   formatApproximateHours,
+  formatCostLabel,
   formatDateShort,
   formatDateWithWeekday,
   formatLargeNumber,
@@ -79,5 +80,30 @@ describe('formatLargeNumber', () => {
 
   test('handles zero', () => {
     expect(formatLargeNumber(0)).toBe('0.0');
+  });
+});
+
+describe('formatCostLabel', () => {
+  test('formats integer dollar values without decimals', () => {
+    expect(formatCostLabel(5)).toBe('$5');
+    expect(formatCostLabel(1)).toBe('$1');
+    expect(formatCostLabel(10)).toBe('$10');
+  });
+
+  test('formats decimal dollar values with two decimal places', () => {
+    expect(formatCostLabel(2.5)).toBe('$2.50');
+    expect(formatCostLabel(1.99)).toBe('$1.99');
+    expect(formatCostLabel(3.1)).toBe('$3.10');
+  });
+
+  test('formats sub-dollar values as cents', () => {
+    expect(formatCostLabel(0.5)).toBe('50¢');
+    expect(formatCostLabel(0.25)).toBe('25¢');
+    expect(formatCostLabel(0.99)).toBe('99¢');
+  });
+
+  test('handles edge case at $1 boundary', () => {
+    expect(formatCostLabel(1)).toBe('$1');
+    expect(formatCostLabel(0.99)).toBe('99¢');
   });
 });

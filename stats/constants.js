@@ -108,6 +108,8 @@ const Milestone = createTierCollection({
 const CostClub = createTierCollection({
   FIVE_DOLLAR: 5,
   TWO_FIFTY: 2.5,
+  ONE_DOLLAR: 1,
+  FIFTY_CENTS: 0.5,
 }, { direction: 'descending' });
 
 export { Metric, Milestone, CostClub };
