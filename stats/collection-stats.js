@@ -2,9 +2,15 @@
  * Collection statistics - ownership, milestones, diagnostics
  */
 
-import { Metric, Milestone } from './constants.js';
+import { Milestone } from './constants.js';
 import { isGameOwned, wasGameAcquiredInYear } from './game-helpers.js';
-import { isPlayInYear, isPlayInOrBeforeYear, getMetricValuesThroughYear } from './play-helpers.js';
+import { isPlayInYear, getMetricValueFromPlayData } from './play-helpers.js';
+import {
+  countGamesInTier,
+  calculateTierIncrease,
+  getNewTierGames,
+  getSkippedTierCount,
+} from './tier-helpers.js';
 
 /**
  * Get total BGG entries owned (includes expansions and expandalones)
@@ -93,19 +99,30 @@ function getTotalExpansions(games, year = null) {
 }
 
 /**
- * Get metric value from raw play data
- * @param {Object} playData - { playCount, totalMinutes, uniqueDates }
+ * Get milestone value from game and play data
+ * @param {Object} game - Game object (unused for milestones)
+ * @param {Object} playData - Play data from getMetricValuesThroughYear
  * @param {string} metric - Metric type
- * @returns {number} Metric value
+ * @returns {number|null} Metric value or null if no play data
  */
-function getMetricValueFromPlayData(playData, metric) {
-  if (metric === Metric.HOURS) {
-    return playData.totalMinutes / 60;
-  } else if (metric === Metric.SESSIONS) {
-    return playData.uniqueDates.size;
-  } else {
-    return playData.playCount;
-  }
+function getMilestoneValue(game, playData, metric) {
+  if (!playData) return null;
+  return getMetricValueFromPlayData(playData, metric);
+}
+
+/**
+ * Calculate this year's metric value for a game
+ * Note: Called after getMilestoneValue confirms currentPlayData exists
+ * @param {Object} game - Game object (unused for milestones)
+ * @param {Object} currentPlayData - Current year cumulative play data (guaranteed non-null)
+ * @param {Object} previousPlayData - Previous year cumulative play data (may be null)
+ * @param {string} metric - Metric type
+ * @returns {number} This year's metric value
+ */
+function getMilestoneThisYearValue(game, currentPlayData, previousPlayData, metric) {
+  const current = getMetricValueFromPlayData(currentPlayData, metric);
+  const previous = previousPlayData ? getMetricValueFromPlayData(previousPlayData, metric) : 0;
+  return current - previous;
 }
 
 /**
@@ -172,39 +189,15 @@ function getMilestones(games, plays, year, metric) {
  * @returns {number} Count of games within the milestone range
  */
 function getMilestoneCountThroughYear(games, plays, year, metric, milestoneType) {
-  // Calculate metric values per game
-  const metricValuesPerGame = new Map();
-
-  plays.forEach(play => {
-    if (!isPlayInOrBeforeYear(play, year)) return;
-
-    const currentValue = metricValuesPerGame.get(play.gameId) || {
-      playCount: 0,
-      totalMinutes: 0,
-      uniqueDates: new Set(),
-    };
-
-    currentValue.playCount += 1;
-    currentValue.totalMinutes += (play.durationMin || 0);
-    currentValue.uniqueDates.add(play.date);
-
-    metricValuesPerGame.set(play.gameId, currentValue);
+  return countGamesInTier({
+    games,
+    plays,
+    year,
+    metric,
+    tierCollection: Milestone,
+    tier: milestoneType,
+    getGameValue: getMilestoneValue,
   });
-
-  // Count games within the threshold range
-  let count = 0;
-  metricValuesPerGame.forEach((value, gameId) => {
-    const game = games.find(g => g.id === gameId);
-    if (!game) return;
-
-    const metricValue = getMetricValueFromPlayData(value, metric);
-
-    if (Milestone.isValueInTier(metricValue, milestoneType)) {
-      count++;
-    }
-  });
-
-  return count;
 }
 
 /**
@@ -217,13 +210,15 @@ function getMilestoneCountThroughYear(games, plays, year, metric, milestoneType)
  * @returns {number} Increase in milestone count (can be negative)
  */
 function calculateMilestoneIncrease(games, plays, year, metric, milestoneType) {
-  // Calculate current year count
-  const currentYearCount = getMilestoneCountThroughYear(games, plays, year, metric, milestoneType);
-
-  // Calculate previous year count
-  const previousYearCount = getMilestoneCountThroughYear(games, plays, year - 1, metric, milestoneType);
-
-  return currentYearCount - previousYearCount;
+  return calculateTierIncrease({
+    games,
+    plays,
+    year,
+    metric,
+    tierCollection: Milestone,
+    tier: milestoneType,
+    getGameValue: getMilestoneValue,
+  });
 }
 
 /**
@@ -236,57 +231,16 @@ function calculateMilestoneIncrease(games, plays, year, metric, milestoneType) {
  * @returns {Array} Array of games newly reaching this milestone threshold
  */
 function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
-  // Calculate metric values per game through current and previous years
-  const metricValuesCurrentYear = getMetricValuesThroughYear(plays, year);
-  const metricValuesPreviousYear = getMetricValuesThroughYear(plays, year - 1);
-
-  // Find games that crossed the threshold this year
-  const newMilestoneGames = [];
-
-  metricValuesCurrentYear.forEach((currentValue, gameId) => {
-    const game = games.find(g => g.id === gameId);
-    if (!game) return;
-
-    const currentCount = getMetricValueFromPlayData(currentValue, metric);
-
-    // Check if game is within the milestone range by current year
-    if (!Milestone.isValueInTier(currentCount, milestoneType)) return;
-
-    // Calculate previous year metric value
-    const previousValue = metricValuesPreviousYear.get(gameId);
-    const previousCount = previousValue ? getMetricValueFromPlayData(previousValue, metric) : 0;
-
-    // Check if game was already in this milestone range last year
-    const wasInRange = Milestone.isValueInTier(previousCount, milestoneType);
-
-    if (!wasInRange) {
-      // Calculate this year's value for this game
-      const thisYearPlays = plays.filter(play => {
-        const playYear = parseInt(play.date.substring(0, 4));
-        return playYear === year && play.gameId === gameId;
-      });
-
-      let thisYearValue;
-      if (metric === Metric.HOURS) {
-        thisYearValue = thisYearPlays.reduce((sum, play) => sum + (play.durationMin / 60), 0);
-      } else if (metric === Metric.SESSIONS) {
-        thisYearValue = new Set(thisYearPlays.map(play => play.date)).size;
-      } else {
-        thisYearValue = thisYearPlays.length;
-      }
-
-      newMilestoneGames.push({
-        game: game,
-        value: currentCount,
-        thisYearValue: thisYearValue,
-      });
-    }
+  return getNewTierGames({
+    games,
+    plays,
+    year,
+    metric,
+    tierCollection: Milestone,
+    tier: milestoneType,
+    getGameValue: getMilestoneValue,
+    getThisYearValue: getMilestoneThisYearValue,
   });
-
-  // Sort by value descending
-  newMilestoneGames.sort((a, b) => b.value - a.value);
-
-  return newMilestoneGames;
 }
 
 /**
@@ -301,37 +255,15 @@ function getNewMilestoneGames(games, plays, year, metric, milestoneType) {
  * @returns {number} Count of games that skipped this milestone
  */
 function getSkippedMilestoneCount(games, plays, year, metric, milestoneType) {
-  // Last tier can't be skipped (no higher milestone)
-  const { threshold, nextThreshold } = Milestone.getThreshold(milestoneType);
-  if (nextThreshold === null) return 0;
-
-  // Calculate metric values per game through current and previous years
-  const metricValuesCurrentYear = getMetricValuesThroughYear(plays, year);
-  const metricValuesPreviousYear = getMetricValuesThroughYear(plays, year - 1);
-
-  // Count games that skipped this milestone
-  let skippedCount = 0;
-
-  metricValuesCurrentYear.forEach((currentValue, gameId) => {
-    const game = games.find(g => g.id === gameId);
-    if (!game) return;
-
-    const currentCount = getMetricValueFromPlayData(currentValue, metric);
-
-    // Game must be above the max threshold (jumped over the range)
-    if (currentCount < nextThreshold) return;
-
-    // Calculate previous year metric value
-    const previousValue = metricValuesPreviousYear.get(gameId);
-    const previousCount = previousValue ? getMetricValueFromPlayData(previousValue, metric) : 0;
-
-    // Game must have been below the min threshold at end of previous year
-    if (previousCount < threshold) {
-      skippedCount++;
-    }
+  return getSkippedTierCount({
+    games,
+    plays,
+    year,
+    metric,
+    tierCollection: Milestone,
+    tier: milestoneType,
+    getGameValue: getMilestoneValue,
   });
-
-  return skippedCount;
 }
 
 /**

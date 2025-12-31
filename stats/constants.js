@@ -57,6 +57,18 @@ function createTierCollection(tiers, { direction }) {
     }
   };
 
+  // isValueAtOrBeyondTier: check if value is at or beyond tier threshold (cumulative membership)
+  collection.isValueAtOrBeyondTier = (value, tier) => {
+    const { threshold } = collection.getThreshold(tier);
+    if (threshold === null) return false;
+
+    if (direction === 'ascending') {
+      return value >= threshold;
+    } else {
+      return value <= threshold;
+    }
+  };
+
   // getTierForValue: find which tier a value falls into
   collection.getTierForValue = (value) => {
     for (const tier of values) {

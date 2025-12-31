@@ -1,5 +1,12 @@
 import { describe, test, expect } from 'vitest';
-import { isPlayInYear, isPlayInOrBeforeYear, filterPlaysByYear, getMetricValuesThroughYear } from './play-helpers.js';
+import {
+  isPlayInYear,
+  isPlayInOrBeforeYear,
+  filterPlaysByYear,
+  getMetricValuesThroughYear,
+  getMetricValueFromPlayData,
+} from './play-helpers.js';
+import { Metric } from './constants.js';
 
 describe('isPlayInYear', () => {
   const play2023 = { date: '2023-06-15', gameId: 1 };
@@ -184,5 +191,49 @@ describe('getMetricValuesThroughYear', () => {
     const result = getMetricValuesThroughYear(playsWithUndefined);
     expect(result.get(1).totalMinutes).toBe(60);
     expect(result.get(1).playCount).toBe(2);
+  });
+});
+
+describe('getMetricValueFromPlayData', () => {
+  const playData = {
+    playCount: 10,
+    totalMinutes: 300,
+    uniqueDates: new Set(['2023-01-01', '2023-01-02', '2023-01-03']),
+  };
+
+  test('returns hours for HOURS metric', () => {
+    expect(getMetricValueFromPlayData(playData, Metric.HOURS)).toBe(5);
+  });
+
+  test('returns session count for SESSIONS metric', () => {
+    expect(getMetricValueFromPlayData(playData, Metric.SESSIONS)).toBe(3);
+  });
+
+  test('returns play count for PLAYS metric', () => {
+    expect(getMetricValueFromPlayData(playData, Metric.PLAYS)).toBe(10);
+  });
+
+  test('defaults to plays for unknown metric', () => {
+    expect(getMetricValueFromPlayData(playData, 'unknown')).toBe(10);
+  });
+
+  test('handles zero values', () => {
+    const zeroData = {
+      playCount: 0,
+      totalMinutes: 0,
+      uniqueDates: new Set(),
+    };
+    expect(getMetricValueFromPlayData(zeroData, Metric.HOURS)).toBe(0);
+    expect(getMetricValueFromPlayData(zeroData, Metric.SESSIONS)).toBe(0);
+    expect(getMetricValueFromPlayData(zeroData, Metric.PLAYS)).toBe(0);
+  });
+
+  test('handles fractional hours', () => {
+    const fractionalData = {
+      playCount: 1,
+      totalMinutes: 90,
+      uniqueDates: new Set(['2023-01-01']),
+    };
+    expect(getMetricValueFromPlayData(fractionalData, Metric.HOURS)).toBe(1.5);
   });
 });

@@ -56,6 +56,23 @@ describe('Milestone Tier Collection', () => {
     expect(Milestone.isValueInTier(10, 999)).toBe(false);
   });
 
+  test('isValueAtOrBeyondTier returns true for values at or above threshold (ascending)', () => {
+    expect(Milestone.isValueAtOrBeyondTier(5, 5)).toBe(true);
+    expect(Milestone.isValueAtOrBeyondTier(10, 5)).toBe(true);
+    expect(Milestone.isValueAtOrBeyondTier(100, 5)).toBe(true);
+    expect(Milestone.isValueAtOrBeyondTier(10, 10)).toBe(true);
+    expect(Milestone.isValueAtOrBeyondTier(25, 10)).toBe(true);
+  });
+
+  test('isValueAtOrBeyondTier returns false for values below threshold (ascending)', () => {
+    expect(Milestone.isValueAtOrBeyondTier(4, 5)).toBe(false);
+    expect(Milestone.isValueAtOrBeyondTier(9, 10)).toBe(false);
+  });
+
+  test('isValueAtOrBeyondTier returns false for unknown tier', () => {
+    expect(Milestone.isValueAtOrBeyondTier(10, 999)).toBe(false);
+  });
+
   test('getTierForValue returns correct tier', () => {
     expect(Milestone.getTierForValue(5)).toBe(5);
     expect(Milestone.getTierForValue(9)).toBe(5);
@@ -128,6 +145,25 @@ describe('CostClub Tier Collection', () => {
 
   test('isValueInTier returns false for unknown tier', () => {
     expect(CostClub.isValueInTier(3, 999)).toBe(false);
+  });
+
+  test('isValueAtOrBeyondTier returns true for values at or below threshold (descending)', () => {
+    expect(CostClub.isValueAtOrBeyondTier(5, 5)).toBe(true);
+    expect(CostClub.isValueAtOrBeyondTier(4, 5)).toBe(true);
+    expect(CostClub.isValueAtOrBeyondTier(2.5, 5)).toBe(true);
+    expect(CostClub.isValueAtOrBeyondTier(1, 5)).toBe(true);
+    expect(CostClub.isValueAtOrBeyondTier(2.5, 2.5)).toBe(true);
+    expect(CostClub.isValueAtOrBeyondTier(1, 2.5)).toBe(true);
+  });
+
+  test('isValueAtOrBeyondTier returns false for values above threshold (descending)', () => {
+    expect(CostClub.isValueAtOrBeyondTier(6, 5)).toBe(false);
+    expect(CostClub.isValueAtOrBeyondTier(10, 5)).toBe(false);
+    expect(CostClub.isValueAtOrBeyondTier(3, 2.5)).toBe(false);
+  });
+
+  test('isValueAtOrBeyondTier returns false for unknown tier', () => {
+    expect(CostClub.isValueAtOrBeyondTier(3, 999)).toBe(false);
   });
 
   test('getTierForValue works with descending direction', () => {

@@ -2,6 +2,8 @@
  * Play helper functions for filtering and year checks
  */
 
+import { Metric } from './constants.js';
+
 /**
  * Check if a play occurred in a specific year
  * @param {Object} play - Play object with date property
@@ -64,4 +66,28 @@ function getMetricValuesThroughYear(plays, year = null) {
   return metricValues;
 }
 
-export { isPlayInYear, isPlayInOrBeforeYear, filterPlaysByYear, getMetricValuesThroughYear };
+/**
+ * Get metric value from raw play data
+ * @param {Object} playData - { playCount, totalMinutes, uniqueDates }
+ * @param {string} metric - Metric type
+ * @returns {number} Metric value
+ */
+function getMetricValueFromPlayData(playData, metric) {
+  switch (metric) {
+    case Metric.HOURS:
+      return playData.totalMinutes / 60;
+    case Metric.SESSIONS:
+      return playData.uniqueDates.size;
+    case Metric.PLAYS:
+    default:
+      return playData.playCount;
+  }
+}
+
+export {
+  isPlayInYear,
+  isPlayInOrBeforeYear,
+  filterPlaysByYear,
+  getMetricValuesThroughYear,
+  getMetricValueFromPlayData,
+};
