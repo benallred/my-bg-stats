@@ -1096,6 +1096,12 @@ function updateCostAnalysisStats() {
     document.querySelector('#total-cost .stat-value').textContent =
         `$${totalCostValue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}${suffix}`;
 
+    // Update Total Cost description based on year filter
+    const totalCostDescription = currentYear
+        ? `Sum of copies acquired in ${currentYear}`
+        : 'Sum of all owned copies';
+    document.getElementById('total-cost-description').textContent = totalCostDescription;
+
     // Update cost club cards
     const clubData = [
         { id: 'five-dollar-club', data: statsCache.fiveDollarClubData },
