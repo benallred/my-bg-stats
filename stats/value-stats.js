@@ -1,8 +1,8 @@
 /**
- * Cost statistics - price per play, cost clubs
+ * Value statistics - price per play, value clubs
  */
 
-import { CostClub } from './constants.js';
+import { ValueClub } from './constants.js';
 import { isGameOwned, wasCopyAcquiredInYear } from './game-helpers.js';
 import { getMetricValueFromPlayData } from './play-helpers.js';
 import {
@@ -14,7 +14,7 @@ import {
 
 /**
  * Get total price paid for owned copies of a game
- * Note: Assumes game passes costClubGameFilter (has owned copies)
+ * Note: Assumes game passes valueClubGameFilter (has owned copies)
  * @param {Object} game - Game object
  * @returns {number|null} Total price paid or null if no price data
  */
@@ -93,14 +93,14 @@ function getTotalCost(games, year = null) {
 }
 
 /**
- * Get cost club value (cost per metric) for a game
- * Note: Assumes game passes costClubGameFilter (owned base game)
+ * Get value club value (cost per metric) for a game
+ * Note: Assumes game passes valueClubGameFilter (owned base game)
  * @param {Object} game - Game object
  * @param {Object} playData - Play data from getMetricValuesThroughYear
  * @param {string} metric - Metric type
  * @returns {number|null} Cost per metric value or null if not calculable
  */
-function getCostClubValue(game, playData, metric) {
+function getValueClubValue(game, playData, metric) {
   const pricePaid = getGamePricePaid(game);
   if (pricePaid === null) return null;
 
@@ -113,23 +113,23 @@ function getCostClubValue(game, playData, metric) {
 }
 
 /**
- * Game filter for cost club (owned base games)
+ * Game filter for value club (owned base games)
  * @param {Object} game - Game object
- * @returns {boolean} true if game is eligible for cost club
+ * @returns {boolean} true if game is eligible for value club
  */
-function costClubGameFilter(game) {
+function valueClubGameFilter(game) {
   return game.isBaseGame && isGameOwned(game);
 }
 
 /**
- * Build cost club game details from play data
+ * Build value club game details from play data
  * @param {Object} game - Game object
  * @param {Object} playData - Play data from getMetricValuesThroughYear
  * @param {number} costPerMetric - Cost per metric value
  * @param {string} metric - Metric type
  * @returns {Object} { game, metricValue, costPerMetric, pricePaid }
  */
-function getCostClubGameDetails(game, playData, costPerMetric, metric) {
+function getValueClubGameDetails(game, playData, costPerMetric, metric) {
   const metricValue = getMetricValueFromPlayData(playData, metric);
   const pricePaid = getGamePricePaid(game);
   return {
@@ -141,22 +141,22 @@ function getCostClubGameDetails(game, playData, costPerMetric, metric) {
 }
 
 /**
- * Calculate this year's metric value for a game (for cost club)
- * Note: Called after getCostClubValue confirms currentPlayData exists
+ * Calculate this year's metric value for a game (for value club)
+ * Note: Called after getValueClubValue confirms currentPlayData exists
  * @param {Object} game - Game object (unused)
  * @param {Object} currentPlayData - Current year cumulative play data (guaranteed non-null)
  * @param {Object} previousPlayData - Previous year cumulative play data (may be null)
  * @param {string} metric - Metric type
  * @returns {number} This year's metric value
  */
-function getCostClubThisYearValue(game, currentPlayData, previousPlayData, metric) {
+function getValueClubThisYearValue(game, currentPlayData, previousPlayData, metric) {
   const current = getMetricValueFromPlayData(currentPlayData, metric);
   const previous = previousPlayData ? getMetricValueFromPlayData(previousPlayData, metric) : 0;
   return current - previous;
 }
 
 /**
- * Build new cost club game details (includes thisYearMetricValue)
+ * Build new value club game details (includes thisYearMetricValue)
  * @param {Object} game - Game object
  * @param {Object} playData - Play data from getMetricValuesThroughYear
  * @param {number} costPerMetric - Cost per metric value
@@ -164,7 +164,7 @@ function getCostClubThisYearValue(game, currentPlayData, previousPlayData, metri
  * @param {string} metric - Metric type
  * @returns {Object} { game, metricValue, costPerMetric, pricePaid, thisYearMetricValue }
  */
-function getNewCostClubGameDetails(game, playData, costPerMetric, thisYearMetricValue, metric) {
+function getNewValueClubGameDetails(game, playData, costPerMetric, thisYearMetricValue, metric) {
   const metricValue = getMetricValueFromPlayData(playData, metric);
   const pricePaid = getGamePricePaid(game);
   return {
@@ -177,7 +177,7 @@ function getNewCostClubGameDetails(game, playData, costPerMetric, thisYearMetric
 }
 
 /**
- * Get games in the cost club (cost per metric <= threshold)
+ * Get games in the value club (cost per metric <= threshold)
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
  * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
@@ -185,17 +185,17 @@ function getNewCostClubGameDetails(game, playData, costPerMetric, thisYearMetric
  * @param {number|null} year - Optional year filter
  * @returns {Object} { count, games }
  */
-function getCostClubGames(games, plays, metric, threshold, year = null) {
+function getValueClubGames(games, plays, metric, threshold, year = null) {
   const clubGames = getGamesInTier({
     games,
     plays,
     year,
     metric,
-    tierCollection: CostClub,
+    tierCollection: ValueClub,
     tier: threshold,
-    getGameValue: getCostClubValue,
-    gameFilter: costClubGameFilter,
-    getGameDetails: getCostClubGameDetails,
+    getGameValue: getValueClubValue,
+    gameFilter: valueClubGameFilter,
+    getGameDetails: getValueClubGameDetails,
   });
 
   return {
@@ -205,29 +205,29 @@ function getCostClubGames(games, plays, metric, threshold, year = null) {
 }
 
 /**
- * Calculate the increase in cost club membership for a specific year
+ * Calculate the increase in value club membership for a specific year
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
  * @param {number} year - Year to analyze
  * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
  * @param {number} threshold - Cost per metric threshold
- * @returns {number} Increase in cost club membership (can be negative)
+ * @returns {number} Increase in value club membership (can be negative)
  */
-function calculateCostClubIncrease(games, plays, year, metric, threshold) {
+function calculateValueClubIncrease(games, plays, year, metric, threshold) {
   return calculateTierIncrease({
     games,
     plays,
     year,
     metric,
-    tierCollection: CostClub,
+    tierCollection: ValueClub,
     tier: threshold,
-    getGameValue: getCostClubValue,
-    gameFilter: costClubGameFilter,
+    getGameValue: getValueClubValue,
+    gameFilter: valueClubGameFilter,
   });
 }
 
 /**
- * Get games that newly entered cost club during a specific year
+ * Get games that newly entered value club during a specific year
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
  * @param {number} year - Year to analyze
@@ -235,23 +235,23 @@ function calculateCostClubIncrease(games, plays, year, metric, threshold) {
  * @param {number} threshold - Cost per metric threshold
  * @returns {Array} Array of { game, metricValue, costPerMetric, pricePaid, thisYearMetricValue }
  */
-function getNewCostClubGames(games, plays, year, metric, threshold) {
+function getNewValueClubGames(games, plays, year, metric, threshold) {
   return getNewTierGames({
     games,
     plays,
     year,
     metric,
-    tierCollection: CostClub,
+    tierCollection: ValueClub,
     tier: threshold,
-    getGameValue: getCostClubValue,
-    gameFilter: costClubGameFilter,
-    getThisYearValue: getCostClubThisYearValue,
-    getGameDetails: getNewCostClubGameDetails,
+    getGameValue: getValueClubValue,
+    gameFilter: valueClubGameFilter,
+    getThisYearValue: getValueClubThisYearValue,
+    getGameDetails: getNewValueClubGameDetails,
   });
 }
 
 /**
- * Get count of games that skipped over a cost club threshold entirely
+ * Get count of games that skipped over a value club threshold entirely
  * A game skips when it goes from above threshold to below next-lower-threshold in one year
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
@@ -261,7 +261,7 @@ function getNewCostClubGames(games, plays, year, metric, threshold) {
  * @param {number|null} nextLowerThreshold - Next lower threshold (null if none exists)
  * @returns {number} Count of games that skipped this threshold
  */
-function getSkippedCostClubCount(games, plays, year, metric, threshold, nextLowerThreshold = null) {
+function getSkippedValueClubCount(games, plays, year, metric, threshold, nextLowerThreshold = null) {
   // If no lower threshold exists, nothing can be skipped
   if (nextLowerThreshold === null) return 0;
 
@@ -270,17 +270,17 @@ function getSkippedCostClubCount(games, plays, year, metric, threshold, nextLowe
     plays,
     year,
     metric,
-    tierCollection: CostClub,
+    tierCollection: ValueClub,
     tier: threshold,
-    getGameValue: getCostClubValue,
-    gameFilter: costClubGameFilter,
+    getGameValue: getValueClubValue,
+    gameFilter: valueClubGameFilter,
   });
 }
 
 export {
   getTotalCost,
-  getCostClubGames,
-  calculateCostClubIncrease,
-  getNewCostClubGames,
-  getSkippedCostClubCount,
+  getValueClubGames,
+  calculateValueClubIncrease,
+  getNewValueClubGames,
+  getSkippedValueClubCount,
 };

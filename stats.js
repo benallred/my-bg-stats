@@ -12,4 +12,4 @@ export * from './stats/collection-stats.js';
 export * from './stats/suggestions.js';
 export * from './stats/year-review.js';
 export * from './stats/social-stats.js';
-export * from './stats/cost-stats.js';
+export * from './stats/value-stats.js';

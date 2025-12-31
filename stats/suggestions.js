@@ -2,7 +2,7 @@
  * Game suggestion algorithms
  */
 
-import { Metric, Milestone, CostClub } from './constants.js';
+import { Metric, Milestone, ValueClub } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import {
   calculateTraditionalHIndex,
@@ -341,13 +341,13 @@ function suggestForNextMilestone(gamePlayData, metric) {
 }
 
 /**
- * Suggestion Algorithm: Game closest to joining the cost club
+ * Suggestion Algorithm: Game closest to joining the value club
  * @param {Map} gamePlayData - Map of game play data (enriched with pricePaid)
  * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
  * @param {number} threshold - Cost per metric threshold
  * @returns {Object|null} Suggestion object or null
  */
-function suggestForCostClub(gamePlayData, metric, threshold) {
+function suggestForValueClub(gamePlayData, metric, threshold) {
   const candidates = [];
 
   gamePlayData.forEach((data) => {
@@ -519,10 +519,10 @@ function getSuggestedGames(games, plays, isExperimental = false) {
     suggestForNextMilestone(gamePlayData, Metric.HOURS),        // Almost a milestone (hours)
     suggestForNextMilestone(gamePlayData, Metric.SESSIONS),    // Almost a milestone (sessions)
     suggestForNextMilestone(gamePlayData, Metric.PLAYS),       // Almost a milestone (plays)
-    // Cost club suggestions (experimental) - one per metric type
-    isExperimental ? suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR) : null,
-    isExperimental ? suggestForCostClub(gamePlayData, Metric.SESSIONS, CostClub.FIVE_DOLLAR) : null,
-    isExperimental ? suggestForCostClub(gamePlayData, Metric.PLAYS, CostClub.FIVE_DOLLAR) : null,
+    // Value club suggestions (experimental) - one per metric type
+    isExperimental ? suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR) : null,
+    isExperimental ? suggestForValueClub(gamePlayData, Metric.SESSIONS, ValueClub.FIVE_DOLLAR) : null,
+    isExperimental ? suggestForValueClub(gamePlayData, Metric.PLAYS, ValueClub.FIVE_DOLLAR) : null,
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData),                       // Shelf of shame
   ].filter(suggestion => suggestion !== null);
@@ -561,7 +561,7 @@ export {
   suggestForNextTraditionalHIndex,
   suggestForNextHourHIndex,
   suggestForNextMilestone,
-  suggestForCostClub,
+  suggestForValueClub,
   suggestNeverPlayedGame,
   getSuggestedGames,
 };

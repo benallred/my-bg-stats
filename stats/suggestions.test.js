@@ -3,10 +3,10 @@ import {
   calculateDaysSince,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
-  suggestForCostClub,
+  suggestForValueClub,
   getSuggestedGames,
 } from './suggestions.js';
-import { Metric, Milestone, CostClub } from './constants.js';
+import { Metric, Milestone, ValueClub } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
@@ -340,7 +340,7 @@ describe('Suggestion Algorithms', () => {
     });
   });
 
-  describe('suggestForCostClub', () => {
+  describe('suggestForValueClub', () => {
     test('returns null when no candidates have price data', () => {
       const gamePlayData = new Map();
       gamePlayData.set(1, {
@@ -351,7 +351,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: null,
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
       expect(result).toBeNull();
     });
 
@@ -365,7 +365,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 5,
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
       expect(result).toBeNull();
     });
 
@@ -379,7 +379,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 50,
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
       expect(result).not.toBeNull();
       expect(result.game.name).toBe('Almost There Game');
       expect(result.reason).toBe('Join the $5/hour club');
@@ -397,7 +397,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 25, // $25 / 4 sessions = $6.25/session
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.SESSIONS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.SESSIONS, ValueClub.FIVE_DOLLAR);
       expect(result).not.toBeNull();
       expect(result.reason).toBe('Join the $5/session club');
       expect(result.stat).toContain('/session');
@@ -413,7 +413,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 25, // $25 / 4 plays = $6.25/play
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.PLAYS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.PLAYS, ValueClub.FIVE_DOLLAR);
       expect(result).not.toBeNull();
       expect(result.reason).toBe('Join the $5/play club');
       expect(result.stat).toContain('/play');
@@ -446,7 +446,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 100,
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
       expect(result).not.toBeNull();
       // Should only select from games with floor(additionalNeeded) = 2
       expect(['Close Game', 'Also Close Game']).toContain(result.game.name);
@@ -462,7 +462,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 50,
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
       expect(result).toBeNull();
     });
 
@@ -485,7 +485,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 50,
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
       expect(result).not.toBeNull();
       expect(result.game.name).toBe('Regular Game');
     });
@@ -500,13 +500,13 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 50,
       });
 
-      const result = suggestForCostClub(gamePlayData, Metric.HOURS, CostClub.FIVE_DOLLAR);
+      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
       expect(result).toBeNull();
     });
   });
 
   describe('getSuggestedGames with isExperimental', () => {
-    test('includes cost club suggestions when isExperimental is true', () => {
+    test('includes value club suggestions when isExperimental is true', () => {
       const testGames = [
         {
           id: 1,
@@ -523,11 +523,11 @@ describe('Suggestion Algorithms', () => {
       ];
 
       const suggestions = getSuggestedGames(testGames, testPlays, true);
-      // May or may not have a cost club suggestion depending on game data
+      // May or may not have a value club suggestion depending on game data
       expect(Array.isArray(suggestions)).toBe(true);
     });
 
-    test('does not include cost club suggestions when isExperimental is false', () => {
+    test('does not include value club suggestions when isExperimental is false', () => {
       const testGames = [
         {
           id: 1,
@@ -543,14 +543,14 @@ describe('Suggestion Algorithms', () => {
       ];
 
       const suggestions = getSuggestedGames(testGames, testPlays, false);
-      const costClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
-      expect(costClubSuggestion).toBeUndefined();
+      const valueClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
+      expect(valueClubSuggestion).toBeUndefined();
     });
 
     test('defaults isExperimental to false', () => {
       const suggestions = getSuggestedGames(typicalData.games, typicalData.plays);
-      const costClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
-      expect(costClubSuggestion).toBeUndefined();
+      const valueClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
+      expect(valueClubSuggestion).toBeUndefined();
     });
 
   });

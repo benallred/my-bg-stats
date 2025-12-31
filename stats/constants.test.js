@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { Metric, Milestone, CostClub } from './constants.js';
+import { Metric, Milestone, ValueClub } from './constants.js';
 
 describe('Metric Constants', () => {
   test('exports HOURS, SESSIONS, PLAYS', () => {
@@ -104,24 +104,24 @@ describe('Milestone Tier Collection', () => {
   });
 });
 
-describe('CostClub Tier Collection', () => {
+describe('ValueClub Tier Collection', () => {
   test('has descending direction', () => {
-    expect(CostClub.direction).toBe('descending');
+    expect(ValueClub.direction).toBe('descending');
   });
 
   test('has values sorted descending', () => {
-    const values = CostClub.values;
+    const values = ValueClub.values;
     for (let i = 0; i < values.length - 1; i++) {
       expect(values[i]).toBeGreaterThan(values[i + 1]);
     }
   });
 
   test('getThreshold returns threshold and nextThreshold for each tier', () => {
-    CostClub.values.forEach((tier, index) => {
-      const result = CostClub.getThreshold(tier);
+    ValueClub.values.forEach((tier, index) => {
+      const result = ValueClub.getThreshold(tier);
       expect(result.threshold).toBe(tier);
-      if (index < CostClub.values.length - 1) {
-        expect(result.nextThreshold).toBe(CostClub.values[index + 1]);
+      if (index < ValueClub.values.length - 1) {
+        expect(result.nextThreshold).toBe(ValueClub.values[index + 1]);
       } else {
         expect(result.nextThreshold).toBeNull();
       }
@@ -129,77 +129,77 @@ describe('CostClub Tier Collection', () => {
   });
 
   test('getThreshold returns null for unknown tier', () => {
-    expect(CostClub.getThreshold(999)).toEqual({ threshold: null, nextThreshold: null });
+    expect(ValueClub.getThreshold(999)).toEqual({ threshold: null, nextThreshold: null });
   });
 
   test('isValueInTier returns true for value at threshold', () => {
-    CostClub.values.forEach(tier => {
-      expect(CostClub.isValueInTier(tier, tier)).toBe(true);
+    ValueClub.values.forEach(tier => {
+      expect(ValueClub.isValueInTier(tier, tier)).toBe(true);
     });
   });
 
   test('isValueInTier respects tier boundaries (descending)', () => {
     // For each tier (except last), values at next threshold belong to next tier
-    CostClub.values.forEach((tier) => {
-      const { nextThreshold } = CostClub.getThreshold(tier);
+    ValueClub.values.forEach((tier) => {
+      const { nextThreshold } = ValueClub.getThreshold(tier);
       if (nextThreshold !== null) {
         // Value exactly at nextThreshold belongs to next tier, not current
-        expect(CostClub.isValueInTier(nextThreshold, tier)).toBe(false);
+        expect(ValueClub.isValueInTier(nextThreshold, tier)).toBe(false);
         // Value just above nextThreshold belongs to current tier
-        expect(CostClub.isValueInTier(nextThreshold + 0.01, tier)).toBe(true);
+        expect(ValueClub.isValueInTier(nextThreshold + 0.01, tier)).toBe(true);
       }
     });
   });
 
   test('isValueInTier returns false for values above first threshold', () => {
-    const firstTier = CostClub.values[0];
-    expect(CostClub.isValueInTier(firstTier + 1, firstTier)).toBe(false);
+    const firstTier = ValueClub.values[0];
+    expect(ValueClub.isValueInTier(firstTier + 1, firstTier)).toBe(false);
   });
 
   test('isValueInTier returns false for unknown tier', () => {
-    expect(CostClub.isValueInTier(3, 999)).toBe(false);
+    expect(ValueClub.isValueInTier(3, 999)).toBe(false);
   });
 
   test('isValueAtOrBeyondTier returns true for values at or below threshold (descending)', () => {
-    CostClub.values.forEach(tier => {
-      expect(CostClub.isValueAtOrBeyondTier(tier, tier)).toBe(true);
-      expect(CostClub.isValueAtOrBeyondTier(tier - 0.1, tier)).toBe(true);
+    ValueClub.values.forEach(tier => {
+      expect(ValueClub.isValueAtOrBeyondTier(tier, tier)).toBe(true);
+      expect(ValueClub.isValueAtOrBeyondTier(tier - 0.1, tier)).toBe(true);
     });
   });
 
   test('isValueAtOrBeyondTier returns false for values above threshold (descending)', () => {
-    CostClub.values.forEach(tier => {
-      expect(CostClub.isValueAtOrBeyondTier(tier + 1, tier)).toBe(false);
+    ValueClub.values.forEach(tier => {
+      expect(ValueClub.isValueAtOrBeyondTier(tier + 1, tier)).toBe(false);
     });
   });
 
   test('isValueAtOrBeyondTier returns false for unknown tier', () => {
-    expect(CostClub.isValueAtOrBeyondTier(3, 999)).toBe(false);
+    expect(ValueClub.isValueAtOrBeyondTier(3, 999)).toBe(false);
   });
 
   test('getTierForValue assigns values to correct tiers (descending)', () => {
     // Value at each threshold belongs to that tier
-    CostClub.values.forEach(tier => {
-      expect(CostClub.getTierForValue(tier)).toBe(tier);
+    ValueClub.values.forEach(tier => {
+      expect(ValueClub.getTierForValue(tier)).toBe(tier);
     });
     // Value above first threshold returns null
-    expect(CostClub.getTierForValue(CostClub.values[0] + 1)).toBeNull();
+    expect(ValueClub.getTierForValue(ValueClub.values[0] + 1)).toBeNull();
   });
 
   test('getNextTarget returns next lower tier value', () => {
     // Value above first tier targets first tier
-    expect(CostClub.getNextTarget(CostClub.values[0] + 5)).toBe(CostClub.values[0]);
+    expect(ValueClub.getNextTarget(ValueClub.values[0] + 5)).toBe(ValueClub.values[0]);
     // Each tier targets the next tier
-    CostClub.values.forEach((tier, index) => {
-      if (index < CostClub.values.length - 1) {
-        expect(CostClub.getNextTarget(tier)).toBe(CostClub.values[index + 1]);
+    ValueClub.values.forEach((tier, index) => {
+      if (index < ValueClub.values.length - 1) {
+        expect(ValueClub.getNextTarget(tier)).toBe(ValueClub.values[index + 1]);
       }
     });
   });
 
   test('getNextTarget returns null when at or below lowest tier', () => {
-    const lastTier = CostClub.values[CostClub.values.length - 1];
-    expect(CostClub.getNextTarget(lastTier)).toBeNull();
-    expect(CostClub.getNextTarget(lastTier / 2)).toBeNull();
+    const lastTier = ValueClub.values[ValueClub.values.length - 1];
+    expect(ValueClub.getNextTarget(lastTier)).toBeNull();
+    expect(ValueClub.getNextTarget(lastTier / 2)).toBeNull();
   });
 });

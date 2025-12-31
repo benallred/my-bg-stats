@@ -5,11 +5,11 @@ import {
   getNewTierGames,
   getSkippedTierCount,
 } from './tier-helpers.js';
-import { Milestone, CostClub, Metric } from './constants.js';
+import { Milestone, ValueClub, Metric } from './constants.js';
 import { getMetricValueFromPlayData } from './play-helpers.js';
 
-// getGamePricePaid helper for CostClub tests (mirrors cost-stats.js implementation)
-// Note: Assumes game passes costClubGameFilter (has owned copies)
+// getGamePricePaid helper for ValueClub tests (mirrors value-stats.js implementation)
+// Note: Assumes game passes valueClubGameFilter (has owned copies)
 function getGamePricePaid(game) {
   const ownedCopies = game.copies.filter(copy => copy.statusOwned === true);
   let totalPricePaid = 0;
@@ -544,9 +544,9 @@ describe('getSkippedTierCount', () => {
   });
 });
 
-describe('tier helpers with CostClub (descending)', () => {
-  // Helper for cost club value calculation
-  const getCostClubValue = (game, playData, metric) => {
+describe('tier helpers with ValueClub (descending)', () => {
+  // Helper for value club value calculation
+  const getValueClubValue = (game, playData, metric) => {
     if (!game.copies) return null;
     const ownedCopies = game.copies.filter(c => c.statusOwned === true);
     if (ownedCopies.length === 0) return null;
@@ -585,9 +585,9 @@ describe('tier helpers with CostClub (descending)', () => {
       plays,
       year: 2023,
       metric: Metric.PLAYS,
-      tierCollection: CostClub,
-      tier: CostClub.FIVE_DOLLAR,
-      getGameValue: getCostClubValue,
+      tierCollection: ValueClub,
+      tier: ValueClub.FIVE_DOLLAR,
+      getGameValue: getValueClubValue,
     });
 
     expect(count).toBe(1); // Only game 1 at $5/play
@@ -610,9 +610,9 @@ describe('tier helpers with CostClub (descending)', () => {
       plays,
       year: 2023,
       metric: Metric.PLAYS,
-      tierCollection: CostClub,
-      tier: CostClub.FIVE_DOLLAR,
-      getGameValue: getCostClubValue,
+      tierCollection: ValueClub,
+      tier: ValueClub.FIVE_DOLLAR,
+      getGameValue: getValueClubValue,
       getThisYearValue: () => 10,
     });
 
@@ -639,9 +639,9 @@ describe('tier helpers with CostClub (descending)', () => {
       plays,
       year: 2023,
       metric: Metric.PLAYS,
-      tierCollection: CostClub,
-      tier: CostClub.FIVE_DOLLAR,
-      getGameValue: getCostClubValue,
+      tierCollection: ValueClub,
+      tier: ValueClub.FIVE_DOLLAR,
+      getGameValue: getValueClubValue,
     });
 
     expect(skipped).toBe(1);

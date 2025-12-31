@@ -1,47 +1,47 @@
 import { describe, test, expect } from 'vitest';
 import {
   getTotalCost,
-  getCostClubGames,
-  calculateCostClubIncrease,
-  getNewCostClubGames,
-  getSkippedCostClubCount,
-} from './cost-stats.js';
-import { Metric, CostClub } from './constants.js';
+  getValueClubGames,
+  calculateValueClubIncrease,
+  getNewValueClubGames,
+  getSkippedValueClubCount,
+} from './value-stats.js';
+import { Metric, ValueClub } from './constants.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
 
 const typicalData = processData(typicalFixture);
 
-describe('CostClub', () => {
+describe('ValueClub', () => {
   test('has FIVE_DOLLAR tier value', () => {
-    expect(CostClub.FIVE_DOLLAR).toBe(5);
+    expect(ValueClub.FIVE_DOLLAR).toBe(5);
   });
 
   test('has TWO_FIFTY tier value', () => {
-    expect(CostClub.TWO_FIFTY).toBe(2.5);
+    expect(ValueClub.TWO_FIFTY).toBe(2.5);
   });
 
   test('has ONE_DOLLAR tier value', () => {
-    expect(CostClub.ONE_DOLLAR).toBe(1);
+    expect(ValueClub.ONE_DOLLAR).toBe(1);
   });
 
   test('has FIFTY_CENTS tier value', () => {
-    expect(CostClub.FIFTY_CENTS).toBe(0.5);
+    expect(ValueClub.FIFTY_CENTS).toBe(0.5);
   });
 
   test('has descending direction', () => {
-    expect(CostClub.direction).toBe('descending');
+    expect(ValueClub.direction).toBe('descending');
   });
 
   test('has values in descending order', () => {
-    expect(CostClub.values).toEqual([5, 2.5, 1, 0.5]);
+    expect(ValueClub.values).toEqual([5, 2.5, 1, 0.5]);
   });
 
   test('getThreshold returns correct next threshold for each tier', () => {
-    expect(CostClub.getThreshold(CostClub.FIVE_DOLLAR)).toEqual({ threshold: 5, nextThreshold: 2.5 });
-    expect(CostClub.getThreshold(CostClub.TWO_FIFTY)).toEqual({ threshold: 2.5, nextThreshold: 1 });
-    expect(CostClub.getThreshold(CostClub.ONE_DOLLAR)).toEqual({ threshold: 1, nextThreshold: 0.5 });
-    expect(CostClub.getThreshold(CostClub.FIFTY_CENTS)).toEqual({ threshold: 0.5, nextThreshold: null });
+    expect(ValueClub.getThreshold(ValueClub.FIVE_DOLLAR)).toEqual({ threshold: 5, nextThreshold: 2.5 });
+    expect(ValueClub.getThreshold(ValueClub.TWO_FIFTY)).toEqual({ threshold: 2.5, nextThreshold: 1 });
+    expect(ValueClub.getThreshold(ValueClub.ONE_DOLLAR)).toEqual({ threshold: 1, nextThreshold: 0.5 });
+    expect(ValueClub.getThreshold(ValueClub.FIFTY_CENTS)).toEqual({ threshold: 0.5, nextThreshold: null });
   });
 });
 
@@ -317,43 +317,43 @@ describe('getTotalCost', () => {
   });
 });
 
-describe('getCostClubGames', () => {
+describe('getValueClubGames', () => {
   test('returns object with count and games', () => {
-    const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result).toHaveProperty('count');
     expect(result).toHaveProperty('games');
   });
 
   test('only includes owned base games', () => {
-    const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     result.games.forEach(item => {
       expect(item.game.isBaseGame).toBe(true);
     });
   });
 
   test('only includes games with price data', () => {
-    const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     result.games.forEach(item => {
       expect(item.pricePaid).toBeGreaterThan(0);
     });
   });
 
   test('only includes games with metric value > 0', () => {
-    const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     result.games.forEach(item => {
       expect(item.metricValue).toBeGreaterThan(0);
     });
   });
 
   test('only includes games where costPerMetric <= threshold', () => {
-    const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     result.games.forEach(item => {
-      expect(item.costPerMetric).toBeLessThanOrEqual(CostClub.FIVE_DOLLAR);
+      expect(item.costPerMetric).toBeLessThanOrEqual(ValueClub.FIVE_DOLLAR);
     });
   });
 
   test('calculates costPerMetric correctly', () => {
-    const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     result.games.forEach(item => {
       // costPerMetric is capped at pricePaid (handles metric < 1)
       const expectedCost = Math.min(item.pricePaid / item.metricValue, item.pricePaid);
@@ -373,23 +373,23 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 12 },
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.ONE_DOLLAR);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.ONE_DOLLAR);
     expect(result.count).toBe(1);
     expect(result.games[0].metricValue).toBeCloseTo(0.2, 5);
     expect(result.games[0].costPerMetric).toBe(1); // Capped at pricePaid, not $5
   });
 
   test('sorts by costPerMetric descending', () => {
-    const result = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     for (let i = 1; i < result.games.length; i++) {
       expect(result.games[i - 1].costPerMetric).toBeGreaterThanOrEqual(result.games[i].costPerMetric);
     }
   });
 
   test('works with different metrics', () => {
-    const hoursResult = getCostClubGames(typicalData.games, typicalData.plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
-    const sessionsResult = getCostClubGames(typicalData.games, typicalData.plays, Metric.SESSIONS, CostClub.FIVE_DOLLAR);
-    const playsResult = getCostClubGames(typicalData.games, typicalData.plays, Metric.PLAYS, CostClub.FIVE_DOLLAR);
+    const hoursResult = getValueClubGames(typicalData.games, typicalData.plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+    const sessionsResult = getValueClubGames(typicalData.games, typicalData.plays, Metric.SESSIONS, ValueClub.FIVE_DOLLAR);
+    const playsResult = getValueClubGames(typicalData.games, typicalData.plays, Metric.PLAYS, ValueClub.FIVE_DOLLAR);
 
     // Results should differ between metrics
     expect(hoursResult.count).toBeDefined();
@@ -398,7 +398,7 @@ describe('getCostClubGames', () => {
   });
 
   test('returns empty array for empty games', () => {
-    const result = getCostClubGames([], [], Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames([], [], Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.count).toBe(0);
     expect(result.games).toEqual([]);
   });
@@ -411,7 +411,7 @@ describe('getCostClubGames', () => {
       copies: [{ statusOwned: true, pricePaid: 50 }],
     }];
     const plays = []; // No plays at all
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.count).toBe(0);
   });
 
@@ -426,7 +426,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 0 },
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.count).toBe(0); // Excluded because 0 hours
   });
 
@@ -440,7 +440,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 600 }, // 10 hours = $5/hour
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.count).toBe(1);
     expect(result.games[0].costPerMetric).toBe(5);
   });
@@ -455,7 +455,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 540 }, // 9 hours = $5.56/hour
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.count).toBe(0);
   });
 
@@ -473,7 +473,7 @@ describe('getCostClubGames', () => {
     ];
     // With just 2023 plays (5 hours), cost would be $10/hour - not in club
     // With cumulative through 2023 (10 hours), cost is $5/hour - in club
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 2023);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2023);
     expect(result.count).toBe(1);
     expect(result.games[0].metricValue).toBe(10); // 10 hours total
     expect(result.games[0].costPerMetric).toBe(5); // $5/hour
@@ -492,11 +492,11 @@ describe('getCostClubGames', () => {
       { gameId: 1, date: '2024-06-15', durationMin: 300 }, // 5 hours
     ];
     // Through 2023 only gets 5 hours ($10/hour) - not in club
-    const result2023 = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 2023);
+    const result2023 = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2023);
     expect(result2023.count).toBe(0);
 
     // Through 2024 gets all 10 hours ($5/hour) - in club
-    const result2024 = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, 2024);
+    const result2024 = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2024);
     expect(result2024.count).toBe(1);
   });
 
@@ -511,7 +511,7 @@ describe('getCostClubGames', () => {
       { gameId: 1, date: '2022-06-15', durationMin: 300 },
       { gameId: 1, date: '2023-06-15', durationMin: 300 },
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR, null);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR, null);
     expect(result.count).toBe(1);
     expect(result.games[0].metricValue).toBe(10);
   });
@@ -526,7 +526,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $2/hour
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.TWO_FIFTY);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.TWO_FIFTY);
     expect(result.count).toBe(1);
     expect(result.games[0].costPerMetric).toBe(2);
   });
@@ -541,7 +541,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $3/hour
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.TWO_FIFTY);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.TWO_FIFTY);
     expect(result.count).toBe(0); // $3/hour is in FIVE_DOLLAR tier, not TWO_FIFTY
   });
 
@@ -555,7 +555,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.80/hour
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.ONE_DOLLAR);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.ONE_DOLLAR);
     expect(result.count).toBe(1);
     expect(result.games[0].costPerMetric).toBe(0.8);
   });
@@ -570,7 +570,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.50/hour
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIFTY_CENTS);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIFTY_CENTS);
     expect(result.count).toBe(1);
     expect(result.games[0].costPerMetric).toBe(0.5);
   });
@@ -585,7 +585,7 @@ describe('getCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.60/hour
     ];
-    const result = getCostClubGames(games, plays, Metric.HOURS, CostClub.FIFTY_CENTS);
+    const result = getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIFTY_CENTS);
     expect(result.count).toBe(0);
   });
 
@@ -600,14 +600,14 @@ describe('getCostClubGames', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $0.20/hour
     ];
     // Should only be in FIFTY_CENTS tier (range is 0 to 0.5)
-    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.FIFTY_CENTS).count).toBe(1);
-    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.ONE_DOLLAR).count).toBe(0);
-    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.TWO_FIFTY).count).toBe(0);
-    expect(getCostClubGames(games, plays, Metric.HOURS, CostClub.FIVE_DOLLAR).count).toBe(0);
+    expect(getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIFTY_CENTS).count).toBe(1);
+    expect(getValueClubGames(games, plays, Metric.HOURS, ValueClub.ONE_DOLLAR).count).toBe(0);
+    expect(getValueClubGames(games, plays, Metric.HOURS, ValueClub.TWO_FIFTY).count).toBe(0);
+    expect(getValueClubGames(games, plays, Metric.HOURS, ValueClub.FIVE_DOLLAR).count).toBe(0);
   });
 });
 
-describe('calculateCostClubIncrease', () => {
+describe('calculateValueClubIncrease', () => {
   test('excludes games without price data', () => {
     const games = [{
       id: 1,
@@ -618,7 +618,7 @@ describe('calculateCostClubIncrease', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 },
     ];
-    const result = calculateCostClubIncrease(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = calculateValueClubIncrease(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result).toBe(0); // No price data, not counted
   });
 
@@ -632,7 +632,7 @@ describe('calculateCostClubIncrease', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 0 }, // Zero hours
     ];
-    const result = calculateCostClubIncrease(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = calculateValueClubIncrease(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result).toBe(0); // Zero hours, not counted
   });
 
@@ -650,7 +650,7 @@ describe('calculateCostClubIncrease', () => {
     // End of 2022: 5 hours = $10/hour (not in club) -> 0 games
     // End of 2023: 10 hours = $5/hour (in club) -> 1 game
     // Increase = 1 - 0 = 1
-    const result = calculateCostClubIncrease(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = calculateValueClubIncrease(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result).toBe(1);
   });
 
@@ -665,14 +665,14 @@ describe('calculateCostClubIncrease', () => {
       { gameId: 1, date: '2022-06-15', durationMin: 600 }, // Already in club by end of 2022
     ];
     // Both 2022 and 2023 have same count (1)
-    const result = calculateCostClubIncrease(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = calculateValueClubIncrease(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result).toBe(0);
   });
 
   test('returns negative when games leave club (theoretical - would require price change)', () => {
     // This shouldn't happen in practice since price doesn't change,
     // but the function supports negative values
-    const result = calculateCostClubIncrease([], [], 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = calculateValueClubIncrease([], [], 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result).toBe(0);
   });
 
@@ -695,12 +695,12 @@ describe('calculateCostClubIncrease', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // Game 1 enters in 2023
       { gameId: 2, date: '2023-06-15', durationMin: 600 }, // Game 2 enters in 2023
     ];
-    const result = calculateCostClubIncrease(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = calculateValueClubIncrease(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result).toBe(2);
   });
 });
 
-describe('getNewCostClubGames', () => {
+describe('getNewValueClubGames', () => {
   test('returns array of games that entered club during year', () => {
     const games = [{
       id: 1,
@@ -712,7 +712,7 @@ describe('getNewCostClubGames', () => {
       { gameId: 1, date: '2022-06-15', durationMin: 300 }, // 5 hours
       { gameId: 1, date: '2023-06-15', durationMin: 300 }, // 5 hours
     ];
-    const result = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.length).toBe(1);
     expect(result[0].game.id).toBe(1);
   });
@@ -727,7 +727,7 @@ describe('getNewCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2022-06-15', durationMin: 600 }, // Already in club by end of 2022
     ];
-    const result = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.length).toBe(0);
   });
 
@@ -742,7 +742,7 @@ describe('getNewCostClubGames', () => {
       { gameId: 1, date: '2022-06-15', durationMin: 300 }, // 5 hours in 2022
       { gameId: 1, date: '2023-06-15', durationMin: 300 }, // 5 hours in 2023
     ];
-    const result = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result[0].metricValue).toBe(10); // Total hours
     expect(result[0].costPerMetric).toBe(5); // $5/hour
     expect(result[0].pricePaid).toBe(50);
@@ -768,7 +768,7 @@ describe('getNewCostClubGames', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $5/hour (in $5 tier)
       { gameId: 2, date: '2023-06-15', durationMin: 600 }, // 10 hours = $3/hour (in $5 tier)
     ];
-    const result = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result[0].game.id).toBe(2); // Lower cost first ($3/hour)
     expect(result[1].game.id).toBe(1); // Higher cost second ($5/hour)
   });
@@ -783,7 +783,7 @@ describe('getNewCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // 10 hours = $10/hour (not in club)
     ];
-    const result = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.length).toBe(0);
   });
 
@@ -799,7 +799,7 @@ describe('getNewCostClubGames', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 60 }, // 11 hours by end of 2023
     ];
     // Was already in club at $5/hour by end of 2022
-    const result = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.length).toBe(0);
   });
 
@@ -813,7 +813,7 @@ describe('getNewCostClubGames', () => {
     const plays = [
       { gameId: 1, date: '2023-06-15', durationMin: 600 }, // First plays in 2023
     ];
-    const result = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
+    const result = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
     expect(result.length).toBe(1);
     expect(result[0].thisYearMetricValue).toBe(10); // All metric value is from this year
   });
@@ -832,9 +832,9 @@ describe('getNewCostClubGames', () => {
       { gameId: 1, date: '2023-01-04', durationMin: 60 },
       { gameId: 1, date: '2023-01-05', durationMin: 60 },
     ];
-    const hoursResult = getNewCostClubGames(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR);
-    const sessionsResult = getNewCostClubGames(games, plays, 2023, Metric.SESSIONS, CostClub.FIVE_DOLLAR);
-    const playsResult = getNewCostClubGames(games, plays, 2023, Metric.PLAYS, CostClub.FIVE_DOLLAR);
+    const hoursResult = getNewValueClubGames(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+    const sessionsResult = getNewValueClubGames(games, plays, 2023, Metric.SESSIONS, ValueClub.FIVE_DOLLAR);
+    const playsResult = getNewValueClubGames(games, plays, 2023, Metric.PLAYS, ValueClub.FIVE_DOLLAR);
 
     expect(hoursResult.length).toBe(1);
     expect(sessionsResult.length).toBe(1);
@@ -842,7 +842,7 @@ describe('getNewCostClubGames', () => {
   });
 });
 
-describe('getSkippedCostClubCount', () => {
+describe('getSkippedValueClubCount', () => {
   test('returns 0 when no next lower threshold exists', () => {
     const games = [{
       id: 1,
@@ -854,7 +854,7 @@ describe('getSkippedCostClubCount', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 6000 }, // 100 hours = $0.50/hour
     ];
     // No next lower threshold passed (null)
-    const result = getSkippedCostClubCount(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR, null);
+    const result = getSkippedValueClubCount(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR, null);
     expect(result).toBe(0);
   });
 
@@ -870,7 +870,7 @@ describe('getSkippedCostClubCount', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 3000 }, // 50 hours = $1/hour
     ];
     // Went from no plays to $1/hour, skipping $5 club (threshold 5, nextLower 2.5)
-    const result = getSkippedCostClubCount(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR, 2.5);
+    const result = getSkippedValueClubCount(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2.5);
     expect(result).toBe(1);
   });
 
@@ -886,7 +886,7 @@ describe('getSkippedCostClubCount', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 300 }, // 10 hours = $5/hour
     ];
     // Entered at $5/hour, not skipped (still at threshold, not below nextLower)
-    const result = getSkippedCostClubCount(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR, 2.5);
+    const result = getSkippedValueClubCount(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2.5);
     expect(result).toBe(0);
   });
 
@@ -902,12 +902,12 @@ describe('getSkippedCostClubCount', () => {
       { gameId: 1, date: '2023-06-15', durationMin: 2400 }, // 50 hours = $1/hour
     ];
     // Was already in club, so didn't skip anything
-    const result = getSkippedCostClubCount(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR, 2.5);
+    const result = getSkippedValueClubCount(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2.5);
     expect(result).toBe(0);
   });
 
   test('returns 0 for empty data', () => {
-    const result = getSkippedCostClubCount([], [], 2023, Metric.HOURS, CostClub.FIVE_DOLLAR, 2.5);
+    const result = getSkippedValueClubCount([], [], 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2.5);
     expect(result).toBe(0);
   });
 
@@ -924,8 +924,8 @@ describe('getSkippedCostClubCount', () => {
       plays.push({ gameId: 1, date: `2023-01-${String(i).padStart(2, '0')}`, durationMin: 60 });
     }
     // All metrics skip from nothing to $1/metric
-    expect(getSkippedCostClubCount(games, plays, 2023, Metric.HOURS, CostClub.FIVE_DOLLAR, 2.5)).toBe(1);
-    expect(getSkippedCostClubCount(games, plays, 2023, Metric.SESSIONS, CostClub.FIVE_DOLLAR, 2.5)).toBe(1);
-    expect(getSkippedCostClubCount(games, plays, 2023, Metric.PLAYS, CostClub.FIVE_DOLLAR, 2.5)).toBe(1);
+    expect(getSkippedValueClubCount(games, plays, 2023, Metric.HOURS, ValueClub.FIVE_DOLLAR, 2.5)).toBe(1);
+    expect(getSkippedValueClubCount(games, plays, 2023, Metric.SESSIONS, ValueClub.FIVE_DOLLAR, 2.5)).toBe(1);
+    expect(getSkippedValueClubCount(games, plays, 2023, Metric.PLAYS, ValueClub.FIVE_DOLLAR, 2.5)).toBe(1);
   });
 });

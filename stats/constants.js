@@ -103,13 +103,13 @@ const Milestone = createTierCollection({
 }, { direction: 'ascending' });
 
 /**
- * Cost club tiers (descending: lower cost per metric = better tier)
+ * Value club tiers (descending: lower cost per metric = better tier)
  */
-const CostClub = createTierCollection({
+const ValueClub = createTierCollection({
   FIVE_DOLLAR: 5,
   TWO_FIFTY: 2.5,
   ONE_DOLLAR: 1,
   FIFTY_CENTS: 0.5,
 }, { direction: 'descending' });
 
-export { Metric, Milestone, CostClub };
+export { Metric, Milestone, ValueClub };
