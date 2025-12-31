@@ -9,6 +9,26 @@ import {
   calculatePlaySessionHIndex,
   calculateHourHIndex,
 } from './h-index.js';
+import { formatCostLabel } from '../formatting.js';
+
+/**
+ * Helper: Get metric value from game play data
+ * Note: Uses uniqueDays (suggestions data structure) not uniqueDates (play-helpers structure)
+ * @param {Object} data - Game play data with totalMinutes, uniqueDays, playCount
+ * @param {string} metric - Metric type
+ * @returns {number} Metric value
+ */
+function getMetricValue(data, metric) {
+  switch (metric) {
+    case Metric.SESSIONS:
+      return data.uniqueDays.size;
+    case Metric.PLAYS:
+      return data.playCount;
+    case Metric.HOURS:
+    default:
+      return data.totalMinutes / 60;
+  }
+}
 
 /**
  * Helper: Calculate days since a date
@@ -257,24 +277,13 @@ function suggestForNextHourHIndex(plays, gamePlayData) {
  * @returns {Object|null} Suggestion object or null
  */
 function suggestForNextMilestone(gamePlayData, metric) {
-  // Get value based on metric
-  const getValue = (data) => {
-    if (metric === Metric.HOURS) {
-      return data.totalMinutes / 60;
-    } else if (metric === Metric.SESSIONS) {
-      return data.uniqueDays.size;
-    } else {
-      return data.playCount;
-    }
-  };
-
   const allPlayedGames = Array.from(gamePlayData.values())
-    .filter(data => getValue(data) > 0);
+    .filter(data => getMetricValue(data, metric) > 0);
 
   // Find games approaching each milestone
   const milestoneChaseGames = allPlayedGames
     .map(data => {
-      const currentValue = getValue(data);
+      const currentValue = getMetricValue(data, metric);
       const target = Milestone.getNextTarget(currentValue);
       if (!target) return null;
       return {
@@ -341,71 +350,66 @@ function suggestForNextMilestone(gamePlayData, metric) {
 }
 
 /**
- * Suggestion Algorithm: Game closest to joining the value club
+ * Suggestion Algorithm: Game closest to joining their next value club tier
  * @param {Map} gamePlayData - Map of game play data (enriched with pricePaid)
  * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
- * @param {number} threshold - Cost per metric threshold
  * @returns {Object|null} Suggestion object or null
  */
-function suggestForValueClub(gamePlayData, metric, threshold) {
-  const candidates = [];
+function suggestForNextValueClub(gamePlayData, metric) {
+  // Find games approaching their next value club tier
+  const valueClubChaseGames = Array.from(gamePlayData.values())
+    .map(data => {
+      // Skip non-replayable games (legacy games, escape rooms, etc.)
+      if (data.game.isNonReplayable) return null;
 
-  gamePlayData.forEach((data) => {
-    // Skip non-replayable games (legacy games, escape rooms, etc.)
-    if (data.game.isNonReplayable) return;
+      // Must have price data
+      if (data.pricePaid === null || data.pricePaid === undefined) return null;
 
-    // Must have price data
-    if (data.pricePaid === null || data.pricePaid === undefined) return;
+      const metricValue = getMetricValue(data, metric);
 
-    // Get metric value
-    let metricValue;
-    switch (metric) {
-      case Metric.SESSIONS:
-        metricValue = data.uniqueDays.size;
-        break;
-      case Metric.PLAYS:
-        metricValue = data.playCount;
-        break;
-      case Metric.HOURS:
-      default:
-        metricValue = data.totalMinutes / 60;
-        break;
+      // Must have at least some play data
+      if (metricValue === 0) return null;
+
+      const costPerMetric = data.pricePaid / metricValue;
+      const target = ValueClub.getNextTarget(costPerMetric);
+
+      // Skip games that have achieved all tiers
+      if (!target) return null;
+
+      // Calculate how much more metric is needed to reach target tier
+      const neededMetricForClub = data.pricePaid / target;
+      const additionalNeeded = neededMetricForClub - metricValue;
+
+      return {
+        game: data.game,
+        costPerMetric,
+        metricValue,
+        target,
+        additionalNeeded,
+        pricePaid: data.pricePaid,
+      };
+    })
+    .filter(item => item !== null);
+
+  if (valueClubChaseGames.length === 0) return null;
+
+  // Find the minimum floored additionalNeeded for each tier (closest to joining)
+  const closestToEachTier = [];
+
+  ValueClub.values.forEach(tier => {
+    const gamesTargetingThisTier = valueClubChaseGames.filter(data => data.target === tier);
+    if (gamesTargetingThisTier.length > 0) {
+      // Find the minimum additionalNeeded for this tier (closest to joining)
+      const minNeeded = Math.min(...gamesTargetingThisTier.map(data => Math.floor(data.additionalNeeded)));
+      closestToEachTier.push(minNeeded);
     }
-
-    // Must have at least some play data
-    if (metricValue === 0) return;
-
-    const costPerMetric = data.pricePaid / metricValue;
-
-    // Only include games not yet in club (above threshold)
-    if (costPerMetric <= threshold) return;
-
-    // Calculate how much more metric is needed to reach threshold
-    const neededMetricForClub = data.pricePaid / threshold;
-    const additionalNeeded = neededMetricForClub - metricValue;
-
-    candidates.push({
-      game: data.game,
-      costPerMetric,
-      metricValue,
-      additionalNeeded,
-      pricePaid: data.pricePaid,
-    });
   });
 
-  if (candidates.length === 0) return null;
-
-  // Find the minimum floored additionalNeeded value
-  const minFlooredNeeded = Math.min(...candidates.map(c => Math.floor(c.additionalNeeded)));
-
-  // Get all candidates that share this floored value (like milestones finding closest to target)
-  const closestCandidates = candidates.filter(c => Math.floor(c.additionalNeeded) === minFlooredNeeded);
-
-  // Select using weighted random (group by threshold/target)
-  const selected = selectRandomWeightedBySqrtRarity(
-    closestCandidates,
-    () => threshold,
+  // Filter to games at these "closest" values, then select one with sqrt rarity weighting
+  const closestGames = valueClubChaseGames.filter(data =>
+    closestToEachTier.includes(Math.floor(data.additionalNeeded)),
   );
+  const selected = selectRandomWeightedBySqrtRarity(closestGames, game => game.target);
 
   // Format metric label
   let metricLabel;
@@ -424,7 +428,7 @@ function suggestForValueClub(gamePlayData, metric, threshold) {
 
   return {
     game: selected.game,
-    reason: `Join the $${threshold}/${metricLabel} club`,
+    reason: `Join the ${formatCostLabel(selected.target)}/${metricLabel} club`,
     stat: `$${selected.costPerMetric.toFixed(2)}/${metricLabel}`,
   };
 }
@@ -520,9 +524,9 @@ function getSuggestedGames(games, plays, isExperimental = false) {
     suggestForNextMilestone(gamePlayData, Metric.SESSIONS),    // Almost a milestone (sessions)
     suggestForNextMilestone(gamePlayData, Metric.PLAYS),       // Almost a milestone (plays)
     // Value club suggestions (experimental) - one per metric type
-    isExperimental ? suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR) : null,
-    isExperimental ? suggestForValueClub(gamePlayData, Metric.SESSIONS, ValueClub.FIVE_DOLLAR) : null,
-    isExperimental ? suggestForValueClub(gamePlayData, Metric.PLAYS, ValueClub.FIVE_DOLLAR) : null,
+    isExperimental ? suggestForNextValueClub(gamePlayData, Metric.HOURS) : null,
+    isExperimental ? suggestForNextValueClub(gamePlayData, Metric.SESSIONS) : null,
+    isExperimental ? suggestForNextValueClub(gamePlayData, Metric.PLAYS) : null,
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData),                       // Shelf of shame
   ].filter(suggestion => suggestion !== null);
@@ -561,7 +565,7 @@ export {
   suggestForNextTraditionalHIndex,
   suggestForNextHourHIndex,
   suggestForNextMilestone,
-  suggestForValueClub,
+  suggestForNextValueClub,
   suggestNeverPlayedGame,
   getSuggestedGames,
 };

@@ -3,10 +3,10 @@ import {
   calculateDaysSince,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
-  suggestForValueClub,
+  suggestForNextValueClub,
   getSuggestedGames,
 } from './suggestions.js';
-import { Metric, Milestone, ValueClub } from './constants.js';
+import { Metric, Milestone } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
@@ -340,7 +340,7 @@ describe('Suggestion Algorithms', () => {
     });
   });
 
-  describe('suggestForValueClub', () => {
+  describe('suggestForNextValueClub', () => {
     test('returns null when no candidates have price data', () => {
       const gamePlayData = new Map();
       gamePlayData.set(1, {
@@ -351,35 +351,35 @@ describe('Suggestion Algorithms', () => {
         pricePaid: null,
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).toBeNull();
     });
 
-    test('returns null when all games are already in club', () => {
+    test('returns null when all games have achieved all tiers', () => {
       const gamePlayData = new Map();
       gamePlayData.set(1, {
         game: { id: 1, name: 'Cheap Game' },
         playCount: 10,
         uniqueDays: new Set(['2023-01-01', '2023-01-02']),
-        totalMinutes: 600, // 10 hours at $5 = $0.50/hour, already in club
+        totalMinutes: 600, // 10 hours at $5 = $0.50/hour, achieved all tiers
         pricePaid: 5,
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).toBeNull();
     });
 
-    test('returns suggestion for game approaching threshold', () => {
+    test('returns suggestion for game approaching next tier', () => {
       const gamePlayData = new Map();
       gamePlayData.set(1, {
         game: { id: 1, name: 'Almost There Game' },
         playCount: 5,
         uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03']),
-        totalMinutes: 480, // 8 hours at $50 = $6.25/hour, needs 2 more hours
+        totalMinutes: 480, // 8 hours at $50 = $6.25/hour, targets $5 tier
         pricePaid: 50,
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).not.toBeNull();
       expect(result.game.name).toBe('Almost There Game');
       expect(result.reason).toBe('Join the $5/hour club');
@@ -394,10 +394,10 @@ describe('Suggestion Algorithms', () => {
         playCount: 10,
         uniqueDays: new Set(['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04']),
         totalMinutes: 240,
-        pricePaid: 25, // $25 / 4 sessions = $6.25/session
+        pricePaid: 25, // $25 / 4 sessions = $6.25/session, targets $5 tier
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.SESSIONS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.SESSIONS);
       expect(result).not.toBeNull();
       expect(result.reason).toBe('Join the $5/session club');
       expect(result.stat).toContain('/session');
@@ -410,46 +410,78 @@ describe('Suggestion Algorithms', () => {
         playCount: 4,
         uniqueDays: new Set(['2023-01-01']),
         totalMinutes: 240,
-        pricePaid: 25, // $25 / 4 plays = $6.25/play
+        pricePaid: 25, // $25 / 4 plays = $6.25/play, targets $5 tier
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.PLAYS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.PLAYS);
       expect(result).not.toBeNull();
       expect(result.reason).toBe('Join the $5/play club');
       expect(result.stat).toContain('/play');
     });
 
-    test('selects from candidates with same floored additionalNeeded', () => {
+    test('selects from closest candidates across different tiers', () => {
       const gamePlayData = new Map();
-      // Game 1: $50 / 8 hours = $6.25/hour, needs 2 more hours (floor = 2)
+      // Game 1: $50 / 8 hours = $6.25/hour, targets $5, needs 2 more hours (floor = 2)
       gamePlayData.set(1, {
-        game: { id: 1, name: 'Close Game' },
+        game: { id: 1, name: 'Close to $5' },
         playCount: 5,
         uniqueDays: new Set(['2023-01-01']),
         totalMinutes: 480,
         pricePaid: 50,
       });
-      // Game 2: $52 / 8 hours = $6.50/hour, needs 2.4 more hours (floor = 2)
+      // Game 2: $5 / 2 hours = $2.50/hour, targets $2.50, needs 0 more hours (floor = 0)
       gamePlayData.set(2, {
-        game: { id: 2, name: 'Also Close Game' },
+        game: { id: 2, name: 'At $2.50 threshold' },
         playCount: 5,
         uniqueDays: new Set(['2023-01-01']),
-        totalMinutes: 480,
-        pricePaid: 52,
+        totalMinutes: 120,
+        pricePaid: 5,
       });
-      // Game 3: $100 / 8 hours = $12.50/hour, needs 12 more hours (floor = 12)
+      // Game 3: $100 / 8 hours = $12.50/hour, targets $5, needs 12 more hours (floor = 12)
       gamePlayData.set(3, {
-        game: { id: 3, name: 'Far Game' },
+        game: { id: 3, name: 'Far from $5' },
         playCount: 5,
         uniqueDays: new Set(['2023-01-01']),
         totalMinutes: 480,
         pricePaid: 100,
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).not.toBeNull();
-      // Should only select from games with floor(additionalNeeded) = 2
-      expect(['Close Game', 'Also Close Game']).toContain(result.game.name);
+      // Should select closest from each tier: "At $2.50 threshold" (floor=0) or "Close to $5" (floor=2)
+      expect(['Close to $5', 'At $2.50 threshold']).toContain(result.game.name);
+    });
+
+    test('dynamically targets different tiers based on current cost', () => {
+      const gamePlayData = new Map();
+      // Game at $4/hour targets $2.50 tier (not $5)
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Targets $2.50' },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 750, // 12.5 hours at $50 = $4/hour
+        pricePaid: 50,
+      });
+
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Join the $2.50/hour club');
+    });
+
+    test('formats 50 cent tier with cent symbol', () => {
+      const gamePlayData = new Map();
+      // Game at $0.75/hour targets $0.50 tier
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Targets 50 cents' },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 4000, // 66.67 hours at $50 = $0.75/hour
+        pricePaid: 50,
+      });
+
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Join the 50¢/hour club');
     });
 
     test('excludes games with zero play data', () => {
@@ -462,7 +494,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 50,
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).toBeNull();
     });
 
@@ -485,7 +517,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 50,
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).not.toBeNull();
       expect(result.game.name).toBe('Regular Game');
     });
@@ -500,7 +532,7 @@ describe('Suggestion Algorithms', () => {
         pricePaid: 50,
       });
 
-      const result = suggestForValueClub(gamePlayData, Metric.HOURS, ValueClub.FIVE_DOLLAR);
+      const result = suggestForNextValueClub(gamePlayData, Metric.HOURS);
       expect(result).toBeNull();
     });
   });
