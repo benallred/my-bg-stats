@@ -540,6 +540,7 @@ function setupBaseMetricFilter() {
         statsCache.fiftyCentClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.FIFTY_CENTS, currentYear);
         updateCostAnalysisStats();
         updateValueClubsStats();
+        updateSocialLocationStats();
 
         // Only refresh sections if not loading from permalink
         if (!isLoadingFromPermalink) {
@@ -558,6 +559,11 @@ function setupBaseMetricFilter() {
             const valueClubStats = ['five-dollar-club', 'two-fifty-club', 'one-dollar-club', 'fifty-cent-club'];
             if (valueClubStats.includes(currentlyOpenStatType)) {
                 showDetailSection(currentlyOpenStatType);
+            }
+
+            // Refresh solo detail section if open
+            if (currentlyOpenStatType === 'solo') {
+                showDetailSection('solo');
             }
 
             // Update year-review filter if open and toggle is not checked
