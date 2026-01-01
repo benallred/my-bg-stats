@@ -247,7 +247,6 @@ let gameData = null;
 let currentYear = null;
 let currentBaseMetric = 'hours'; // Default to hours
 let currentlyOpenStatType = null;
-let currentlyOpenDiagnosticType = null;
 let yearDataCache = null;
 let isLoadingFromPermalink = false;
 let showAllYearReviewMetrics = false;
@@ -511,10 +510,6 @@ function setupYearFilter() {
                 }
             }
 
-            // Refresh diagnostic detail section if open
-            if (currentlyOpenDiagnosticType) {
-                showDiagnosticDetail(currentlyOpenDiagnosticType);
-            }
         }
 
         // Update URL when year changes
@@ -645,13 +640,13 @@ function updateAllStats() {
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
-        suggestedGames: getSuggestedGames(gameData.games, gameData.plays, isExperimentalEnabled()),
+        suggestedGames: getSuggestedGames(gameData.games, gameData.plays, isHiddenEnabled()),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
         // Social & Locations stats
         playerStats: getPlayerStats(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
         locationStats: getLocationStats(gameData.plays, gameData.locations, currentYear),
         soloGameStats: getSoloGameStats(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
-        // Cost Analysis stats (experimental)
+        // Cost Analysis stats (hidden)
         totalCostData: getTotalCost(gameData.games, currentYear),
         costPerMetricData: getCostPerMetricStats(gameData.games, gameData.plays, currentBaseMetric, currentYear),
         shelfOfShameData: getShelfOfShame(gameData.games, gameData.plays, currentYear),
@@ -733,7 +728,7 @@ function updateAllStats() {
             // Top games by unique players (most shared)
             topGamesByUniquePlayers: getTopGamesByUniquePlayers(gameData.games, gameData.plays, currentYear, 3, gameData.anonymousPlayerId),
 
-            // Top games by unique locations (most travelled)
+            // Top games by unique locations (most traveled)
             topGamesByUniqueLocations: getTopGamesByUniqueLocations(gameData.games, gameData.plays, currentYear, 3),
 
             // Logging achievements (cumulative thresholds crossed)
@@ -1070,31 +1065,43 @@ function updateSocialLocationStats() {
 }
 
 /**
- * Update diagnostics section
+ * Update diagnostics section visibility and values
  */
 function updateDiagnosticsSection() {
-    // Update unknown acquisition dates card (diagnostics use .stat-value, not .widget__value)
-    const unknownCard = document.querySelector('[data-stat="unknown-acquisition-dates"]');
-    unknownCard.querySelector('.stat-value').textContent = statsCache.unknownGames.length;
+    const section = document.getElementById('diagnostics-section');
+    const unknownCard = document.getElementById('unknown-acquisition-dates');
+    const neverPlayedCard = document.getElementById('never-played');
+    const missingPriceCard = document.getElementById('missing-price-paid');
 
-    // Update never played games card
-    const neverPlayedCard = document.querySelector('[data-stat="never-played"]');
-    neverPlayedCard.querySelector('.stat-value').textContent = statsCache.neverPlayedGames.length;
+    // Show/hide section based on hidden flag
+    if (!isHiddenEnabled()) {
+        section.style.display = 'none';
+        unknownCard.style.display = 'none';
+        neverPlayedCard.style.display = 'none';
+        missingPriceCard.style.display = 'none';
+        return;
+    }
 
-    // Update missing price paid card
-    const missingPriceCard = document.querySelector('[data-stat="missing-price-paid"]');
-    missingPriceCard.querySelector('.stat-value').textContent = statsCache.missingPricePaidGames.length;
+    section.style.display = 'block';
+    unknownCard.style.display = 'flex';
+    neverPlayedCard.style.display = 'flex';
+    missingPriceCard.style.display = 'flex';
+
+    // Update card values
+    unknownCard.querySelector('.widget__value').textContent = statsCache.unknownGames.length;
+    neverPlayedCard.querySelector('.widget__value').textContent = statsCache.neverPlayedGames.length;
+    missingPriceCard.querySelector('.widget__value').textContent = statsCache.missingPricePaidGames.length;
 }
 
 /**
- * Update Cost Analysis section (experimental)
+ * Update Cost Analysis section (hidden)
  */
 function updateCostAnalysisStats() {
     const section = document.getElementById('cost-analysis-section');
     if (!section) return;
 
-    // Show/hide section based on experimental flag
-    if (!isExperimentalEnabled()) {
+    // Show/hide section based on hidden flag
+    if (!isHiddenEnabled()) {
         section.style.display = 'none';
         return;
     }
@@ -1196,14 +1203,14 @@ function updateShelfOfShameCard() {
 }
 
 /**
- * Update Value Clubs section (experimental)
+ * Update Value Clubs section (hidden)
  */
 function updateValueClubsStats() {
     const section = document.getElementById('value-clubs-section');
     if (!section) return;
 
-    // Show/hide section based on experimental flag
-    if (!isExperimentalEnabled()) {
+    // Show/hide section based on hidden flag
+    if (!isHiddenEnabled()) {
         section.style.display = 'none';
         return;
     }
@@ -1354,20 +1361,6 @@ function setupEventListeners() {
         });
     });
 
-    // Diagnostic cards
-    const diagnosticCards = document.querySelectorAll('.diagnostic-card.clickable');
-    diagnosticCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const statType = card.dataset.stat;
-            // Toggle: if clicking the already-open card, close it
-            if (statType === currentlyOpenDiagnosticType) {
-                closeDiagnosticDetail();
-            } else {
-                showDiagnosticDetail(statType);
-            }
-        });
-    });
-
     // Detail section close button
     document.getElementById('close-detail').addEventListener('click', closeDetailSection);
 
@@ -1377,15 +1370,8 @@ function setupEventListeners() {
         showDetailSection('year-review');
     });
 
-    // Diagnostic detail section close button
-    document.getElementById('close-diagnostic-detail').addEventListener('click', closeDiagnosticDetail);
-
-    // Permalink buttons
-    document.getElementById('permalink-btn').addEventListener('click', () => copyPermalink(false));
-    document.getElementById('diagnostic-permalink-btn').addEventListener('click', () => copyPermalink(true));
-
-    // Diagnostics toggle button
-    setupDiagnosticsToggle();
+    // Permalink button
+    document.getElementById('permalink-btn').addEventListener('click', () => copyPermalink());
 
     // Theme toggle button
     const themeToggle = document.getElementById('theme-toggle');
@@ -2039,6 +2025,35 @@ const statDetailHandlers = {
         }),
         render: (detailContent) => {
             showShelfOfShameBreakdown(detailContent);
+        },
+    },
+    'unknown-acquisition-dates': {
+        getTitle: () => 'Unknown Acquisition Dates',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.unknownGames.length,
+        }),
+        render: (detailContent, statsCache) => {
+            createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year']);
+        },
+    },
+    'never-played': {
+        getTitle: (currentYear) => currentYear
+            ? `Never Played <span style="white-space: nowrap">(Acquired ${currentYear})</span>`
+            : 'Never Played',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.neverPlayedGames.length,
+        }),
+        render: (detailContent, statsCache) => {
+            createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
+        },
+    },
+    'missing-price-paid': {
+        getTitle: () => 'Missing Price Paid',
+        getSummary: (statsCache) => ({
+            mainValue: statsCache.missingPricePaidGames.length,
+        }),
+        render: (detailContent, statsCache) => {
+            createGameTable(detailContent, statsCache.missingPricePaidGames, ['Name', 'Year', 'Acquisition Date']);
         },
     },
 };
@@ -3358,9 +3373,9 @@ function showYearReviewDetail(container, statsCache) {
     const topPlays = statsCache.yearReview.topGamesByPlays;
     const longestSinglePlays = statsCache.yearReview.longestSinglePlays;
     const topSharedGames = statsCache.yearReview.topGamesByUniquePlayers;
-    const topTravelledGames = statsCache.yearReview.topGamesByUniqueLocations;
+    const topTraveledGames = statsCache.yearReview.topGamesByUniqueLocations;
 
-    if (topHours.length > 0 || topSessions.length > 0 || topPlays.length > 0 || longestSinglePlays.length > 0 || topSharedGames.length > 0 || topTravelledGames.length > 0) {
+    if (topHours.length > 0 || topSessions.length > 0 || topPlays.length > 0 || longestSinglePlays.length > 0 || topSharedGames.length > 0 || topTraveledGames.length > 0) {
         const formatHoursValue = (minutes) => {
             const hours = minutes / 60;
             return `${hours.toFixed(1)} hours this year`;
@@ -3470,26 +3485,26 @@ function showYearReviewDetail(container, statsCache) {
             `;
         };
 
-        const renderMostTravelledGamesRow = () => {
-            if (topTravelledGames.length === 0) return '';
+        const renderMostTraveledGamesRow = () => {
+            if (topTraveledGames.length === 0) return '';
 
-            const thumbnails = topTravelledGames.map(item => renderGameThumbnailOnly(item.game)).join('');
+            const thumbnails = topTraveledGames.map(item => renderGameThumbnailOnly(item.game)).join('');
             const rankLabels = ['1st', '2nd', '3rd'];
 
             return `
-                <tr class="year-review-row year-review-row-clickable" data-detail="most-travelled">
+                <tr class="year-review-row year-review-row-clickable" data-detail="most-traveled">
                     <td class="year-review-label-detail">
                         <span class="year-review-expand-icon">▶</span>
-                        Top ${topTravelledGames.length} most travelled games:
+                        Top ${topTraveledGames.length} most traveled games:
                     </td>
                     <td class="year-review-value-detail">
                         <span class="top-games-thumbnails">${thumbnails}</span>
                     </td>
                 </tr>
-                <tr class="year-review-expanded-content" data-detail="most-travelled" style="display: none;">
+                <tr class="year-review-expanded-content" data-detail="most-traveled" style="display: none;">
                     <td colspan="2">
                         <div class="year-review-games-list">
-                            ${topTravelledGames.map((item, index) => `
+                            ${topTraveledGames.map((item, index) => `
                                 <div class="year-review-game-item">
                                     <span class="year-review-game-rank">${rankLabels[index]}</span>
                                     <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
@@ -3513,7 +3528,7 @@ function showYearReviewDetail(container, statsCache) {
                     ${renderTopGamesRow('plays', topPlays, formatPlaysValue)}
                     ${renderLongestPlaysRow()}
                     ${renderMostSharedGamesRow()}
-                    ${renderMostTravelledGamesRow()}
+                    ${renderMostTraveledGamesRow()}
                 </tbody>
             </table>
         `;
@@ -3848,8 +3863,8 @@ function showYearReviewDetail(container, statsCache) {
         detailDiv.appendChild(milestonesSubsection);
     }
 
-    // Build value club rows (only if experimental features enabled)
-    if (isExperimentalEnabled()) {
+    // Build value club rows (only if hidden features enabled)
+    if (isHiddenEnabled()) {
         const valueClubRows = [];
         const metricUnits = { hours: 'hour', sessions: 'session', plays: 'play' };
 
@@ -4140,137 +4155,6 @@ function createGameTable(container, games, columns, filterYear = null) {
 }
 
 /**
- * Configuration map for diagnostic detail handlers
- * Each handler defines how to display title, summary, and content for a diagnostic type
- */
-const diagnosticDetailHandlers = {
-    'unknown-acquisition-dates': {
-        getTitle: () => 'Games with Unknown Acquisition Dates',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.unknownGames.length
-        }),
-        render: (detailContent, statsCache) => {
-            createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year']);
-        }
-    },
-    'never-played': {
-        getTitle: (currentYear) => currentYear ? `Never Played (Acquired in <span style="white-space: nowrap">${currentYear}</span>)` : 'Never Played Games <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.neverPlayedGames.length
-        }),
-        render: (detailContent, statsCache) => {
-            createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
-        }
-    },
-    'missing-price-paid': {
-        getTitle: () => 'Owned Base Games Missing Price Paid',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.missingPricePaidGames.length
-        }),
-        render: (detailContent, statsCache) => {
-            createGameTable(detailContent, statsCache.missingPricePaidGames, ['Name', 'Year', 'Acquisition Date']);
-        }
-    }
-};
-
-/**
- * Show diagnostic detail section
- */
-function showDiagnosticDetail(statType) {
-    const detailSection = document.getElementById('diagnostic-detail-section');
-    const detailTitle = document.getElementById('diagnostic-detail-title');
-    const detailContent = document.getElementById('diagnostic-detail-content');
-    const detailStatSummary = document.getElementById('diagnostic-stat-summary');
-
-    // Remove active class from all diagnostic cards
-    document.querySelectorAll('.diagnostic-card.clickable').forEach(card => {
-        card.classList.remove('active');
-    });
-
-    // Add active class to the clicked card
-    const clickedCard = document.querySelector(`.diagnostic-card[data-stat="${statType}"]`);
-    if (clickedCard) {
-        clickedCard.classList.add('active');
-    }
-
-    // Clear previous content
-    detailContent.innerHTML = '';
-    detailStatSummary.innerHTML = '';
-    detailStatSummary.style.display = 'none';
-
-    // Get handler for this diagnostic type
-    const handler = diagnosticDetailHandlers[statType];
-    if (!handler) {
-        console.error(`No handler found for diagnostic type: ${statType}`);
-        return;
-    }
-
-    // Set title using handler
-    detailTitle.innerHTML = handler.getTitle(currentYear);
-
-    // Get summary data and populate
-    const summary = handler.getSummary(statsCache);
-    populateStatSummary(detailStatSummary, summary.mainValue, summary.substats);
-
-    // Render content using handler
-    handler.render(detailContent, statsCache, currentYear);
-
-    // Show section
-    detailSection.style.display = 'block';
-
-    // Track currently open diagnostic
-    currentlyOpenDiagnosticType = statType;
-
-    // Update URL when diagnostic changes
-    updateURL();
-}
-
-/**
- * Close diagnostic detail section
- */
-function closeDiagnosticDetail() {
-    const detailSection = document.getElementById('diagnostic-detail-section');
-    detailSection.style.display = 'none';
-    currentlyOpenDiagnosticType = null;
-
-    // Remove active class from all diagnostic cards
-    document.querySelectorAll('.diagnostic-card.clickable').forEach(card => {
-        card.classList.remove('active');
-    });
-
-    // Update URL when diagnostic is closed
-    updateURL();
-}
-
-/**
- * Setup diagnostics section toggle functionality
- */
-function setupDiagnosticsToggle() {
-    const header = document.getElementById('diagnostics-header');
-    const content = document.getElementById('diagnostics-content');
-
-    // Load saved state from localStorage
-    const isCollapsed = localStorage.getItem('diagnosticsCollapsed') === 'true';
-
-    if (isCollapsed) {
-        content.classList.add('collapsed');
-    }
-
-    // Toggle on click
-    header.addEventListener('click', () => {
-        const isCurrentlyCollapsed = content.classList.contains('collapsed');
-
-        if (isCurrentlyCollapsed) {
-            content.classList.remove('collapsed');
-            localStorage.setItem('diagnosticsCollapsed', 'false');
-        } else {
-            content.classList.add('collapsed');
-            localStorage.setItem('diagnosticsCollapsed', 'true');
-        }
-    });
-}
-
-/**
  * Load state from URL parameters (permalink)
  */
 function loadFromPermalink() {
@@ -4326,14 +4210,7 @@ function loadFromPermalink() {
 
             // Open stat detail if specified
             if (statParam) {
-                // Check if it's a diagnostic stat
-                const isDiagnostic = statParam === 'unknown-acquisition-dates' || statParam === 'never-played';
-
-                if (isDiagnostic) {
-                    showDiagnosticDetail(statParam);
-                } else {
-                    showDetailSection(statParam);
-                }
+                showDetailSection(statParam);
             }
 
             isLoadingFromPermalink = false;
@@ -4346,10 +4223,9 @@ function loadFromPermalink() {
 /**
  * Copy permalink to clipboard
  */
-async function copyPermalink(isDiagnostic = false) {
+async function copyPermalink() {
     const permalink = window.location.href;
-    const buttonId = isDiagnostic ? 'diagnostic-permalink-btn' : 'permalink-btn';
-    const button = document.getElementById(buttonId);
+    const button = document.getElementById('permalink-btn');
 
     try {
         await navigator.clipboard.writeText(permalink);
@@ -4397,8 +4273,6 @@ function updateURL() {
     // Add stat parameter if a section is open
     if (currentlyOpenStatType) {
         params.set('stat', currentlyOpenStatType);
-    } else if (currentlyOpenDiagnosticType) {
-        params.set('stat', currentlyOpenDiagnosticType);
     }
 
     // Add showAllMetrics param if toggle is enabled (persists even when section is closed)
@@ -4424,24 +4298,24 @@ function updateURL() {
 }
 
 /**
- * Toggle experimental features flag in localStorage with visual feedback
+ * Toggle hidden features flag in localStorage with visual feedback
  * @param {HTMLElement} element - Element to color based on flag state
  */
-function toggleExperimentalFeatures(element) {
-    const current = localStorage.getItem('experimentalFeatures') === 'true';
+function toggleHiddenFeatures(element) {
+    const current = localStorage.getItem('hiddenFeatures') === 'true';
     const newValue = !current;
-    localStorage.setItem('experimentalFeatures', newValue);
+    localStorage.setItem('hiddenFeatures', newValue);
 
     // Persistent color indicates flag state
     element.style.color = newValue ? 'var(--color-primary)' : '';
 }
 
 /**
- * Check if experimental features are enabled
- * @returns {boolean} True if experimental features are enabled
+ * Check if hidden features are enabled
+ * @returns {boolean} True if hidden features are enabled
  */
-function isExperimentalEnabled() {
-    return localStorage.getItem('experimentalFeatures') === 'true';
+function isHiddenEnabled() {
+    return localStorage.getItem('hiddenFeatures') === 'true';
 }
 
 /**
@@ -4454,8 +4328,8 @@ function updateFooter() {
         lastUpdatedEl.textContent =
             `Last updated: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 
-        // Set initial color if experimental features already enabled
-        if (isExperimentalEnabled()) {
+        // Set initial color if hidden features already enabled
+        if (isHiddenEnabled()) {
             lastUpdatedEl.style.color = 'var(--color-primary)';
         }
 
@@ -4466,7 +4340,7 @@ function updateFooter() {
             tapCount++;
             clearTimeout(tapTimeout);
             if (tapCount >= 5) {
-                toggleExperimentalFeatures(lastUpdatedEl);
+                toggleHiddenFeatures(lastUpdatedEl);
                 tapCount = 0;
             } else {
                 tapTimeout = setTimeout(() => tapCount = 0, 1500);

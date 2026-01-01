@@ -253,7 +253,7 @@
                 <div class="widget__value">--</div>
             </article>
 
-            <!-- Cost Analysis Group (experimental) -->
+            <!-- Cost Analysis Group (hidden) -->
             <div class="widget-group-label" id="cost-analysis-section" style="display: none;">Cost Analysis</div>
 
             <article class="widget widget--1x1 clickable" id="avg-cost-per-metric" data-stat="avg-cost-per-metric" style="display: none;">
@@ -294,7 +294,7 @@
                 </div>
             </article>
 
-            <!-- Value Clubs Group (experimental) -->
+            <!-- Value Clubs Group (hidden) -->
             <div class="widget-group-label" id="value-clubs-section" style="display: none;">Value Clubs <span class="widget-group-subtitle">(aka "Justifying My Spending")</span></div>
 
             <article class="widget widget--1x1 clickable" id="five-dollar-club" data-stat="five-dollar-club" style="display: none;">
@@ -357,6 +357,29 @@
                     <span class="widget__cta-btn">View review →</span>
                 </div>
             </article>
+
+            <!-- Diagnostics (Hidden) -->
+            <div class="widget-group-label" id="diagnostics-section" style="display: none;">
+                Diagnostics
+            </div>
+
+            <article class="widget widget--1x1 clickable" id="unknown-acquisition-dates" data-stat="unknown-acquisition-dates" style="display: none;">
+                <div class="widget__title">Unknown Acquisition Dates</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Games missing acquisition date</div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="never-played" data-stat="never-played" style="display: none;">
+                <div class="widget__title">Never Played</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Owned games with zero plays</div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="missing-price-paid" data-stat="missing-price-paid" style="display: none;">
+                <div class="widget__title">Missing Price Paid</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Owned base games without price</div>
+            </article>
         </div>
 
         <!-- Detail Section (shown when stat is clicked) -->
@@ -378,52 +401,6 @@
             </div>
         </section>
 
-        <!-- Diagnostics Section (always visible, collapsible) -->
-        <section id="diagnostics-section" class="diagnostics-section">
-            <div class="diagnostics-header" id="diagnostics-header">
-                <h2>Diagnostics</h2>
-            </div>
-            <div id="diagnostics-content" class="diagnostics-content">
-                <div class="diagnostics-grid">
-                    <div class="diagnostic-card clickable" data-stat="unknown-acquisition-dates">
-                        <h3>Unknown Acquisition Dates</h3>
-                        <div class="stat-value">--</div>
-                        <p class="stat-description">Games missing acquisition date</p>
-                    </div>
-
-                    <div class="diagnostic-card clickable" data-stat="never-played">
-                        <h3>Never Played</h3>
-                        <div class="stat-value">--</div>
-                        <p class="stat-description">Owned games with zero plays</p>
-                    </div>
-
-                    <div class="diagnostic-card clickable" data-stat="missing-price-paid">
-                        <h3>Missing Price Paid</h3>
-                        <div class="stat-value">--</div>
-                        <p class="stat-description">Owned base games without price</p>
-                    </div>
-                </div>
-
-                <!-- Diagnostic Detail Section -->
-                <section id="diagnostic-detail-section" class="diagnostic-detail-section" style="display: none;">
-                    <div class="detail-header">
-                        <div class="detail-header-top">
-                            <h3 id="diagnostic-detail-title"></h3>
-                            <div class="detail-header-buttons">
-                                <button id="diagnostic-permalink-btn" class="permalink-btn" title="Copy permalink to clipboard">🔗</button>
-                                <button id="close-diagnostic-detail" class="close-btn">&times;</button>
-                            </div>
-                        </div>
-                        <div id="diagnostic-stat-summary" class="detail-stat-summary" style="display: none;">
-                            <!-- Stat summary will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    <div id="diagnostic-detail-content" class="detail-content">
-                        <!-- Content will be populated by JavaScript -->
-                    </div>
-                </section>
-            </div>
-        </section>
     </main>
 
     <footer>

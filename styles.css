@@ -11,9 +11,6 @@
     --bg-h-index-contributor: #e3f2fd;
     --bg-h-index-contributor-even: #d1e7f8;
     --bg-year-badge: #f8f9fa;
-    --bg-diagnostics: #f8f9fa;
-    --bg-diagnostic-card: white;
-    --bg-diagnostic-card-active: #e9ecef;
     --bg-info-section: #fff3cd;
 
     /* Text colors */
@@ -24,9 +21,6 @@
     --text-muted: #777;
     --text-light: #999;
     --text-badge: #495057;
-    --text-diagnostic-heading: #6c757d;
-    --text-diagnostic: #495057;
-    --text-diagnostic-muted: #868e96;
     --text-info: #856404;
 
     /* Accent colors */
@@ -51,8 +45,6 @@
     --border-secondary: #dee2e6;
     --border-tertiary: #e9ecef;
     --border-light: #eee;
-    --border-diagnostic: #adb5bd;
-    --border-diagnostic-active: #6c757d;
 
     /* Shadows */
     --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
@@ -60,8 +52,6 @@
     --shadow-lg: 0 4px 12px rgba(52, 152, 219, 0.3);
     --shadow-lg-alt: 0 4px 12px rgba(52, 152, 219, 0.4);
     --shadow-sticky: 2px 0 4px rgba(0,0,0,0.05);
-    --shadow-diagnostic: 0 2px 6px rgba(0,0,0,0.1);
-    --shadow-diagnostic-active: 0 2px 8px rgba(108, 117, 125, 0.3);
     --shadow-hover-bg: rgba(108, 117, 125, 0.05);
 
     /* Transition timings */
@@ -82,9 +72,6 @@
     --bg-h-index-contributor: #1e3a5f;
     --bg-h-index-contributor-even: #1a3352;
     --bg-year-badge: #383838;
-    --bg-diagnostics: #252525;
-    --bg-diagnostic-card: #2d2d2d;
-    --bg-diagnostic-card-active: #383838;
     --bg-info-section: #3d3520;
 
     /* Text colors */
@@ -95,9 +82,6 @@
     --text-muted: #a0a0a0;
     --text-light: #808080;
     --text-badge: #b0b0b0;
-    --text-diagnostic-heading: #909090;
-    --text-diagnostic: #b0b0b0;
-    --text-diagnostic-muted: #808080;
     --text-info: #e6d291;
 
     /* Accent colors */
@@ -122,8 +106,6 @@
     --border-secondary: #404040;
     --border-tertiary: #383838;
     --border-light: #353535;
-    --border-diagnostic: #555555;
-    --border-diagnostic-active: #707070;
 
     /* Shadows */
     --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
@@ -131,8 +113,6 @@
     --shadow-lg: 0 4px 12px rgba(93, 173, 226, 0.3);
     --shadow-lg-alt: 0 4px 12px rgba(93, 173, 226, 0.4);
     --shadow-sticky: 2px 0 4px rgba(0,0,0,0.3);
-    --shadow-diagnostic: 0 2px 6px rgba(0,0,0,0.3);
-    --shadow-diagnostic-active: 0 2px 8px rgba(93, 173, 226, 0.3);
     --shadow-hover-bg: rgba(255, 255, 255, 0.05);
 }
 
@@ -529,21 +509,6 @@ header h1 {
     }
 }
 
-/* Stat Value - used by diagnostics section */
-.stat-value {
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: var(--color-primary);
-    margin-bottom: 0.4rem;
-}
-
-/* Stat Description - used by diagnostics section */
-.stat-description {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-top: 0.5rem;
-}
-
 /* Detail Section - Inline expansion below widgets */
 .detail-section {
     grid-column: span 12;
@@ -683,8 +648,7 @@ header h1 {
     overflow-y: auto;
 }
 
-.detail-section table thead,
-.diagnostic-detail-section table thead {
+.detail-section table thead {
     background: var(--bg-table-header);
     position: sticky;
     top: 0;
@@ -1027,149 +991,6 @@ footer p {
     }
 }
 
-/* Diagnostics Section */
-.diagnostics-section {
-    background: var(--bg-diagnostics);
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-secondary);
-    margin-bottom: 2rem;
-    transition: width var(--transition-border) ease-out, background-color var(--transition-theme), border-color var(--transition-theme);
-}
-
-.diagnostics-section:has(.diagnostics-content.collapsed) {
-    width: fit-content;
-}
-
-.diagnostics-section:has(.diagnostics-content.collapsed) .diagnostics-header {
-    justify-content: flex-start;
-    margin-bottom: 0;
-}
-
-.diagnostics-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    user-select: none;
-    padding: 0.25rem;
-    margin: -0.25rem;
-    margin-bottom: 0.75rem;
-    border-radius: 4px;
-    transition: background var(--transition-hover), margin var(--transition-border) ease-out;
-}
-
-.diagnostics-header:hover {
-    background: var(--shadow-hover-bg);
-}
-
-.diagnostics-header h2 {
-    color: var(--text-diagnostic-heading);
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.diagnostics-content {
-    overflow: visible;
-}
-
-.diagnostics-content.collapsed {
-    display: none;
-}
-
-.diagnostics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-    max-width: 800px;
-    padding: 2px 0;
-}
-
-.diagnostic-card {
-    background: var(--bg-diagnostic-card);
-    padding: 1.25rem;
-    border-radius: 6px;
-    border: 2px solid var(--border-secondary);
-    transition: transform var(--transition-hover), box-shadow var(--transition-hover), border-color var(--transition-hover), background-color var(--transition-theme), color var(--transition-theme);
-}
-
-.diagnostic-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-diagnostic);
-}
-
-.diagnostic-card.clickable {
-    cursor: pointer;
-}
-
-.diagnostic-card.clickable:hover {
-    border-color: var(--border-diagnostic);
-}
-
-.diagnostic-card.active {
-    background-color: var(--bg-diagnostic-card-active);
-    border-color: var(--border-diagnostic-active);
-    box-shadow: var(--shadow-diagnostic-active);
-}
-
-.diagnostic-card h3 {
-    color: var(--text-diagnostic);
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-
-.diagnostic-card .stat-value {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-diagnostic-heading);
-    margin-bottom: 0.25rem;
-}
-
-.diagnostic-card .stat-description {
-    font-size: 0.85rem;
-    color: var(--text-diagnostic-muted);
-    margin-top: 0.25rem;
-}
-
-@media (max-width: 768px) {
-    .diagnostics-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .diagnostic-card .stat-value {
-        font-size: 1.75rem;
-    }
-}
-
-/* Diagnostic Detail Section */
-.diagnostic-detail-section {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 2px solid var(--border-secondary);
-    animation: slideIn 0.3s ease-out;
-}
-
-.diagnostic-detail-section .detail-header {
-    background: var(--bg-diagnostics);
-}
-
-.diagnostic-detail-section .detail-header h3 {
-    color: var(--text-diagnostic);
-    font-size: 1.1rem;
-}
-
-.diagnostic-detail-section table {
-    font-size: 0.9rem;
-}
-
-.diagnostic-detail-section table th,
-.diagnostic-detail-section table td {
-    padding: 0.5rem 0.75rem;
-}
 
 /* Gaming Year in Review Detail */
 @media (min-width: 1200px) {

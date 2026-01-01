@@ -741,8 +741,8 @@ describe('Suggestion Algorithms', () => {
     });
   });
 
-  describe('getSuggestedGames with isExperimental', () => {
-    test('includes value club suggestions when isExperimental is true', () => {
+  describe('getSuggestedGames with isHidden', () => {
+    test('includes value club suggestions when isHidden is true', () => {
       const testGames = [
         {
           id: 1,
@@ -763,7 +763,7 @@ describe('Suggestion Algorithms', () => {
       expect(Array.isArray(suggestions)).toBe(true);
     });
 
-    test('does not include value club suggestions when isExperimental is false', () => {
+    test('does not include value club suggestions when isHidden is false', () => {
       const testGames = [
         {
           id: 1,
@@ -783,7 +783,7 @@ describe('Suggestion Algorithms', () => {
       expect(valueClubSuggestion).toBeUndefined();
     });
 
-    test('defaults isExperimental to false', () => {
+    test('defaults isHidden to false', () => {
       const suggestions = getSuggestedGames(typicalData.games, typicalData.plays);
       const valueClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
       expect(valueClubSuggestion).toBeUndefined();
