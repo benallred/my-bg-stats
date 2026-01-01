@@ -470,6 +470,7 @@ function setupYearFilter() {
     yearSelect.addEventListener('change', (e) => {
         currentYear = e.target.value === 'all' ? null : parseInt(e.target.value);
         updateYearInfoBadge();
+        updateHeaderScrollMargin();
         updateSectionVisibility();
         updateAllStats();
 
@@ -2113,10 +2114,10 @@ function showDetailSection(statType) {
     // Show section
     detailSection.style.display = 'block';
 
-    // Scroll the clicked widget into view
-    requestAnimationFrame(() => {
+    // Scroll the clicked card into view after the expand animation completes (250ms)
+    setTimeout(() => {
         clickedCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+    }, 250);
 
     // Track currently open stat
     currentlyOpenStatType = statType;
@@ -4349,15 +4350,27 @@ function updateFooter() {
 }
 
 /**
+ * Update the scroll margin CSS variable based on current header height
+ */
+function updateHeaderScrollMargin() {
+    const header = document.querySelector('header');
+    requestAnimationFrame(() => {
+        const height = header.offsetHeight;
+        document.documentElement.style.setProperty('--header-scroll-margin', `${height + 4}px`);
+    });
+}
+
+/**
  * Setup sticky header shadow effect on scroll
  */
 function setupStickyHeader() {
     const header = document.querySelector('header');
 
-    // Capture initial height for scroll progress calculation
+    // Capture initial height for scroll progress calculation and scroll margin
     let initialHeight = 0;
     requestAnimationFrame(() => {
         initialHeight = header.offsetHeight;
+        updateHeaderScrollMargin();
     });
 
     window.addEventListener('scroll', () => {
