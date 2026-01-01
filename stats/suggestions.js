@@ -515,10 +515,9 @@ function suggestNeverPlayedGame(gamePlayData) {
  * Get suggested games to play next based on play patterns
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
- * @param {boolean} isHidden - Whether hidden features are enabled
  * @returns {Array} Array of {game, reasons, stats} in priority order
  */
-function getSuggestedGames(games, plays, isHidden = false) {
+function getSuggestedGames(games, plays) {
   // Filter to owned base games only
   const ownedBaseGames = games.filter(game => game.isBaseGame && isGameOwned(game));
 
@@ -578,10 +577,9 @@ function getSuggestedGames(games, plays, isHidden = false) {
     suggestForNextMilestone(gamePlayData, Metric.HOURS),        // Almost a milestone (hours)
     suggestForNextMilestone(gamePlayData, Metric.SESSIONS),    // Almost a milestone (sessions)
     suggestForNextMilestone(gamePlayData, Metric.PLAYS),       // Almost a milestone (plays)
-    // Value club suggestions (hidden) - one per metric type
-    isHidden ? suggestForNextValueClub(gamePlayData, Metric.HOURS) : null,
-    isHidden ? suggestForNextValueClub(gamePlayData, Metric.SESSIONS) : null,
-    isHidden ? suggestForNextValueClub(gamePlayData, Metric.PLAYS) : null,
+    suggestForNextValueClub(gamePlayData, Metric.HOURS),
+    suggestForNextValueClub(gamePlayData, Metric.SESSIONS),
+    suggestForNextValueClub(gamePlayData, Metric.PLAYS),
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData),                       // Shelf of shame
     suggestHighestCostPerMetric(gamePlayData),                  // Justify the cost

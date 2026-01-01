@@ -430,7 +430,6 @@ async function loadData() {
         throw new Error('Failed to load data.json');
     }
     gameData = await response.json();
-    console.log('Data loaded:', gameData);
 }
 
 /**
@@ -640,7 +639,7 @@ function updateAllStats() {
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
-        suggestedGames: getSuggestedGames(gameData.games, gameData.plays, isHiddenEnabled()),
+        suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
         // Social & Locations stats
         playerStats: getPlayerStats(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),

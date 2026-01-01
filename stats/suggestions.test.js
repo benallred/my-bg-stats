@@ -158,13 +158,8 @@ describe('Suggestion Algorithms', () => {
       expect(suggestions).toEqual([]);
     });
 
-    test('accepts metric parameter and uses it for milestone suggestions (hours)', () => {
-      const suggestions = getSuggestedGames(typicalData.games, typicalData.plays, 'hours');
-      expect(Array.isArray(suggestions)).toBe(true);
-    });
-
-    test('accepts metric parameter and uses it for milestone suggestions (sessions)', () => {
-      const suggestions = getSuggestedGames(typicalData.games, typicalData.plays, 'sessions');
+    test('returns suggestions for typical data', () => {
+      const suggestions = getSuggestedGames(typicalData.games, typicalData.plays);
       expect(Array.isArray(suggestions)).toBe(true);
     });
 
@@ -180,7 +175,7 @@ describe('Suggestion Algorithms', () => {
         },
       ];
       const testPlays = [{ gameId: 1, date: '2020-01-01', durationMin: 240 }];
-      const suggestions = getSuggestedGames(testGames, testPlays, 'hours');
+      const suggestions = getSuggestedGames(testGames, testPlays);
       const milestoneSuggestion = suggestions.find(
         s => s.reasons.includes('Closest to a five') || s.reasons.includes('Almost a five')
       );
@@ -206,7 +201,7 @@ describe('Suggestion Algorithms', () => {
         { gameId: 1, date: '2020-01-03', durationMin: 60 },
         { gameId: 1, date: '2020-01-04', durationMin: 60 },
       ];
-      const suggestions = getSuggestedGames(testGames, testPlays, 'sessions');
+      const suggestions = getSuggestedGames(testGames, testPlays);
       const milestoneSuggestion = suggestions.find(
         s => s.reasons.includes('Closest to a five') || s.reasons.includes('Almost a five')
       );
@@ -741,56 +736,6 @@ describe('Suggestion Algorithms', () => {
     });
   });
 
-  describe('getSuggestedGames with isHidden', () => {
-    test('includes value club suggestions when isHidden is true', () => {
-      const testGames = [
-        {
-          id: 1,
-          name: 'Expensive Game',
-          isBaseGame: true,
-          isExpansion: false,
-          isExpandalone: false,
-          copies: [{ statusOwned: true, pricePaid: 100 }],
-        },
-      ];
-      const testPlays = [
-        { gameId: 1, date: '2023-01-01', durationMin: 480 },
-        { gameId: 1, date: '2023-01-02', durationMin: 480 },
-      ];
-
-      const suggestions = getSuggestedGames(testGames, testPlays, true);
-      // May or may not have a value club suggestion depending on game data
-      expect(Array.isArray(suggestions)).toBe(true);
-    });
-
-    test('does not include value club suggestions when isHidden is false', () => {
-      const testGames = [
-        {
-          id: 1,
-          name: 'Expensive Game',
-          isBaseGame: true,
-          isExpansion: false,
-          isExpandalone: false,
-          copies: [{ statusOwned: true, pricePaid: 100 }],
-        },
-      ];
-      const testPlays = [
-        { gameId: 1, date: '2023-01-01', durationMin: 480 },
-      ];
-
-      const suggestions = getSuggestedGames(testGames, testPlays, false);
-      const valueClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
-      expect(valueClubSuggestion).toBeUndefined();
-    });
-
-    test('defaults isHidden to false', () => {
-      const suggestions = getSuggestedGames(typicalData.games, typicalData.plays);
-      const valueClubSuggestion = suggestions.find(s => s.reasons && s.reasons.some(r => r.startsWith('Join the $')));
-      expect(valueClubSuggestion).toBeUndefined();
-    });
-
-  });
-
   describe('Edge cases for uncovered branches', () => {
     test('milestone suggestion shows singular session text when at 1 session', () => {
       const testGames = [
@@ -801,7 +746,7 @@ describe('Suggestion Algorithms', () => {
         { gameId: 1, date: '2023-01-01', durationMin: 60 },
       ];
 
-      const suggestions = getSuggestedGames(testGames, testPlays, 'sessions');
+      const suggestions = getSuggestedGames(testGames, testPlays);
       const milestoneSuggestion = suggestions.find(s => s.reasons.some(r => r.includes('five') || r.includes('dime')));
       if (milestoneSuggestion) {
         // Should use singular "session" not "sessions" for value of 1
@@ -819,7 +764,7 @@ describe('Suggestion Algorithms', () => {
         { gameId: 1, date: '2023-01-01', durationMin: 60 },
       ];
 
-      const suggestions = getSuggestedGames(testGames, testPlays, 'plays');
+      const suggestions = getSuggestedGames(testGames, testPlays);
       const milestoneSuggestion = suggestions.find(s => s.reasons.some(r => r.includes('five') || r.includes('dime')));
       if (milestoneSuggestion) {
         // Should use singular "play" not "plays" for value of 1
@@ -870,7 +815,7 @@ describe('Suggestion Algorithms', () => {
       }
 
       // With 101 unique sessions, the game is past the 100 milestone for sessions
-      const suggestions = getSuggestedGames(testGames, testPlays, 'sessions');
+      const suggestions = getSuggestedGames(testGames, testPlays);
       // Should not have milestone suggestions for sessions since all games are past 100
       const milestoneSuggestion = suggestions.find(s =>
         s.reasons.some(r => r.includes('five') || r.includes('dime') || r.includes('quarter') || r.includes('century'))
