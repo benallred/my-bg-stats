@@ -791,10 +791,10 @@ function updateAllStats() {
  */
 function updateHIndexStats() {
     const hIndexValue = getCurrentHIndex();
-    document.querySelector('#h-index .stat-value').textContent = hIndexValue;
+    document.querySelector('#h-index .widget__value').textContent = hIndexValue;
 
     // Update People H-Index
-    document.querySelector('#people-h-index .stat-value').textContent = statsCache.peopleHIndex;
+    document.querySelector('#people-h-index .widget__value').textContent = statsCache.peopleHIndex;
 }
 
 /**
@@ -859,10 +859,10 @@ function updateMilestoneCardLabels() {
 
     const currentLabels = labels[currentBaseMetric] || labels.hours;
 
-    document.querySelector('#fives .stat-description').textContent = currentLabels.fives;
-    document.querySelector('#dimes .stat-description').textContent = currentLabels.dimes;
-    document.querySelector('#quarters .stat-description').textContent = currentLabels.quarters;
-    document.querySelector('#centuries .stat-description').textContent = currentLabels.centuries;
+    document.querySelector('#fives .widget__description').textContent = currentLabels.fives;
+    document.querySelector('#dimes .widget__description').textContent = currentLabels.dimes;
+    document.querySelector('#quarters .widget__description').textContent = currentLabels.quarters;
+    document.querySelector('#centuries .widget__description').textContent = currentLabels.centuries;
 }
 
 /**
@@ -930,13 +930,13 @@ function updateCollectionStats() {
     }
 
     // Total BGG Entries
-    document.querySelector('#total-bgg-entries .stat-value').textContent = statsCache.totalBGGEntries;
+    document.querySelector('#total-bgg-entries .widget__value').textContent = statsCache.totalBGGEntries;
 
     // Total Games Owned
-    document.querySelector('#total-games-owned .stat-value').textContent = statsCache.totalGamesOwned;
+    document.querySelector('#total-games-owned .widget__value').textContent = statsCache.totalGamesOwned;
 
     // Total Expansions
-    document.querySelector('#total-expansions .stat-value').textContent = statsCache.expansionsData.total;
+    document.querySelector('#total-expansions .widget__value').textContent = statsCache.expansionsData.total;
     document.getElementById('expandalones-count').textContent = statsCache.expansionsData.expandalones;
     document.getElementById('expansion-only-count').textContent = statsCache.expansionsData.expansionOnly;
 }
@@ -947,11 +947,11 @@ function updateCollectionStats() {
 function updatePlayStats() {
     // Total Plays
     const totalPlays = getTotalPlays(gameData.plays, currentYear);
-    document.querySelector('#total-plays .stat-value').textContent = totalPlays.toLocaleString();
+    document.querySelector('#total-plays .widget__value').textContent = totalPlays.toLocaleString();
 
     // Total Days Played
     const totalDays = getTotalDaysPlayed(gameData.plays, currentYear);
-    document.querySelector('#total-days-played .stat-value').textContent = totalDays.toLocaleString();
+    document.querySelector('#total-days-played .widget__value').textContent = totalDays.toLocaleString();
 
     // Daily Session Stats
     const dailySessionMedian = document.getElementById('daily-session-median');
@@ -971,7 +971,7 @@ function updatePlayStats() {
     }
 
     // Unique Games Played
-    document.querySelector('#unique-games-played .stat-value').textContent = statsCache.gamesPlayedData.total;
+    document.querySelector('#unique-games-played .widget__value').textContent = statsCache.gamesPlayedData.total;
     document.getElementById('my-games-count').textContent = statsCache.gamesPlayedData.myGames;
     document.getElementById('others-games-count').textContent = statsCache.gamesPlayedData.othersGames;
 
@@ -997,7 +997,7 @@ function updatePlayTimeStats() {
 
     // Add tilde prefix if any durations are estimated
     const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
-    document.querySelector('#total-play-time .stat-value').textContent = `${prefix}${hours} hours`;
+    document.querySelector('#total-play-time .widget__value').textContent = `${prefix}${hours} hours`;
     document.getElementById('play-time-days').textContent = `${prefix}${days}`;
 }
 
@@ -1006,10 +1006,10 @@ function updatePlayTimeStats() {
  */
 function updateMilestoneStats() {
     const milestones = getCurrentMilestones();
-    document.querySelector('#fives .stat-value').textContent = milestones[Milestone.FIVES].length;
-    document.querySelector('#dimes .stat-value').textContent = milestones[Milestone.DIMES].length;
-    document.querySelector('#quarters .stat-value').textContent = milestones[Milestone.QUARTERS].length;
-    document.querySelector('#centuries .stat-value').textContent = milestones[Milestone.CENTURIES].length;
+    document.querySelector('#fives .widget__value').textContent = milestones[Milestone.FIVES].length;
+    document.querySelector('#dimes .widget__value').textContent = milestones[Milestone.DIMES].length;
+    document.querySelector('#quarters .widget__value').textContent = milestones[Milestone.QUARTERS].length;
+    document.querySelector('#centuries .widget__value').textContent = milestones[Milestone.CENTURIES].length;
 }
 
 /**
@@ -1021,11 +1021,11 @@ function updateSocialLocationStats() {
     const soloGameStats = statsCache.soloGameStats;
 
     // Update Players card
-    document.querySelector('#players-card .stat-value').textContent = `> ${playerStats.uniquePlayerCount}`;
+    document.querySelector('#players-card .widget__value').textContent = `> ${playerStats.uniquePlayerCount}`;
 
     // Update Solo card based on current metric
     const soloCard = document.getElementById('solo-card');
-    const soloValue = soloCard.querySelector('.stat-value');
+    const soloValue = soloCard.querySelector('.widget__value');
     const soloPercent = document.getElementById('solo-percent');
     const soloOnlyDaysContainer = document.getElementById('solo-only-days-container');
     const soloOnlyDays = document.getElementById('solo-only-days');
@@ -1066,14 +1066,14 @@ function updateSocialLocationStats() {
     soloPercent.textContent = percentValue;
 
     // Update Locations card
-    document.querySelector('#locations-card .stat-value').textContent = locationStats.locationCount;
+    document.querySelector('#locations-card .widget__value').textContent = locationStats.locationCount;
 }
 
 /**
  * Update diagnostics section
  */
 function updateDiagnosticsSection() {
-    // Update unknown acquisition dates card
+    // Update unknown acquisition dates card (diagnostics use .stat-value, not .widget__value)
     const unknownCard = document.querySelector('[data-stat="unknown-acquisition-dates"]');
     unknownCard.querySelector('.stat-value').textContent = statsCache.unknownGames.length;
 
@@ -1107,7 +1107,7 @@ function updateCostAnalysisStats() {
     // Update Total Cost card
     const totalCostValue = statsCache.totalCostData.totalCost;
     const prefix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '> ' : '';
-    document.querySelector('#total-cost .stat-value').textContent =
+    document.querySelector('#total-cost .widget__value').textContent =
         `${prefix}$${totalCostValue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
     // Update Total Cost description based on year filter
@@ -1152,7 +1152,7 @@ function updateAvgCostPerMetricCard() {
     document.getElementById('avg-cost-label').textContent = metricLabels[currentBaseMetric] || metricLabels.hours;
 
     // Update main value (median) with < prefix
-    const mainValueEl = document.querySelector('#avg-cost-per-metric .stat-value');
+    const mainValueEl = document.querySelector('#avg-cost-per-metric .widget__value');
     if (data.median !== null) {
         mainValueEl.textContent = `< $${data.median.toFixed(2)}`;
     } else {
@@ -1180,7 +1180,7 @@ function updateShelfOfShameCard() {
     const data = statsCache.shelfOfShameData;
 
     // Main value: total cost with < prefix
-    const mainValueEl = document.querySelector('#shelf-of-shame .stat-value');
+    const mainValueEl = document.querySelector('#shelf-of-shame .widget__value');
     mainValueEl.textContent = data.totalCost > 0
         ? `< $${data.totalCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
         : '$0';
@@ -1218,9 +1218,13 @@ function updateValueClubsStats() {
     ];
 
     clubData.forEach(({ id, data }) => {
-        const count = data.count;
-        document.querySelector(`#${id} .stat-value`).textContent =
-            `${count} game${count === 1 ? '' : 's'}`;
+        const card = document.getElementById(id);
+        if (card) {
+            card.style.display = '';
+            const count = data.count;
+            card.querySelector('.widget__value').textContent =
+                `${count} game${count === 1 ? '' : 's'}`;
+        }
     });
 
     // Update card descriptions and cumulative substats
@@ -1337,7 +1341,7 @@ function updateYearInReview() {
  */
 function setupEventListeners() {
     // Main stat cards
-    const clickableCards = document.querySelectorAll('.stat-card.clickable');
+    const clickableCards = document.querySelectorAll('.widget.clickable');
     clickableCards.forEach(card => {
         card.addEventListener('click', () => {
             const statType = card.dataset.stat;
@@ -2040,21 +2044,22 @@ const statDetailHandlers = {
 };
 
 /**
- * Show detail section for a specific stat
+ * Show detail section for a specific stat - inline below the clicked widget
  */
 function showDetailSection(statType) {
     const detailSection = document.getElementById('detail-section');
     const detailTitle = document.getElementById('detail-title');
     const detailContent = document.getElementById('detail-content');
     const detailStatSummary = document.getElementById('detail-stat-summary');
+    const dashboardGrid = document.querySelector('.dashboard-grid');
 
     // Remove active class from all stat cards
-    document.querySelectorAll('.stat-card.clickable').forEach(card => {
+    document.querySelectorAll('.widget.clickable').forEach(card => {
         card.classList.remove('active');
     });
 
     // Add active class to the clicked card
-    const clickedCard = document.querySelector(`.stat-card[data-stat="${statType}"]`);
+    const clickedCard = document.querySelector(`.widget[data-stat="${statType}"]`);
     if (clickedCard) {
         clickedCard.classList.add('active');
     }
@@ -2086,43 +2091,21 @@ function showDetailSection(statType) {
         handler.renderSummary(detailStatSummary, detailContent);
     }
 
+    // Move detail section into the grid, right after the clicked widget
+    if (clickedCard && dashboardGrid) {
+        clickedCard.after(detailSection);
+    }
+
     // Show section
     detailSection.style.display = 'block';
 
-    // Calculate scroll position to show detail section optimally
+    // Scroll the clicked widget into view
     requestAnimationFrame(() => {
-        // Wait another frame to ensure layout is complete
-        requestAnimationFrame(() => {
-            const detailSectionRect = detailSection.getBoundingClientRect();
-            const sectionStyles = getComputedStyle(detailSection);
-            const marginBottom = parseFloat(sectionStyles.marginBottom);
-
-            // Position the visual bottom of the section at the viewport bottom
-            // The visual bottom excludes the margin-bottom
-            const targetBottom = detailSectionRect.bottom - marginBottom;
-            const viewportHeight = window.innerHeight;
-
-            // Calculate how much to scroll to align bottom with viewport bottom
-            const scrollAmount = targetBottom - viewportHeight;
-
-            // Only skip scrolling if we're already at the exact position
-            if (Math.abs(scrollAmount) < 1) {
-                return;
-            }
-
-            // Scroll to position (can be positive to scroll down or negative to scroll up)
-            window.scrollTo({
-                top: window.pageYOffset + scrollAmount,
-                behavior: 'smooth'
-            });
-        });
+        clickedCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // Track currently open stat
     currentlyOpenStatType = statType;
-
-    // Update detail header height for sticky table headers
-    updateDetailHeaderHeight();
 
     // Update URL when stat changes
     updateURL();
@@ -2136,7 +2119,7 @@ function closeDetailSection() {
     currentlyOpenStatType = null;
 
     // Remove active class from all stat cards
-    document.querySelectorAll('.stat-card.clickable').forEach(card => {
+    document.querySelectorAll('.widget.clickable').forEach(card => {
         card.classList.remove('active');
     });
 
@@ -4238,24 +4221,8 @@ function showDiagnosticDetail(statType) {
     // Track currently open diagnostic
     currentlyOpenDiagnosticType = statType;
 
-    // Update detail header height for sticky table headers
-    updateDiagnosticHeaderHeight();
-
     // Update URL when diagnostic changes
     updateURL();
-}
-
-/**
- * Update diagnostic header height CSS variable when diagnostic detail section is shown
- */
-function updateDiagnosticHeaderHeight() {
-    const detailHeader = document.querySelector('#diagnostic-detail-section .detail-header');
-    if (detailHeader) {
-        requestAnimationFrame(() => {
-            const detailHeaderHeight = detailHeader.offsetHeight;
-            document.documentElement.style.setProperty('--detail-header-height', `${detailHeaderHeight}px`);
-        });
-    }
 }
 
 /**
@@ -4548,29 +4515,5 @@ function setupStickyHeader() {
         } else {
             header.classList.remove('sticky-scrolled');
         }
-
-        // Update CSS variable for detail header sticky positioning
-        const currentHeaderHeight = header.offsetHeight;
-        document.documentElement.style.setProperty('--main-header-height', `${currentHeaderHeight}px`);
-
-        // Also update detail header height if it exists
-        const detailHeader = document.querySelector('.detail-header');
-        if (detailHeader) {
-            const detailHeaderHeight = detailHeader.offsetHeight;
-            document.documentElement.style.setProperty('--detail-header-height', `${detailHeaderHeight}px`);
-        }
     }, { passive: true });
-}
-
-/**
- * Update detail header height CSS variable when detail section is shown
- */
-function updateDetailHeaderHeight() {
-    const detailHeader = document.querySelector('.detail-header');
-    if (detailHeader) {
-        requestAnimationFrame(() => {
-            const detailHeaderHeight = detailHeader.offsetHeight;
-            document.documentElement.style.setProperty('--detail-header-height', `${detailHeaderHeight}px`);
-        });
-    }
 }

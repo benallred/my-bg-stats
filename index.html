@@ -49,328 +49,312 @@
     </header>
 
     <main>
-        <!-- H-Index Metrics Section -->
-        <section id="h-index-section" class="stat-section">
-            <h2 class="section-heading">H-Index Metrics</h2>
-            <div class="section-grid">
-                <div class="stat-card clickable" id="h-index" data-stat="h-index">
-                    <h3 id="h-index-title">
-                        H-Index
-                        <svg class="info-icon" id="h-index-info-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Show h-index information">
-                            <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-                            <text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text>
+        <!-- Dashboard Grid - All widgets in a single responsive grid -->
+        <div class="dashboard-grid">
+            <!-- H-Index Group -->
+            <div class="widget-group-label">H-Index Metrics</div>
+
+            <article class="widget widget--2x1 clickable" id="h-index" data-stat="h-index">
+                <div class="widget__title" id="h-index-title">
+                    H-Index
+                    <svg class="info-icon" id="h-index-info-icon" width="14" height="14" viewBox="0 0 16 16" aria-label="Show h-index information">
+                        <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        <text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text>
+                    </svg>
+                </div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="h-index-description">Games ranked by total hours</div>
+            </article>
+
+            <article class="widget widget--2x1 clickable" id="people-h-index" data-stat="people-h-index">
+                <div class="widget__title" id="people-h-index-title">
+                    People H-Index
+                    <span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
+                        <svg class="experimental-icon" width="14" height="14" viewBox="0 0 16 16" aria-label="Experimental feature">
+                            <path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                            <circle cx="6.5" cy="10.5" r="1" fill="currentColor"/>
+                            <circle cx="9" cy="11.5" r="0.7" fill="currentColor"/>
                         </svg>
-                    </h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="h-index-description">Games ranked by total hours</p>
+                    </span>
+                    <svg class="info-icon" id="people-h-index-info-icon" width="14" height="14" viewBox="0 0 16 16" aria-label="Show People H-Index information">
+                        <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        <text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text>
+                    </svg>
                 </div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="people-h-index-description">Games ranked by unique players</div>
+            </article>
 
-                <div class="stat-card clickable" id="people-h-index" data-stat="people-h-index">
-                    <h3 id="people-h-index-title">
-                        People H-Index
-                        <span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
-                            <svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature">
-                                <path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                                <circle cx="6.5" cy="10.5" r="1" fill="currentColor"/>
-                                <circle cx="9" cy="11.5" r="0.7" fill="currentColor"/>
-                            </svg>
-                        </span>
-                        <svg class="info-icon" id="people-h-index-info-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Show People H-Index information">
-                            <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-                            <text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text>
+            <!-- Collection Group -->
+            <div class="widget-group-label">Collection</div>
+
+            <article class="widget widget--1x1 clickable" id="total-games-owned" data-stat="total-games-owned">
+                <div class="widget__title"><span class="stat-label">Games Owned</span></div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Base games only</div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="total-expansions" data-stat="total-expansions">
+                <div class="widget__title"><span class="stat-label">Expansions</span></div>
+                <div class="widget__value">--</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Expandalones:</span>
+                        <span class="widget__substat-value" id="expandalones-count">--</span>
+                    </div>
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Expansion-only:</span>
+                        <span class="widget__substat-value" id="expansion-only-count">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="total-bgg-entries" data-stat="total-bgg-entries">
+                <div class="widget__title"><span class="stat-label">BGG Entries</span></div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Includes all copies</div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="total-cost" data-stat="total-cost" style="display: none;">
+                <div class="widget__title">Total Cost</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="total-cost-description">Sum of all owned copies</div>
+            </article>
+
+            <!-- Play Activity Group -->
+            <div class="widget-group-label" id="play-statistics-section">Play Activity</div>
+
+            <article class="widget widget--1x1" id="total-plays">
+                <div class="widget__title">Plays</div>
+                <div class="widget__value">--</div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="unique-games-played" data-stat="unique-games-played">
+                <div class="widget__title">Unique Games</div>
+                <div class="widget__value">--</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">My games:</span>
+                        <span class="widget__substat-value" id="my-games-count">--</span>
+                    </div>
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Others':</span>
+                        <span class="widget__substat-value" id="others-games-count">--</span>
+                    </div>
+                    <div class="widget__substat hidden" id="new-to-me-container">
+                        <span class="widget__substat-label">New-to-me:</span>
+                        <span class="widget__substat-value" id="new-to-me-count">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="total-days-played" data-stat="total-days-played">
+                <div class="widget__title">Days Played</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Unique dates with plays</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Median:</span>
+                        <span class="widget__substat-value" id="daily-session-median">--</span>
+                    </div>
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Average:</span>
+                        <span class="widget__substat-value" id="daily-session-average">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="total-play-time" data-stat="total-play-time">
+                <div class="widget__title">Play Time</div>
+                <div class="widget__value">--</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">In days:</span>
+                        <span class="widget__substat-value" id="play-time-days">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Milestones Group -->
+            <div class="widget-group-label" id="milestone-section">Milestones</div>
+
+            <article class="widget widget--1x1 clickable" id="fives" data-stat="fives">
+                <div class="widget__title">Fives</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Games with 5-9</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label" id="fives-cumulative-label">All 5+:</span>
+                        <span class="widget__substat-value" id="fives-cumulative">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="dimes" data-stat="dimes">
+                <div class="widget__title">Dimes</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Games with 10-24</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label" id="dimes-cumulative-label">All 10+:</span>
+                        <span class="widget__substat-value" id="dimes-cumulative">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="quarters" data-stat="quarters">
+                <div class="widget__title">Quarters</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Games with 25-99</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label" id="quarters-cumulative-label">All 25+:</span>
+                        <span class="widget__substat-value" id="quarters-cumulative">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="centuries" data-stat="centuries">
+                <div class="widget__title">Centuries</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description">Games with 100+</div>
+            </article>
+
+            <!-- Social Group -->
+            <div class="widget-group-label" id="social-locations-section">Social & Locations</div>
+
+            <article class="widget widget--1x1 clickable" id="players-card" data-stat="players">
+                <div class="widget__title">Players</div>
+                <div class="widget__value">> --</div>
+                <div class="widget__description">Excludes strangers</div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="solo-card" data-stat="solo">
+                <div class="widget__title">Solo</div>
+                <div class="widget__value">--</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">% of total:</span>
+                        <span class="widget__substat-value" id="solo-percent">--</span>
+                    </div>
+                    <div class="widget__substat" id="solo-only-days-container" style="display: none;">
+                        <span class="widget__substat-label">Solo-only days:</span>
+                        <span class="widget__substat-value" id="solo-only-days">--</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="locations-card" data-stat="locations">
+                <div class="widget__title">Locations</div>
+                <div class="widget__value">--</div>
+            </article>
+
+            <!-- Cost Analysis Group (experimental) -->
+            <div class="widget-group-label" id="cost-analysis-section" style="display: none;">Cost Analysis</div>
+
+            <article class="widget widget--1x1 clickable" id="avg-cost-per-metric" data-stat="avg-cost-per-metric" style="display: none;">
+                <div class="widget__title">
+                    <span id="avg-cost-label">Cost Per Hour</span>
+                    <span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
+                        <svg class="experimental-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Experimental feature">
+                            <path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                            <circle cx="6.5" cy="10.5" r="1" fill="currentColor"/>
+                            <circle cx="9" cy="11.5" r="0.7" fill="currentColor"/>
                         </svg>
-                    </h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="people-h-index-description">Games ranked by unique players</p>
+                    </span>
                 </div>
-            </div>
-        </section>
-
-        <!-- Collection Statistics Section -->
-        <section class="stat-section">
-            <h2 class="section-heading">Collection Statistics</h2>
-            <div class="section-grid">
-                <div class="stat-card clickable" id="total-bgg-entries" data-stat="total-bgg-entries">
-                    <h3><span class="stat-label">Total BGG Entries Owned</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Includes expansions, expandalones & all copies</p>
-                </div>
-
-                <div class="stat-card clickable" id="total-games-owned" data-stat="total-games-owned">
-                    <h3><span class="stat-label">Total Games Owned</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Base games only</p>
-                </div>
-
-                <div class="stat-card clickable" id="total-expansions" data-stat="total-expansions">
-                    <h3><span class="stat-label">Total Expansions Owned</span></h3>
-                    <div class="stat-value">--</div>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label">Expandalones:</span>
-                            <span class="substat-value" id="expandalones-count">--</span>
-                        </div>
-                        <div class="substat">
-                            <span class="substat-label">Expansion-only:</span>
-                            <span class="substat-value" id="expansion-only-count">--</span>
-                        </div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="avg-cost-description">Median cost per hour</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Game avg:</span>
+                        <span class="widget__substat-value" id="avg-cost-game-average">--</span>
+                    </div>
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Overall:</span>
+                        <span class="widget__substat-value" id="avg-cost-overall-rate">--</span>
                     </div>
                 </div>
-            </div>
-        </section>
+            </article>
 
-        <!-- Play Statistics Section -->
-        <section id="play-statistics-section" class="stat-section">
-            <h2 class="section-heading">Play Statistics</h2>
-            <div class="section-grid">
-                <div class="stat-card" id="total-plays">
-                    <h3>Total Plays Logged</h3>
-                    <div class="stat-value">--</div>
-                </div>
-
-                <div class="stat-card clickable" id="unique-games-played" data-stat="unique-games-played">
-                    <h3>Unique Games Played</h3>
-                    <div class="stat-value">--</div>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label">My games:</span>
-                            <span class="substat-value" id="my-games-count">--</span>
-                        </div>
-                        <div class="substat">
-                            <span class="substat-label">Others' games:</span>
-                            <span class="substat-value" id="others-games-count">--</span>
-                        </div>
-                        <div class="substat hidden" id="new-to-me-container">
-                            <span class="substat-label">New-to-me:</span>
-                            <span class="substat-value" id="new-to-me-count">--</span>
-                        </div>
+            <article class="widget widget--1x1 clickable" id="shelf-of-shame" data-stat="shelf-of-shame" style="display: none;">
+                <div class="widget__title">Shelf of Shame</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="shelf-of-shame-description">Owned games never played</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label">Games:</span>
+                        <span class="widget__substat-value" id="shelf-of-shame-count">--</span>
                     </div>
                 </div>
+            </article>
 
-                <div class="stat-card clickable" id="total-days-played" data-stat="total-days-played">
-                    <h3>Total Days Played</h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Unique dates with plays</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label">Median:</span>
-                            <span class="substat-value" id="daily-session-median">--</span>
-                        </div>
-                        <div class="substat">
-                            <span class="substat-label">Average:</span>
-                            <span class="substat-value" id="daily-session-average">--</span>
-                        </div>
+            <!-- Value Clubs Group (experimental) -->
+            <div class="widget-group-label" id="value-clubs-section" style="display: none;">Value Clubs <span class="widget-group-subtitle">(aka "Justifying My Spending")</span></div>
+
+            <article class="widget widget--1x1 clickable" id="five-dollar-club" data-stat="five-dollar-club" style="display: none;">
+                <div class="widget__title">$5 Club</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="five-dollar-club-description">Games at $5 or less per hour</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label" id="five-dollar-cumulative-label">All ≤$5:</span>
+                        <span class="widget__substat-value" id="five-dollar-cumulative">--</span>
                     </div>
                 </div>
+            </article>
 
-                <div class="stat-card clickable" id="total-play-time" data-stat="total-play-time">
-                    <h3>Total Play Time</h3>
-                    <div class="stat-value">--</div>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label">In days:</span>
-                            <span class="substat-value" id="play-time-days">--</span>
-                        </div>
+            <article class="widget widget--1x1 clickable" id="two-fifty-club" data-stat="two-fifty-club" style="display: none;">
+                <div class="widget__title">$2.50 Club</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="two-fifty-club-description">Games at $2.50 or less per hour</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label" id="two-fifty-cumulative-label">All ≤$2.50:</span>
+                        <span class="widget__substat-value" id="two-fifty-cumulative">--</span>
                     </div>
                 </div>
-            </div>
-        </section>
+            </article>
 
-        <!-- Milestone Achievements Section -->
-        <section id="milestone-section" class="stat-section">
-            <h2 class="section-heading">Milestone Achievements</h2>
-            <div class="section-grid">
-                <div class="stat-card clickable" id="fives" data-stat="fives">
-                    <h3>Fives</h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Games with 5-9</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label" id="fives-cumulative-label">All games with 5+:</span>
-                            <span class="substat-value" id="fives-cumulative">--</span>
-                        </div>
+            <article class="widget widget--1x1 clickable" id="one-dollar-club" data-stat="one-dollar-club" style="display: none;">
+                <div class="widget__title">$1 Club</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="one-dollar-club-description">Games at $1 or less per hour</div>
+                <div class="widget__substats">
+                    <div class="widget__substat">
+                        <span class="widget__substat-label" id="one-dollar-cumulative-label">All ≤$1:</span>
+                        <span class="widget__substat-value" id="one-dollar-cumulative">--</span>
                     </div>
                 </div>
+            </article>
 
-                <div class="stat-card clickable" id="dimes" data-stat="dimes">
-                    <h3>Dimes</h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Games with 10-24</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label" id="dimes-cumulative-label">All games with 10+:</span>
-                            <span class="substat-value" id="dimes-cumulative">--</span>
-                        </div>
-                    </div>
-                </div>
+            <article class="widget widget--1x1 clickable" id="fifty-cent-club" data-stat="fifty-cent-club" style="display: none;">
+                <div class="widget__title">50¢ Club</div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="fifty-cent-club-description">Games at 50¢ or less per hour</div>
+            </article>
 
-                <div class="stat-card clickable" id="quarters" data-stat="quarters">
-                    <h3>Quarters</h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Games with 25-99</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label" id="quarters-cumulative-label">All games with 25+:</span>
-                            <span class="substat-value" id="quarters-cumulative">--</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- Insights Group -->
+            <div class="widget-group-label" id="insights-section">Insights</div>
 
-                <div class="stat-card clickable" id="centuries" data-stat="centuries">
-                    <h3>Centuries</h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description">Games with 100+</p>
+            <article class="widget widget--2x2 widget--feature clickable" id="play-next-suggestions" data-stat="play-next-suggestions">
+                <div class="widget__title">Play Next Suggestions</div>
+                <div class="widget__description">Recommendations based on play patterns</div>
+                <div class="widget__cta">
+                    <span class="widget__cta-btn">View suggestions →</span>
                 </div>
-            </div>
-        </section>
+            </article>
 
-        <!-- Social & Locations Section -->
-        <section id="social-locations-section" class="stat-section">
-            <h2 class="section-heading">Social & Locations</h2>
-            <div class="section-grid">
-                <div class="stat-card clickable" id="players-card" data-stat="players">
-                    <h3>Players</h3>
-                    <div class="stat-value">> --</div>
-                    <p class="stat-description">Excludes strangers</p>
+            <article class="widget widget--2x2 widget--feature clickable" id="year-review-card" data-stat="year-review" style="display: none;">
+                <div class="widget__title">Gaming Year in Review</div>
+                <div class="widget__description">Interesting facts from the gaming year</div>
+                <div class="widget__cta">
+                    <span class="widget__cta-btn">View review →</span>
                 </div>
-
-                <div class="stat-card clickable" id="solo-card" data-stat="solo">
-                    <h3>Solo</h3>
-                    <div class="stat-value">--</div>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label">% of total:</span>
-                            <span class="substat-value" id="solo-percent">--</span>
-                        </div>
-                        <div class="substat" id="solo-only-days-container" style="display: none;">
-                            <span class="substat-label">Solo-only days:</span>
-                            <span class="substat-value" id="solo-only-days">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card clickable" id="locations-card" data-stat="locations">
-                    <h3>Locations</h3>
-                    <div class="stat-value">--</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Cost Analysis Section (experimental) -->
-        <section id="cost-analysis-section" class="stat-section" style="display: none;">
-            <h2 class="section-heading">Cost Analysis</h2>
-            <div class="section-grid">
-                <div class="stat-card clickable" id="total-cost" data-stat="total-cost">
-                    <h3><span class="stat-label">Total Cost</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="total-cost-description">Sum of all owned copies</p>
-                </div>
-
-                <div class="stat-card clickable" id="avg-cost-per-metric" data-stat="avg-cost-per-metric">
-                    <h3>
-                        <span class="stat-label" id="avg-cost-label">Cost Per Hour</span>
-                        <span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
-                            <svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature">
-                                <path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                                <circle cx="6.5" cy="10.5" r="1" fill="currentColor"/>
-                                <circle cx="9" cy="11.5" r="0.7" fill="currentColor"/>
-                            </svg>
-                        </span>
-                    </h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="avg-cost-description">Median cost per hour</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label">Game average:</span>
-                            <span class="substat-value" id="avg-cost-game-average">--</span>
-                        </div>
-                        <div class="substat">
-                            <span class="substat-label">Overall rate:</span>
-                            <span class="substat-value" id="avg-cost-overall-rate">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card clickable" id="shelf-of-shame" data-stat="shelf-of-shame">
-                    <h3><span class="stat-label">Shelf of Shame</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="shelf-of-shame-description">Owned games never played</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label">Games:</span>
-                            <span class="substat-value" id="shelf-of-shame-count">--</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Value Clubs Section (experimental) -->
-        <section id="value-clubs-section" class="stat-section" style="display: none;">
-            <h2 class="section-heading">Value Clubs</h2>
-            <span class="section-subtitle">(aka "Justifying My Spending")</span>
-            <div class="section-grid">
-                <div class="stat-card clickable" id="five-dollar-club" data-stat="five-dollar-club">
-                    <h3><span class="stat-label">$5 Club</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="five-dollar-club-description">Games at $5 or less per hour</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label" id="five-dollar-cumulative-label">All games at $5 or less:</span>
-                            <span class="substat-value" id="five-dollar-cumulative">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card clickable" id="two-fifty-club" data-stat="two-fifty-club">
-                    <h3><span class="stat-label">$2.50 Club</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="two-fifty-club-description">Games at $2.50 or less per hour</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label" id="two-fifty-cumulative-label">All games at $2.50 or less:</span>
-                            <span class="substat-value" id="two-fifty-cumulative">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card clickable" id="one-dollar-club" data-stat="one-dollar-club">
-                    <h3><span class="stat-label">$1 Club</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="one-dollar-club-description">Games at $1 or less per hour</p>
-                    <div class="stat-substats">
-                        <div class="substat">
-                            <span class="substat-label" id="one-dollar-cumulative-label">All games at $1 or less:</span>
-                            <span class="substat-value" id="one-dollar-cumulative">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card clickable" id="fifty-cent-club" data-stat="fifty-cent-club">
-                    <h3><span class="stat-label">50¢ Club</span></h3>
-                    <div class="stat-value">--</div>
-                    <p class="stat-description" id="fifty-cent-club-description">Games at 50¢ or less per hour</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Insights Section -->
-        <section id="insights-section" class="stat-section">
-            <h2 class="section-heading">Insights</h2>
-            <div class="section-grid">
-                <div class="stat-card clickable insight-card" id="play-next-suggestions" data-stat="play-next-suggestions">
-                    <h3>Play Next Suggestions</h3>
-                    <p class="stat-description">Recommendations based on play patterns</p>
-                </div>
-
-                <div class="stat-card clickable insight-card" id="year-review-card" data-stat="year-review" style="display: none;">
-                    <h3>Gaming Year in Review</h3>
-                    <p class="stat-description">Interesting facts from the gaming year</p>
-                </div>
-            </div>
-        </section>
+            </article>
+        </div>
 
         <!-- Detail Section (shown when stat is clicked) -->
         <section id="detail-section" class="detail-section" style="display: none;">
