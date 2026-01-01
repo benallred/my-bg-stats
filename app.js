@@ -1896,6 +1896,19 @@ function showDetailSection(statType) {
     // Show section
     detailSection.style.display = 'block';
 
+    // Dynamically set detail content max-height based on available space
+    const detailContentEl = document.getElementById('detail-content');
+    if (clickedCard) {
+        const header = document.querySelector('header');
+        const detailHeader = detailSection.querySelector('.detail-header');
+        const headerHeight = header?.offsetHeight || 0;
+        const cardHeight = clickedCard.offsetHeight;
+        const detailHeaderHeight = detailHeader?.offsetHeight || 0;
+        const buffer = 24; // Small buffer for spacing
+        const availableHeight = window.innerHeight - headerHeight - cardHeight - detailHeaderHeight - buffer;
+        detailContentEl.style.maxHeight = `${Math.max(availableHeight, 200)}px`;
+    }
+
     // Scroll the clicked card into view after the expand animation completes (250ms)
     setTimeout(() => {
         clickedCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1913,6 +1926,7 @@ function showDetailSection(statType) {
  */
 function closeDetailSection() {
     document.getElementById('detail-section').style.display = 'none';
+    document.getElementById('detail-content').style.maxHeight = '';
     currentlyOpenStatType = null;
 
     // Remove active class from all stat cards
