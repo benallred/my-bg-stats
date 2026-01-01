@@ -1439,52 +1439,6 @@ function setupEventListeners() {
 }
 
 /**
- * Helper function to populate stat summary in detail header
- */
-function populateStatSummary(summaryElement, mainValue, substats = []) {
-    if (!mainValue && (!substats || substats.length === 0)) {
-        summaryElement.style.display = 'none';
-        return;
-    }
-
-    summaryElement.innerHTML = '';
-    summaryElement.style.display = 'flex';
-
-    // Add main stat value
-    if (mainValue) {
-        const mainDiv = document.createElement('div');
-        mainDiv.className = 'detail-stat-main';
-        mainDiv.textContent = mainValue;
-        summaryElement.appendChild(mainDiv);
-    }
-
-    // Add substats if present
-    if (substats && substats.length > 0) {
-        const substatsDiv = document.createElement('div');
-        substatsDiv.className = 'detail-stat-substats';
-
-        substats.forEach(substat => {
-            const substatDiv = document.createElement('div');
-            substatDiv.className = 'detail-substat';
-
-            const label = document.createElement('span');
-            label.className = 'detail-substat-label';
-            label.textContent = substat.label;
-
-            const value = document.createElement('span');
-            value.className = 'detail-substat-value';
-            value.textContent = substat.value;
-
-            substatDiv.appendChild(label);
-            substatDiv.appendChild(value);
-            substatsDiv.appendChild(substatDiv);
-        });
-
-        summaryElement.appendChild(substatsDiv);
-    }
-}
-
-/**
  * Show h-index info modal
  * Updates content based on current base metric selection
  */
@@ -1593,9 +1547,6 @@ const statDetailHandlers = {
             const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
             return `${title} Breakdown ${yearText}${infoIcon}`;
         },
-        getSummary: (statsCache) => ({
-            mainValue: getCurrentHIndex()
-        }),
         render: (detailContent, statsCache) => {
             const hIndexValue = getCurrentHIndex();
             showHIndexBreakdown(detailContent, currentBaseMetric, hIndexValue);
@@ -1608,102 +1559,42 @@ const statDetailHandlers = {
             const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
             return `People H-Index Breakdown ${yearText}${experimentalIcon}${infoIcon}`;
         },
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.peopleHIndex
-        }),
         render: (detailContent, statsCache) => {
             showPeopleHIndexBreakdown(detailContent, statsCache.peopleHIndex);
         }
     },
     'total-bgg-entries': {
-        getTitle: (currentYear) => currentYear ? `BGG Entries Acquired in <span style="white-space: nowrap">(${currentYear})</span>` : 'BGG Entries <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.totalBGGEntries
-        }),
+        getTitle: (currentYear) => currentYear ? `BGG Entries Acquired in <span style="white-space: nowrap">${currentYear}</span>` : 'BGG Entries <span style="white-space: nowrap">(All Time)</span>',
         render: (detailContent) => {
             showBGGEntries(detailContent);
         }
     },
     'total-games-owned': {
-        getTitle: (currentYear) => currentYear ? `Games Acquired in <span style="white-space: nowrap">(${currentYear})</span>` : 'Games Owned <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.totalGamesOwned
-        }),
+        getTitle: (currentYear) => currentYear ? `Games Acquired in <span style="white-space: nowrap">${currentYear}</span>` : 'Games Owned <span style="white-space: nowrap">(All Time)</span>',
         render: (detailContent) => {
             showGamesOwned(detailContent);
         }
     },
     'total-expansions': {
-        getTitle: (currentYear) => currentYear ? `Expansions Acquired in <span style="white-space: nowrap">(${currentYear})</span>` : 'Expansions <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.expansionsData.total,
-            substats: [
-                { label: 'Expandalones:', value: statsCache.expansionsData.expandalones },
-                { label: 'Expansion-only:', value: statsCache.expansionsData.expansionOnly }
-            ]
-        }),
+        getTitle: (currentYear) => currentYear ? `Expansions Acquired in <span style="white-space: nowrap">${currentYear}</span>` : 'Expansions <span style="white-space: nowrap">(All Time)</span>',
         render: (detailContent) => {
             showExpansions(detailContent);
         }
     },
     'unique-games-played': {
-        getTitle: (currentYear) => currentYear ? `Unique Games Played in <span style="white-space: nowrap">(${currentYear})</span>` : 'Unique Games Played <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache, currentYear) => {
-            const substats = [
-                { label: 'My games:', value: statsCache.gamesPlayedData.myGames },
-                { label: 'Others\' games:', value: statsCache.gamesPlayedData.othersGames }
-            ];
-            if (currentYear && statsCache.gamesPlayedData.newToMe !== null) {
-                substats.push({ label: 'New-to-me:', value: statsCache.gamesPlayedData.newToMe });
-            }
-            return {
-                mainValue: statsCache.gamesPlayedData.total,
-                substats: substats
-            };
-        },
+        getTitle: (currentYear) => currentYear ? `Unique Games Played in <span style="white-space: nowrap">${currentYear}</span>` : 'Unique Games Played <span style="white-space: nowrap">(All Time)</span>',
         render: (detailContent) => {
             showGamesPlayed(detailContent);
         }
     },
     'total-play-time': {
-        getTitle: (currentYear) => currentYear ? `Play Time by Game in <span style="white-space: nowrap">(${currentYear})</span>` : 'Play Time by Game <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => {
-            const hours = formatLargeNumber(statsCache.playTimeData.totalHours);
-            const days = formatLargeNumber(statsCache.playTimeData.totalHours / 24);
-            const prefix = statsCache.playTimeData.playsWithEstimatedDuration > 0 ? '~' : '';
-            return {
-                mainValue: `${prefix}${hours} hours`,
-                substats: [
-                    { label: 'In days:', value: `${prefix}${days}` }
-                ]
-            };
-        },
+        getTitle: (currentYear) => currentYear ? `Play Time by Game in <span style="white-space: nowrap">${currentYear}</span>` : 'Play Time by Game <span style="white-space: nowrap">(All Time)</span>',
         render: (detailContent) => {
             showPlayTimeBreakdown(detailContent);
         }
     },
     'total-days-played': {
-        getTitle: (currentYear) => currentYear ? `Days Played by Game in <span style="white-space: nowrap">(${currentYear})</span>` : 'Days Played by Game <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => {
-            const totalDays = statsCache.totalDaysPlayed;
-            const dailyStats = statsCache.dailySessionStats;
-
-            const formatTimePerDay = (minutes) => {
-                if (minutes === null) return '-';
-                if (minutes < 60) {
-                    return `${Math.round(minutes)} minutes per gaming day`;
-                }
-                return `${(minutes / 60).toFixed(1)} hours per gaming day`;
-            };
-
-            return {
-                mainValue: `${totalDays.toLocaleString()} days`,
-                substats: [
-                    { label: 'Median:', value: formatTimePerDay(dailyStats.medianMinutes) },
-                    { label: 'Average:', value: formatTimePerDay(dailyStats.averageMinutes) }
-                ]
-            };
-        },
+        getTitle: (currentYear) => currentYear ? `Days Played by Game in <span style="white-space: nowrap">${currentYear}</span>` : 'Days Played by Game <span style="white-space: nowrap">(All Time)</span>',
         render: (detailContent) => {
             showDaysPlayedBreakdown(detailContent);
         }
@@ -1718,10 +1609,6 @@ const statDetailHandlers = {
             const label = metricLabels[currentBaseMetric] || metricLabels.hours;
             const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
-        },
-        getSummary: () => {
-            const milestones = getCurrentMilestones();
-            return { mainValue: milestones[Milestone.FIVES].length };
         },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
@@ -1739,10 +1626,6 @@ const statDetailHandlers = {
             const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
         },
-        getSummary: () => {
-            const milestones = getCurrentMilestones();
-            return { mainValue: milestones[Milestone.DIMES].length };
-        },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
             showMilestoneGames(detailContent, Milestone.DIMES, milestones);
@@ -1758,10 +1641,6 @@ const statDetailHandlers = {
             const label = metricLabels[currentBaseMetric] || metricLabels.hours;
             const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
-        },
-        getSummary: () => {
-            const milestones = getCurrentMilestones();
-            return { mainValue: milestones[Milestone.QUARTERS].length };
         },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
@@ -1779,10 +1658,6 @@ const statDetailHandlers = {
             const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
         },
-        getSummary: () => {
-            const milestones = getCurrentMilestones();
-            return { mainValue: milestones[Milestone.CENTURIES].length };
-        },
         render: (detailContent) => {
             const milestones = getCurrentMilestones();
             showMilestoneGames(detailContent, Milestone.CENTURIES, milestones);
@@ -1790,74 +1665,30 @@ const statDetailHandlers = {
     },
     'play-next-suggestions': {
         getTitle: () => 'Play Next Suggestions',
-        getSummary: (statsCache) => ({
-            mainValue: `${statsCache.suggestedGames.length} game${statsCache.suggestedGames.length === 1 ? '' : 's'}`
-        }),
         render: (detailContent) => {
             showSuggestedGames(detailContent);
         }
     },
     'players': {
         getTitle: (currentYear) => currentYear ? `Players <span style="white-space: nowrap">(${currentYear})</span>` : 'Players <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => ({
-            mainValue: `> ${statsCache.playerStats.uniquePlayerCount}`
-        }),
         render: (detailContent) => {
             showPlayersBreakdown(detailContent);
         }
     },
     'solo': {
         getTitle: (currentYear) => currentYear ? `Solo <span style="white-space: nowrap">(${currentYear})</span>` : 'Solo <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => {
-            const soloGameStats = statsCache.soloGameStats;
-            let mainValue, percentValue;
-            switch (currentBaseMetric) {
-                case Metric.SESSIONS:
-                    mainValue = soloGameStats.totalSoloSessions.toLocaleString() + ' sessions';
-                    percentValue = soloGameStats.totalSessions > 0
-                        ? ((soloGameStats.totalSoloSessions / soloGameStats.totalSessions) * 100).toFixed(1) + '%'
-                        : '0%';
-                    break;
-                case Metric.PLAYS:
-                    mainValue = soloGameStats.totalSoloPlays.toLocaleString() + ' plays';
-                    percentValue = soloGameStats.totalPlays > 0
-                        ? ((soloGameStats.totalSoloPlays / soloGameStats.totalPlays) * 100).toFixed(1) + '%'
-                        : '0%';
-                    break;
-                case Metric.HOURS:
-                default:
-                    const soloHours = soloGameStats.totalSoloMinutes / 60;
-                    mainValue = soloHours.toFixed(1) + ' hours';
-                    percentValue = soloGameStats.totalMinutes > 0
-                        ? ((soloGameStats.totalSoloMinutes / soloGameStats.totalMinutes) * 100).toFixed(1) + '%'
-                        : '0%';
-                    break;
-            }
-            return {
-                mainValue: mainValue,
-                substats: [
-                    { label: '% of total:', value: percentValue },
-                ]
-            };
-        },
         render: (detailContent) => {
             showSoloBreakdown(detailContent);
         }
     },
     'locations': {
         getTitle: (currentYear) => currentYear ? `Locations <span style="white-space: nowrap">(${currentYear})</span>` : 'Locations <span style="white-space: nowrap">(All Time)</span>',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.locationStats.locationCount
-        }),
         render: (detailContent) => {
             showLocationsBreakdown(detailContent);
         }
     },
     'year-review': {
         getTitle: (currentYear) => `Gaming Year in Review <span style="white-space: nowrap">(${currentYear})</span>`,
-        getSummary: () => ({
-            mainValue: ''
-        }),
         renderSummary: (summaryElement, detailContent) => {
             summaryElement.innerHTML = `
                 <div class="year-review-filter-toggle">
@@ -1895,12 +1726,6 @@ const statDetailHandlers = {
                 : '<span style="white-space: nowrap">(All Time)</span>';
             return `Total Cost ${yearText}`;
         },
-        getSummary: (statsCache) => {
-            const prefix = statsCache.totalCostData.gamesWithoutPrice > 0 ? '> ' : '';
-            return {
-                mainValue: `${prefix}$${statsCache.totalCostData.totalCost.toLocaleString()}`,
-            };
-        },
         render: (detailContent) => {
             showTotalCostBreakdown(detailContent);
         },
@@ -1918,10 +1743,7 @@ const statDetailHandlers = {
                 : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
         },
-        getSummary: (statsCache) => ({
-            mainValue: `${statsCache.fiveDollarClubData.count} game${statsCache.fiveDollarClubData.count === 1 ? '' : 's'}`,
-        }),
-        render: (detailContent) => {
+        render: (detailContent, statsCache) => {
             showValueClubBreakdown(detailContent, statsCache.fiveDollarClubData, '$5');
         },
     },
@@ -1938,10 +1760,7 @@ const statDetailHandlers = {
                 : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
         },
-        getSummary: (statsCache) => ({
-            mainValue: `${statsCache.twoFiftyClubData.count} game${statsCache.twoFiftyClubData.count === 1 ? '' : 's'}`,
-        }),
-        render: (detailContent) => {
+        render: (detailContent, statsCache) => {
             showValueClubBreakdown(detailContent, statsCache.twoFiftyClubData, '$2.50');
         },
     },
@@ -1958,10 +1777,7 @@ const statDetailHandlers = {
                 : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
         },
-        getSummary: (statsCache) => ({
-            mainValue: `${statsCache.oneDollarClubData.count} game${statsCache.oneDollarClubData.count === 1 ? '' : 's'}`,
-        }),
-        render: (detailContent) => {
+        render: (detailContent, statsCache) => {
             showValueClubBreakdown(detailContent, statsCache.oneDollarClubData, '$1');
         },
     },
@@ -1978,10 +1794,7 @@ const statDetailHandlers = {
                 : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}`;
         },
-        getSummary: (statsCache) => ({
-            mainValue: `${statsCache.fiftyCentClubData.count} game${statsCache.fiftyCentClubData.count === 1 ? '' : 's'}`,
-        }),
-        render: (detailContent) => {
+        render: (detailContent, statsCache) => {
             showValueClubBreakdown(detailContent, statsCache.fiftyCentClubData, '50¢');
         },
     },
@@ -1999,39 +1812,18 @@ const statDetailHandlers = {
                 : '<span style="white-space: nowrap">(All Time)</span>';
             return `${label} ${yearText}${experimentalIcon}`;
         },
-        getSummary: (statsCache) => {
-            const data = statsCache.costPerMetricData;
-            return {
-                mainValue: data.median !== null ? `< $${data.median.toFixed(2)}` : '--',
-                substats: [
-                    { label: 'Game average:', value: data.gameAverage !== null ? `< $${data.gameAverage.toFixed(2)}` : '--' },
-                    { label: 'Overall rate:', value: data.overallRate !== null ? `< $${data.overallRate.toFixed(2)}` : '--' },
-                ],
-            };
-        },
         render: (detailContent) => {
             showCostPerMetricBreakdown(detailContent);
         },
     },
     'shelf-of-shame': {
         getTitle: () => 'Shelf of Shame',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.shelfOfShameData.totalCost > 0
-                ? `< $${statsCache.shelfOfShameData.totalCost.toLocaleString()}`
-                : '$0',
-            substats: [
-                { label: 'Games:', value: `${statsCache.shelfOfShameData.count}` },
-            ],
-        }),
         render: (detailContent) => {
             showShelfOfShameBreakdown(detailContent);
         },
     },
     'unknown-acquisition-dates': {
         getTitle: () => 'Unknown Acquisition Dates',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.unknownGames.length,
-        }),
         render: (detailContent, statsCache) => {
             createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year']);
         },
@@ -2040,18 +1832,12 @@ const statDetailHandlers = {
         getTitle: (currentYear) => currentYear
             ? `Never Played <span style="white-space: nowrap">(Acquired ${currentYear})</span>`
             : 'Never Played',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.neverPlayedGames.length,
-        }),
         render: (detailContent, statsCache) => {
             createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
         },
     },
     'missing-price-paid': {
         getTitle: () => 'Missing Price Paid',
-        getSummary: (statsCache) => ({
-            mainValue: statsCache.missingPricePaidGames.length,
-        }),
         render: (detailContent, statsCache) => {
             createGameTable(detailContent, statsCache.missingPricePaidGames, ['Name', 'Year', 'Acquisition Date']);
         },
@@ -2094,14 +1880,10 @@ function showDetailSection(statType) {
     // Set title using handler
     detailTitle.innerHTML = handler.getTitle(currentYear);
 
-    // Get summary data and populate
-    const summary = handler.getSummary(statsCache, currentYear);
-    populateStatSummary(detailStatSummary, summary.mainValue, summary.substats);
-
     // Render content using handler
     handler.render(detailContent, statsCache, currentYear);
 
-    // Call renderSummary if handler provides custom summary rendering
+    // Call renderSummary if handler provides custom summary rendering (e.g., year-review toggle)
     if (handler.renderSummary) {
         handler.renderSummary(detailStatSummary, detailContent);
     }
