@@ -4476,13 +4476,12 @@ function updateFooter() {
 }
 
 /**
- * Setup sticky header that compacts on scroll
+ * Setup sticky header shadow effect on scroll
  */
 function setupStickyHeader() {
     const header = document.querySelector('header');
-    const h1 = header.querySelector('h1');
 
-    // Capture initial values
+    // Capture initial height for scroll progress calculation
     let initialHeight = 0;
     requestAnimationFrame(() => {
         initialHeight = header.offsetHeight;
@@ -4494,26 +4493,10 @@ function setupStickyHeader() {
         const scrollY = window.scrollY;
         const scrollProgress = Math.min(scrollY / initialHeight, 1); // 0 to 1
 
-        // Calculate values based on scroll progress
-        const padding = 2 - (scrollProgress * 1); // 2rem to 1rem
-        const h1MarginBottom = 1 - scrollProgress; // 1rem to 0
-        const h1FontSize = 2 - (scrollProgress * 0.5); // 2rem to 1.5rem (default is 2rem via browser)
+        // Only animate shadow on scroll (header is already compact)
         const shadowBlur = 2 + (scrollProgress * 2); // 2px to 4px
         const shadowAlpha = 0.1 + (scrollProgress * 0.05); // 0.1 to 0.15
 
-        // Apply styles directly
-        header.style.paddingTop = `${padding}rem`;
-        header.style.paddingBottom = `${padding}rem`;
         header.style.boxShadow = `0 ${shadowBlur}px ${shadowBlur * 2}px rgba(0,0,0,${shadowAlpha})`;
-
-        h1.style.marginBottom = `${h1MarginBottom}rem`;
-        h1.style.fontSize = `${h1FontSize}rem`;
-
-        // Handle sticky state class
-        if (scrollProgress >= 1) {
-            header.classList.add('sticky-scrolled');
-        } else {
-            header.classList.remove('sticky-scrolled');
-        }
     }, { passive: true });
 }

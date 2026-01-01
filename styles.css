@@ -23,7 +23,7 @@
     --text-secondary: #666;
     --text-muted: #777;
     --text-light: #999;
-    --text-badge: #6c757d;
+    --text-badge: #495057;
     --text-diagnostic-heading: #6c757d;
     --text-diagnostic: #495057;
     --text-diagnostic-muted: #868e96;
@@ -94,7 +94,7 @@
     --text-secondary: #c0c0c0;
     --text-muted: #a0a0a0;
     --text-light: #808080;
-    --text-badge: #909090;
+    --text-badge: #b0b0b0;
     --text-diagnostic-heading: #909090;
     --text-diagnostic: #b0b0b0;
     --text-diagnostic-muted: #808080;
@@ -159,48 +159,49 @@ body {
 /* Header */
 header {
     background: var(--bg-header);
-    padding: 1.5rem;
+    padding: 0.75rem;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
     margin-bottom: 1rem;
     position: sticky;
     top: 0;
     z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
 }
 
 header h1 {
     color: var(--text-heading);
-    margin-bottom: 1rem;
-}
-
-/* Layout container for title and year filter when sticky */
-header.sticky-scrolled {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 1.5rem;
-}
-
-header.sticky-scrolled h1 {
+    font-size: 1.25rem;
+    margin-bottom: 0;
     flex-shrink: 0;
-    margin-bottom: 0 !important;
+}
+
+.header-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .year-filter {
     display: flex;
-    align-items: baseline;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.75rem;
     flex-wrap: wrap;
 }
 
 .filter-group {
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.35rem;
     flex-shrink: 0;
 }
 
 .year-filter label {
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--text-label);
     white-space: nowrap;
@@ -208,10 +209,10 @@ header.sticky-scrolled h1 {
 
 #year-select,
 #base-metric-select {
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 0.75rem;
     border: 2px solid var(--border-primary);
     border-radius: 4px;
-    font-size: 1rem;
+    font-size: 0.875rem;
     cursor: pointer;
     background: var(--bg-card);
     color: var(--text-primary);
@@ -232,11 +233,11 @@ header.sticky-scrolled h1 {
 .year-info-badge {
     display: inline-flex;
     align-items: center;
-    padding: 0.35rem 0.75rem;
+    padding: 0.25rem 0.5rem;
     background: var(--bg-year-badge);
     border: 1px solid var(--border-secondary);
     border-radius: 4px;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-badge);
     font-weight: 500;
     flex-shrink: 1;
@@ -244,8 +245,8 @@ header.sticky-scrolled h1 {
 }
 
 .theme-toggle {
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     padding: 0;
     border: 2px solid var(--border-primary);
     border-radius: 4px;
@@ -257,7 +258,6 @@ header.sticky-scrolled h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    align-self: flex-end;
 }
 
 .theme-toggle:hover {
@@ -276,9 +276,17 @@ header.sticky-scrolled h1 {
     max-height: 20px;
 }
 
+.header-info-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
 .year-review-link {
     color: var(--color-primary);
     text-decoration: none;
+    font-size: 0.875rem;
     font-weight: 500;
     white-space: nowrap;
     transition: color var(--transition-hover);
@@ -970,12 +978,7 @@ footer p {
     }
 
     header {
-        padding: 0.75rem;
         margin-bottom: 0.75rem;
-    }
-
-    header h1 {
-        font-size: 1.25rem;
     }
 
     .detail-section {

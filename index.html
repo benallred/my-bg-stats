@@ -23,29 +23,32 @@
 </head>
 <body>
     <header>
-        <h1>My Board Game Stats</h1>
+        <div class="header-title-row">
+            <h1>My Board Game Stats</h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"></button>
+        </div>
         <div class="year-filter">
             <div class="filter-group">
-                <label for="year-select">Filter by year:</label>
+                <label for="year-select">Year:</label>
                 <select id="year-select">
                     <option value="all">All Time</option>
                     <!-- Years will be populated by JavaScript -->
                 </select>
             </div>
-            <span id="year-info-badge" class="year-info-badge" style="display: none;"></span>
 
             <div class="filter-group">
-                <label for="base-metric-select">Base Metric:</label>
+                <label for="base-metric-select">Metric:</label>
                 <select id="base-metric-select">
                     <option value="hours">Hours</option>
                     <option value="sessions">Sessions</option>
                     <option value="plays">Plays</option>
                 </select>
             </div>
-
-            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"></button>
         </div>
-        <a href="#" id="year-review-link" class="year-review-link" style="display: none;">Go to <span id="year-review-link-year"></span> Year in Review</a>
+        <div class="header-info-row">
+            <span id="year-info-badge" class="year-info-badge" style="display: none;"></span>
+            <a href="#" id="year-review-link" class="year-review-link" style="display: none;">Go to <span id="year-review-link-year"></span> Year in Review</a>
+        </div>
     </header>
 
     <main>
