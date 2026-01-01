@@ -1123,9 +1123,11 @@ function updateCostAnalysisStats() {
         : 'Sum of all owned copies';
     document.getElementById('total-cost-description').textContent = totalCostDescription;
 
-    // Hide Cost/Hour and Shelf of Shame cards in pre-logging years
+    // Show/hide cards based on pre-logging status
+    const totalCostCard = document.getElementById('total-cost');
     const avgCostCard = document.getElementById('avg-cost-per-metric');
     const shelfOfShameCard = document.getElementById('shelf-of-shame');
+    totalCostCard.style.display = '';
     avgCostCard.style.display = isPreLogging ? 'none' : '';
     shelfOfShameCard.style.display = isPreLogging ? 'none' : '';
 
