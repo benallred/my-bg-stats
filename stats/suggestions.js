@@ -390,7 +390,7 @@ function suggestForNextValueClub(gamePlayData, metric) {
       // Must have at least some play data
       if (metricValue === 0) return null;
 
-      const costPerMetric = data.pricePaid / metricValue;
+      const costPerMetric = Math.min(data.pricePaid / metricValue, data.pricePaid);
       const target = ValueClub.getNextTarget(costPerMetric);
 
       // Skip games that have achieved all tiers
