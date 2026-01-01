@@ -1106,9 +1106,16 @@ function updateCostAnalysisStats() {
     const section = document.getElementById('cost-analysis-section');
     if (!section) return;
 
+    const totalCostCard = document.getElementById('total-cost');
+    const avgCostCard = document.getElementById('avg-cost-per-metric');
+    const shelfOfShameCard = document.getElementById('shelf-of-shame');
+
     // Show/hide section based on hidden flag
     if (!isHiddenEnabled()) {
         section.style.display = 'none';
+        totalCostCard.style.display = 'none';
+        avgCostCard.style.display = 'none';
+        shelfOfShameCard.style.display = 'none';
         return;
     }
     section.style.display = 'block';
@@ -1130,9 +1137,6 @@ function updateCostAnalysisStats() {
     document.getElementById('total-cost-description').textContent = totalCostDescription;
 
     // Show/hide cards based on pre-logging status
-    const totalCostCard = document.getElementById('total-cost');
-    const avgCostCard = document.getElementById('avg-cost-per-metric');
-    const shelfOfShameCard = document.getElementById('shelf-of-shame');
     totalCostCard.style.display = '';
     avgCostCard.style.display = isPreLogging ? 'none' : '';
     shelfOfShameCard.style.display = isPreLogging ? 'none' : '';
@@ -1217,9 +1221,16 @@ function updateValueClubsStats() {
     const section = document.getElementById('value-clubs-section');
     if (!section) return;
 
+    // Card IDs for value clubs
+    const clubIds = ['five-dollar-club', 'two-fifty-club', 'one-dollar-club', 'fifty-cent-club'];
+
     // Show/hide section based on hidden flag
     if (!isHiddenEnabled()) {
         section.style.display = 'none';
+        clubIds.forEach(id => {
+            const card = document.getElementById(id);
+            if (card) card.style.display = 'none';
+        });
         return;
     }
     section.style.display = 'block';
@@ -4112,6 +4123,11 @@ function toggleHiddenFeatures(element) {
 
     // Persistent color indicates flag state
     element.style.color = newValue ? 'var(--color-primary)' : '';
+
+    // Immediately refresh hidden sections
+    updateDiagnosticsSection();
+    updateCostAnalysisStats();
+    updateValueClubsStats();
 }
 
 /**
