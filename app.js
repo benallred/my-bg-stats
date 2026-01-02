@@ -2221,6 +2221,16 @@ function showGamesPlayed(container) {
     const playCountsPerGame = new Map();
     const ownedGamesInYear = new Set();
 
+    // Build first play dates map for new-to-me detection
+    const firstPlayDates = new Map();
+    gameData.plays.forEach(play => {
+        if (!firstPlayDates.has(play.gameId)) {
+            firstPlayDates.set(play.gameId, play.date);
+        } else if (play.date < firstPlayDates.get(play.gameId)) {
+            firstPlayDates.set(play.gameId, play.date);
+        }
+    });
+
     gameData.plays.forEach(play => {
         if (!isPlayInYear(play, currentYear)) return;
         const count = playCountsPerGame.get(play.gameId) || 0;
@@ -2235,10 +2245,18 @@ function showGamesPlayed(container) {
     const gamesWithPlays = Array.from(playCountsPerGame.entries()).map(([gameId, count]) => {
         const game = gameData.games.find(g => g.id === gameId);
         const owned = ownedGamesInYear.has(gameId);
-        return { game, count, owned };
+        const newToMe = currentYear && firstPlayDates.get(gameId)?.startsWith(currentYear.toString());
+        return { game, count, owned, newToMe };
     });
 
     gamesWithPlays.sort((a, b) => b.count - a.count);
+
+    const statusIcons = (item) => {
+        const icons = [];
+        if (!item.owned) icons.push('👥');
+        if (item.newToMe) icons.push('✨');
+        return icons.join(' ');
+    };
 
     const table = document.createElement('table');
     table.innerHTML = `
@@ -2246,7 +2264,7 @@ function showGamesPlayed(container) {
             <tr>
                 <th>Game</th>
                 <th class="sorted-desc">Plays</th>
-                <th>Owned</th>
+                <th style="white-space: nowrap;"><span style="font-size: 0.85em;">Others' 👥<br>New to me ✨</span></th>
             </tr>
         </thead>
         <tbody>
@@ -2254,7 +2272,7 @@ function showGamesPlayed(container) {
                 <tr>
                     <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
                     <td>${item.count}</td>
-                    <td>${item.owned ? '✓' : ''}</td>
+                    <td>${statusIcons(item)}</td>
                 </tr>
             `).join('')}
         </tbody>
