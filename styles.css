@@ -815,6 +815,24 @@ table tbody tr:hover {
     border-color: var(--color-primary);
 }
 
+/* Tiny inline thumbnails for summary text */
+.game-thumbnail-tiny {
+    width: 16px;
+    height: 12px;
+    object-fit: cover;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 0.25rem;
+}
+
+.game-thumbnail-tiny.game-image-clickable {
+    cursor: pointer;
+}
+
+.game-thumbnail-tiny.game-image-clickable:hover {
+    opacity: 0.7;
+}
+
 /* Placeholder for missing images */
 .game-thumbnail-placeholder {
     width: 50px;

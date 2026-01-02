@@ -194,6 +194,25 @@ function renderGameThumbnailOnly(game) {
 }
 
 /**
+ * Helper: Render game name with tiny inline thumbnail for summary text
+ * Used in Year in Review summary where images should be inline with text
+ * @param {Object} game - Game object with name, thumbnailUrl, coverUrl
+ * @returns {string} HTML string with tiny image and bold italic name
+ */
+function renderGameNameWithTinyThumbnail(game) {
+  const modalClass = game.coverUrl ? ' game-image-clickable' : '';
+  const fullImageAttr = game.coverUrl
+    ? ` data-full-image="${game.coverUrl}"`
+    : '';
+
+  const imageHTML = game.thumbnailUrl
+    ? `<img src="${game.thumbnailUrl}" alt="" class="game-thumbnail-tiny${modalClass}"${fullImageAttr} />`
+    : '';
+
+  return `${imageHTML}<strong><em>${game.name}</em></strong>`;
+}
+
+/**
  * Initialize image modal for click-to-enlarge functionality
  * Creates modal element and sets up event listeners
  */
@@ -2936,7 +2955,7 @@ function showYearReviewDetail(container, statsCache) {
                     const metricSpans = metrics.map(m =>
                         `<span class="metric-name ${m}">${m}</span>`
                     );
-                    gameHighlightParts.push(`by ${formatNaturalList(metricSpans)} was <strong><em>${name}</em></strong>`);
+                    gameHighlightParts.push(`by ${formatNaturalList(metricSpans)} was ${renderGameNameWithTinyThumbnail(game.game)}`);
                 }
             });
         });
@@ -2949,19 +2968,19 @@ function showYearReviewDetail(container, statsCache) {
     // Longest single play summary
     const longestPlay = statsCache.yearReview.longestSinglePlays[0];
     if (longestPlay) {
-        summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of <strong><em>${longestPlay.game.name}</em></strong>`);
+        summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of ${renderGameNameWithTinyThumbnail(longestPlay.game)}`);
     }
 
     // Biggest hit among new games (by sessions)
     const topNewGame = statsCache.yearReview.topNewToMeGameBySessions;
     if (topNewGame) {
-        summaryBullets.push(`Biggest hit among new games was <strong><em>${topNewGame.game.name}</em></strong> (${topNewGame.sessions} <span class="metric-name sessions">sessions</span>)`);
+        summaryBullets.push(`Biggest hit among new games was ${renderGameNameWithTinyThumbnail(topNewGame.game)} (${topNewGame.sessions} <span class="metric-name sessions">sessions</span>)`);
     }
 
     // Returning favorite (top returning game by sessions)
     const topReturningGame = statsCache.yearReview.topReturningGameBySessions;
     if (topReturningGame) {
-        summaryBullets.push(`Returning favorite was <strong><em>${topReturningGame.game.name}</em></strong> (${topReturningGame.sessions} <span class="metric-name sessions">sessions</span>)`);
+        summaryBullets.push(`Returning favorite was ${renderGameNameWithTinyThumbnail(topReturningGame.game)} (${topReturningGame.sessions} <span class="metric-name sessions">sessions</span>)`);
     }
 
     // Solo stats summary (show hours or sessions, whichever is greater)
@@ -2978,7 +2997,7 @@ function showYearReviewDetail(container, statsCache) {
                 soloBullet = `Logged ${soloSessions} solo <span class="metric-name sessions">sessions</span>`;
             }
             if (topSoloGame) {
-                soloBullet += ` with the top solo game being <strong><em>${topSoloGame.game.name}</em></strong>`;
+                soloBullet += ` with the top solo game being ${renderGameNameWithTinyThumbnail(topSoloGame.game)}`;
             }
             summaryBullets.push(soloBullet);
         }
