@@ -379,6 +379,10 @@ function initializeImageModal() {
   }, { passive: true });
 
   modal.addEventListener('touchend', (e) => {
+    // Don't interpret swipes as navigation when zoomed (user is panning with native pinch-to-zoom)
+    const isNativeZoomed = window.visualViewport && window.visualViewport.scale > 1;
+    if (isNativeZoomed) return;
+
     touchEndX = e.changedTouches[0].screenX;
     const swipeDistance = touchEndX - touchStartX;
     const minSwipeDistance = 50;
