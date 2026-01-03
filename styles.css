@@ -898,6 +898,11 @@ table tbody tr:hover {
     background: rgba(0, 0, 0, 0.85);
     cursor: pointer;
     animation: fadeIn 0.2s ease-in;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.image-modal * {
+    -webkit-tap-highlight-color: transparent;
 }
 
 .image-modal.active {
