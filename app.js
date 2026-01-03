@@ -231,29 +231,83 @@ function initializeImageModal() {
 
   const modalImg = modal.querySelector('.image-modal-content');
 
+  // Zoom state
+  let isZoomed = false;
+  let translateX = 0;
+  let translateY = 0;
+
+  function resetZoom() {
+    isZoomed = false;
+    translateX = 0;
+    translateY = 0;
+    modalImg.style.transform = '';
+    modalImg.style.cursor = '';
+    modal.classList.remove('zoomed');
+  }
+
   // Close modal and reset gallery index
   function closeModal() {
     modal.classList.remove('active');
     currentGalleryIndex = -1;
+    resetZoom();
     setTimeout(() => {
       modalImg.src = '';
     }, 200); // Clear after fade-out
   }
 
-  // Close on click
-  modal.addEventListener('click', closeModal);
+  // Handle image click for zoom toggle
+  modalImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    if (!isZoomed) {
+      // Zoom in
+      isZoomed = true;
+      modal.classList.add('zoomed');
+    } else {
+      // Zoom out
+      resetZoom();
+    }
+  });
+
+  // Pan by moving mouse when zoomed
+  modal.addEventListener('mousemove', (e) => {
+    if (!isZoomed) return;
+
+    const rect = modal.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+
+    // Convert 0-1 range to translation offset (centered at 0.5)
+    translateX = (0.5 - x) * 100;
+    translateY = (0.5 - y) * 100;
+
+    modalImg.style.transform = `scale(2) translate(${translateX}%, ${translateY}%)`;
+  });
+
+  // Close on backdrop click (not image)
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
 
   // Keyboard navigation
   document.addEventListener('keyup', (e) => {
     if (!modal.classList.contains('active')) return;
 
     if (e.key === 'Escape') {
-      closeModal();
+      if (isZoomed) {
+        resetZoom();
+      } else {
+        closeModal();
+      }
     } else if (e.key === 'ArrowLeft' && currentGalleryIndex > 0) {
+      resetZoom();
       currentGalleryIndex--;
       modalImg.src = shelfPhotos[currentGalleryIndex].src;
       modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
     } else if (e.key === 'ArrowRight' && currentGalleryIndex >= 0 && currentGalleryIndex < shelfPhotos.length - 1) {
+      resetZoom();
       currentGalleryIndex++;
       modalImg.src = shelfPhotos[currentGalleryIndex].src;
       modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
@@ -271,6 +325,7 @@ function initializeImageModal() {
         const galleryIndex = shelfPhotos.findIndex(p => p.src === fullImageUrl);
         currentGalleryIndex = galleryIndex;
 
+        resetZoom();
         modalImg.src = fullImageUrl;
         modalImg.alt = thumbnail.alt;
         modal.classList.add('active');
