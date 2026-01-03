@@ -212,6 +212,19 @@ function renderGameNameWithTinyThumbnail(game) {
   return `${imageHTML}<strong>${game.name}</strong>`;
 }
 
+// Shelf gallery photos
+const shelfPhotos = [
+    { src: 'images/shelves/full.jpg', type: 'full' },
+    { src: 'images/shelves/case-01.jpg', type: 'case' },
+    { src: 'images/shelves/case-02.jpg', type: 'case' },
+    { src: 'images/shelves/case-03.jpg', type: 'case' },
+    { src: 'images/shelves/case-04.jpg', type: 'case' },
+    { src: 'images/shelves/case-05.jpg', type: 'case' },
+    { src: 'images/shelves/case-06.jpg', type: 'case' },
+    { src: 'images/shelves/case-07.jpg', type: 'case' },
+    { src: 'images/shelves/case-08.jpg', type: 'case' },
+];
+
 // Track current gallery index for arrow key navigation
 let currentGalleryIndex = -1;
 
@@ -252,8 +265,8 @@ function initializeImageModal() {
   function updateNavButtons() {
     // Only show nav buttons for gallery images
     const isGalleryImage = currentGalleryIndex >= 0;
-    prevBtn.style.display = isGalleryImage ? '' : 'none';
-    nextBtn.style.display = isGalleryImage ? '' : 'none';
+    prevBtn.style.display = isGalleryImage ? 'block' : 'none';
+    nextBtn.style.display = isGalleryImage ? 'block' : 'none';
     prevBtn.disabled = currentGalleryIndex <= 0;
     nextBtn.disabled = currentGalleryIndex >= shelfPhotos.length - 1;
   }
@@ -372,19 +385,6 @@ function initializeImageModal() {
     }
   });
 }
-
-// Shelf gallery photos
-const shelfPhotos = [
-    { src: 'images/shelves/full.jpg', type: 'full' },
-    { src: 'images/shelves/case-01.jpg', type: 'case' },
-    { src: 'images/shelves/case-02.jpg', type: 'case' },
-    { src: 'images/shelves/case-03.jpg', type: 'case' },
-    { src: 'images/shelves/case-04.jpg', type: 'case' },
-    { src: 'images/shelves/case-05.jpg', type: 'case' },
-    { src: 'images/shelves/case-06.jpg', type: 'case' },
-    { src: 'images/shelves/case-07.jpg', type: 'case' },
-    { src: 'images/shelves/case-08.jpg', type: 'case' },
-];
 
 // Global data
 let gameData = null;
