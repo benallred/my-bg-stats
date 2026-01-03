@@ -197,7 +197,7 @@ function renderGameThumbnailOnly(game) {
  * Helper: Render game name with tiny inline thumbnail for summary text
  * Used in Year in Review summary where images should be inline with text
  * @param {Object} game - Game object with name, thumbnailUrl, coverUrl
- * @returns {string} HTML string with tiny image and bold italic name
+ * @returns {string} HTML string with tiny image and bold name
  */
 function renderGameNameWithTinyThumbnail(game) {
   const modalClass = game.coverUrl ? ' game-image-clickable' : '';
@@ -209,7 +209,7 @@ function renderGameNameWithTinyThumbnail(game) {
     ? `<img src="${game.thumbnailUrl}" alt="" class="game-thumbnail-tiny${modalClass}"${fullImageAttr} />`
     : '';
 
-  return `${imageHTML}<strong><em>${game.name}</em></strong>`;
+  return `${imageHTML}<strong>${game.name}</strong>`;
 }
 
 /**
