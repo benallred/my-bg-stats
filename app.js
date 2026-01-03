@@ -212,6 +212,9 @@ function renderGameNameWithTinyThumbnail(game) {
   return `${imageHTML}<strong>${game.name}</strong>`;
 }
 
+// Track current gallery index for arrow key navigation
+let currentGalleryIndex = -1;
+
 /**
  * Initialize image modal for click-to-enlarge functionality
  * Creates modal element and sets up event listeners
@@ -228,21 +231,32 @@ function initializeImageModal() {
 
   const modalImg = modal.querySelector('.image-modal-content');
 
-  // Close on click
-  modal.addEventListener('click', () => {
+  // Close modal and reset gallery index
+  function closeModal() {
     modal.classList.remove('active');
+    currentGalleryIndex = -1;
     setTimeout(() => {
       modalImg.src = '';
     }, 200); // Clear after fade-out
-  });
+  }
 
-  // Close on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      modal.classList.remove('active');
-      setTimeout(() => {
-        modalImg.src = '';
-      }, 200);
+  // Close on click
+  modal.addEventListener('click', closeModal);
+
+  // Keyboard navigation
+  document.addEventListener('keyup', (e) => {
+    if (!modal.classList.contains('active')) return;
+
+    if (e.key === 'Escape') {
+      closeModal();
+    } else if (e.key === 'ArrowLeft' && currentGalleryIndex > 0) {
+      currentGalleryIndex--;
+      modalImg.src = shelfPhotos[currentGalleryIndex].src;
+      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
+    } else if (e.key === 'ArrowRight' && currentGalleryIndex >= 0 && currentGalleryIndex < shelfPhotos.length - 1) {
+      currentGalleryIndex++;
+      modalImg.src = shelfPhotos[currentGalleryIndex].src;
+      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
     }
   });
 
@@ -253,6 +267,10 @@ function initializeImageModal() {
       e.stopPropagation(); // Prevent click from bubbling to parent row handlers
       const fullImageUrl = thumbnail.dataset.fullImage;
       if (fullImageUrl) {
+        // Check if this is a gallery image and track index
+        const galleryIndex = shelfPhotos.findIndex(p => p.src === fullImageUrl);
+        currentGalleryIndex = galleryIndex;
+
         modalImg.src = fullImageUrl;
         modalImg.alt = thumbnail.alt;
         modal.classList.add('active');
@@ -260,6 +278,19 @@ function initializeImageModal() {
     }
   });
 }
+
+// Shelf gallery photos
+const shelfPhotos = [
+    { src: 'images/shelves/full.jpg', type: 'full' },
+    { src: 'images/shelves/case-01.jpg', type: 'case' },
+    { src: 'images/shelves/case-02.jpg', type: 'case' },
+    { src: 'images/shelves/case-03.jpg', type: 'case' },
+    { src: 'images/shelves/case-04.jpg', type: 'case' },
+    { src: 'images/shelves/case-05.jpg', type: 'case' },
+    { src: 'images/shelves/case-06.jpg', type: 'case' },
+    { src: 'images/shelves/case-07.jpg', type: 'case' },
+    { src: 'images/shelves/case-08.jpg', type: 'case' },
+];
 
 // Global data
 let gameData = null;
@@ -1759,6 +1790,12 @@ const statDetailHandlers = {
             showYearReviewDetail(detailContent, statsCache);
         }
     },
+    'shelf-gallery': {
+        getTitle: () => 'Shelf Gallery',
+        render: (detailContent) => {
+            showShelfGallery(detailContent);
+        },
+    },
     'total-cost': {
         getTitle: (currentYear) => {
             const yearText = currentYear
@@ -2495,6 +2532,59 @@ function showSuggestedGames(container) {
         </tbody>
     `;
     container.appendChild(table);
+}
+
+/**
+ * Show shelf gallery
+ */
+function showShelfGallery(container) {
+    if (shelfPhotos.length === 0) {
+        container.innerHTML = '<p>No photos available.</p>';
+        return;
+    }
+
+    const fullPhotos = shelfPhotos.filter(p => p.type === 'full');
+    const casePhotos = shelfPhotos.filter(p => p.type === 'case');
+
+    // Render full-width photos
+    if (fullPhotos.length > 0) {
+        const fullDiv = document.createElement('div');
+        fullDiv.className = 'shelf-gallery-full';
+        fullDiv.innerHTML = fullPhotos.map((photo) => {
+            const index = shelfPhotos.indexOf(photo);
+            return `
+                <div class="shelf-gallery-item shelf-gallery-item--full">
+                    <img
+                        src="${photo.src}"
+                        alt="Shelf photo ${index + 1}"
+                        class="shelf-gallery-image game-image-clickable"
+                        data-full-image="${photo.src}"
+                    />
+                </div>
+            `;
+        }).join('');
+        container.appendChild(fullDiv);
+    }
+
+    // Render case photos in grid
+    if (casePhotos.length > 0) {
+        const caseDiv = document.createElement('div');
+        caseDiv.className = 'shelf-gallery-grid';
+        caseDiv.innerHTML = casePhotos.map((photo) => {
+            const index = shelfPhotos.indexOf(photo);
+            return `
+                <div class="shelf-gallery-item shelf-gallery-item--case">
+                    <img
+                        src="${photo.src}"
+                        alt="Shelf photo ${index + 1}"
+                        class="shelf-gallery-image game-image-clickable"
+                        data-full-image="${photo.src}"
+                    />
+                </div>
+            `;
+        }).join('');
+        container.appendChild(caseDiv);
+    }
 }
 
 /**

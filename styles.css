@@ -466,6 +466,10 @@ header h1 {
     .widget--2x2 {
         grid-column: span 6;
     }
+
+    .shelf-gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* Responsive: Mobile */
@@ -928,6 +932,47 @@ table tbody tr:hover {
     }
 }
 
+/* Shelf Gallery */
+.shelf-gallery-full {
+    margin-bottom: 1rem;
+}
+
+.shelf-gallery-item--full {
+    border-radius: 8px;
+    border: 1px solid var(--border-tertiary);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.shelf-gallery-item--full:last-child {
+    margin-bottom: 0;
+}
+
+.shelf-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.shelf-gallery-item--case {
+    border-radius: 8px;
+    border: 1px solid var(--border-tertiary);
+    overflow: hidden;
+}
+
+.shelf-gallery-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: opacity var(--transition-hover);
+}
+
+.shelf-gallery-image:hover {
+    opacity: 0.9;
+}
+
 /* Loading state */
 .game-thumbnail[loading="lazy"] {
     background: var(--bg-table-row-even);
@@ -1009,6 +1054,11 @@ footer p {
     .theme-toggle svg {
         max-width: 18px;
         max-height: 18px;
+    }
+
+    .shelf-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
     }
 }
 
