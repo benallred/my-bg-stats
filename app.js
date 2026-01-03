@@ -370,6 +370,28 @@ function initializeImageModal() {
     }
   });
 
+  // Swipe navigation for touch devices
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  modal.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  modal.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const swipeDistance = touchEndX - touchStartX;
+    const minSwipeDistance = 50;
+
+    if (swipeDistance > minSwipeDistance) {
+      // Swiped right - go to previous
+      navigatePrev();
+    } else if (swipeDistance < -minSwipeDistance) {
+      // Swiped left - go to next
+      navigateNext();
+    }
+  }, { passive: true });
+
   // Event delegation for thumbnail clicks
   document.addEventListener('click', (e) => {
     const thumbnail = e.target.closest('.game-image-clickable');
