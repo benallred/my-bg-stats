@@ -44,8 +44,8 @@ import {
   getPlayTimeByGame,
   getDaysPlayedByGame,
   getTopGamesByMetric,
-  getTopNewToMeGame,
-  getTopReturningGame,
+  getTopNewToMeGames,
+  getTopReturningGames,
   getTimeAndActivityStats,
   getLoggingAchievements,
   getSoloStats,
@@ -774,11 +774,13 @@ function updateAllStats() {
             // Top solo game by hours (for summary)
             topSoloGameByHours: getTopSoloGameByHours(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
 
-            // Top new-to-me game by sessions (for summary)
-            topNewToMeGameBySessions: getTopNewToMeGame(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
+            // Top new-to-me games (for summary)
+            topNewToMeGamesByHours: getTopNewToMeGames(gameData.games, gameData.plays, currentYear, Metric.HOURS, 2),
+            topNewToMeGamesBySessions: getTopNewToMeGames(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, 2),
 
-            // Top returning game by sessions (for summary)
-            topReturningGameBySessions: getTopReturningGame(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
+            // Top returning games (for summary)
+            topReturningGamesByHours: getTopReturningGames(gameData.games, gameData.plays, currentYear, Metric.HOURS, 2),
+            topReturningGamesBySessions: getTopReturningGames(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, 2),
         };
         // Populate value club cache dynamically for each tier and metric
         ValueClub.values.forEach(tierValue => {
@@ -2971,16 +2973,38 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of ${renderGameNameWithTinyThumbnail(longestPlay.game)}`);
     }
 
-    // Biggest hit among new games (by sessions)
-    const topNewGame = statsCache.yearReview.topNewToMeGameBySessions;
-    if (topNewGame) {
-        summaryBullets.push(`Biggest hit among new games was ${renderGameNameWithTinyThumbnail(topNewGame.game)} (${topNewGame.sessions} <span class="metric-name sessions">sessions</span>)`);
+    // Biggest hit among new games (by sessions and hours)
+    const topNewBySessions = statsCache.yearReview.topNewToMeGamesBySessions?.[0];
+    const topNewByHours = statsCache.yearReview.topNewToMeGamesByHours?.[0];
+    if (topNewBySessions) {
+        let hoursGame = topNewByHours;
+        // If same game tops both metrics, use second by hours
+        if (hoursGame && topNewByHours.game.id === topNewBySessions.game.id) {
+            const secondByHours = statsCache.yearReview.topNewToMeGamesByHours?.[1];
+            hoursGame = secondByHours || null;
+        }
+        if (hoursGame) {
+            summaryBullets.push(`Biggest hits among new games were ${renderGameNameWithTinyThumbnail(topNewBySessions.game)} (${topNewBySessions.sessions} <span class="metric-name sessions">sessions</span>) and ${renderGameNameWithTinyThumbnail(hoursGame.game)} (${formatApproximateHours(hoursGame.hours)} <span class="metric-name hours">hours</span>)`);
+        } else {
+            summaryBullets.push(`Biggest hit among new games was ${renderGameNameWithTinyThumbnail(topNewBySessions.game)} (${topNewBySessions.sessions} <span class="metric-name sessions">sessions</span>)`);
+        }
     }
 
-    // Returning favorite (top returning game by sessions)
-    const topReturningGame = statsCache.yearReview.topReturningGameBySessions;
-    if (topReturningGame) {
-        summaryBullets.push(`Returning favorite was ${renderGameNameWithTinyThumbnail(topReturningGame.game)} (${topReturningGame.sessions} <span class="metric-name sessions">sessions</span>)`);
+    // Returning favorites (by sessions and hours)
+    const topReturningBySessions = statsCache.yearReview.topReturningGamesBySessions?.[0];
+    const topReturningByHours = statsCache.yearReview.topReturningGamesByHours?.[0];
+    if (topReturningBySessions) {
+        let hoursGame = topReturningByHours;
+        // If same game tops both metrics, use second by hours
+        if (hoursGame && topReturningByHours.game.id === topReturningBySessions.game.id) {
+            const secondByHours = statsCache.yearReview.topReturningGamesByHours?.[1];
+            hoursGame = secondByHours || null;
+        }
+        if (hoursGame) {
+            summaryBullets.push(`Returning favorites were ${renderGameNameWithTinyThumbnail(topReturningBySessions.game)} (${topReturningBySessions.sessions} <span class="metric-name sessions">sessions</span>) and ${renderGameNameWithTinyThumbnail(hoursGame.game)} (${formatApproximateHours(hoursGame.hours)} <span class="metric-name hours">hours</span>)`);
+        } else {
+            summaryBullets.push(`Returning favorite was ${renderGameNameWithTinyThumbnail(topReturningBySessions.game)} (${topReturningBySessions.sessions} <span class="metric-name sessions">sessions</span>)`);
+        }
     }
 
     // Solo stats summary (show hours or sessions, whichever is greater)

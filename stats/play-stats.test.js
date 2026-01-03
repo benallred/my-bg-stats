@@ -8,8 +8,8 @@ import {
   getPlayTimeByGame,
   getDaysPlayedByGame,
   getTopGamesByMetric,
-  getTopNewToMeGame,
-  getTopReturningGame,
+  getTopNewToMeGames,
+  getTopReturningGames,
 } from './play-stats.js';
 import { processData } from '../scripts/transform-game-data.js';
 import minimalFixture from '../tests/fixtures/minimal.json';
@@ -582,442 +582,389 @@ describe('getTopGamesByMetric', () => {
   });
 });
 
-describe('getTopNewToMeGame', () => {
-  test('returns null when year is null', () => {
-    const result = getTopNewToMeGame(typicalData.games, typicalData.plays, null, 'sessions');
-    expect(result).toBeNull();
+describe('getTopNewToMeGames', () => {
+  test('returns empty array when year is null', () => {
+    const result = getTopNewToMeGames(typicalData.games, typicalData.plays, null, 'sessions', 2);
+    expect(result).toEqual([]);
   });
 
-  test('returns null when no new-to-me games exist', () => {
+  test('returns empty array when no new-to-me games exist', () => {
     const games = [{ id: 1, name: 'Game A' }];
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-01', durationMin: 60 },
     ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result).toBeNull();
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toEqual([]);
   });
 
-  test('returns the correct game when multiple new-to-me games exist', () => {
+  test('returns top N new-to-me games by sessions', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
       { id: 3, name: 'Game C' },
     ];
     const plays = [
-      // Game A: first played 2023, not new to me in 2024
-      { gameId: 1, date: '2023-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-02', durationMin: 60 },
       { gameId: 1, date: '2024-01-03', durationMin: 60 },
-      // Game B: first played 2024, 3 sessions - should win
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-02', durationMin: 30 },
-      { gameId: 2, date: '2024-02-03', durationMin: 30 },
-      // Game C: first played 2024, 2 sessions
-      { gameId: 3, date: '2024-03-01', durationMin: 120 },
-      { gameId: 3, date: '2024-03-02', durationMin: 120 },
+      { gameId: 2, date: '2024-01-01', durationMin: 120 },
+      { gameId: 2, date: '2024-01-02', durationMin: 120 },
+      { gameId: 3, date: '2024-01-01', durationMin: 30 },
     ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result).not.toBeNull();
-    expect(result.game.id).toBe(2);
-    expect(result.sessions).toBe(3);
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game A');
+    expect(result[0].sessions).toBe(3);
+    expect(result[1].game.name).toBe('Game B');
+    expect(result[1].sessions).toBe(2);
   });
 
-  test('correctly breaks ties using secondary metrics', () => {
+  test('returns top N new-to-me games by hours', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
+      { id: 3, name: 'Game C' },
     ];
-    const plays = [
-      // Game A: 2 sessions, 60 total minutes
-      { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-02', durationMin: 30 },
-      // Game B: 2 sessions, 120 total minutes - should win on hours tiebreaker
-      { gameId: 2, date: '2024-02-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-02', durationMin: 60 },
-    ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result).not.toBeNull();
-    expect(result.game.id).toBe(2);
-    expect(result.hours).toBe(120);
-  });
-
-  test('returns correct structure with all metrics', () => {
-    const games = [{ id: 1, name: 'Game A' }];
-    const plays = [
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-02', durationMin: 45 },
-    ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result).toHaveProperty('game');
-    expect(result).toHaveProperty('value');
-    expect(result).toHaveProperty('hours');
-    expect(result).toHaveProperty('sessions');
-    expect(result).toHaveProperty('plays');
-    expect(result.sessions).toBe(2);
-    expect(result.plays).toBe(3);
-    expect(result.hours).toBe(135);
-    expect(result.value).toBe(2);
-  });
-
-  test('works with hours metric', () => {
-    const games = [
-      { id: 1, name: 'Game A' },
-      { id: 2, name: 'Game B' },
-    ];
-    const plays = [
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-01', durationMin: 120 },
-    ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'hours');
-    expect(result.game.id).toBe(2);
-    expect(result.value).toBe(120);
-  });
-
-  test('works with plays metric', () => {
-    const games = [
-      { id: 1, name: 'Game A' },
-      { id: 2, name: 'Game B' },
-    ];
-    const plays = [
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-    ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'plays');
-    expect(result.game.id).toBe(2);
-    expect(result.value).toBe(3);
-  });
-
-  test('only considers plays within the specified year for metrics', () => {
-    const games = [{ id: 1, name: 'Game A' }];
     const plays = [
       { gameId: 1, date: '2024-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-02', durationMin: 60 },
-      { gameId: 1, date: '2025-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 180 },
+      { gameId: 3, date: '2024-01-01', durationMin: 90 },
     ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result.sessions).toBe(2);
-    expect(result.plays).toBe(2);
+    const result = getTopNewToMeGames(games, plays, 2024, 'hours', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game B');
+    expect(result[0].hours).toBe(180);
+    expect(result[1].game.name).toBe('Game A');
+    expect(result[1].hours).toBe(120);
   });
 
-  test('ignores games not in games array', () => {
-    const games = [{ id: 1, name: 'Game A' }];
-    const plays = [
-      { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      { gameId: 999, date: '2024-02-01', durationMin: 120 },
-    ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result.game.id).toBe(1);
-  });
-
-  test('handles out-of-order plays when determining first play date', () => {
-    const games = [{ id: 1, name: 'Game A' }];
-    const plays = [
-      // Plays in non-chronological order - later play first in array
-      { gameId: 1, date: '2024-03-01', durationMin: 60 },
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
-    ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result).not.toBeNull();
-    expect(result.game.id).toBe(1);
-  });
-
-  test('tiebreaker falls through sessions to plays', () => {
+  test('returns top N new-to-me games by plays', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
     ];
     const plays = [
-      // Game A: 2 sessions, 60 minutes, 2 plays
       { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-02', durationMin: 30 },
-      // Game B: 2 sessions, 60 minutes, 3 plays - should win on plays tiebreaker
-      { gameId: 2, date: '2024-02-01', durationMin: 20 },
-      { gameId: 2, date: '2024-02-01', durationMin: 20 },
-      { gameId: 2, date: '2024-02-02', durationMin: 20 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 2, date: '2024-01-01', durationMin: 60 },
     ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result.game.id).toBe(2);
-    expect(result.plays).toBe(3);
+    const result = getTopNewToMeGames(games, plays, 2024, 'plays', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game A');
+    expect(result[0].plays).toBe(3);
+    expect(result[1].game.name).toBe('Game B');
+    expect(result[1].plays).toBe(1);
   });
 
-  test('returns null when new-to-me games exist but are not in games array', () => {
+  test('returns fewer than count if not enough games exist', () => {
     const games = [{ id: 1, name: 'Game A' }];
+    const plays = [{ gameId: 1, date: '2024-01-01', durationMin: 60 }];
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 5);
+    expect(result).toHaveLength(1);
+  });
+
+  test('excludes games first played before the year', () => {
+    const games = [
+      { id: 1, name: 'Old Game' },
+      { id: 2, name: 'New Game' },
+    ];
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 60 },
-      { gameId: 999, date: '2024-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 60 },
     ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'sessions');
-    expect(result).toBeNull();
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('New Game');
   });
 
-  test('tiebreaker uses sessions when value and hours tie', () => {
+  test('uses plays as final tiebreaker when value, hours, and sessions are equal', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
     ];
     const plays = [
-      // Game A: 2 plays, 60 minutes, 1 session
+      // Both games: same sessions (1), same hours (60 min), but different plays
       { gameId: 1, date: '2024-01-01', durationMin: 30 },
       { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      // Game B: 2 plays, 60 minutes, 2 sessions - should win on sessions
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-02', durationMin: 30 },
+      { gameId: 2, date: '2024-01-01', durationMin: 60 },
     ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'plays');
-    expect(result.game.id).toBe(2);
-    expect(result.sessions).toBe(2);
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(2);
+    // Game A has 2 plays, Game B has 1 play - Game A should be first
+    expect(result[0].game.name).toBe('Game A');
+    expect(result[0].plays).toBe(2);
+    expect(result[1].game.name).toBe('Game B');
+    expect(result[1].plays).toBe(1);
   });
 
-  test('handles games with zero duration (fallback to 0 in maps)', () => {
+  test('updates first play date when earlier play is found later in array', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      // Later play comes first in array
+      { gameId: 1, date: '2024-06-01', durationMin: 60 },
+      // Earlier play comes second - should update first play date to Jan
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+    ];
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 1);
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Game A');
+  });
+
+  test('uses sessions tiebreaker when value and hours are equal', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
     ];
+    const plays = [
+      // Game A: 60 min total across 2 sessions
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-02', durationMin: 30 },
+      // Game B: 60 min total in 1 session
+      { gameId: 2, date: '2024-01-01', durationMin: 60 },
+    ];
+    // Sort by hours - both have 60 min, so sessions is tiebreaker
+    const result = getTopNewToMeGames(games, plays, 2024, 'hours', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game A'); // 2 sessions
+    expect(result[1].game.name).toBe('Game B'); // 1 session
+  });
+
+  test('uses hours tiebreaker when value is equal but hours differ', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      // Game A: 2 sessions, 120 min total
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-02', durationMin: 60 },
+      // Game B: 2 sessions, 60 min total
+      { gameId: 2, date: '2024-01-01', durationMin: 30 },
+      { gameId: 2, date: '2024-01-02', durationMin: 30 },
+    ];
+    // Sort by sessions - both have 2 sessions, so hours is tiebreaker
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game A'); // 120 min
+    expect(result[1].game.name).toBe('Game B'); // 60 min
+  });
+
+  test('ignores plays with non-existent game IDs', () => {
+    const games = [{ id: 1, name: 'Game A' }];
     const plays = [
       { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 2, date: '2024-01-01', durationMin: 0 },
+      { gameId: 999, date: '2024-01-01', durationMin: 60 }, // Non-existent game
     ];
-    const result = getTopNewToMeGame(games, plays, 2024, 'plays');
-    expect(result.length).toBeUndefined();
-    const game2Result = getTopNewToMeGame(
-      [{ id: 2, name: 'Game B' }],
-      [{ gameId: 2, date: '2024-01-01', durationMin: 0 }],
-      2024,
-      'plays',
-    );
-    expect(game2Result.hours).toBe(0);
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Game A');
+  });
+
+  test('returns empty array when plays exist but games array is empty', () => {
+    const games = [];
+    const plays = [{ gameId: 1, date: '2024-01-01', durationMin: 60 }];
+    const result = getTopNewToMeGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toEqual([]);
   });
 });
 
-describe('getTopReturningGame', () => {
-  test('returns null when year is null', () => {
-    const result = getTopReturningGame(typicalData.games, typicalData.plays, null, 'sessions');
-    expect(result).toBeNull();
+describe('getTopReturningGames', () => {
+  test('returns empty array when year is null', () => {
+    const result = getTopReturningGames(typicalData.games, typicalData.plays, null, 'sessions', 2);
+    expect(result).toEqual([]);
   });
 
-  test('returns null when no returning games exist (all games are new-to-me)', () => {
-    const games = [
-      { id: 1, name: 'Game A' },
-      { id: 2, name: 'Game B' },
-    ];
+  test('returns empty array when no returning games exist', () => {
+    const games = [{ id: 1, name: 'Game A' }];
     const plays = [
       { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-01', durationMin: 60 },
     ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result).toBeNull();
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toEqual([]);
   });
 
-  test('returns the correct returning game when multiple exist', () => {
+  test('returns top N returning games by sessions', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
       { id: 3, name: 'Game C' },
     ];
     const plays = [
-      // Game A: first played 2023, 3 sessions in 2024 - should win
       { gameId: 1, date: '2023-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-02', durationMin: 60 },
       { gameId: 1, date: '2024-01-03', durationMin: 60 },
-      // Game B: first played 2023, 2 sessions in 2024
-      { gameId: 2, date: '2023-06-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-02', durationMin: 30 },
-      // Game C: first played 2024, new-to-me (not returning)
-      { gameId: 3, date: '2024-03-01', durationMin: 120 },
-      { gameId: 3, date: '2024-03-02', durationMin: 120 },
-      { gameId: 3, date: '2024-03-03', durationMin: 120 },
-      { gameId: 3, date: '2024-03-04', durationMin: 120 },
-    ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result).not.toBeNull();
-    expect(result.game.id).toBe(1);
-    expect(result.sessions).toBe(3);
-  });
-
-  test('correctly breaks ties using secondary metrics', () => {
-    const games = [
-      { id: 1, name: 'Game A' },
-      { id: 2, name: 'Game B' },
-    ];
-    const plays = [
-      // Game A: first played 2023, 2 sessions in 2024, 60 total minutes
-      { gameId: 1, date: '2023-01-01', durationMin: 60 },
-      { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-02', durationMin: 30 },
-      // Game B: first played 2023, 2 sessions in 2024, 120 total minutes - should win on hours tiebreaker
-      { gameId: 2, date: '2023-06-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-02', durationMin: 60 },
-    ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result).not.toBeNull();
-    expect(result.game.id).toBe(2);
-    expect(result.hours).toBe(120);
-  });
-
-  test('returns correct structure with all metrics', () => {
-    const games = [{ id: 1, name: 'Game A' }];
-    const plays = [
-      { gameId: 1, date: '2023-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-02', durationMin: 45 },
-    ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result).toHaveProperty('game');
-    expect(result).toHaveProperty('value');
-    expect(result).toHaveProperty('hours');
-    expect(result).toHaveProperty('sessions');
-    expect(result).toHaveProperty('plays');
-    expect(result.sessions).toBe(2);
-    expect(result.plays).toBe(3);
-    expect(result.hours).toBe(135);
-    expect(result.value).toBe(2);
-  });
-
-  test('works with hours metric', () => {
-    const games = [
-      { id: 1, name: 'Game A' },
-      { id: 2, name: 'Game B' },
-    ];
-    const plays = [
-      { gameId: 1, date: '2023-01-01', durationMin: 60 },
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
       { gameId: 2, date: '2023-01-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-01', durationMin: 120 },
+      { gameId: 2, date: '2024-01-01', durationMin: 120 },
+      { gameId: 2, date: '2024-01-02', durationMin: 120 },
+      { gameId: 3, date: '2023-01-01', durationMin: 60 },
+      { gameId: 3, date: '2024-01-01', durationMin: 30 },
     ];
-    const result = getTopReturningGame(games, plays, 2024, 'hours');
-    expect(result.game.id).toBe(2);
-    expect(result.value).toBe(120);
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game A');
+    expect(result[0].sessions).toBe(3);
+    expect(result[1].game.name).toBe('Game B');
+    expect(result[1].sessions).toBe(2);
   });
 
-  test('works with plays metric', () => {
+  test('returns top N returning games by hours', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
+      { id: 3, name: 'Game C' },
     ];
-    const plays = [
-      { gameId: 1, date: '2023-01-01', durationMin: 60 },
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 2, date: '2023-01-01', durationMin: 60 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-    ];
-    const result = getTopReturningGame(games, plays, 2024, 'plays');
-    expect(result.game.id).toBe(2);
-    expect(result.value).toBe(3);
-  });
-
-  test('only considers plays within the specified year for metrics', () => {
-    const games = [{ id: 1, name: 'Game A' }];
     const plays = [
       { gameId: 1, date: '2023-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-01', durationMin: 60 },
       { gameId: 1, date: '2024-01-02', durationMin: 60 },
-      { gameId: 1, date: '2025-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 180 },
+      { gameId: 3, date: '2023-01-01', durationMin: 60 },
+      { gameId: 3, date: '2024-01-01', durationMin: 90 },
     ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result.sessions).toBe(2);
-    expect(result.plays).toBe(2);
+    const result = getTopReturningGames(games, plays, 2024, 'hours', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game B');
+    expect(result[0].hours).toBe(180);
+    expect(result[1].game.name).toBe('Game A');
+    expect(result[1].hours).toBe(120);
   });
 
-  test('handles out-of-order plays when determining first play date', () => {
+  test('returns top N returning games by plays', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 60 },
+    ];
+    const result = getTopReturningGames(games, plays, 2024, 'plays', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game A');
+    expect(result[0].plays).toBe(3);
+    expect(result[1].game.name).toBe('Game B');
+    expect(result[1].plays).toBe(1);
+  });
+
+  test('returns fewer than count if not enough games exist', () => {
     const games = [{ id: 1, name: 'Game A' }];
     const plays = [
-      // Plays in non-chronological order - later play first in array
-      { gameId: 1, date: '2024-03-01', durationMin: 60 },
       { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
     ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result).not.toBeNull();
-    expect(result.game.id).toBe(1);
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 5);
+    expect(result).toHaveLength(1);
   });
 
-  test('excludes returning games not played in the target year', () => {
+  test('excludes games first played in the year (new-to-me games)', () => {
+    const games = [
+      { id: 1, name: 'Old Game' },
+      { id: 2, name: 'New Game' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 120 },
+    ];
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Old Game');
+  });
+
+  test('excludes returning games not played in the year', () => {
+    const games = [
+      { id: 1, name: 'Played This Year' },
+      { id: 2, name: 'Not Played This Year' },
+    ];
+    const plays = [
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+    ];
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Played This Year');
+  });
+
+  test('updates first play date when earlier play is found later in array', () => {
+    const games = [{ id: 1, name: 'Game A' }];
+    const plays = [
+      // Later play comes first in array
+      { gameId: 1, date: '2023-06-01', durationMin: 60 },
+      // Earlier play comes second - should update first play date
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+    ];
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 1);
+    expect(result).toHaveLength(1);
+    expect(result[0].game.name).toBe('Game A');
+  });
+
+  test('uses tiebreakers (hours, sessions, plays) when primary metric is equal', () => {
+    const games = [
+      { id: 1, name: 'Game A' },
+      { id: 2, name: 'Game B' },
+      { id: 3, name: 'Game C' },
+    ];
+    const plays = [
+      // Game A: 1 session (value), 60 min (hours), 1 session, 2 plays
+      { gameId: 1, date: '2023-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      { gameId: 1, date: '2024-01-01', durationMin: 30 },
+      // Game B: 1 session (value), 60 min (hours), 1 session, 1 play
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 60 },
+      // Game C: 1 session (value), 30 min (hours) - should be last
+      { gameId: 3, date: '2023-01-01', durationMin: 60 },
+      { gameId: 3, date: '2024-01-01', durationMin: 30 },
+    ];
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 3);
+    expect(result).toHaveLength(3);
+    // All have same sessions (1), so sorted by hours (A=60, B=60, C=30)
+    // A and B tied on hours, so sorted by sessions (both 1), then plays (A=2, B=1)
+    expect(result[0].game.name).toBe('Game A');
+    expect(result[1].game.name).toBe('Game B');
+    expect(result[2].game.name).toBe('Game C');
+  });
+
+  test('uses sessions tiebreaker when value and hours are equal', () => {
     const games = [
       { id: 1, name: 'Game A' },
       { id: 2, name: 'Game B' },
     ];
     const plays = [
-      // Game A: first played 2022, played in 2023 but not 2024
-      { gameId: 1, date: '2022-01-01', durationMin: 60 },
+      // Game A: first played 2023, 60 min total in 2024 across 2 sessions
       { gameId: 1, date: '2023-01-01', durationMin: 60 },
-      // Game B: first played 2023, played in 2024 - should be the only result
-      { gameId: 2, date: '2023-06-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-    ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result).not.toBeNull();
-    expect(result.game.id).toBe(2);
-  });
-
-  test('tiebreaker falls through sessions to plays', () => {
-    const games = [
-      { id: 1, name: 'Game A' },
-      { id: 2, name: 'Game B' },
-    ];
-    const plays = [
-      // Game A: first played 2023, 2 sessions in 2024, 60 minutes, 2 plays
-      { gameId: 1, date: '2023-01-01', durationMin: 30 },
       { gameId: 1, date: '2024-01-01', durationMin: 30 },
       { gameId: 1, date: '2024-01-02', durationMin: 30 },
-      // Game B: first played 2023, 2 sessions in 2024, 60 minutes, 3 plays - should win on plays tiebreaker
-      { gameId: 2, date: '2023-01-01', durationMin: 20 },
-      { gameId: 2, date: '2024-02-01', durationMin: 20 },
-      { gameId: 2, date: '2024-02-01', durationMin: 20 },
-      { gameId: 2, date: '2024-02-02', durationMin: 20 },
+      // Game B: first played 2023, 60 min total in 2024 in 1 session
+      { gameId: 2, date: '2023-01-01', durationMin: 60 },
+      { gameId: 2, date: '2024-01-01', durationMin: 60 },
     ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result.game.id).toBe(2);
-    expect(result.plays).toBe(3);
+    // Sort by hours - both have 60 min, so sessions is tiebreaker
+    const result = getTopReturningGames(games, plays, 2024, 'hours', 2);
+    expect(result).toHaveLength(2);
+    expect(result[0].game.name).toBe('Game A'); // 2 sessions
+    expect(result[1].game.name).toBe('Game B'); // 1 session
   });
 
-  test('returns null when returning games exist but are not in games array', () => {
+  test('returns empty array when returning games exist but none played in year', () => {
     const games = [{ id: 1, name: 'Game A' }];
     const plays = [
-      { gameId: 1, date: '2024-01-01', durationMin: 60 },
-      { gameId: 999, date: '2023-01-01', durationMin: 60 },
-      { gameId: 999, date: '2024-01-01', durationMin: 60 },
-    ];
-    const result = getTopReturningGame(games, plays, 2024, 'sessions');
-    expect(result).toBeNull();
-  });
-
-  test('tiebreaker uses sessions when value and hours tie', () => {
-    const games = [
-      { id: 1, name: 'Game A' },
-      { id: 2, name: 'Game B' },
-    ];
-    const plays = [
-      // Game A: first played 2023, 2 plays in 2024, 60 minutes, 1 session
-      { gameId: 1, date: '2023-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      { gameId: 1, date: '2024-01-01', durationMin: 30 },
-      // Game B: first played 2023, 2 plays in 2024, 60 minutes, 2 sessions - should win on sessions
-      { gameId: 2, date: '2023-01-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-01', durationMin: 30 },
-      { gameId: 2, date: '2024-02-02', durationMin: 30 },
-    ];
-    const result = getTopReturningGame(games, plays, 2024, 'plays');
-    expect(result.game.id).toBe(2);
-    expect(result.sessions).toBe(2);
-  });
-
-  test('handles games with zero duration (fallback to 0 in maps)', () => {
-    const games = [{ id: 1, name: 'Game A' }];
-    const plays = [
+      // Game played before year but not in the year
       { gameId: 1, date: '2023-01-01', durationMin: 60 },
-      { gameId: 1, date: '2024-01-01', durationMin: 0 },
     ];
-    const result = getTopReturningGame(games, plays, 2024, 'plays');
-    expect(result.hours).toBe(0);
+    const result = getTopReturningGames(games, plays, 2024, 'sessions', 2);
+    expect(result).toEqual([]);
   });
 });
