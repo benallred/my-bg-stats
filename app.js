@@ -225,11 +225,15 @@ function initializeImageModal() {
   modal.id = 'image-modal';
   modal.className = 'image-modal';
   modal.innerHTML = `
+    <button class="image-modal-nav image-modal-prev" aria-label="Previous image">&#8249;</button>
     <img src="" alt="" class="image-modal-content" />
+    <button class="image-modal-nav image-modal-next" aria-label="Next image">&#8250;</button>
   `;
   document.body.appendChild(modal);
 
   const modalImg = modal.querySelector('.image-modal-content');
+  const prevBtn = modal.querySelector('.image-modal-prev');
+  const nextBtn = modal.querySelector('.image-modal-next');
 
   // Zoom state
   let isZoomed = false;
@@ -245,6 +249,35 @@ function initializeImageModal() {
     modal.classList.remove('zoomed');
   }
 
+  function updateNavButtons() {
+    // Only show nav buttons for gallery images
+    const isGalleryImage = currentGalleryIndex >= 0;
+    prevBtn.style.display = isGalleryImage ? '' : 'none';
+    nextBtn.style.display = isGalleryImage ? '' : 'none';
+    prevBtn.disabled = currentGalleryIndex <= 0;
+    nextBtn.disabled = currentGalleryIndex >= shelfPhotos.length - 1;
+  }
+
+  function navigatePrev() {
+    if (currentGalleryIndex > 0) {
+      resetZoom();
+      currentGalleryIndex--;
+      modalImg.src = shelfPhotos[currentGalleryIndex].src;
+      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
+      updateNavButtons();
+    }
+  }
+
+  function navigateNext() {
+    if (currentGalleryIndex >= 0 && currentGalleryIndex < shelfPhotos.length - 1) {
+      resetZoom();
+      currentGalleryIndex++;
+      modalImg.src = shelfPhotos[currentGalleryIndex].src;
+      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
+      updateNavButtons();
+    }
+  }
+
   // Close modal and reset gallery index
   function closeModal() {
     modal.classList.remove('active');
@@ -254,6 +287,17 @@ function initializeImageModal() {
       modalImg.src = '';
     }, 200); // Clear after fade-out
   }
+
+  // Navigation button clicks
+  prevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navigatePrev();
+  });
+
+  nextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navigateNext();
+  });
 
   // Handle image click for zoom toggle
   modalImg.addEventListener('click', (e) => {
@@ -301,16 +345,10 @@ function initializeImageModal() {
       } else {
         closeModal();
       }
-    } else if (e.key === 'ArrowLeft' && currentGalleryIndex > 0) {
-      resetZoom();
-      currentGalleryIndex--;
-      modalImg.src = shelfPhotos[currentGalleryIndex].src;
-      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
-    } else if (e.key === 'ArrowRight' && currentGalleryIndex >= 0 && currentGalleryIndex < shelfPhotos.length - 1) {
-      resetZoom();
-      currentGalleryIndex++;
-      modalImg.src = shelfPhotos[currentGalleryIndex].src;
-      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
+    } else if (e.key === 'ArrowLeft') {
+      navigatePrev();
+    } else if (e.key === 'ArrowRight') {
+      navigateNext();
     }
   });
 
@@ -329,6 +367,7 @@ function initializeImageModal() {
         modalImg.src = fullImageUrl;
         modalImg.alt = thumbnail.alt;
         modal.classList.add('active');
+        updateNavButtons();
       }
     }
   });
