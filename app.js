@@ -2922,12 +2922,6 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(locationBullet);
     }
 
-    // Longest single play summary
-    const longestPlay = statsCache.yearReview.longestSinglePlays[0];
-    if (longestPlay) {
-        summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of ${renderGameNameWithTinyThumbnail(longestPlay.game)}`);
-    }
-
     // Biggest hit among new games (by sessions and hours)
     const topNewBySessions = statsCache.yearReview.topNewToMeGamesBySessions?.[0];
     const topNewByHours = statsCache.yearReview.topNewToMeGamesByHours?.[0];
@@ -2960,6 +2954,12 @@ function showYearReviewDetail(container, statsCache) {
         } else {
             summaryBullets.push(`Returning favorite was ${renderGameNameWithTinyThumbnail(topReturningBySessions.game)} (${topReturningBySessions.sessions} <span class="metric-name sessions">sessions</span>)`);
         }
+    }
+
+    // Longest single play summary
+    const longestPlay = statsCache.yearReview.longestSinglePlays[0];
+    if (longestPlay) {
+        summaryBullets.push(`Longest single play was ${formatApproximateHours(longestPlay.durationMin)} hours of ${renderGameNameWithTinyThumbnail(longestPlay.game)}`);
     }
 
     // Solo stats summary (show hours or sessions, whichever is greater)
