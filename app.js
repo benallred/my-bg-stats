@@ -373,15 +373,18 @@ function initializeImageModal() {
   // Swipe navigation for touch devices
   let touchStartX = 0;
   let touchEndX = 0;
+  let wasZoomedDuringTouch = false;
 
   modal.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
+    // Track if zoomed at start of touch
+    wasZoomedDuringTouch = window.visualViewport && window.visualViewport.scale > 1;
   }, { passive: true });
 
   modal.addEventListener('touchend', (e) => {
-    // Don't interpret swipes as navigation when zoomed (user is panning with native pinch-to-zoom)
-    const isNativeZoomed = window.visualViewport && window.visualViewport.scale > 1;
-    if (isNativeZoomed) return;
+    // Don't interpret as swipe if user was zoomed at any point (panning or zooming out)
+    const isCurrentlyZoomed = window.visualViewport && window.visualViewport.scale > 1;
+    if (wasZoomedDuringTouch || isCurrentlyZoomed) return;
 
     touchEndX = e.changedTouches[0].screenX;
     const swipeDistance = touchEndX - touchStartX;
