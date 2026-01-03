@@ -373,18 +373,35 @@ function initializeImageModal() {
   // Swipe navigation for touch devices
   let touchStartX = 0;
   let touchEndX = 0;
+  let wasMultiTouch = false;
   let wasZoomedDuringTouch = false;
 
   modal.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
+    // Track if this is a multi-touch gesture (pinch zoom)
+    if (e.touches.length > 1) {
+      wasMultiTouch = true;
+    } else {
+      wasMultiTouch = false;
+      touchStartX = e.changedTouches[0].screenX;
+    }
     // Track if zoomed at start of touch
     wasZoomedDuringTouch = window.visualViewport && window.visualViewport.scale > 1;
   }, { passive: true });
 
+  // Track if additional fingers are added during touch
+  modal.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 1) {
+      wasMultiTouch = true;
+    }
+  }, { passive: true });
+
   modal.addEventListener('touchend', (e) => {
-    // Don't interpret as swipe if user was zoomed at any point (panning or zooming out)
+    // Don't interpret as swipe if:
+    // - Multi-touch gesture (pinch zoom)
+    // - User was zoomed at start (panning)
+    // - User is still zoomed (shouldn't happen but safety check)
     const isCurrentlyZoomed = window.visualViewport && window.visualViewport.scale > 1;
-    if (wasZoomedDuringTouch || isCurrentlyZoomed) return;
+    if (wasMultiTouch || wasZoomedDuringTouch || isCurrentlyZoomed) return;
 
     touchEndX = e.changedTouches[0].screenX;
     const swipeDistance = touchEndX - touchStartX;
