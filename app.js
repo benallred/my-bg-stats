@@ -2922,51 +2922,6 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(locationBullet);
     }
 
-    // Game Highlights summary
-    const topHoursGame = statsCache.yearReview.topGamesByHours[0];
-    const topSessionsGame = statsCache.yearReview.topGamesBySessions[0];
-    const topPlaysGame = statsCache.yearReview.topGamesByPlays[0];
-    if (topHoursGame || topSessionsGame || topPlaysGame) {
-        // Group metrics by game name to consolidate duplicates
-        const gameToMetrics = new Map();
-        const metricOrder = ['hours', 'sessions', 'plays'];
-        const games = [
-            { game: topHoursGame, metric: 'hours' },
-            { game: topSessionsGame, metric: 'sessions' },
-            { game: topPlaysGame, metric: 'plays' },
-        ];
-        games.forEach(({ game, metric }) => {
-            if (game) {
-                const name = game.game.name;
-                if (!gameToMetrics.has(name)) {
-                    gameToMetrics.set(name, []);
-                }
-                gameToMetrics.get(name).push(metric);
-            }
-        });
-
-        // Build parts in metric order (by first metric each game appears in)
-        const gameHighlightParts = [];
-        const processedGames = new Set();
-        metricOrder.forEach(metric => {
-            games.filter(g => g.metric === metric && g.game).forEach(({ game }) => {
-                const name = game.game.name;
-                if (!processedGames.has(name)) {
-                    processedGames.add(name);
-                    const metrics = gameToMetrics.get(name);
-                    const metricSpans = metrics.map(m =>
-                        `<span class="metric-name ${m}">${m}</span>`
-                    );
-                    gameHighlightParts.push(`by ${formatNaturalList(metricSpans)} was ${renderGameNameWithTinyThumbnail(game.game)}`);
-                }
-            });
-        });
-
-        if (gameHighlightParts.length > 0) {
-            summaryBullets.push(`Top game ${formatNaturalList(gameHighlightParts)}`);
-        }
-    }
-
     // Longest single play summary
     const longestPlay = statsCache.yearReview.longestSinglePlays[0];
     if (longestPlay) {
