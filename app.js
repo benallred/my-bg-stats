@@ -265,8 +265,8 @@ function initializeImageModal() {
   function updateNavButtons() {
     // Only show nav buttons for gallery images
     const isGalleryImage = currentGalleryIndex >= 0;
-    prevBtn.style.display = isGalleryImage ? 'block' : 'none';
-    nextBtn.style.display = isGalleryImage ? 'block' : 'none';
+    prevBtn.style.display = isGalleryImage ? '' : 'none';
+    nextBtn.style.display = isGalleryImage ? '' : 'none';
     prevBtn.disabled = currentGalleryIndex <= 0;
     nextBtn.disabled = currentGalleryIndex >= shelfPhotos.length - 1;
   }
@@ -312,34 +312,39 @@ function initializeImageModal() {
     navigateNext();
   });
 
-  // Handle image click for zoom toggle
-  modalImg.addEventListener('click', (e) => {
-    e.stopPropagation();
+  // Detect touch device (has native pinch-to-zoom)
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    if (!isZoomed) {
-      // Zoom in
-      isZoomed = true;
-      modal.classList.add('zoomed');
-    } else {
-      // Zoom out
-      resetZoom();
-    }
-  });
+  // Handle image click for zoom toggle (desktop only)
+  if (!isTouchDevice) {
+    modalImg.addEventListener('click', (e) => {
+      e.stopPropagation();
 
-  // Pan by moving mouse when zoomed
-  modal.addEventListener('mousemove', (e) => {
-    if (!isZoomed) return;
+      if (!isZoomed) {
+        // Zoom in
+        isZoomed = true;
+        modal.classList.add('zoomed');
+      } else {
+        // Zoom out
+        resetZoom();
+      }
+    });
 
-    const rect = modal.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
+    // Pan by moving mouse when zoomed
+    modal.addEventListener('mousemove', (e) => {
+      if (!isZoomed) return;
 
-    // Convert 0-1 range to translation offset (centered at 0.5)
-    translateX = (0.5 - x) * 100;
-    translateY = (0.5 - y) * 100;
+      const rect = modal.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
 
-    modalImg.style.transform = `scale(2) translate(${translateX}%, ${translateY}%)`;
-  });
+      // Convert 0-1 range to translation offset (centered at 0.5)
+      translateX = (0.5 - x) * 100;
+      translateY = (0.5 - y) * 100;
+
+      modalImg.style.transform = `scale(2) translate(${translateX}%, ${translateY}%)`;
+    });
+  }
 
   // Close on backdrop click (not image)
   modal.addEventListener('click', (e) => {

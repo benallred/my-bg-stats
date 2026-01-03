@@ -923,6 +923,13 @@ table tbody tr:hover {
     transition: transform 0.2s ease;
 }
 
+/* Disable zoom cursor on touch devices (they have native pinch-to-zoom) */
+@media (pointer: coarse) {
+    .image-modal-content {
+        cursor: default;
+    }
+}
+
 .image-modal.zoomed .image-modal-content {
     max-width: none;
     max-height: none;
