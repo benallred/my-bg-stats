@@ -59,6 +59,7 @@ import {
   getTopGamesByUniquePlayers,
   getTopGamesByUniqueLocations,
   getAllLocationsBySession,
+  getMostConsistentGame,
   ValueClub,
   getTotalCost,
   getValueClubGames,
@@ -957,6 +958,9 @@ function updateAllStats() {
             // Top returning games (for summary)
             topReturningGamesByHours: getTopReturningGames(gameData.games, gameData.plays, currentYear, Metric.HOURS, 2),
             topReturningGamesBySessions: getTopReturningGames(gameData.games, gameData.plays, currentYear, Metric.SESSIONS, 2),
+
+            // Most consistent game (played in most months)
+            mostConsistentGame: getMostConsistentGame(gameData.games, gameData.plays, currentYear),
         };
         // Populate value club cache dynamically for each tier and metric
         ValueClub.values.forEach(tierValue => {
@@ -3189,6 +3193,12 @@ function showYearReviewDetail(container, statsCache) {
         } else {
             summaryBullets.push(`Returning favorite was ${renderGameNameWithTinyThumbnail(topReturningBySessions.game)} (${topReturningBySessions.sessions} <span class="metric-name sessions">sessions</span>)`);
         }
+    }
+
+    // Most consistent game (played in most months)
+    const mostConsistentGame = statsCache.yearReview.mostConsistentGame;
+    if (mostConsistentGame && mostConsistentGame.monthCount > 1) {
+        summaryBullets.push(`Most consistent game was ${renderGameNameWithTinyThumbnail(mostConsistentGame.game)} (played in ${mostConsistentGame.monthCount} months)`);
     }
 
     // Longest single play summary

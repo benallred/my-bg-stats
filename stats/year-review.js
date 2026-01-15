@@ -449,6 +449,71 @@ function getAllLocationsBySession(plays, locations, year = null) {
   return results;
 }
 
+/**
+ * Get the most consistent game (played in the most months during a year)
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} year - Year to analyze
+ * @returns {Object|null} { game, monthCount } or null if no plays
+ */
+function getMostConsistentGame(games, plays, year) {
+  const filteredPlays = filterPlaysByYear(plays, year);
+
+  if (filteredPlays.length === 0) {
+    return null;
+  }
+
+  // Create game lookup map
+  const gameMap = new Map(games.map(g => [g.id, g]));
+
+  // Group plays by gameId and collect unique months + stats
+  const gameStatsMap = new Map();
+  for (const play of filteredPlays) {
+    if (!gameStatsMap.has(play.gameId)) {
+      gameStatsMap.set(play.gameId, {
+        months: new Set(),
+        minutes: 0,
+        sessions: new Set(),
+        plays: 0,
+      });
+    }
+    const stats = gameStatsMap.get(play.gameId);
+    // Extract month from date (YYYY-MM-DD format)
+    const month = play.date.substring(0, 7); // "YYYY-MM"
+    stats.months.add(month);
+    stats.minutes += play.durationMin;
+    stats.sessions.add(play.date);
+    stats.plays++;
+  }
+
+  // Find game with most months, using hours/sessions/plays as tie-breakers
+  let bestGame = null;
+  let bestStats = null;
+
+  for (const [gameId, stats] of gameStatsMap.entries()) {
+    const game = gameMap.get(gameId);
+    if (!game) continue;
+
+    if (!bestStats ||
+        stats.months.size > bestStats.months.size ||
+        (stats.months.size === bestStats.months.size && stats.minutes > bestStats.minutes) ||
+        (stats.months.size === bestStats.months.size && stats.minutes === bestStats.minutes && stats.sessions.size > bestStats.sessions.size) ||
+        (stats.months.size === bestStats.months.size && stats.minutes === bestStats.minutes && stats.sessions.size === bestStats.sessions.size && stats.plays > bestStats.plays)) {
+      bestGame = game;
+      bestStats = stats;
+    }
+  }
+
+  if (!bestGame) {
+    return null;
+  }
+
+  return {
+    game: bestGame,
+    monthCount: bestStats.months.size,
+  };
+}
+
 export {
   getTimeAndActivityStats,
   getLoggingAchievements,
@@ -457,4 +522,5 @@ export {
   getTopGamesByUniquePlayers,
   getTopGamesByUniqueLocations,
   getAllLocationsBySession,
+  getMostConsistentGame,
 };

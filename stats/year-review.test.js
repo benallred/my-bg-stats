@@ -7,6 +7,7 @@ import {
   getTopGamesByUniquePlayers,
   getTopGamesByUniqueLocations,
   getAllLocationsBySession,
+  getMostConsistentGame,
 } from './year-review.js';
 
 describe('getTimeAndActivityStats', () => {
@@ -1064,5 +1065,131 @@ describe('getTopGamesByUniqueLocations', () => {
     expect(result[1].value).toBe(1);
     expect(result[0].game.name).toBe('Catan');
     expect(result[1].game.name).toBe('Wingspan');
+  });
+});
+
+describe('getMostConsistentGame', () => {
+  const games = [
+    { id: 1, name: 'Wingspan' },
+    { id: 2, name: 'Catan' },
+    { id: 3, name: 'Azul' },
+  ];
+
+  test('returns null for no plays', () => {
+    const result = getMostConsistentGame(games, [], 2024);
+    expect(result).toBeNull();
+  });
+
+  test('returns null for no plays in specified year', () => {
+    const plays = [
+      { gameId: 1, date: '2023-01-15', durationMin: 60 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+    expect(result).toBeNull();
+  });
+
+  test('returns game played in most months', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 1, date: '2024-02-15', durationMin: 60 },
+      { gameId: 1, date: '2024-03-15', durationMin: 60 },
+      { gameId: 1, date: '2024-04-15', durationMin: 60 },
+      { gameId: 2, date: '2024-01-15', durationMin: 60 },
+      { gameId: 2, date: '2024-02-15', durationMin: 60 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+
+    expect(result.game.name).toBe('Wingspan');
+    expect(result.monthCount).toBe(4);
+  });
+
+  test('multiple plays in same month count as one', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 60 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 1, date: '2024-01-31', durationMin: 60 },
+      { gameId: 2, date: '2024-01-15', durationMin: 60 },
+      { gameId: 2, date: '2024-02-15', durationMin: 60 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+
+    expect(result.game.name).toBe('Catan');
+    expect(result.monthCount).toBe(2);
+  });
+
+  test('breaks ties by hours', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 1, date: '2024-02-15', durationMin: 60 },
+      { gameId: 2, date: '2024-01-15', durationMin: 120 },
+      { gameId: 2, date: '2024-02-15', durationMin: 120 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+
+    expect(result.game.name).toBe('Catan');
+    expect(result.monthCount).toBe(2);
+  });
+
+  test('breaks ties by sessions when hours are equal', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 1, date: '2024-02-15', durationMin: 60 },
+      { gameId: 2, date: '2024-01-15', durationMin: 60 },
+      { gameId: 2, date: '2024-02-16', durationMin: 60 },
+      { gameId: 2, date: '2024-02-17', durationMin: 0 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+
+    // Wingspan: 2 months, 120 mins, 2 sessions
+    // Catan: 2 months, 120 mins, 3 sessions
+    expect(result.game.name).toBe('Catan');
+    expect(result.monthCount).toBe(2);
+  });
+
+  test('breaks ties by plays when hours and sessions are equal', () => {
+    const plays = [
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+      { gameId: 1, date: '2024-02-15', durationMin: 60 },
+      { gameId: 2, date: '2024-01-15', durationMin: 30 },
+      { gameId: 2, date: '2024-01-15', durationMin: 30 },
+      { gameId: 2, date: '2024-02-15', durationMin: 30 },
+      { gameId: 2, date: '2024-02-15', durationMin: 30 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+
+    // Wingspan: 2 months, 120 mins, 2 sessions, 2 plays
+    // Catan: 2 months, 120 mins, 2 sessions, 4 plays
+    expect(result.game.name).toBe('Catan');
+    expect(result.monthCount).toBe(2);
+  });
+
+  test('handles game not in games array', () => {
+    const plays = [
+      { gameId: 999, date: '2024-01-15', durationMin: 60 },
+      { gameId: 999, date: '2024-02-15', durationMin: 60 },
+      { gameId: 1, date: '2024-01-15', durationMin: 60 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+
+    expect(result.game.name).toBe('Wingspan');
+    expect(result.monthCount).toBe(1);
+  });
+
+  test('returns null when all played games are not in games array', () => {
+    const plays = [
+      { gameId: 999, date: '2024-01-15', durationMin: 60 },
+      { gameId: 888, date: '2024-02-15', durationMin: 60 },
+    ];
+
+    const result = getMostConsistentGame(games, plays, 2024);
+
+    expect(result).toBeNull();
   });
 });
