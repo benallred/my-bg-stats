@@ -6,7 +6,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
-      include: ['stats/**/*.js', 'utils.js', 'formatting.js'],
+      include: ['stats/**/*.js', 'utils.js', 'formatting.js', 'table-sorting.js'],
       exclude: ['scripts/**', 'tests/**', 'node_modules/**', '**/*.test.js'],
       thresholds: {
         lines: 100,

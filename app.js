@@ -72,6 +72,7 @@ import {
 } from './stats.js';
 
 import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
+import { tableColumnConfigs, getDefaultSort, sortTableData, createSortableHeaderHtml } from './table-sorting.js';
 
 /**
  * Helper: Get acquisition date for a game (from first owned or first copy)
@@ -443,6 +444,8 @@ let gameData = null;
 let currentYear = null;
 let currentBaseMetric = 'hours'; // Default to hours
 let currentlyOpenStatType = null;
+let currentSortCol = null;
+let currentSortDir = null;
 let yearDataCache = null;
 let isLoadingFromPermalink = false;
 let showAllYearReviewMetrics = false;
@@ -1656,6 +1659,27 @@ function setupEventListeners() {
             }
         }
     });
+
+    // Sortable table header click handler (event delegation)
+    document.addEventListener('click', (e) => {
+        const th = e.target.closest('th[data-sort-col]');
+        if (!th || !currentlyOpenStatType) return;
+
+        const column = th.dataset.sortCol;
+        const config = tableColumnConfigs[currentlyOpenStatType];
+        const colConfig = config?.find(c => c.key === column);
+
+        // Toggle direction if same column, else use column's default or desc
+        if (currentSortCol === column) {
+            currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSortCol = column;
+            currentSortDir = colConfig?.defaultDir || 'desc';
+        }
+
+        updateURL();
+        rerenderDetailContent(currentlyOpenStatType); // Re-render without animation
+    });
 }
 
 /**
@@ -2071,6 +2095,31 @@ const statDetailHandlers = {
 };
 
 /**
+ * Re-render detail content without animation (used for sorting)
+ */
+function rerenderDetailContent(statType) {
+    const detailContent = document.getElementById('detail-content');
+    const detailStatSummary = document.getElementById('detail-stat-summary');
+
+    // Clear previous content
+    detailContent.innerHTML = '';
+    detailStatSummary.innerHTML = '';
+    detailStatSummary.style.display = 'none';
+
+    // Get handler for this stat type
+    const handler = statDetailHandlers[statType];
+    if (!handler) return;
+
+    // Render content using handler
+    handler.render(detailContent, statsCache, currentYear);
+
+    // Call renderSummary if handler provides custom summary rendering
+    if (handler.renderSummary) {
+        handler.renderSummary(detailStatSummary, detailContent);
+    }
+}
+
+/**
  * Show detail section for a specific stat - inline below the clicked widget
  */
 function showDetailSection(statType) {
@@ -2079,6 +2128,12 @@ function showDetailSection(statType) {
     const detailContent = document.getElementById('detail-content');
     const detailStatSummary = document.getElementById('detail-stat-summary');
     const dashboardGrid = document.querySelector('.dashboard-grid');
+
+    // Reset sort state when opening a different stat (unless loading from permalink)
+    if (currentlyOpenStatType !== statType && !isLoadingFromPermalink) {
+        currentSortCol = null;
+        currentSortDir = null;
+    }
 
     // Remove active class from all stat cards
     document.querySelectorAll('.widget.clickable').forEach(card => {
@@ -2155,6 +2210,10 @@ function closeDetailSection() {
     document.getElementById('detail-content').style.maxHeight = '';
     currentlyOpenStatType = null;
 
+    // Clear sort state when closing detail section
+    currentSortCol = null;
+    currentSortDir = null;
+
     // Remove active class from all stat cards
     document.querySelectorAll('.widget.clickable').forEach(card => {
         card.classList.remove('active');
@@ -2171,6 +2230,7 @@ function closeDetailSection() {
  * @param {number} hIndex - H-index value
  */
 function showHIndexBreakdown(container, metric, hIndex) {
+    const statType = 'h-index';
     let breakdown, columnHeader, valueKey;
 
     if (metric === 'hours') {
@@ -2187,29 +2247,40 @@ function showHIndexBreakdown(container, metric, hIndex) {
         valueKey = 'count';
     }
 
+    // Add rank and value properties for sorting, calculate contribution before sorting
+    breakdown = breakdown.map((item, index) => {
+        const rank = index + 1;
+        const value = item[valueKey];
+        const contributes = rank <= value && rank <= hIndex;
+        return { ...item, rank, value, contributes };
+    });
+
+    // Apply current sort
+    breakdown = sortTableData(breakdown, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'rank', label: 'Rank' },
+        { key: 'game', label: 'Game' },
+        { key: 'value', label: columnHeader },
+        { key: 'contributes', label: 'Contributes to H-Index?' },
+    ], currentSortCol, currentSortDir);
+
     const table = document.createElement('table');
     table.className = 'h-index-table';
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Game</th>
-                <th class="sorted-desc">${columnHeader}</th>
-                <th>Contributes to H-Index?</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
-            ${breakdown.map((item, index) => {
-                const rank = index + 1;
-                const value = item[valueKey];
-                const contributesToHIndex = rank <= value && rank <= hIndex;
-                const displayValue = metric === 'hours' ? value.toFixed(1) : value;
+            ${breakdown.map(item => {
+                const displayValue = metric === 'hours' ? item.value.toFixed(1) : item.value;
                 return `
-                    <tr${contributesToHIndex ? ' class="h-index-contributor"' : ''}>
-                        <td>${rank}</td>
+                    <tr${item.contributes ? ' class="h-index-contributor"' : ''}>
+                        <td>${item.rank}</td>
                         <td>${renderGameNameWithThumbnail(item.game)}</td>
                         <td>${displayValue}</td>
-                        <td>${contributesToHIndex ? '✓' : ''}</td>
+                        <td>${item.contributes ? '✓' : ''}</td>
                     </tr>
                 `;
             }).join('')}
@@ -2224,7 +2295,8 @@ function showHIndexBreakdown(container, metric, hIndex) {
  * @param {number} hIndex - People H-Index value
  */
 function showPeopleHIndexBreakdown(container, hIndex) {
-    const breakdown = getPeopleHIndexBreakdown(
+    const statType = 'people-h-index';
+    let breakdown = getPeopleHIndexBreakdown(
         gameData.games,
         gameData.plays,
         gameData.selfPlayerId,
@@ -2232,30 +2304,39 @@ function showPeopleHIndexBreakdown(container, hIndex) {
         currentYear,
     );
 
+    // Add rank and contributes properties for sorting
+    breakdown = breakdown.map((item, index) => {
+        const rank = index + 1;
+        const contributes = rank <= item.uniquePlayers && rank <= hIndex;
+        return { ...item, rank, contributes };
+    });
+
+    // Apply current sort
+    breakdown = sortTableData(breakdown, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'rank', label: 'Rank' },
+        { key: 'game', label: 'Game' },
+        { key: 'players', label: 'Unique Players' },
+        { key: 'contributes', label: 'Contributes to H-Index?' },
+    ], currentSortCol, currentSortDir);
+
     const table = document.createElement('table');
     table.className = 'h-index-table';
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Game</th>
-                <th class="sorted-desc">Unique Players</th>
-                <th>Contributes to H-Index?</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
-            ${breakdown.map((item, index) => {
-                const rank = index + 1;
-                const contributesToHIndex = rank <= item.uniquePlayers && rank <= hIndex;
-                return `
-                    <tr${contributesToHIndex ? ' class="h-index-contributor"' : ''}>
-                        <td>${rank}</td>
-                        <td>${renderGameNameWithThumbnail(item.game)}</td>
-                        <td>${item.uniquePlayers}</td>
-                        <td>${contributesToHIndex ? '✓' : ''}</td>
-                    </tr>
-                `;
-            }).join('')}
+            ${breakdown.map(item => `
+                <tr${item.contributes ? ' class="h-index-contributor"' : ''}>
+                    <td>${item.rank}</td>
+                    <td>${renderGameNameWithThumbnail(item.game)}</td>
+                    <td>${item.uniquePlayers}</td>
+                    <td>${item.contributes ? '✓' : ''}</td>
+                </tr>
+            `).join('')}
         </tbody>
     `;
     container.appendChild(table);
@@ -2265,6 +2346,8 @@ function showPeopleHIndexBreakdown(container, hIndex) {
  * Show BGG entries table
  */
 function showBGGEntries(container) {
+    const statType = 'bgg-entries';
+
     // Build list of all owned copies (may include multiple copies of same game)
     const entries = [];
 
@@ -2277,7 +2360,7 @@ function showBGGEntries(container) {
                         entries.push({
                             gameId: game.id,
                             game,
-                            copy
+                            copy,
                         });
                     }
                 } else {
@@ -2285,7 +2368,7 @@ function showBGGEntries(container) {
                         entries.push({
                             gameId: game.id,
                             game,
-                            copy
+                            copy,
                         });
                     }
                 }
@@ -2313,55 +2396,65 @@ function showBGGEntries(container) {
     // Track which version name occurrence we're on for each game
     const versionNameIndexes = new Map();
 
+    // Pre-process entries to add sortable properties
+    const processedEntries = entries.map(entry => {
+        const game = entry.game;
+        const copy = entry.copy;
+        const gameId = entry.gameId;
+        const hasMultipleCopies = entriesPerGame.get(gameId) > 1;
+
+        let name = game.name;
+        if (hasMultipleCopies) {
+            const versionName = copy.versionName || 'no version set';
+            const key = `${gameId}:${versionName}`;
+            const versionCount = versionNameCounts.get(key);
+
+            if (versionCount > 1) {
+                const currentIndex = versionNameIndexes.get(key) || 1;
+                versionNameIndexes.set(key, currentIndex + 1);
+                name += ` (${versionName} - ${currentIndex})`;
+            } else {
+                name += ` (${versionName})`;
+            }
+        }
+
+        const type = game.isBaseGame ? 'Base Game' :
+                    game.isExpandalone ? 'Expandalone' :
+                    game.isExpansion ? 'Expansion' : 'Unknown';
+        const acquisitionDate = copy ? (copy.acquisitionDate || 'Unknown') : 'Unknown';
+
+        return {
+            ...entry,
+            name,
+            type,
+            acquisitionDate,
+            displayGame: { ...game, name },
+        };
+    });
+
+    // Apply current sort
+    const sortedEntries = sortTableData(processedEntries, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'name', label: 'Name' },
+        { key: 'type', label: 'Type' },
+        { key: 'date', label: 'Acquisition Date' },
+    ], currentSortCol, currentSortDir);
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th class="sorted-asc">Name</th>
-                <th>Type</th>
-                <th>Acquisition Date</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
-            ${entries.map(entry => {
-                const game = entry.game;
-                const copy = entry.copy;
-                const gameId = entry.gameId;
-                const hasMutipleCopies = entriesPerGame.get(gameId) > 1;
-
-                let name = game.name;
-                if (hasMutipleCopies) {
-                    const versionName = copy.versionName || 'no version set';
-                    const key = `${gameId}:${versionName}`;
-                    const versionCount = versionNameCounts.get(key);
-
-                    if (versionCount > 1) {
-                        // Multiple copies with same versionName, add disambiguator
-                        const currentIndex = versionNameIndexes.get(key) || 1;
-                        versionNameIndexes.set(key, currentIndex + 1);
-                        name += ` (${versionName} - ${currentIndex})`;
-                    } else {
-                        // Single copy with this versionName
-                        name += ` (${versionName})`;
-                    }
-                }
-
-                const type = game.isBaseGame ? 'Base Game' :
-                            game.isExpandalone ? 'Expandalone' :
-                            game.isExpansion ? 'Expansion' : 'Unknown';
-                const acquisitionDate = copy ? (copy.acquisitionDate || 'Unknown') : 'Unknown';
-
-                // Create a temporary game object with modified name for rendering
-                const displayGame = { ...game, name: name };
-
-                return `
-                    <tr>
-                        <td>${renderGameNameWithThumbnail(displayGame)}</td>
-                        <td>${type}</td>
-                        <td>${acquisitionDate}</td>
-                    </tr>
-                `;
-            }).join('')}
+            ${sortedEntries.map(entry => `
+                <tr>
+                    <td>${renderGameNameWithThumbnail(entry.displayGame)}</td>
+                    <td>${entry.type}</td>
+                    <td>${entry.acquisitionDate}</td>
+                </tr>
+            `).join('')}
         </tbody>
     `;
     container.appendChild(table);
@@ -2399,21 +2492,36 @@ function showExpansions(container) {
         return isGameOwned(game);
     });
 
+    // Pre-process entries for sorting
+    let entries = expansions.map(game => ({
+        game,
+        name: game.name,
+        type: game.isExpandalone ? 'Expandalone' : 'Expansion',
+        acquisitionDate: getGameAcquisitionDate(game) || '',
+    }));
+
+    // Apply current sort
+    const statType = 'expansions';
+    entries = sortTableData(entries, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'name', label: 'Name' },
+        { key: 'type', label: 'Type' },
+        { key: 'date', label: 'Acquisition Date' },
+    ], currentSortCol, currentSortDir);
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th class="sorted-asc">Name</th>
-                <th>Type</th>
-                <th>Acquisition Date</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
-            ${expansions.map(game => `
+            ${entries.map(entry => `
                 <tr>
-                    <td>${renderGameNameWithThumbnail(game)}</td>
-                    <td>${game.isExpandalone ? 'Expandalone' : 'Expansion'}</td>
-                    <td>${getGameAcquisitionDate(game) || 'Unknown'}</td>
+                    <td>${renderGameNameWithThumbnail(entry.game)}</td>
+                    <td>${entry.type}</td>
+                    <td>${entry.acquisitionDate || 'Unknown'}</td>
                 </tr>
             `).join('')}
         </tbody>
@@ -2449,14 +2557,23 @@ function showGamesPlayed(container) {
         }
     });
 
-    const gamesWithPlays = Array.from(playCountsPerGame.entries()).map(([gameId, count]) => {
+    let gamesWithPlays = Array.from(playCountsPerGame.entries()).map(([gameId, count]) => {
         const game = gameData.games.find(g => g.id === gameId);
         const owned = ownedGamesInYear.has(gameId);
         const newToMe = currentYear && firstPlayDates.get(gameId)?.startsWith(currentYear.toString());
-        return { game, count, owned, newToMe };
+        return { game, plays: count, owned, newToMe };
     });
 
-    gamesWithPlays.sort((a, b) => b.count - a.count);
+    // Apply current sort
+    const statType = 'games-played';
+    gamesWithPlays = sortTableData(gamesWithPlays, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'plays', label: 'Plays' },
+        { key: 'status', label: '<span style="font-size: 0.85em;">Others\' 👥<br>New to me ✨</span>' },
+    ], currentSortCol, currentSortDir);
 
     const statusIcons = (item) => {
         const icons = [];
@@ -2468,17 +2585,13 @@ function showGamesPlayed(container) {
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th class="sorted-desc">Plays</th>
-                <th style="white-space: nowrap;"><span style="font-size: 0.85em;">Others' 👥<br>New to me ✨</span></th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${gamesWithPlays.map(item => `
                 <tr>
                     <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
-                    <td>${item.count}</td>
+                    <td>${item.plays}</td>
                     <td>${statusIcons(item)}</td>
                 </tr>
             `).join('')}
@@ -2491,23 +2604,38 @@ function showGamesPlayed(container) {
  * Show milestone games table
  */
 function showMilestoneGames(container, milestone, milestonesData) {
-    const games = milestonesData[milestone];
+    // Map milestone enum to statType
+    const milestoneToStatType = {
+        [Milestone.FIVES]: 'fives',
+        [Milestone.DIMES]: 'dimes',
+        [Milestone.QUARTERS]: 'quarters',
+        [Milestone.CENTURIES]: 'centuries',
+    };
+    const statType = milestoneToStatType[milestone];
+
+    let games = milestonesData[milestone];
+
+    // Apply current sort
+    games = sortTableData(games, statType, currentSortCol, currentSortDir);
 
     // Determine column header based on current base metric
     const columnHeaders = {
         hours: 'Total Hours',
         sessions: 'Days Played',
-        plays: 'Play Count'
+        plays: 'Play Count',
     };
     const columnHeader = columnHeaders[currentBaseMetric] || 'Total Hours';
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'count', label: columnHeader },
+    ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th class="sorted-desc">${columnHeader}</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${games.map(item => {
@@ -2534,18 +2662,25 @@ function showMilestoneGames(container, milestone, milestonesData) {
  * Show days played breakdown by game
  */
 function showDaysPlayedBreakdown(container) {
-    const breakdown = getDaysPlayedByGame(gameData.games, gameData.plays, currentYear);
+    const statType = 'total-days-played';
+    let breakdown = getDaysPlayedByGame(gameData.games, gameData.plays, currentYear);
+
+    // Apply current sort
+    breakdown = sortTableData(breakdown, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'days', label: 'Days Played' },
+        { key: 'medavgplays', label: 'Median/Avg Plays Per Day' },
+        { key: 'minmaxtime', label: 'Min/Max Time Per Day' },
+        { key: 'medavgtime', label: 'Median/Avg Time Per Day' },
+    ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th class="sorted-desc">Days Played</th>
-                <th>Median/Avg Plays Per Day</th>
-                <th>Min/Max Time Per Day</th>
-                <th>Median/Avg Time Per Day</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${breakdown.map(item => {
@@ -2589,18 +2724,25 @@ function showDaysPlayedBreakdown(container) {
  * Show play time breakdown by game
  */
 function showPlayTimeBreakdown(container) {
-    const breakdown = getPlayTimeByGame(gameData.games, gameData.plays, currentYear);
+    const statType = 'total-play-time';
+    let breakdown = getPlayTimeByGame(gameData.games, gameData.plays, currentYear);
+
+    // Apply current sort
+    breakdown = sortTableData(breakdown, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'time', label: 'Time Played' },
+        { key: 'minmax', label: 'Min/Max Play Time' },
+        { key: 'medavg', label: 'Median/Avg Play Time' },
+        { key: 'durations', label: 'Play Durations' },
+    ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th class="sorted-desc">Time Played</th>
-                <th>Min/Max Play Time</th>
-                <th>Median/Avg Play Time</th>
-                <th>Play Durations</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${breakdown.map(item => {
@@ -2740,6 +2882,7 @@ function showShelfGallery(container) {
  * Show total cost breakdown
  */
 function showTotalCostBreakdown(container) {
+    const statType = 'total-cost';
     const { games, gamesWithoutPrice } = statsCache.totalCostData;
 
     if (games.length === 0) {
@@ -2747,16 +2890,19 @@ function showTotalCostBreakdown(container) {
         return;
     }
 
-    // Sort by price descending (null/unknown sorts as 0)
-    const sortedGames = [...games].sort((a, b) => (b.totalPricePaid ?? 0) - (a.totalPricePaid ?? 0));
+    // Apply current sort
+    const sortedGames = sortTableData(games, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'price', label: 'Price Paid' },
+    ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th class="sorted-desc">Price Paid</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${sortedGames.map(item => {
@@ -2786,6 +2932,7 @@ function showTotalCostBreakdown(container) {
  * Show value club breakdown for any tier
  */
 function showValueClubBreakdown(container, clubData, clubLabel) {
+    const statType = 'value-clubs';
     const { games } = clubData;
 
     if (games.length === 0) {
@@ -2798,18 +2945,21 @@ function showValueClubBreakdown(container, clubData, clubLabel) {
     const metricLabelSingular = currentBaseMetric === 'hours' ? 'Hour'
         : currentBaseMetric === 'sessions' ? 'Session' : 'Play';
 
-    // Sort by costPerMetric ascending (best value games at top)
-    const sortedGames = [...games].sort((a, b) => a.costPerMetric - b.costPerMetric);
+    // Apply current sort
+    const sortedGames = sortTableData(games, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'value', label: metricLabel },
+        { key: 'costper', label: `Cost/${metricLabelSingular}` },
+        { key: 'price', label: 'Price Paid' },
+    ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th>${metricLabel}</th>
-                <th class="sorted-asc">Cost/${metricLabelSingular}</th>
-                <th>Price Paid</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${sortedGames.map(item => {
@@ -2834,6 +2984,7 @@ function showValueClubBreakdown(container, clubData, clubLabel) {
  * Show cost per metric breakdown
  */
 function showCostPerMetricBreakdown(container) {
+    const statType = 'cost-per-metric';
     const { games } = statsCache.costPerMetricData;
 
     if (games.length === 0) {
@@ -2856,19 +3007,24 @@ function showCostPerMetricBreakdown(container) {
     `;
     container.appendChild(explanationDiv);
 
-    // Games already sorted by costPerMetric ascending
+    // Apply current sort
+    const sortedGames = sortTableData(games, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'value', label: metricLabel },
+        { key: 'costper', label: `Cost/${metricLabelSingular}` },
+        { key: 'price', label: 'Price Paid' },
+    ], currentSortCol, currentSortDir);
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th>${metricLabel}</th>
-                <th class="sorted-asc">Cost/${metricLabelSingular}</th>
-                <th>Price Paid</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
-            ${games.map(item => {
+            ${sortedGames.map(item => {
                 const metricDisplay = currentBaseMetric === 'hours'
                     ? item.metricValue.toFixed(1)
                     : Math.floor(item.metricValue);
@@ -2890,6 +3046,7 @@ function showCostPerMetricBreakdown(container) {
  * Show shelf of shame breakdown
  */
 function showShelfOfShameBreakdown(container) {
+    const statType = 'shelf-of-shame';
     const { games, totalCost, count } = statsCache.shelfOfShameData;
 
     if (games.length === 0) {
@@ -2906,17 +3063,22 @@ function showShelfOfShameBreakdown(container) {
     `;
     container.appendChild(explanationDiv);
 
-    // Games already sorted by price descending
+    // Apply current sort
+    const sortedGames = sortTableData(games, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'price', label: 'Price Paid' },
+    ], currentSortCol, currentSortDir);
+
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th class="sorted-desc">Price Paid</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
-            ${games.map(item => `
+            ${sortedGames.map(item => `
                 <tr>
                     <td>${renderGameNameWithThumbnail(item.game)}</td>
                     <td>$${item.pricePaid.toFixed(2)}</td>
@@ -2936,6 +3098,7 @@ function showShelfOfShameBreakdown(container) {
  * Show players breakdown
  */
 function showPlayersBreakdown(container) {
+    const statType = 'players';
     const playerStats = statsCache.playerStats;
 
     if (playerStats.playerDetails.length === 0) {
@@ -2943,32 +3106,27 @@ function showPlayersBreakdown(container) {
         return;
     }
 
-    // Sort by current metric
-    const sortedPlayers = [...playerStats.playerDetails].sort((a, b) => {
-        switch (currentBaseMetric) {
-            case Metric.SESSIONS:
-                return b.sessions - a.sessions;
-            case Metric.PLAYS:
-                return b.plays - a.plays;
-            case Metric.HOURS:
-            default:
-                return b.minutes - a.minutes;
-        }
-    });
+    // Apply current sort (uses currentBaseMetric as default sort column)
+    const sortedPlayers = sortTableData(
+        playerStats.playerDetails,
+        statType,
+        currentSortCol,
+        currentSortDir,
+        currentBaseMetric,
+    );
 
-    const hoursClass = currentBaseMetric === Metric.HOURS ? ' class="sorted-desc"' : '';
-    const sessionsClass = currentBaseMetric === Metric.SESSIONS ? ' class="sorted-desc"' : '';
-    const playsClass = currentBaseMetric === Metric.PLAYS ? ' class="sorted-desc"' : '';
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'player', label: 'Player' },
+        { key: 'hours', label: 'Hours' },
+        { key: 'sessions', label: 'Sessions' },
+        { key: 'plays', label: 'Plays' },
+    ], currentSortCol || currentBaseMetric, currentSortDir || 'desc');
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Player</th>
-                <th${hoursClass}>Hours</th>
-                <th${sessionsClass}>Sessions</th>
-                <th${playsClass}>Plays</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${sortedPlayers.map(player => `
@@ -2988,6 +3146,7 @@ function showPlayersBreakdown(container) {
  * Show solo games breakdown
  */
 function showSoloBreakdown(container) {
+    const statType = 'solo';
     const soloGameStats = statsCache.soloGameStats;
 
     if (soloGameStats.gameDetails.length === 0) {
@@ -2995,32 +3154,27 @@ function showSoloBreakdown(container) {
         return;
     }
 
-    // Sort by current metric
-    const sortedGames = [...soloGameStats.gameDetails].sort((a, b) => {
-        switch (currentBaseMetric) {
-            case Metric.SESSIONS:
-                return b.sessions - a.sessions;
-            case Metric.PLAYS:
-                return b.plays - a.plays;
-            case Metric.HOURS:
-            default:
-                return b.minutes - a.minutes;
-        }
-    });
+    // Apply current sort (uses currentBaseMetric as default sort column)
+    const sortedGames = sortTableData(
+        soloGameStats.gameDetails,
+        statType,
+        currentSortCol,
+        currentSortDir,
+        currentBaseMetric,
+    );
 
-    const hoursClass = currentBaseMetric === Metric.HOURS ? ' class="sorted-desc"' : '';
-    const sessionsClass = currentBaseMetric === Metric.SESSIONS ? ' class="sorted-desc"' : '';
-    const playsClass = currentBaseMetric === Metric.PLAYS ? ' class="sorted-desc"' : '';
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'hours', label: 'Hours' },
+        { key: 'sessions', label: 'Sessions' },
+        { key: 'plays', label: 'Plays' },
+    ], currentSortCol || currentBaseMetric, currentSortDir || 'desc');
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Game</th>
-                <th${hoursClass}>Hours</th>
-                <th${sessionsClass}>Sessions</th>
-                <th${playsClass}>Plays</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${sortedGames.map(item => `
@@ -3040,6 +3194,7 @@ function showSoloBreakdown(container) {
  * Show locations breakdown
  */
 function showLocationsBreakdown(container) {
+    const statType = 'locations';
     const locationStats = statsCache.locationStats;
 
     if (locationStats.locationDetails.length === 0) {
@@ -3047,32 +3202,27 @@ function showLocationsBreakdown(container) {
         return;
     }
 
-    // Sort by current metric
-    const sortedLocations = [...locationStats.locationDetails].sort((a, b) => {
-        switch (currentBaseMetric) {
-            case Metric.SESSIONS:
-                return b.sessions - a.sessions;
-            case Metric.PLAYS:
-                return b.plays - a.plays;
-            case Metric.HOURS:
-            default:
-                return b.minutes - a.minutes;
-        }
-    });
+    // Apply current sort (uses currentBaseMetric as default sort column)
+    const sortedLocations = sortTableData(
+        locationStats.locationDetails,
+        statType,
+        currentSortCol,
+        currentSortDir,
+        currentBaseMetric,
+    );
 
-    const hoursClass = currentBaseMetric === Metric.HOURS ? ' class="sorted-desc"' : '';
-    const sessionsClass = currentBaseMetric === Metric.SESSIONS ? ' class="sorted-desc"' : '';
-    const playsClass = currentBaseMetric === Metric.PLAYS ? ' class="sorted-desc"' : '';
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'location', label: 'Location' },
+        { key: 'hours', label: 'Hours' },
+        { key: 'sessions', label: 'Sessions' },
+        { key: 'plays', label: 'Plays' },
+    ], currentSortCol || currentBaseMetric, currentSortDir || 'desc');
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr>
-                <th>Location</th>
-                <th${hoursClass}>Hours</th>
-                <th${sessionsClass}>Sessions</th>
-                <th${playsClass}>Plays</th>
-            </tr>
+            <tr>${headerHtml}</tr>
         </thead>
         <tbody>
             ${sortedLocations.map(loc => `
@@ -4240,6 +4390,8 @@ function loadFromPermalink() {
     const statParam = urlParams.get('stat');
     const modalParam = urlParams.get('modal');
     const showAllMetricsParam = urlParams.get('showAllMetrics');
+    const sortColParam = urlParams.get('sortCol');
+    const sortDirParam = urlParams.get('sortDir');
 
     // Initialize showAllYearReviewMetrics from URL before early return check
     if (showAllMetricsParam === 'true') {
@@ -4272,6 +4424,12 @@ function loadFromPermalink() {
             currentBaseMetric = baseMetricParam;
             updateHIndexCardLabels();
         }
+    }
+
+    // Set sort state if specified (only valid with a stat param)
+    if (sortColParam && (sortDirParam === 'asc' || sortDirParam === 'desc')) {
+        currentSortCol = sortColParam;
+        currentSortDir = sortDirParam;
     }
 
     // Open the specified stat or modal after a short delay to ensure stats are loaded
@@ -4349,6 +4507,18 @@ function updateURL() {
     // Add stat parameter if a section is open
     if (currentlyOpenStatType) {
         params.set('stat', currentlyOpenStatType);
+
+        // Add sort params only if stat section is open and sort is non-default
+        if (currentSortCol && currentSortDir) {
+            const defaultSort = getDefaultSort(currentlyOpenStatType);
+            const isDefault = defaultSort &&
+                currentSortCol === defaultSort.column &&
+                currentSortDir === defaultSort.direction;
+            if (!isDefault) {
+                params.set('sortCol', currentSortCol);
+                params.set('sortDir', currentSortDir);
+            }
+        }
     }
 
     // Add showAllMetrics param if toggle is enabled (persists even when section is closed)

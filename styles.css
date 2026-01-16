@@ -683,20 +683,41 @@ table th {
     background: var(--bg-table-header);
 }
 
+/* Sortable table headers */
+th.sortable,
+th.sorted-asc,
+th.sorted-desc {
+    cursor: pointer;
+}
+
+th.sortable:hover,
+th.sorted-asc:hover,
+th.sorted-desc:hover {
+    background: var(--bg-table-header-hover, rgba(255, 255, 255, 0.05));
+}
+
 /* Sort indicators for table headers */
+th.sortable::after,
 th.sorted-asc::after,
 th.sorted-desc::after {
     margin-left: 0.5em;
-    font-size: 0.7em;
     color: var(--text-muted);
+}
+
+th.sortable::after {
+    content: '◇';
+    font-size: 1em;
+    opacity: 0.5;
 }
 
 th.sorted-asc::after {
     content: '▲';
+    font-size: 0.7em;
 }
 
 th.sorted-desc::after {
     content: '▼';
+    font-size: 0.7em;
 }
 
 table td {
