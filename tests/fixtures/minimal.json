@@ -66,7 +66,7 @@
         {
           "uuid": "copy-uuid-1",
           "statusOwned": true,
-          "metaData": "{\"AcquisitionDate\":\"2021-01-15\",\"PricePaid\":\"29.99\",\"PricePaidCurrency\":\"USD\"}"
+          "metaData": "{\"AcquisitionDate\":\"2021-01-15\",\"PricePaid\":\"29.99\",\"PricePaidCurrency\":\"USD\",\"Rating\":\"8\"}"
         }
       ],
       "tags": []

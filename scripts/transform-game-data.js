@@ -39,6 +39,47 @@ function getEarliestOwnedCopy(copies) {
 }
 
 /**
+ * Selects the rating to use for a game from its copies.
+ * Priority: owned copies (latest acquired) > unowned copies with rating.
+ * If only one copy has a rating, uses that regardless of ownership.
+ * @param {Array} copies - Array of processed copy objects (with rating field)
+ * @returns {number|null} The selected rating or null if none
+ */
+function selectGameRating(copies) {
+  if (!copies || copies.length === 0) {
+    return null;
+  }
+
+  // Filter to copies with ratings
+  const copiesWithRating = copies.filter(copy => copy.rating !== null);
+
+  if (copiesWithRating.length === 0) {
+    return null;
+  }
+
+  // If only one copy has a rating, use it
+  if (copiesWithRating.length === 1) {
+    return copiesWithRating[0].rating;
+  }
+
+  // Multiple copies with ratings - prefer owned copies
+  const ownedWithRating = copiesWithRating.filter(copy => copy.statusOwned);
+
+  // Choose from owned if any, otherwise from all with rating
+  const candidates = ownedWithRating.length > 0 ? ownedWithRating : copiesWithRating;
+
+  // Sort by acquisition date descending (latest first), nulls last
+  candidates.sort((a, b) => {
+    if (!a.acquisitionDate && !b.acquisitionDate) return 0;
+    if (!a.acquisitionDate) return 1;
+    if (!b.acquisitionDate) return -1;
+    return b.acquisitionDate.localeCompare(a.acquisitionDate);
+  });
+
+  return candidates[0].rating;
+}
+
+/**
  * Extracts copy metadata from a game's copies array.
  * @param {Array} copies - Array of copy objects from BG Stats
  * @returns {Array} Array of copy objects with acquisitionDate and statusOwned
@@ -51,6 +92,7 @@ function extractCopyMetadata(copies) {
       let copyAcquisitionDate = null;
       let pricePaid = null;
       let currency = null;
+      let rating = null;
 
       if (copy.metaData) {
         try {
@@ -67,6 +109,12 @@ function extractCopyMetadata(copies) {
           if (metadata.PricePaidCurrency) {
             currency = metadata.PricePaidCurrency;
           }
+          if (metadata.Rating) {
+            const parsedRating = parseInt(metadata.Rating, 10);
+            if (!isNaN(parsedRating)) {
+              rating = parsedRating;
+            }
+          }
         } catch (e) {
           // Invalid JSON in metaData, skip
         }
@@ -78,7 +126,8 @@ function extractCopyMetadata(copies) {
         acquisitionDate: copyAcquisitionDate,
         statusOwned: copy.statusOwned === true,
         pricePaid: pricePaid,
-        currency: currency
+        currency: currency,
+        rating: rating,
       });
     });
   }
@@ -183,6 +232,9 @@ function buildGamesMap(games, expandaloneTagId, oneTimeTagId) {
     // Extract copies metadata
     const copies = extractCopyMetadata(game.copies);
 
+    // Select game-level rating from copies
+    const rating = selectGameRating(copies);
+
     // Classify game based on mutually exclusive rules
     const classification = classifyGame(game, isExpandalone);
 
@@ -206,16 +258,20 @@ function buildGamesMap(games, expandaloneTagId, oneTimeTagId) {
       }
     }
 
+    // Strip rating from copies for output (rating is stored at game level only)
+    const outputCopies = copies.map(({ rating: _rating, ...rest }) => rest);
+
     gamesMap.set(game.id, {
       id: game.id,
       name: game.name,
       bggId: game.bggId,
       year: game.bggYear || null,
+      rating: rating,
       isBaseGame: classification.isBaseGame,
       isExpansion: classification.isExpansion,
       isExpandalone: classification.isExpandalone,
       isNonReplayable: isNonReplayable,
-      copies: copies,
+      copies: outputCopies,
       playCount: 0,
       uniquePlayDays: new Set(),
       thumbnailUrl: thumbnailUrl,

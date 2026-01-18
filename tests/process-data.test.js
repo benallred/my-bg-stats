@@ -124,6 +124,126 @@ describe('process-data.js transformation logic', () => {
     });
   });
 
+  describe('Game Rating', () => {
+    test('extracts rating from copy metaData to game level', () => {
+      const output = processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Base Game');
+
+      expect(game.rating).toBe(8);
+    });
+
+    test('handles missing rating as null', () => {
+      const output = processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Expansion');
+
+      expect(game.rating).toBeNull();
+    });
+
+    test('handles malformed JSON in metaData with null rating', () => {
+      const fixtureWithBadJSON = {
+        ...minimalFixture,
+        games: [{
+          ...minimalFixture.games[0],
+          copies: [{
+            uuid: 'test-uuid',
+            statusOwned: true,
+            metaData: '{invalid json',
+          }],
+        }],
+      };
+
+      const output = processData(fixtureWithBadJSON);
+      expect(output.games[0].rating).toBeNull();
+    });
+
+    test('selects rating from only copy with rating regardless of ownership', () => {
+      const fixture = {
+        ...minimalFixture,
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [
+            {
+              uuid: 'copy-1',
+              statusOwned: false,
+              metaData: '{"Rating":"7"}',
+            },
+            {
+              uuid: 'copy-2',
+              statusOwned: true,
+              metaData: '{}',
+            },
+          ],
+          tags: [],
+        }],
+      };
+
+      const output = processData(fixture);
+      expect(output.games[0].rating).toBe(7);
+    });
+
+    test('prefers owned copy rating when multiple copies have ratings', () => {
+      const fixture = {
+        ...minimalFixture,
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [
+            {
+              uuid: 'copy-1',
+              statusOwned: false,
+              metaData: '{"Rating":"5","AcquisitionDate":"2023-01-01"}',
+            },
+            {
+              uuid: 'copy-2',
+              statusOwned: true,
+              metaData: '{"Rating":"9","AcquisitionDate":"2022-01-01"}',
+            },
+          ],
+          tags: [],
+        }],
+      };
+
+      const output = processData(fixture);
+      expect(output.games[0].rating).toBe(9);
+    });
+
+    test('selects latest acquired owned copy rating when multiple owned copies have ratings', () => {
+      const fixture = {
+        ...minimalFixture,
+        games: [{
+          id: 1,
+          name: 'Test Game',
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [
+            {
+              uuid: 'copy-1',
+              statusOwned: true,
+              metaData: '{"Rating":"6","AcquisitionDate":"2022-01-01"}',
+            },
+            {
+              uuid: 'copy-2',
+              statusOwned: true,
+              metaData: '{"Rating":"9","AcquisitionDate":"2023-06-15"}',
+            },
+          ],
+          tags: [],
+        }],
+      };
+
+      const output = processData(fixture);
+      expect(output.games[0].rating).toBe(9);
+    });
+  });
+
   describe('Typical Play Time Calculation', () => {
     test('calculates median for odd number of plays', () => {
       const output = processData(durationMissingFixture);
