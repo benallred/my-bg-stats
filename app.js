@@ -1932,7 +1932,18 @@ const statDetailHandlers = {
         }
     },
     'year-review': {
-        getTitle: (currentYear) => `Gaming Year in Review <span style="white-space: nowrap">(${currentYear})</span>`,
+        getTitle: (currentYear) => {
+            const generatedDate = new Date(gameData.generatedAt);
+            const generatedYear = generatedDate.getFullYear();
+            const isIncomplete = currentYear === generatedYear;
+
+            let title = `Gaming Year in Review <span style="white-space: nowrap">(${currentYear})</span>`;
+            if (isIncomplete) {
+                const formattedDate = generatedDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+                title += ` <span class="year-incomplete-badge">Data through ${formattedDate}</span>`;
+            }
+            return title;
+        },
         renderSummary: (summaryElement, detailContent) => {
             summaryElement.innerHTML = `
                 <div class="year-review-filter-toggle">
