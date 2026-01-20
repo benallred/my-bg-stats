@@ -265,7 +265,7 @@ const exitedShameGames = previousShame.games
 
 Before committing changes:
 
-1. **Run tests with coverage**: Execute `npm run test:coverage` to ensure all tests pass and coverage thresholds are met
+1. **Run tests with coverage**: Execute `npm run test:coverage` (see note below about Git Bash on Windows) to ensure all tests pass and coverage thresholds are met
 2. **Verify output**: Confirm no test failures and coverage meets configured thresholds
 3. **Fix issues**: If tests fail or coverage drops, resolve issues before committing
 
@@ -275,3 +275,21 @@ Before committing changes:
 - Has not been tested
 
 This ensures the codebase remains stable and well-tested at all times.
+
+### Running Tests in Git Bash on Windows
+
+**Important**: Vitest's path resolution on Windows is sensitive to drive letter capitalization. You MUST use an explicit `cd` command before running Vitest:
+
+```bash
+# CORRECT - Always use explicit cd
+cd /c/path/to/project && npm run test:coverage
+
+# INCORRECT - Will fail with "No test suite found" errors
+npm run test:coverage
+```
+
+**Why this happens:**
+- Without the explicit `cd`, Node.js sees the path with lowercase drive letter (e.g., `c:\path\to\project`)
+- With the explicit `cd`, Node.js sees the path with uppercase drive letter (e.g., `C:\path\to\project`)
+- Vitest's path resolution fails when the drive letter case doesn't match expectations
+- This is a known Vitest issue on Windows with path canonicalization
