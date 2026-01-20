@@ -1,4 +1,13 @@
 import { calculateMedian } from '../utils.js';
+import { fromZonedTime } from 'date-fns-tz';
+
+/**
+ * Timezone used for BG Stats timestamp data.
+ * BG Stats stores timestamps in Mountain Time (America/Denver).
+ * This timezone handles DST transitions automatically.
+ * @constant {string}
+ */
+const BGSTATS_TIMEZONE = 'America/Denver';
 
 /**
  * Enum representing the playUsedGameCopy field values from BG Stats.
@@ -474,7 +483,12 @@ function finalizeOutput(gamesMap, plays, players, locations, selfPlayerId, anony
   // Use latest play timestamp for generatedAt
   let generatedAt;
   if (plays.length > 0) {
-    generatedAt = new Date(plays[0].timestamp).toISOString();
+    // Parse timestamp as Mountain Time and convert to UTC
+    // plays[0].timestamp format: "YYYY-MM-DD HH:MM:SS"
+    // Example: "2024-01-15 14:30:00" in Mountain Time
+    const timestamp = plays[0].timestamp.replace(' ', 'T'); // Convert to ISO-like format
+    const utcDate = fromZonedTime(timestamp, BGSTATS_TIMEZONE);
+    generatedAt = utcDate.toISOString();
   } else {
     // Fallback to current time if no plays exist
     generatedAt = new Date().toISOString();
