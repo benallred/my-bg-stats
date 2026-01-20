@@ -1703,7 +1703,7 @@
       "name": "Box One",
       "bggId": 323255,
       "year": 2020,
-      "rating": null,
+      "rating": 9,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -1729,7 +1729,7 @@
       "name": "Box Two",
       "bggId": 431292,
       "year": 2024,
-      "rating": null,
+      "rating": 4,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -1744,11 +1744,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/PXU8IXS8oLo6zvuVSARVVQ__thumb/img/iasRLMmk5jkj0fIj0IKVUsg2h98=/fit-in/200x150/filters:strip_icc()/pic8497329.jpg",
       "coverUrl": "https://cf.geekdo-images.com/PXU8IXS8oLo6zvuVSARVVQ__original/img/0OEkN0J3HCYI-c-1Q9Wzt4tdAys=/0x0/filters:format(jpeg)/pic8497329.jpg",
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 140
     },
     {
       "id": 170,
@@ -5845,11 +5845,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 20,
-      "uniquePlayDays": 20,
+      "playCount": 21,
+      "uniquePlayDays": 21,
       "thumbnailUrl": "https://cf.geekdo-images.com/-vOrd4bOspibyohYExLqWg__thumb/img/2GbaKvYOzWIxfgbYTk2R9puiyzo=/fit-in/200x150/filters:strip_icc()/pic6940449.png",
       "coverUrl": "https://cf.geekdo-images.com/-vOrd4bOspibyohYExLqWg__original/img/iXU8a9WaVlwrkiEiOxWN06y9y5g=/0x0/filters:format(png)/pic6940449.png",
-      "typicalPlayTimeMinutes": 74.5
+      "typicalPlayTimeMinutes": 74
     },
     {
       "id": 537,
@@ -6321,11 +6321,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 22,
-      "uniquePlayDays": 15,
+      "playCount": 25,
+      "uniquePlayDays": 16,
       "thumbnailUrl": "https://cf.geekdo-images.com/z0VOKlGc9AcsXj_ywL6Alw__thumb/img/mzvPWuvCl1rmniP9gJZFhO5XHBk=/fit-in/200x150/filters:strip_icc()/pic5509189.png",
       "coverUrl": "https://cf.geekdo-images.com/z0VOKlGc9AcsXj_ywL6Alw__original/img/GpfxJ-7qUM-LSbzYD141infQkfs=/0x0/filters:format(png)/pic5509189.png",
-      "typicalPlayTimeMinutes": 12.5
+      "typicalPlayTimeMinutes": 12
     },
     {
       "id": 264,
@@ -14900,6 +14900,75 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 76,
+      "copyId": "803b66d4-a153-4bcb-8d65-d051ebf3df5f",
+      "date": "2026-01-19",
+      "timestamp": "2026-01-19 22:07:15",
+      "durationMin": 8,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 76,
+      "copyId": "803b66d4-a153-4bcb-8d65-d051ebf3df5f",
+      "date": "2026-01-19",
+      "timestamp": "2026-01-19 22:00:31",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 76,
+      "copyId": "803b66d4-a153-4bcb-8d65-d051ebf3df5f",
+      "date": "2026-01-19",
+      "timestamp": "2026-01-19 21:50:27",
+      "durationMin": 10,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 488,
+      "copyId": "7fb4b161-0750-43c8-b54a-c01c85f6c944",
+      "date": "2026-01-18",
+      "timestamp": "2026-01-18 20:48:24",
+      "durationMin": 44,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 7
+    },
+    {
+      "gameId": 513,
+      "copyId": "56ed61a0-6146-4cb8-92fd-c9403dac23f0",
+      "date": "2026-01-18",
+      "timestamp": "2026-01-18 16:44:06",
+      "durationMin": 140,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 454,
       "copyId": "716d3e4c-e1bf-4bc9-a411-a193278fcf99",
@@ -43416,5 +43485,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2026-01-18T04:06:36.000Z"
+  "generatedAt": "2026-01-20T05:07:15.000Z"
 }
