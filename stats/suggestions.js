@@ -140,7 +140,11 @@ function suggestRecentlyPlayedWithLowSessions(gamePlayData) {
   const oneMonthAgoStr = oneMonthAgo.toISOString().split('T')[0];
 
   const recentlyPlayedGames = Array.from(gamePlayData.values())
-    .filter(data => data.lastPlayDate && data.lastPlayDate >= oneMonthAgoStr && data.uniqueDays.size > 0)
+    .filter(data => {
+      // Skip non-replayable games (legacy games, escape rooms, etc.)
+      if (data.game.isNonReplayable) return false;
+      return data.lastPlayDate && data.lastPlayDate >= oneMonthAgoStr && data.uniqueDays.size > 0;
+    })
     .sort((a, b) => a.uniqueDays.size - b.uniqueDays.size);
 
   if (recentlyPlayedGames.length === 0) return null;
@@ -163,7 +167,11 @@ function suggestRecentlyPlayedWithLowSessions(gamePlayData) {
  */
 function suggestLongestUnplayed(gamePlayData) {
   const playedGames = Array.from(gamePlayData.values())
-    .filter(data => data.lastPlayDate !== null);
+    .filter(data => {
+      // Skip non-replayable games (legacy games, escape rooms, etc.)
+      if (data.game.isNonReplayable) return false;
+      return data.lastPlayDate !== null;
+    });
 
   if (playedGames.length === 0) return null;
 
@@ -209,6 +217,8 @@ function suggestForNextHIndex(gamePlayData, currentHIndex, getValue, metricName)
   // Get all candidates with metric below nextHIndex, sorted by highest metric first
   const candidates = Array.from(gamePlayData.values())
     .filter(data => {
+      // Skip non-replayable games (legacy games, escape rooms, etc.)
+      if (data.game.isNonReplayable) return false;
       const value = getValue(data);
       return value > 0 && value < nextHIndex;
     })
@@ -310,7 +320,11 @@ function suggestForNextHourHIndex(plays, gamePlayData) {
  */
 function suggestForNextMilestone(gamePlayData, metric) {
   const allPlayedGames = Array.from(gamePlayData.values())
-    .filter(data => getMetricValue(data, metric) > 0);
+    .filter(data => {
+      // Skip non-replayable games (legacy games, escape rooms, etc.)
+      if (data.game.isNonReplayable) return false;
+      return getMetricValue(data, metric) > 0;
+    });
 
   // Find games approaching each milestone
   const milestoneChaseGames = allPlayedGames
@@ -454,6 +468,8 @@ function suggestHighestCostPerMetric(gamePlayData) {
     // Filter to games with price data and at least some play time
     const eligibleGames = Array.from(gamePlayData.values())
       .filter(data => {
+        // Skip non-replayable games (legacy games, escape rooms, etc.)
+        if (data.game.isNonReplayable) return false;
         if (data.pricePaid === null || data.pricePaid === undefined) return false;
         const metricValue = getMetricValue(data, metric);
         return metricValue > 0;

@@ -3,8 +3,13 @@ import {
   calculateDaysSince,
   selectRandom,
   selectRandomWeightedBySqrtRarity,
+  suggestRecentlyPlayedWithLowSessions,
+  suggestLongestUnplayed,
+  suggestForNextHIndex,
+  suggestForNextMilestone,
   suggestForNextValueClub,
   suggestHighestCostPerMetric,
+  suggestNeverPlayedGame,
   getSuggestedGames,
 } from './suggestions.js';
 import { Metric, Milestone } from './constants.js';
@@ -733,6 +738,252 @@ describe('Suggestion Algorithms', () => {
       const result = suggestHighestCostPerMetric(gamePlayData);
       expect(result).not.toBeNull();
       expect(result.game.name).toBe('Has Price');
+    });
+  });
+
+  describe('Non-replayable game filtering', () => {
+    describe('suggestRecentlyPlayedWithLowSessions', () => {
+      test('excludes non-replayable games', () => {
+        const gamePlayData = new Map();
+        const today = new Date().toISOString().split('T')[0];
+        // Non-replayable game that would otherwise qualify
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 3,
+          uniqueDays: new Set([today]),
+          totalMinutes: 180,
+          lastPlayDate: today,
+        });
+        // Regular game that qualifies
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Regular Game', isNonReplayable: false },
+          playCount: 3,
+          uniqueDays: new Set([today]),
+          totalMinutes: 180,
+          lastPlayDate: today,
+        });
+
+        const result = suggestRecentlyPlayedWithLowSessions(gamePlayData);
+        expect(result).not.toBeNull();
+        expect(result.game.name).toBe('Regular Game');
+      });
+
+      test('returns null when only non-replayable games would qualify', () => {
+        const gamePlayData = new Map();
+        const today = new Date().toISOString().split('T')[0];
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 3,
+          uniqueDays: new Set([today]),
+          totalMinutes: 180,
+          lastPlayDate: today,
+        });
+
+        const result = suggestRecentlyPlayedWithLowSessions(gamePlayData);
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('suggestLongestUnplayed', () => {
+      test('excludes non-replayable games', () => {
+        const gamePlayData = new Map();
+        // Non-replayable game that would otherwise qualify
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 5,
+          uniqueDays: new Set(['2020-01-01']),
+          totalMinutes: 300,
+          lastPlayDate: '2020-01-01',
+        });
+        // Regular game that qualifies
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Regular Game', isNonReplayable: false },
+          playCount: 5,
+          uniqueDays: new Set(['2020-01-01']),
+          totalMinutes: 300,
+          lastPlayDate: '2020-01-01',
+        });
+
+        const result = suggestLongestUnplayed(gamePlayData);
+        expect(result).not.toBeNull();
+        expect(result.game.name).toBe('Regular Game');
+      });
+
+      test('returns null when only non-replayable games would qualify', () => {
+        const gamePlayData = new Map();
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 5,
+          uniqueDays: new Set(['2020-01-01']),
+          totalMinutes: 300,
+          lastPlayDate: '2020-01-01',
+        });
+
+        const result = suggestLongestUnplayed(gamePlayData);
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('suggestForNextHIndex', () => {
+      test('excludes non-replayable games', () => {
+        const gamePlayData = new Map();
+        // Non-replayable game that would otherwise qualify (1 play, approaching h-index of 2)
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+        });
+        // Regular game that qualifies (1 play, approaching h-index of 2)
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Regular Game', isNonReplayable: false },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+        });
+
+        const currentHIndex = 1;
+        const getValue = data => data.playCount;
+        const result = suggestForNextHIndex(gamePlayData, currentHIndex, getValue, 'Plays');
+        expect(result).not.toBeNull();
+        expect(result.game.name).toBe('Regular Game');
+      });
+
+      test('returns null when only non-replayable games would qualify', () => {
+        const gamePlayData = new Map();
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+        });
+
+        const currentHIndex = 1;
+        const getValue = data => data.playCount;
+        const result = suggestForNextHIndex(gamePlayData, currentHIndex, getValue, 'Plays');
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('suggestForNextMilestone', () => {
+      test('excludes non-replayable games', () => {
+        const gamePlayData = new Map();
+        // Non-replayable game that would otherwise qualify
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 4,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 240,
+        });
+        // Regular game that qualifies
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Regular Game', isNonReplayable: false },
+          playCount: 4,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 240,
+        });
+
+        const result = suggestForNextMilestone(gamePlayData, Metric.PLAYS);
+        expect(result).not.toBeNull();
+        expect(result.game.name).toBe('Regular Game');
+      });
+
+      test('returns null when only non-replayable games would qualify', () => {
+        const gamePlayData = new Map();
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 4,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 240,
+        });
+
+        const result = suggestForNextMilestone(gamePlayData, Metric.PLAYS);
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('suggestHighestCostPerMetric', () => {
+      test('excludes non-replayable games', () => {
+        const gamePlayData = new Map();
+        // Non-replayable game that would otherwise qualify
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+          pricePaid: 200,
+        });
+        // Regular game that qualifies
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Regular Game', isNonReplayable: false },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+          pricePaid: 100,
+        });
+
+        const result = suggestHighestCostPerMetric(gamePlayData);
+        expect(result).not.toBeNull();
+        expect(result.game.name).toBe('Regular Game');
+      });
+
+      test('returns null when only non-replayable games would qualify', () => {
+        const gamePlayData = new Map();
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+          pricePaid: 100,
+        });
+
+        const result = suggestHighestCostPerMetric(gamePlayData);
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('suggestNeverPlayedGame (shelf of shame)', () => {
+      test('includes non-replayable games', () => {
+        const gamePlayData = new Map();
+        // Non-replayable game that should be included
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 0,
+          uniqueDays: new Set(),
+          totalMinutes: 0,
+          lastPlayDate: null,
+        });
+        // Regular game
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Regular Game', isNonReplayable: false },
+          playCount: 0,
+          uniqueDays: new Set(),
+          totalMinutes: 0,
+          lastPlayDate: null,
+        });
+
+        const result = suggestNeverPlayedGame(gamePlayData);
+        expect(result).not.toBeNull();
+        expect(result.reason).toBe('Shelf of shame');
+        expect(result.stat).toBe('Never played');
+        // Both games should be eligible
+        expect(['Legacy Game', 'Regular Game']).toContain(result.game.name);
+      });
+
+      test('can suggest non-replayable game when only option', () => {
+        const gamePlayData = new Map();
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 0,
+          uniqueDays: new Set(),
+          totalMinutes: 0,
+          lastPlayDate: null,
+        });
+
+        const result = suggestNeverPlayedGame(gamePlayData);
+        expect(result).not.toBeNull();
+        expect(result.game.name).toBe('Legacy Game');
+      });
     });
   });
 
