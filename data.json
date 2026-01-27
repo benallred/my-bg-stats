@@ -68,7 +68,7 @@
       "name": "Abandon All Artichokes",
       "bggId": 302260,
       "year": 2020,
-      "rating": null,
+      "rating": 7,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -83,11 +83,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 25,
-      "uniquePlayDays": 19,
+      "playCount": 26,
+      "uniquePlayDays": 20,
       "thumbnailUrl": "https://cf.geekdo-images.com/qwFz_zhMjIxRjgAIx__8WQ__thumb/img/PPRNQrHRGq48IhY6PlOXg95aYUw=/fit-in/200x150/filters:strip_icc()/pic5335069.png",
       "coverUrl": "https://cf.geekdo-images.com/qwFz_zhMjIxRjgAIx__8WQ__original/img/pxX6W95d3V38ZuynABAtorApTc8=/0x0/filters:format(png)/pic5335069.png",
-      "typicalPlayTimeMinutes": 16
+      "typicalPlayTimeMinutes": 15.5
     },
     {
       "id": 55,
@@ -1666,8 +1666,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 20,
-      "uniquePlayDays": 16,
+      "playCount": 21,
+      "uniquePlayDays": 17,
       "thumbnailUrl": "https://cf.geekdo-images.com/LPZHyg3KP_JI0x5CRut9lQ__thumb/img/F1jYA7KSf96S5j7zRMD5t35GNb8=/fit-in/200x150/filters:strip_icc()/pic6643190.png",
       "coverUrl": "https://cf.geekdo-images.com/LPZHyg3KP_JI0x5CRut9lQ__original/img/qV7_RqqlgH_Cn_VXt8MLiGKC97U=/0x0/filters:format(png)/pic6643190.png",
       "typicalPlayTimeMinutes": 21
@@ -6306,7 +6306,7 @@
       "name": "Infinity Gauntlet: A Love Letter Game",
       "bggId": 304285,
       "year": 2020,
-      "rating": null,
+      "rating": 8,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -8788,7 +8788,7 @@
       "name": "Riftforce",
       "bggId": 291859,
       "year": 2021,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -8803,11 +8803,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 5,
-      "uniquePlayDays": 5,
+      "playCount": 6,
+      "uniquePlayDays": 6,
       "thumbnailUrl": "https://cf.geekdo-images.com/nq48jZJYZkp96pe1URln1w__thumb/img/2P7n0MozONuD7pRMSzyUmZ-f44E=/fit-in/200x150/filters:strip_icc()/pic6205691.png",
       "coverUrl": "https://cf.geekdo-images.com/nq48jZJYZkp96pe1URln1w__original/img/PKVINbrGTn1-_Egxn2lukaSe5Lw=/0x0/filters:format(png)/pic6205691.png",
-      "typicalPlayTimeMinutes": 41
+      "typicalPlayTimeMinutes": 38.5
     },
     {
       "id": 487,
@@ -10093,8 +10093,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 11,
-      "uniquePlayDays": 11,
+      "playCount": 13,
+      "uniquePlayDays": 13,
       "thumbnailUrl": "https://cf.geekdo-images.com/E_-9WT4_6-kABS796Q-piA__thumb/img/l-LKCyGEkwhPpyW2zQCyA9Kh1SY=/fit-in/200x150/filters:strip_icc()/pic4162054.png",
       "coverUrl": "https://cf.geekdo-images.com/E_-9WT4_6-kABS796Q-piA__original/img/b1r3xRKUZBJm7-NUjjdwcdKk2IE=/0x0/filters:format(png)/pic4162054.png",
       "typicalPlayTimeMinutes": 166
@@ -12168,7 +12168,7 @@
       "name": "The Game: Face to Face",
       "bggId": 236461,
       "year": 2017,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -12183,11 +12183,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 9,
-      "uniquePlayDays": 8,
+      "playCount": 10,
+      "uniquePlayDays": 9,
       "thumbnailUrl": "https://cf.geekdo-images.com/bn4PzmubJyyZmo-sHO6i8Q__thumb/img/UTnuNns9SCYEuU74MCqS2naqTwY=/fit-in/200x150/filters:strip_icc()/pic5980577.png",
       "coverUrl": "https://cf.geekdo-images.com/bn4PzmubJyyZmo-sHO6i8Q__original/img/rWTynOnpmyXWsIQGxtBgbXY0pC8=/0x0/filters:format(png)/pic5980577.png",
-      "typicalPlayTimeMinutes": 21
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 317,
@@ -14851,7 +14851,7 @@
       "name": "포인트 샐러드: 이브이에디션",
       "bggId": 274960,
       "year": 2019,
-      "rating": null,
+      "rating": 7,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -14866,8 +14866,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 9,
-      "uniquePlayDays": 7,
+      "playCount": 10,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/Xy0W9NtEpX0EVjwgxO3IEA__thumb/img/1gKeE2_50dXcL03gH3cEU-Ixj6c=/fit-in/200x150/filters:strip_icc()/pic4621571.png",
       "coverUrl": "https://cf.geekdo-images.com/Xy0W9NtEpX0EVjwgxO3IEA__original/img/WdLBZcryNqysYsyC3PNF9FeaPWQ=/0x0/filters:format(png)/pic4621571.png",
       "typicalPlayTimeMinutes": 20
@@ -14900,6 +14900,99 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 497,
+      "copyId": "8c2b2483-90af-4679-9e51-494233f9f538",
+      "date": "2026-01-26",
+      "timestamp": "2026-01-26 20:12:06",
+      "durationMin": 19,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 410,
+      "copyId": "b1a97c11-3127-4c9a-8b62-8430335172b9",
+      "date": "2026-01-25",
+      "timestamp": "2026-01-25 18:41:52",
+      "durationMin": 89,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 410,
+      "copyId": "b1a97c11-3127-4c9a-8b62-8430335172b9",
+      "date": "2026-01-24",
+      "timestamp": "2026-01-24 10:58:21",
+      "durationMin": 204,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 486,
+      "copyId": "f2ebf412-f61b-4a41-9f1a-7a16d3715bfb",
+      "date": "2026-01-23",
+      "timestamp": "2026-01-23 21:23:17",
+      "durationMin": 32,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 447,
+      "copyId": "81068284-1428-4718-836d-92afabba1c29",
+      "date": "2026-01-22",
+      "timestamp": "2026-01-22 21:23:21",
+      "durationMin": 20,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 100,
+      "copyId": "0e1d82ca-ebb5-4190-b3e5-65cfd33ba089",
+      "date": "2026-01-21",
+      "timestamp": "2026-01-21 18:04:14",
+      "durationMin": 9,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 504,
+      "copyId": "3839b299-e746-43b5-8691-6845c56004b5",
+      "date": "2026-01-20",
+      "timestamp": "2026-01-20 20:01:58",
+      "durationMin": 17,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 76,
       "copyId": "803b66d4-a153-4bcb-8d65-d051ebf3df5f",
@@ -14954,7 +15047,7 @@
         3,
         4
       ],
-      "locationId": 7
+      "locationId": 1
     },
     {
       "gameId": 513,
@@ -15035,7 +15128,7 @@
         3,
         4
       ],
-      "locationId": 7
+      "locationId": 1
     },
     {
       "gameId": 570,
@@ -15304,7 +15397,7 @@
         3,
         4
       ],
-      "locationId": 7
+      "locationId": 1
     },
     {
       "gameId": 508,
@@ -42846,7 +42939,7 @@
       "copyId": "0e1d82ca-ebb5-4190-b3e5-65cfd33ba089",
       "date": "2021-10-09",
       "timestamp": "2021-10-09 10:00:00",
-      "durationMin": 16,
+      "durationMin": 15.5,
       "durationEstimated": true,
       "players": [
         2,
@@ -42936,7 +43029,7 @@
       "copyId": "0e1d82ca-ebb5-4190-b3e5-65cfd33ba089",
       "date": "2021-10-03",
       "timestamp": "2021-10-03 10:00:00",
-      "durationMin": 16,
+      "durationMin": 15.5,
       "durationEstimated": true,
       "players": [
         2,
@@ -43035,7 +43128,7 @@
       "copyId": "0e1d82ca-ebb5-4190-b3e5-65cfd33ba089",
       "date": "2021-09-27",
       "timestamp": "2021-09-27 10:00:00",
-      "durationMin": 16,
+      "durationMin": 15.5,
       "durationEstimated": true,
       "players": [
         4,
@@ -43050,7 +43143,7 @@
       "copyId": "0e1d82ca-ebb5-4190-b3e5-65cfd33ba089",
       "date": "2021-09-27",
       "timestamp": "2021-09-27 10:00:00",
-      "durationMin": 16,
+      "durationMin": 15.5,
       "durationEstimated": true,
       "players": [
         4,
@@ -43485,5 +43578,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2026-01-20T05:07:15.000Z"
+  "generatedAt": "2026-01-27T03:12:06.000Z"
 }
