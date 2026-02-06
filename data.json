@@ -6702,8 +6702,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 23,
-      "uniquePlayDays": 12,
+      "playCount": 25,
+      "uniquePlayDays": 13,
       "thumbnailUrl": "https://cf.geekdo-images.com/TIEYwnIRV6kvAEnFkYe2OA__thumb/img/ysbEGf4Z0tNnYPSnGOH8tw5sa8Y=/fit-in/200x150/filters:strip_icc()/pic6858706.png",
       "coverUrl": "https://cf.geekdo-images.com/TIEYwnIRV6kvAEnFkYe2OA__original/img/F_I7FrEWXrTcl-3fYOgC4OZcryQ=/0x0/filters:format(png)/pic6858706.png",
       "typicalPlayTimeMinutes": 7
@@ -14900,6 +14900,34 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 494,
+      "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
+      "date": "2026-02-05",
+      "timestamp": "2026-02-05 21:13:52",
+      "durationMin": 5,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 494,
+      "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
+      "date": "2026-02-05",
+      "timestamp": "2026-02-05 21:08:12",
+      "durationMin": 5,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 447,
       "copyId": "81068284-1428-4718-836d-92afabba1c29",
@@ -43748,5 +43776,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2026-02-05T03:19:36.000Z"
+  "generatedAt": "2026-02-06T04:13:52.000Z"
 }
