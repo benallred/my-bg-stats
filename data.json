@@ -3576,11 +3576,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/SAWf0NIsIICJBRWal4bDNQ__thumb/img/ju66fjflBrOgh2WJHRIufK0TC4o=/fit-in/200x150/filters:strip_icc()/pic2736237.jpg",
       "coverUrl": "https://cf.geekdo-images.com/SAWf0NIsIICJBRWal4bDNQ__original/img/kShoTHRkodi-hXX9Mb-Ksm6ym8I=/0x0/filters:format(jpeg)/pic2736237.jpg",
-      "typicalPlayTimeMinutes": 13
+      "typicalPlayTimeMinutes": 11
     },
     {
       "id": 214,
@@ -3732,11 +3732,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 8,
-      "uniquePlayDays": 7,
+      "playCount": 9,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/fbX3QFrAWR2LsYEkSyYzcQ__small/img/tfRZUlmTdCW_gGjQqg0_Dyowfqk=/fit-in/200x150/filters:strip_icc()/pic8815900.jpg",
       "coverUrl": "https://cf.geekdo-images.com/fbX3QFrAWR2LsYEkSyYzcQ__original/img/I_SLJPO38VcIgvmn3HMZcqZSKfs=/0x0/filters:format(jpeg)/pic8815900.jpg",
-      "typicalPlayTimeMinutes": 76
+      "typicalPlayTimeMinutes": 71
     },
     {
       "id": 590,
@@ -14684,11 +14684,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
+      "playCount": 5,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/iOla7B7sqs4IsGQcS4ghgA__thumb/img/oStmPCcaE3-Ncs6-EyRZDQfFVnE=/fit-in/200x150/filters:strip_icc()/pic5733939.png",
       "coverUrl": "https://cf.geekdo-images.com/iOla7B7sqs4IsGQcS4ghgA__original/img/O4hptBLLfWtBpA7gzNVfuJxfLIk=/0x0/filters:format(png)/pic5733939.png",
-      "typicalPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 24
     },
     {
       "id": 442,
@@ -14788,8 +14788,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 9,
-      "uniquePlayDays": 4,
+      "playCount": 11,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/x7ofYK9Jxm2oyoXz9WKyHA__thumb/img/ZvBuTbMeORRdF8yIsqblDx6t-T4=/fit-in/200x150/filters:strip_icc()/pic6417644.jpg",
       "coverUrl": "https://cf.geekdo-images.com/x7ofYK9Jxm2oyoXz9WKyHA__original/img/wAv1g-UwdJhb2R-CnOLAtfSo6jE=/0x0/filters:format(jpeg)/pic6417644.jpg",
       "typicalPlayTimeMinutes": 15
@@ -14900,6 +14900,78 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 444,
+      "copyId": "d19abe4f-3ef7-490e-9bb7-60e509a0fc67",
+      "date": "2026-02-07",
+      "timestamp": "2026-02-07 20:16:08",
+      "durationMin": 16,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 444,
+      "copyId": "d19abe4f-3ef7-490e-9bb7-60e509a0fc67",
+      "date": "2026-02-07",
+      "timestamp": "2026-02-07 20:04:29",
+      "durationMin": 12,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 355,
+      "copyId": "b04a013b-0e70-4ea3-945e-c934c63b87cc",
+      "date": "2026-02-07",
+      "timestamp": "2026-02-07 19:51:59",
+      "durationMin": 9,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 443,
+      "copyId": "8325a908-0f34-470d-9066-94f0bc0a8c2c",
+      "date": "2026-02-07",
+      "timestamp": "2026-02-07 19:25:39",
+      "durationMin": 22,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 589,
+      "copyId": "4cf7c224-be35-4263-a864-95f1e0d1b667",
+      "date": "2026-02-06",
+      "timestamp": "2026-02-06 21:49:24",
+      "durationMin": 71,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 494,
       "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
@@ -43776,5 +43848,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2026-02-06T04:13:52.000Z"
+  "generatedAt": "2026-02-08T03:16:08.000Z"
 }
