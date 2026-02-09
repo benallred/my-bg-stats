@@ -3573,7 +3573,7 @@ function showYearReviewDetail(container, statsCache) {
                             </div>
                         </td>
                     </tr>
-                    <tr class="year-review-row year-review-row-clickable" data-metric="people">
+                    <tr class="year-review-row year-review-row-clickable">
                         <td class="year-review-label-detail">
                             <span class="year-review-expand-icon">▶</span>
                             Increase in all-time people h-index:
@@ -3584,7 +3584,7 @@ function showYearReviewDetail(container, statsCache) {
                             statsCache.yearReview.peopleHIndexCurrent
                         )}</td>
                     </tr>
-                    <tr class="year-review-expanded-content" data-metric="people" style="display: none;">
+                    <tr class="year-review-expanded-content" style="display: none;">
                         <td colspan="2">
                             <div class="year-review-games-list">
                                 ${newPeopleGames.length > 0
