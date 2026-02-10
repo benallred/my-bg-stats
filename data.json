@@ -3561,7 +3561,7 @@
       "name": "Dr. Eureka",
       "bggId": 181345,
       "year": 2015,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -6963,7 +6963,7 @@
       "name": "Lost Legacy: The Starship",
       "bggId": 158339,
       "year": 2013,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -6978,11 +6978,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 1,
+      "playCount": 9,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/aOB_o5UdsJorNJXl-cSP8w__thumb/img/yP1Xl_aWaif7XmwKbWkyvokXbyY=/fit-in/200x150/filters:strip_icc()/pic1998162.jpg",
       "coverUrl": "https://cf.geekdo-images.com/aOB_o5UdsJorNJXl-cSP8w__original/img/x2vwRidRBfSKXHtK41U0L8zeG4k=/0x0/filters:format(jpeg)/pic1998162.jpg",
-      "typicalPlayTimeMinutes": 30
+      "typicalPlayTimeMinutes": 3
     },
     {
       "id": 41,
@@ -13593,11 +13593,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/-jn45ZxkJXYlthEyDIYEMQ__thumb/img/LQKAm2oQircS1a6SvnO7WLN7PFA=/fit-in/200x150/filters:strip_icc()/pic5045366.jpg",
       "coverUrl": "https://cf.geekdo-images.com/-jn45ZxkJXYlthEyDIYEMQ__original/img/KvmIv9AD58iRUswvQCklgTi7IcQ=/0x0/filters:format(jpeg)/pic5045366.jpg",
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 52
     },
     {
       "id": 341,
@@ -14669,7 +14669,7 @@
       "name": "다이브",
       "bggId": 304324,
       "year": 2021,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -14773,7 +14773,7 @@
       "name": "시티 체이스: 경찰 vs 도둑",
       "bggId": 346625,
       "year": 2021,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -14900,6 +14900,106 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 63,
+      "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
+      "date": "2026-02-09",
+      "timestamp": "2026-02-09 20:06:39",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 63,
+      "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
+      "date": "2026-02-09",
+      "timestamp": "2026-02-09 20:02:40",
+      "durationMin": 4,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 63,
+      "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
+      "date": "2026-02-09",
+      "timestamp": "2026-02-09 19:58:40",
+      "durationMin": 4,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 63,
+      "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
+      "date": "2026-02-09",
+      "timestamp": "2026-02-09 19:55:36",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 63,
+      "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
+      "date": "2026-02-09",
+      "timestamp": "2026-02-09 19:49:16",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 63,
+      "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
+      "date": "2026-02-09",
+      "timestamp": "2026-02-09 19:46:27",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 29,
+      "copyId": "dad78083-e2e3-450b-a21a-33803ebfd560",
+      "date": "2026-02-08",
+      "timestamp": "2026-02-08 19:22:19",
+      "durationMin": 52,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 444,
       "copyId": "d19abe4f-3ef7-490e-9bb7-60e509a0fc67",
@@ -42864,7 +42964,7 @@
       "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
       "date": "2021-10-29",
       "timestamp": "2021-10-29 10:00:00",
-      "durationMin": 30,
+      "durationMin": 3,
       "durationEstimated": true,
       "players": [
         3,
@@ -42878,7 +42978,7 @@
       "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
       "date": "2021-10-29",
       "timestamp": "2021-10-29 10:00:00",
-      "durationMin": 30,
+      "durationMin": 3,
       "durationEstimated": true,
       "players": [
         3,
@@ -42892,7 +42992,7 @@
       "copyId": "82af4370-bb03-4a9c-9ab7-ba108ff576a4",
       "date": "2021-10-29",
       "timestamp": "2021-10-29 10:00:00",
-      "durationMin": 30,
+      "durationMin": 3,
       "durationEstimated": true,
       "players": [
         3,
@@ -43848,5 +43948,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2026-02-08T03:16:08.000Z"
+  "generatedAt": "2026-02-10T03:06:39.000Z"
 }
