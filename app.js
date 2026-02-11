@@ -69,6 +69,8 @@ import {
   getCostPerMetricStats,
   getShelfOfShame,
   getShelfOfShameChanges,
+  getPlayedRatingBreakdown,
+  getCollectionRatingBreakdown,
 } from './stats.js';
 
 import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
@@ -809,6 +811,7 @@ function updateSectionVisibility() {
     const playStatsSection = document.getElementById('play-statistics-section');
     const milestoneSection = document.getElementById('milestone-section');
     const socialLocationsSection = document.getElementById('social-locations-section');
+    const playedRatingCard = document.getElementById('played-rating');
 
     // Check if current year is pre-logging
     const isPreLogging = currentYear && yearDataCache
@@ -821,6 +824,8 @@ function updateSectionVisibility() {
     if (playStatsSection) playStatsSection.style.display = displayValue;
     if (milestoneSection) milestoneSection.style.display = displayValue;
     if (socialLocationsSection) socialLocationsSection.style.display = displayValue;
+    // Hide played games rating card in pre-logging years (section and collection card always visible)
+    if (playedRatingCard) playedRatingCard.style.display = displayValue;
 }
 
 /**
@@ -851,6 +856,9 @@ function updateAllStats() {
         playerStats: getPlayerStats(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
         locationStats: getLocationStats(gameData.plays, gameData.locations, currentYear),
         soloGameStats: getSoloGameStats(gameData.plays, gameData.games, gameData.selfPlayerId, currentYear),
+        // Rating stats
+        playedRatingData: getPlayedRatingBreakdown(gameData.games, gameData.plays, currentYear),
+        collectionRatingData: getCollectionRatingBreakdown(gameData.games, currentYear),
         // Cost Analysis stats (hidden)
         totalCostData: getTotalCost(gameData.games, currentYear),
         costPerMetricData: getCostPerMetricStats(gameData.games, gameData.plays, currentBaseMetric, currentYear),
@@ -985,6 +993,8 @@ function updateAllStats() {
     updateMilestoneCardLabels();
     updateMilestoneCumulativeSubstats();
     updateSocialLocationStats();
+    updateCollectionRatingStats();
+    updatePlayedRatingStats();
     updateDiagnosticsSection();
     updateCostAnalysisStats();
     updateValueClubsStats();
@@ -1272,6 +1282,52 @@ function updateSocialLocationStats() {
 
     // Update Locations card
     document.querySelector('#locations-card .widget__value').textContent = locationStats.locationCount;
+}
+
+/**
+ * Update collection rating statistics
+ */
+function updateCollectionRatingStats() {
+    const data = statsCache.collectionRatingData;
+
+    // Update main value
+    const mainValue = document.querySelector('#collection-rating .widget__value');
+    mainValue.textContent = data.average !== null
+        ? data.average.toFixed(1)
+        : '--';
+
+    // Update "games rated" substat - only show when some games lack ratings
+    const gamesRatedContainer = document.getElementById('collection-games-rated-container');
+    const gamesRatedCount = document.getElementById('collection-games-rated-count');
+    if (data.ratedCount !== data.totalCount) {
+        gamesRatedContainer.style.display = '';
+        gamesRatedCount.textContent = `${data.ratedCount}/${data.totalCount}`;
+    } else {
+        gamesRatedContainer.style.display = 'none';
+    }
+}
+
+/**
+ * Update rating statistics for played games
+ */
+function updatePlayedRatingStats() {
+    const avgPlayed = statsCache.playedRatingData;
+
+    // Update main value (avg rating of played games)
+    const mainValue = document.querySelector('#played-rating .widget__value');
+    mainValue.textContent = avgPlayed.average !== null
+        ? avgPlayed.average.toFixed(1)
+        : '--';
+
+    // Update "games rated" substat - only show when some games lack ratings
+    const gamesRatedContainer = document.getElementById('played-games-rated-container');
+    const gamesRatedCount = document.getElementById('played-games-rated-count');
+    if (avgPlayed.ratedCount !== avgPlayed.totalCount) {
+        gamesRatedContainer.style.display = '';
+        gamesRatedCount.textContent = `${avgPlayed.ratedCount}/${avgPlayed.totalCount}`;
+    } else {
+        gamesRatedContainer.style.display = 'none';
+    }
 }
 
 /**
@@ -1929,6 +1985,22 @@ const statDetailHandlers = {
         getTitle: (currentYear) => currentYear ? `Locations <span style="white-space: nowrap">(${currentYear})</span>` : 'Locations <span style="white-space: nowrap">(All Time)</span>',
         render: (detailContent) => {
             showLocationsBreakdown(detailContent);
+        }
+    },
+    'collection-rating': {
+        getTitle: (currentYear) => currentYear
+            ? `Ratings of Games Acquired in <span style="white-space: nowrap">${currentYear}</span>`
+            : 'Ratings of Games in Collection',
+        render: (detailContent) => {
+            showCollectionRatingBreakdown(detailContent);
+        }
+    },
+    'played-rating': {
+        getTitle: (currentYear) => currentYear
+            ? `Ratings of Games Played in <span style="white-space: nowrap">${currentYear}</span>`
+            : 'Ratings of Games Played',
+        render: (detailContent) => {
+            showPlayedRatingBreakdown(detailContent);
         }
     },
     'year-review': {
@@ -3242,6 +3314,137 @@ function showLocationsBreakdown(container) {
                     <td>${(loc.minutes / 60).toFixed(1)} (${loc.minutesPercent.toFixed(1)}%)</td>
                     <td>${loc.sessions} (${loc.sessionsPercent.toFixed(1)}%)</td>
                     <td>${loc.plays} (${loc.playsPercent.toFixed(1)}%)</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show collection rating breakdown by game
+ */
+function showCollectionRatingBreakdown(container) {
+    const statType = 'collection-rating';
+    const data = statsCache.collectionRatingData;
+
+    // Filter to only include rated games
+    const ratedGames = data.gameRatings.filter(
+        item => item.rating !== null && item.rating !== undefined
+    );
+
+    if (ratedGames.length === 0) {
+        container.innerHTML = currentYear
+            ? `<p>No games acquired and rated in ${currentYear}.</p>`
+            : '<p>No rated games in collection.</p>';
+        return;
+    }
+
+    // Apply current sort
+    const sortedGames = sortTableData(
+        ratedGames,
+        statType,
+        currentSortCol,
+        currentSortDir,
+    );
+
+    // Format acquisition date for display
+    const formatAcquisitionDate = (date) => {
+        if (!date) return '--';
+        return date.substring(0, 4); // Just show year
+    };
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'rating', label: 'Rating' },
+        { key: 'acquired', label: 'Acquired' },
+    ], currentSortCol || 'rating', currentSortDir || 'desc');
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>${headerHtml}</tr>
+        </thead>
+        <tbody>
+            ${sortedGames.map(item => `
+                <tr>
+                    <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
+                    <td>${item.rating}</td>
+                    <td>${formatAcquisitionDate(item.acquisitionDate)}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show rating breakdown by game
+ */
+function showPlayedRatingBreakdown(container) {
+    const statType = 'played-rating';
+    const ratingData = statsCache.playedRatingData;
+
+    // Filter to only include rated games
+    const ratedGames = ratingData.gameRatings.filter(
+        item => item.rating !== null && item.rating !== undefined
+    );
+
+    if (ratedGames.length === 0) {
+        container.innerHTML = '<p>No rated games played in this period.</p>';
+        return;
+    }
+
+    // Apply current sort
+    const sortedGames = sortTableData(
+        ratedGames,
+        statType,
+        currentSortCol,
+        currentSortDir,
+        currentBaseMetric,
+    );
+
+    // Determine metric column header and value formatter
+    const metricHeaders = {
+        hours: 'Hours',
+        sessions: 'Sessions',
+        plays: 'Plays',
+    };
+    const metricHeader = metricHeaders[currentBaseMetric] || 'Hours';
+
+    const getMetricValue = (item) => {
+        switch (currentBaseMetric) {
+            case Metric.SESSIONS:
+                return item.playData.uniqueDates;
+            case Metric.PLAYS:
+                return item.playData.playCount;
+            case Metric.HOURS:
+            default:
+                return (item.playData.totalMinutes / 60).toFixed(1);
+        }
+    };
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'game', label: 'Game' },
+        { key: 'rating', label: 'Rating' },
+        { key: currentBaseMetric, label: metricHeader },
+        { key: 'status', label: 'Owned' },
+    ], currentSortCol || 'rating', currentSortDir || 'desc');
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>${headerHtml}</tr>
+        </thead>
+        <tbody>
+            ${sortedGames.map(item => `
+                <tr>
+                    <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
+                    <td>${item.rating}</td>
+                    <td>${getMetricValue(item)}</td>
+                    <td>${item.playData.owned ? '✓' : ''}</td>
                 </tr>
             `).join('')}
         </tbody>

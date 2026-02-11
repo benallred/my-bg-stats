@@ -45,4 +45,37 @@ function wasGameAcquiredInYear(game, year) {
   return game.copies.some(copy => wasCopyAcquiredInYear(copy, year));
 }
 
-export { isGameOwned, wasCopyAcquiredInYear, wasCopyAcquiredInOrBeforeYear, wasGameAcquiredInYear };
+/**
+ * Helper: Check if a game was acquired in or before a specific year
+ * @param {Object} game - Game object
+ * @param {number} year - Year to check
+ * @returns {boolean} true if any copy was acquired in or before the year
+ */
+function wasGameAcquiredInOrBeforeYear(game, year) {
+  if (!game.copies || game.copies.length === 0) return false;
+  return game.copies.some(copy => wasCopyAcquiredInOrBeforeYear(copy, year));
+}
+
+/**
+ * Helper: Get the earliest acquisition date of a game
+ * @param {Object} game - Game object
+ * @returns {string|null} The earliest acquisition date, or null if none
+ */
+function getGameAcquisitionDate(game) {
+  if (!game.copies || game.copies.length === 0) return null;
+  const dates = game.copies
+    .map(c => c.acquisitionDate)
+    .filter(d => d);
+  if (dates.length === 0) return null;
+  dates.sort();
+  return dates[0];
+}
+
+export {
+  isGameOwned,
+  wasCopyAcquiredInYear,
+  wasCopyAcquiredInOrBeforeYear,
+  wasGameAcquiredInYear,
+  wasGameAcquiredInOrBeforeYear,
+  getGameAcquisitionDate,
+};

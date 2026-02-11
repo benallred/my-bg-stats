@@ -67,6 +67,19 @@ export const tableColumnConfigs = {
         { key: 'sessions', getValue: item => item.sessions },
         { key: 'plays', getValue: item => item.plays },
     ],
+    'collection-rating': [
+        { key: 'game', getValue: item => item.game.name, type: 'string' },
+        { key: 'rating', getValue: item => item.rating ?? -1, defaultDir: 'desc' },
+        { key: 'acquired', getValue: item => item.acquisitionDate || '', type: 'string' },
+    ],
+    'played-rating': [
+        { key: 'game', getValue: item => item.game.name, type: 'string' },
+        { key: 'rating', getValue: item => item.rating ?? -1, defaultDir: 'desc' },
+        { key: 'hours', getValue: item => item.playData.totalMinutes },
+        { key: 'sessions', getValue: item => item.playData.uniqueDates },
+        { key: 'plays', getValue: item => item.playData.playCount },
+        { key: 'status', sortable: false },
+    ],
     'fives': [
         { key: 'game', getValue: item => item.game.name, type: 'string' },
         { key: 'count', getValue: item => item.count, defaultDir: 'desc' },

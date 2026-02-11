@@ -403,6 +403,63 @@ describe('sortTableData - all table types', () => {
         expect(sortTableData(data, 'expansions', 'type', 'asc')[0].type).toBe('Expansion');
         expect(sortTableData(data, 'expansions', 'date', 'desc')[0].acquisitionDate).toBe('2024-06-01');
     });
+
+    test('played-rating sorts by all columns', () => {
+        const data = [
+            { game: { name: 'Catan' }, rating: 7, playData: { totalMinutes: 120, uniqueDates: 3, playCount: 5 } },
+            { game: { name: 'Azul' }, rating: 9, playData: { totalMinutes: 60, uniqueDates: 2, playCount: 3 } },
+            { game: { name: 'Wingspan' }, rating: null, playData: { totalMinutes: 180, uniqueDates: 4, playCount: 6 } },
+        ];
+        expect(sortTableData(data, 'played-rating', 'game', 'asc')[0].game.name).toBe('Azul');
+        expect(sortTableData(data, 'played-rating', 'rating', 'desc')[0].rating).toBe(9);
+        expect(sortTableData(data, 'played-rating', 'hours', 'desc')[0].playData.totalMinutes).toBe(180);
+        expect(sortTableData(data, 'played-rating', 'sessions', 'desc')[0].playData.uniqueDates).toBe(4);
+        expect(sortTableData(data, 'played-rating', 'plays', 'desc')[0].playData.playCount).toBe(6);
+    });
+
+    test('played-rating handles null ratings by sorting them last', () => {
+        const data = [
+            { game: { name: 'Catan' }, rating: 7, playData: { totalMinutes: 120, uniqueDates: 3, playCount: 5 } },
+            { game: { name: 'Wingspan' }, rating: null, playData: { totalMinutes: 180, uniqueDates: 4, playCount: 6 } },
+        ];
+        // null coalesces to -1, so in desc order null should be last
+        const result = sortTableData(data, 'played-rating', 'rating', 'desc');
+        expect(result[0].rating).toBe(7);
+        expect(result[1].rating).toBeNull();
+    });
+
+    test('collection-rating sorts by all columns', () => {
+        const data = [
+            { game: { name: 'Catan' }, rating: 7, acquisitionDate: '2021-06-15' },
+            { game: { name: 'Azul' }, rating: 9, acquisitionDate: '2020-03-01' },
+            { game: { name: 'Wingspan' }, rating: null, acquisitionDate: '2022-01-10' },
+        ];
+        expect(sortTableData(data, 'collection-rating', 'game', 'asc')[0].game.name).toBe('Azul');
+        expect(sortTableData(data, 'collection-rating', 'rating', 'desc')[0].rating).toBe(9);
+        expect(sortTableData(data, 'collection-rating', 'acquired', 'asc')[0].acquisitionDate).toBe('2020-03-01');
+        expect(sortTableData(data, 'collection-rating', 'acquired', 'desc')[0].acquisitionDate).toBe('2022-01-10');
+    });
+
+    test('collection-rating handles null ratings by sorting them last', () => {
+        const data = [
+            { game: { name: 'Catan' }, rating: 7, acquisitionDate: '2021-06-15' },
+            { game: { name: 'Wingspan' }, rating: null, acquisitionDate: '2022-01-10' },
+        ];
+        const result = sortTableData(data, 'collection-rating', 'rating', 'desc');
+        expect(result[0].rating).toBe(7);
+        expect(result[1].rating).toBeNull();
+    });
+
+    test('collection-rating handles missing acquisition dates', () => {
+        const data = [
+            { game: { name: 'Catan' }, rating: 7, acquisitionDate: '2021-06-15' },
+            { game: { name: 'Wingspan' }, rating: 8, acquisitionDate: null },
+        ];
+        const result = sortTableData(data, 'collection-rating', 'acquired', 'asc');
+        // Empty string sorts before dates
+        expect(result[0].acquisitionDate).toBeNull();
+        expect(result[1].acquisitionDate).toBe('2021-06-15');
+    });
 });
 
 describe('createSortableHeaderHtml', () => {
