@@ -2655,7 +2655,9 @@ function showGamesPlayed(container) {
     const headerHtml = createSortableHeaderHtml(statType, [
         { key: 'game', label: 'Game' },
         { key: 'plays', label: 'Plays' },
-        { key: 'status', label: '<span style="font-size: 0.85em;">Others\' 👥<br>New to me ✨</span>' },
+        { key: 'status', label: currentYear
+            ? '<span style="font-size: 0.85em;">Others\' 👥<br>New to me ✨</span>'
+            : 'Others\' 👥' },
     ], currentSortCol, currentSortDir);
 
     const statusIcons = (item) => {

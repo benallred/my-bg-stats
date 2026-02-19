@@ -116,6 +116,11 @@
     --shadow-hover-bg: rgba(255, 255, 255, 0.05);
 }
 
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
 /* Global Styles */
 * {
     margin: 0;
