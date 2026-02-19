@@ -3432,7 +3432,7 @@ function showPlayedRatingBreakdown(container) {
         { key: 'game', label: 'Game' },
         { key: 'rating', label: 'Rating' },
         { key: currentBaseMetric, label: metricHeader },
-        { key: 'status', label: 'Owned' },
+        { key: 'status', label: 'Others\' 👥' },
     ], currentSortCol || 'rating', currentSortDir || 'desc');
 
     const table = document.createElement('table');
@@ -3446,7 +3446,7 @@ function showPlayedRatingBreakdown(container) {
                     <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
                     <td>${item.rating}</td>
                     <td>${getMetricValue(item)}</td>
-                    <td>${item.playData.owned ? '✓' : ''}</td>
+                    <td>${item.playData.owned ? '' : '👥'}</td>
                 </tr>
             `).join('')}
         </tbody>
