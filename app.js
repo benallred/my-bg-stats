@@ -1290,6 +1290,10 @@ function updateSocialLocationStats() {
 function updateCollectionRatingStats() {
     const data = statsCache.collectionRatingData;
 
+    // Update card title based on year filter
+    const titleElement = document.querySelector('#collection-rating .widget__title');
+    titleElement.textContent = currentYear ? 'Avg Acquired Rating' : 'Avg Collection Rating';
+
     // Update main value
     const mainValue = document.querySelector('#collection-rating .widget__value');
     mainValue.textContent = data.average !== null
