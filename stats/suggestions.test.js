@@ -2,6 +2,7 @@ import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   calculateDaysSince,
   selectRandom,
+  selectRandomWeighted,
   selectRandomWeightedBySqrtRarity,
   suggestRecentlyPlayedWithLowSessions,
   suggestLongestUnplayed,
@@ -9,10 +10,12 @@ import {
   suggestForNextMilestone,
   suggestForNextValueClub,
   suggestHighestCostPerMetric,
+  suggestFavoriteGame,
+  suggestOwnedUnratedGame,
   suggestNeverPlayedGame,
   getSuggestedGames,
 } from './suggestions.js';
-import { Metric, Milestone } from './constants.js';
+import { Metric, Milestone, MIN_FAVORITE_RATING } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
@@ -984,6 +987,338 @@ describe('Suggestion Algorithms', () => {
         expect(result).not.toBeNull();
         expect(result.game.name).toBe('Legacy Game');
       });
+    });
+  });
+
+  describe('selectRandomWeighted', () => {
+    test('returns null for empty array', () => {
+      expect(selectRandomWeighted([], () => 1)).toBeNull();
+    });
+
+    test('returns single item from single-element array', () => {
+      const items = [{ id: 1 }];
+      expect(selectRandomWeighted(items, () => 5)).toBe(items[0]);
+    });
+
+    test('selects item based on weight', () => {
+      const items = [
+        { id: 1, weight: 1 },
+        { id: 2, weight: 100 },
+      ];
+      // Math.random mocked to 0.5, total weight = 101
+      // random = 0.5 * 101 = 50.5, cumulative: [1, 101]
+      // 50.5 > 1, 50.5 <= 101 → selects item 2
+      const result = selectRandomWeighted(items, item => item.weight);
+      expect(result.id).toBe(2);
+    });
+
+    test('selects first item when random is very low', () => {
+      vi.spyOn(Math, 'random').mockReturnValue(0.001);
+      const items = [
+        { id: 1, weight: 10 },
+        { id: 2, weight: 90 },
+      ];
+      // random = 0.001 * 100 = 0.1, cumulative: [10, 100]
+      // 0.1 <= 10 → selects item 1
+      const result = selectRandomWeighted(items, item => item.weight);
+      expect(result.id).toBe(1);
+    });
+  });
+
+  describe('suggestFavoriteGame', () => {
+    test('returns null when no games have ratings', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Unrated Game', rating: null, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('returns null when only non-replayable games have ratings', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Legacy Game', rating: 9, isNonReplayable: true },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('returns null when rated games have zero plays', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Rated No Plays', rating: 8, isNonReplayable: false },
+        playCount: 0,
+        uniqueDays: new Set(),
+        totalMinutes: 0,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('returns suggestion for rated played game', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Great Game', rating: 8, isNonReplayable: false },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01', '2023-01-02']),
+        totalMinutes: 600,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Old faithful');
+      expect(result.stat).toBe('Rated 8/10');
+      expect(result.game.name).toBe('Great Game');
+    });
+
+    test('excludes non-replayable games', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Legacy Game', rating: 10, isNonReplayable: true },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Regular Game', rating: 7, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.game.name).toBe('Regular Game');
+    });
+
+    test('uses quadratic weighting to favor higher ratings', () => {
+      // With Math.random mocked to 0.5:
+      // Game A: rating 7, weight = 49/1 = 49
+      // Game B: rating 10, weight = 100/1 = 100
+      // Total = 149, random = 0.5 * 149 = 74.5
+      // Cumulative: [49, 149]
+      // 74.5 > 49, 74.5 <= 149 → selects Game B
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Lower Rated', rating: 7, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'High Rated', rating: 10, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result.game.name).toBe('High Rated');
+      expect(result.stat).toBe('Rated 10/10');
+    });
+
+    test('can select lower-rated game with appropriate random value', () => {
+      // With Math.random returning 0.01:
+      // Game A: rating 7, weight = 49/1 = 49
+      // Game B: rating 10, weight = 100/1 = 100
+      // Total = 149, random = 0.01 * 149 = 1.49
+      // Cumulative: [49, 149]
+      // 1.49 <= 49 → selects Game A
+      vi.spyOn(Math, 'random').mockReturnValue(0.01);
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Lower Rated', rating: 7, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'High Rated', rating: 10, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result.game.name).toBe('Lower Rated');
+      expect(result.stat).toBe('Rated 7/10');
+    });
+
+    test('normalizes weight by group size so many same-rated games do not dominate', () => {
+      // With Math.random mocked to 0.5:
+      // 3 games at rating 7: each weight = 49/3, group total = 49
+      // 1 game at rating 10: weight = 100/1, group total = 100
+      // Total = 149, random = 0.5 * 149 = 74.5
+      // Cumulative: [16.33, 32.67, 49.0, 149]
+      // 74.5 > 49.0, 74.5 <= 149 → selects the rating-10 game
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Mid A', rating: 7, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Mid B', rating: 7, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(3, {
+        game: { id: 3, name: 'Mid C', rating: 7, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(4, {
+        game: { id: 4, name: 'High Rated', rating: 10, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result.game.name).toBe('High Rated');
+    });
+
+    test('excludes games rated below MIN_FAVORITE_RATING', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Below Cutoff', rating: MIN_FAVORITE_RATING - 1, isNonReplayable: false },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 600,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Well Below', rating: MIN_FAVORITE_RATING - 4, isNonReplayable: false },
+        playCount: 10,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 600,
+      });
+
+      const result = suggestFavoriteGame(gamePlayData);
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('suggestOwnedUnratedGame', () => {
+    test('returns null when all games have ratings', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Rated Game', rating: 8, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestOwnedUnratedGame(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('returns null when only non-replayable unrated games exist', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Legacy Game', rating: null, isNonReplayable: true },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestOwnedUnratedGame(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('returns suggestion for unrated game with plays', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Unrated Played', rating: null, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+
+      const result = suggestOwnedUnratedGame(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.reason).toBe('Rate me');
+      expect(result.stat).toBe('Awaiting verdict after 5 plays');
+      expect(result.game.name).toBe('Unrated Played');
+    });
+
+    test('returns null when unrated games have zero plays', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Unrated Unplayed', rating: null, isNonReplayable: false },
+        playCount: 0,
+        uniqueDays: new Set(),
+        totalMinutes: 0,
+      });
+
+      const result = suggestOwnedUnratedGame(gamePlayData);
+      expect(result).toBeNull();
+    });
+
+    test('returns singular play text for 1 play', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'One Play Game', rating: null, isNonReplayable: false },
+        playCount: 1,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 60,
+      });
+
+      const result = suggestOwnedUnratedGame(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.stat).toBe('Awaiting verdict after 1 play');
+    });
+
+    test('excludes non-replayable games', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Legacy Game', rating: null, isNonReplayable: true },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Regular Game', rating: null, isNonReplayable: false },
+        playCount: 3,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 180,
+      });
+
+      const result = suggestOwnedUnratedGame(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.game.name).toBe('Regular Game');
+    });
+
+    test('excludes games with ratings', () => {
+      const gamePlayData = new Map();
+      gamePlayData.set(1, {
+        game: { id: 1, name: 'Rated Game', rating: 7, isNonReplayable: false },
+        playCount: 5,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 300,
+      });
+      gamePlayData.set(2, {
+        game: { id: 2, name: 'Unrated Game', rating: null, isNonReplayable: false },
+        playCount: 3,
+        uniqueDays: new Set(['2023-01-01']),
+        totalMinutes: 180,
+      });
+
+      const result = suggestOwnedUnratedGame(gamePlayData);
+      expect(result).not.toBeNull();
+      expect(result.game.name).toBe('Unrated Game');
     });
   });
 

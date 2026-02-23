@@ -2,7 +2,7 @@
  * Game suggestion algorithms
  */
 
-import { Metric, Milestone, ValueClub } from './constants.js';
+import { Metric, Milestone, ValueClub, MIN_FAVORITE_RATING } from './constants.js';
 import { isGameOwned } from './game-helpers.js';
 import {
   calculateTraditionalHIndex,
@@ -121,6 +121,31 @@ function selectRandomWeightedBySqrtRarity(items, getGroupKeyFn) {
   const random = Math.random() * totalWeight;
   for (let i = 0; i < cumulativeWeights.length; i++) {
     if (random <= cumulativeWeights[i]) {
+      return items[i];
+    }
+  }
+
+  // Should never reach here due to cumulative weight math
+  // If we do, return undefined and let the caller fail loudly (bug detection)
+}
+
+/**
+ * Select a random item with explicit weights.
+ * @param {Array} items - Array of items to select from
+ * @param {Function} getWeightFn - Function that returns weight for an item (must be > 0)
+ * @returns {*} Selected item or null if items is empty
+ */
+function selectRandomWeighted(items, getWeightFn) {
+  if (items.length === 0) return null;
+
+  const weights = items.map(item => getWeightFn(item));
+  const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+
+  const random = Math.random() * totalWeight;
+  let cumulative = 0;
+  for (let i = 0; i < items.length; i++) {
+    cumulative += weights[i];
+    if (random <= cumulative) {
       return items[i];
     }
   }
@@ -528,6 +553,66 @@ function suggestNeverPlayedGame(gamePlayData) {
 }
 
 /**
+ * Suggestion Algorithm: Favorite game (weighted by rating)
+ * Higher-rated games are more likely to be selected, using quadratic weighting.
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestFavoriteGame(gamePlayData) {
+  const ratedPlayedGames = Array.from(gamePlayData.values())
+    .filter(data => {
+      if (data.game.isNonReplayable) return false;
+      if (data.game.rating === null || data.game.rating === undefined) return false;
+      if (data.game.rating < MIN_FAVORITE_RATING) return false;
+      return data.playCount > 0;
+    });
+
+  if (ratedPlayedGames.length === 0) return null;
+
+  // Count games per rating to normalize group sizes
+  const ratingCounts = new Map();
+  ratedPlayedGames.forEach(data => {
+    const rating = data.game.rating;
+    ratingCounts.set(rating, (ratingCounts.get(rating) || 0) + 1);
+  });
+
+  const candidate = selectRandomWeighted(
+    ratedPlayedGames,
+    data => data.game.rating ** 2 / ratingCounts.get(data.game.rating),
+  );
+
+  return {
+    game: candidate.game,
+    reason: 'Old faithful',
+    stat: `Rated ${candidate.game.rating}/10`,
+  };
+}
+
+/**
+ * Suggestion Algorithm: Owned but unrated game
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestOwnedUnratedGame(gamePlayData) {
+  const unratedGames = Array.from(gamePlayData.values())
+    .filter(data => {
+      if (data.game.isNonReplayable) return false;
+      if (data.game.rating !== null && data.game.rating !== undefined) return false;
+      return data.playCount > 0;
+    });
+
+  if (unratedGames.length === 0) return null;
+
+  const candidate = selectRandom(unratedGames);
+
+  return {
+    game: candidate.game,
+    reason: 'Rate me',
+    stat: `Awaiting verdict after ${candidate.playCount} ${candidate.playCount === 1 ? 'play' : 'plays'}`,
+  };
+}
+
+/**
  * Get suggested games to play next based on play patterns
  * @param {Array} games - Array of game objects
  * @param {Array} plays - Array of play objects
@@ -593,9 +678,11 @@ function getSuggestedGames(games, plays) {
     suggestForNextMilestone(gamePlayData, Metric.HOURS),        // Almost a milestone (hours)
     suggestForNextMilestone(gamePlayData, Metric.SESSIONS),    // Almost a milestone (sessions)
     suggestForNextMilestone(gamePlayData, Metric.PLAYS),       // Almost a milestone (plays)
-    suggestForNextValueClub(gamePlayData, Metric.HOURS),
-    suggestForNextValueClub(gamePlayData, Metric.SESSIONS),
-    suggestForNextValueClub(gamePlayData, Metric.PLAYS),
+    suggestForNextValueClub(gamePlayData, Metric.HOURS),       // Join the club (hours)
+    suggestForNextValueClub(gamePlayData, Metric.SESSIONS),    // Join the club (sessions)
+    suggestForNextValueClub(gamePlayData, Metric.PLAYS),       // Join the club (plays)
+    suggestFavoriteGame(gamePlayData),                          // Old faithful
+    suggestOwnedUnratedGame(gamePlayData),                      // Rate me
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData),                       // Shelf of shame
     suggestHighestCostPerMetric(gamePlayData),                  // Justify the cost
@@ -627,6 +714,7 @@ function getSuggestedGames(games, plays) {
 export {
   calculateDaysSince,
   selectRandom,
+  selectRandomWeighted,
   selectRandomWeightedBySqrtRarity,
   suggestRecentlyPlayedWithLowSessions,
   suggestLongestUnplayed,
@@ -637,6 +725,8 @@ export {
   suggestForNextMilestone,
   suggestForNextValueClub,
   suggestHighestCostPerMetric,
+  suggestFavoriteGame,
+  suggestOwnedUnratedGame,
   suggestNeverPlayedGame,
   getSuggestedGames,
 };

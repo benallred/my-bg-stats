@@ -112,4 +112,9 @@ const ValueClub = createTierCollection({
   FIFTY_CENTS: 0.5,
 }, { direction: 'descending' });
 
-export { Metric, Milestone, ValueClub };
+/**
+ * Minimum rating for a game to be considered a "favorite" in suggestions
+ */
+const MIN_FAVORITE_RATING = 7;
+
+export { Metric, Milestone, ValueClub, MIN_FAVORITE_RATING };
