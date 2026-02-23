@@ -681,11 +681,11 @@ function getSuggestedGames(games, plays) {
     suggestForNextValueClub(gamePlayData, Metric.HOURS),       // Join the club (hours)
     suggestForNextValueClub(gamePlayData, Metric.SESSIONS),    // Join the club (sessions)
     suggestForNextValueClub(gamePlayData, Metric.PLAYS),       // Join the club (plays)
+    suggestHighestCostPerMetric(gamePlayData),                  // Justify the cost
     suggestFavoriteGame(gamePlayData),                          // Old faithful
     suggestOwnedUnratedGame(gamePlayData),                      // Rate me
     suggestLongestUnplayed(gamePlayData),                      // Gathering dust
     suggestNeverPlayedGame(gamePlayData),                       // Shelf of shame
-    suggestHighestCostPerMetric(gamePlayData),                  // Justify the cost
   ].filter(suggestion => suggestion !== null);
 
   // Merge duplicates by collecting reasons and stats into arrays
