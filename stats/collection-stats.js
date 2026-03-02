@@ -341,6 +341,49 @@ function getOwnedBaseGamesMissingPricePaid(games) {
 }
 
 /**
+ * Get owned base games without a personal rating
+ * Only returns owned base games (excludes expansions and expandalones)
+ * Results include lastPlayDate and are sorted descending by it (never-played last)
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} base games with no rating, each with lastPlayDate property
+ */
+function getOwnedBaseGamesWithoutRating(games, plays) {
+  // Build map of game ID to last play date
+  const lastPlayDates = new Map();
+  for (const play of plays) {
+    const current = lastPlayDates.get(play.gameId);
+    if (!current || play.date > current) {
+      lastPlayDates.set(play.gameId, play.date);
+    }
+  }
+
+  const unratedGames = games.filter(game => {
+    // Must be a base game (exclude expansions and expandalones)
+    if (!game.isBaseGame) return false;
+
+    if (!game.copies || game.copies.length === 0) return false;
+
+    // Get owned copies
+    const ownedCopies = game.copies.filter(copy => copy.statusOwned === true);
+    if (ownedCopies.length === 0) return false;
+
+    // Check if game has no rating
+    return game.rating === null || game.rating === undefined;
+  });
+
+  // Attach lastPlayDate and sort descending (never-played last)
+  return unratedGames
+    .map(game => ({ ...game, lastPlayDate: lastPlayDates.get(game.id) || null }))
+    .sort((a, b) => {
+      if (a.lastPlayDate === null && b.lastPlayDate === null) return 0;
+      if (a.lastPlayDate === null) return 1;
+      if (b.lastPlayDate === null) return -1;
+      return b.lastPlayDate.localeCompare(a.lastPlayDate);
+    });
+}
+
+/**
  * Get all acquisition years from game copies
  * @param {Array} games - Array of game objects
  * @returns {Array} sorted array of years
@@ -413,6 +456,7 @@ export {
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getOwnedBaseGamesMissingPricePaid,
+  getOwnedBaseGamesWithoutRating,
   getAllAcquisitionYears,
   getAvailableYears,
 };

@@ -38,6 +38,7 @@ import {
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getOwnedBaseGamesMissingPricePaid,
+  getOwnedBaseGamesWithoutRating,
   getSuggestedGames,
   getHIndexBreakdown,
   getHourHIndexBreakdown,
@@ -850,6 +851,7 @@ function updateAllStats() {
         unknownGames: getGamesWithUnknownAcquisitionDate(gameData.games, currentYear),
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
+        unratedGames: getOwnedBaseGamesWithoutRating(gameData.games, gameData.plays),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
         // Social & Locations stats
@@ -1342,6 +1344,7 @@ function updateDiagnosticsSection() {
     const unknownCard = document.getElementById('unknown-acquisition-dates');
     const neverPlayedCard = document.getElementById('never-played');
     const missingPriceCard = document.getElementById('missing-price-paid');
+    const unratedCard = document.getElementById('unrated-games');
 
     // Show/hide section based on hidden flag
     if (!isHiddenEnabled()) {
@@ -1349,6 +1352,7 @@ function updateDiagnosticsSection() {
         unknownCard.style.display = 'none';
         neverPlayedCard.style.display = 'none';
         missingPriceCard.style.display = 'none';
+        unratedCard.style.display = 'none';
         return;
     }
 
@@ -1356,11 +1360,13 @@ function updateDiagnosticsSection() {
     unknownCard.style.display = 'flex';
     neverPlayedCard.style.display = 'flex';
     missingPriceCard.style.display = 'flex';
+    unratedCard.style.display = 'flex';
 
     // Update card values
     unknownCard.querySelector('.widget__value').textContent = statsCache.unknownGames.length;
     neverPlayedCard.querySelector('.widget__value').textContent = statsCache.neverPlayedGames.length;
     missingPriceCard.querySelector('.widget__value').textContent = statsCache.missingPricePaidGames.length;
+    unratedCard.querySelector('.widget__value').textContent = statsCache.unratedGames.length;
 }
 
 /**
@@ -2177,6 +2183,12 @@ const statDetailHandlers = {
         getTitle: () => 'Missing Price Paid',
         render: (detailContent, statsCache) => {
             createGameTable(detailContent, statsCache.missingPricePaidGames, ['Name', 'Year', 'Acquisition Date']);
+        },
+    },
+    'unrated-games': {
+        getTitle: () => 'Unrated Games',
+        render: (detailContent, statsCache) => {
+            createGameTable(detailContent, statsCache.unratedGames, ['Name', 'Year', 'Last Played']);
         },
     },
 };
@@ -4546,8 +4558,14 @@ function applyYearReviewMetricFilter(detailDiv, showAll) {
 function createGameTable(container, games, columns, filterYear = null) {
     const table = document.createElement('table');
 
+    const hasLastPlayed = columns.includes('Last Played');
     const headerRow = columns.map(col => {
-        const sortClass = col === 'Name' ? ' class="sorted-asc"' : '';
+        let sortClass = '';
+        if (hasLastPlayed && col === 'Last Played') {
+            sortClass = ' class="sorted-desc"';
+        } else if (!hasLastPlayed && col === 'Name') {
+            sortClass = ' class="sorted-asc"';
+        }
         return `<th${sortClass}>${col}</th>`;
     }).join('');
 
@@ -4582,6 +4600,9 @@ function createGameTable(container, games, columns, filterYear = null) {
                     break;
                 case 'Plays':
                     cells.push(`<td>${game.playCount}</td>`);
+                    break;
+                case 'Last Played':
+                    cells.push(`<td>${game.lastPlayDate || 'Never'}</td>`);
                     break;
             }
         });

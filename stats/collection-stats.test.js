@@ -11,6 +11,7 @@ import {
   getGamesWithUnknownAcquisitionDate,
   getOwnedGamesNeverPlayed,
   getOwnedBaseGamesMissingPricePaid,
+  getOwnedBaseGamesWithoutRating,
   getAllAcquisitionYears,
   getAvailableYears,
 } from './collection-stats.js';
@@ -896,6 +897,250 @@ describe('Diagnostic Functions', () => {
       ];
       const result = getOwnedBaseGamesMissingPricePaid(testGames);
       expect(result.length).toBe(0);
+    });
+  });
+
+  describe('getOwnedBaseGamesWithoutRating', () => {
+    test('finds owned base games without rating', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Unrated Base Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01' }],
+        },
+        {
+          id: 2,
+          name: 'Rated Base Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: 7,
+          copies: [{ statusOwned: true, acquisitionDate: '2023-01-01' }],
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(1);
+    });
+
+    test('excludes expansions even if unrated', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Unrated Expansion',
+          isBaseGame: false,
+          isExpansion: true,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(0);
+    });
+
+    test('excludes expandalones even if unrated', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Unrated Expandalone',
+          isBaseGame: false,
+          isExpansion: false,
+          isExpandalone: true,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(0);
+    });
+
+    test('handles undefined rating as unrated', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game With Undefined Rating',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(1);
+    });
+
+    test('treats rating of 0 as rated', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game Rated Zero',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: 0,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(0);
+    });
+
+    test('handles games with no copies property', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game Without Copies',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(0);
+    });
+
+    test('handles games with no owned copies', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Game With Unowned Copy',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: false }],
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(0);
+    });
+
+    test('returns empty array for empty games array', () => {
+      const result = getOwnedBaseGamesWithoutRating([], []);
+      expect(result.length).toBe(0);
+    });
+
+    test('attaches lastPlayDate from plays data', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Played Unrated Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+        {
+          id: 2,
+          name: 'Unplayed Unrated Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const plays = [
+        { gameId: 1, date: '2023-06-15' },
+        { gameId: 1, date: '2024-01-10' },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, plays);
+      expect(result[0].lastPlayDate).toBe('2024-01-10');
+      expect(result[1].lastPlayDate).toBe(null);
+    });
+
+    test('keeps earlier play date when later one already recorded', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Multi-play Game',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const plays = [
+        { gameId: 1, date: '2024-01-10' },
+        { gameId: 1, date: '2023-06-15' },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, plays);
+      expect(result[0].lastPlayDate).toBe('2024-01-10');
+    });
+
+    test('preserves order for multiple never-played games', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Never Played A',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+        {
+          id: 2,
+          name: 'Never Played B',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, []);
+      expect(result.length).toBe(2);
+      expect(result[0].lastPlayDate).toBe(null);
+      expect(result[1].lastPlayDate).toBe(null);
+    });
+
+    test('sorts descending by lastPlayDate with never-played last', () => {
+      const testGames = [
+        {
+          id: 1,
+          name: 'Old Play',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+        {
+          id: 2,
+          name: 'Never Played',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+        {
+          id: 3,
+          name: 'Recent Play',
+          isBaseGame: true,
+          isExpansion: false,
+          isExpandalone: false,
+          rating: null,
+          copies: [{ statusOwned: true }],
+        },
+      ];
+      const plays = [
+        { gameId: 1, date: '2023-01-01' },
+        { gameId: 3, date: '2024-06-01' },
+      ];
+      const result = getOwnedBaseGamesWithoutRating(testGames, plays);
+      expect(result[0].id).toBe(3);
+      expect(result[1].id).toBe(1);
+      expect(result[2].id).toBe(2);
     });
   });
 });
