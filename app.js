@@ -2168,7 +2168,7 @@ const statDetailHandlers = {
     'unknown-acquisition-dates': {
         getTitle: () => 'Unknown Acquisition Dates',
         render: (detailContent, statsCache) => {
-            createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year']);
+            createGameTable(detailContent, statsCache.unknownGames, ['Name', 'Type', 'Year'], { column: 'Name', direction: 'asc' });
         },
     },
     'never-played': {
@@ -2176,19 +2176,29 @@ const statDetailHandlers = {
             ? `Never Played <span style="white-space: nowrap">(Acquired ${currentYear})</span>`
             : 'Never Played',
         render: (detailContent, statsCache) => {
-            createGameTable(detailContent, statsCache.neverPlayedGames, ['Name', 'Type', 'Year', 'Acquisition Date']);
+            const sorted = [...statsCache.neverPlayedGames].sort((a, b) => {
+                const dateA = getGameAcquisitionDate(a) || '';
+                const dateB = getGameAcquisitionDate(b) || '';
+                return dateB.localeCompare(dateA);
+            });
+            createGameTable(detailContent, sorted, ['Name', 'Type', 'Year', 'Acquisition Date'], { column: 'Acquisition Date', direction: 'desc' });
         },
     },
     'missing-price-paid': {
         getTitle: () => 'Missing Price Paid',
         render: (detailContent, statsCache) => {
-            createGameTable(detailContent, statsCache.missingPricePaidGames, ['Name', 'Year', 'Acquisition Date']);
+            const sorted = [...statsCache.missingPricePaidGames].sort((a, b) => {
+                const dateA = getGameAcquisitionDate(a) || '';
+                const dateB = getGameAcquisitionDate(b) || '';
+                return dateB.localeCompare(dateA);
+            });
+            createGameTable(detailContent, sorted, ['Name', 'Year', 'Acquisition Date'], { column: 'Acquisition Date', direction: 'desc' });
         },
     },
     'unrated-games': {
         getTitle: () => 'Unrated Games',
         render: (detailContent, statsCache) => {
-            createGameTable(detailContent, statsCache.unratedGames, ['Name', 'Year', 'Last Played']);
+            createGameTable(detailContent, statsCache.unratedGames, ['Name', 'Year', 'Last Played'], { column: 'Last Played', direction: 'desc' });
         },
     },
 };
@@ -2573,7 +2583,7 @@ function showGamesOwned(container) {
         return isGameOwned(game);
     });
 
-    createGameTable(container, games, ['Name', 'Year', 'Acquisition Date', 'Plays'], currentYear);
+    createGameTable(container, games, ['Name', 'Year', 'Acquisition Date', 'Plays'], { column: 'Name', direction: 'asc' }, currentYear);
 }
 
 /**
@@ -4555,17 +4565,11 @@ function applyYearReviewMetricFilter(detailDiv, showAll) {
 /**
  * Helper function to create a game table
  */
-function createGameTable(container, games, columns, filterYear = null) {
+function createGameTable(container, games, columns, defaultSort, filterYear = null) {
     const table = document.createElement('table');
 
-    const hasLastPlayed = columns.includes('Last Played');
     const headerRow = columns.map(col => {
-        let sortClass = '';
-        if (hasLastPlayed && col === 'Last Played') {
-            sortClass = ' class="sorted-desc"';
-        } else if (!hasLastPlayed && col === 'Name') {
-            sortClass = ' class="sorted-asc"';
-        }
+        const sortClass = col === defaultSort.column ? ` class="sorted-${defaultSort.direction}"` : '';
         return `<th${sortClass}>${col}</th>`;
     }).join('');
 
