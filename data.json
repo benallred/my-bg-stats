@@ -3550,11 +3550,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 14,
-      "uniquePlayDays": 7,
+      "playCount": 16,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/a93rBWXCZ6QU9NIbTBjlBg__small/img/V1ProyyzfYSl93V4BGUxpGP_crY=/fit-in/200x150/filters:strip_icc()/pic7622768.png",
       "coverUrl": "https://cf.geekdo-images.com/a93rBWXCZ6QU9NIbTBjlBg__original/img/Rhd0kav4hCZnpQJDl48ppM6aE4M=/0x0/filters:format(png)/pic7622768.png",
-      "typicalPlayTimeMinutes": 8
+      "typicalPlayTimeMinutes": 7.5
     },
     {
       "id": 355,
@@ -3732,11 +3732,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 10,
-      "uniquePlayDays": 9,
+      "playCount": 11,
+      "uniquePlayDays": 10,
       "thumbnailUrl": "https://cf.geekdo-images.com/fbX3QFrAWR2LsYEkSyYzcQ__small/img/tfRZUlmTdCW_gGjQqg0_Dyowfqk=/fit-in/200x150/filters:strip_icc()/pic8815900.jpg",
       "coverUrl": "https://cf.geekdo-images.com/fbX3QFrAWR2LsYEkSyYzcQ__original/img/I_SLJPO38VcIgvmn3HMZcqZSKfs=/0x0/filters:format(jpeg)/pic8815900.jpg",
-      "typicalPlayTimeMinutes": 70.5
+      "typicalPlayTimeMinutes": 70
     },
     {
       "id": 590,
@@ -5966,11 +5966,11 @@
           "currency": null
         }
       ],
-      "playCount": 65,
-      "uniquePlayDays": 44,
+      "playCount": 66,
+      "uniquePlayDays": 45,
       "thumbnailUrl": "https://cf.geekdo-images.com/4DffKExiPihIf9T_AqkPCQ__thumb/img/0EuD6uQ0lLAb2jtY6YC0EduW7Gw=/fit-in/200x150/filters:strip_icc()/pic1299877.png",
       "coverUrl": "https://cf.geekdo-images.com/4DffKExiPihIf9T_AqkPCQ__original/img/00AgwqL0q6j08AE3CfKOPm1S17c=/0x0/filters:format(png)/pic1299877.png",
-      "typicalPlayTimeMinutes": 12
+      "typicalPlayTimeMinutes": 11.5
     },
     {
       "id": 235,
@@ -6401,7 +6401,7 @@
       "name": "Jump Ship!",
       "bggId": 192729,
       "year": 2016,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -6416,11 +6416,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
+      "playCount": 5,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/AAHmtONgZ8APh2T_E_S_ZQ__thumb/img/m-_iw2AOzwRbGyqJJYucfp6f-eM=/fit-in/200x150/filters:strip_icc()/pic3048469.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AAHmtONgZ8APh2T_E_S_ZQ__original/img/qz6NDWdogGfaZgCN4QKBc96L_uM=/0x0/filters:format(jpeg)/pic3048469.jpg",
-      "typicalPlayTimeMinutes": 15
+      "typicalPlayTimeMinutes": 13
     },
     {
       "id": 133,
@@ -8199,11 +8199,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 5,
-      "uniquePlayDays": 5,
+      "playCount": 6,
+      "uniquePlayDays": 6,
       "thumbnailUrl": "https://cf.geekdo-images.com/NME9DO7GFaXbOyM8DPnFEQ__thumb/img/jFeo7CE887HRwbMiyWNOm09QryQ=/fit-in/200x150/filters:strip_icc()/pic2643412.jpg",
       "coverUrl": "https://cf.geekdo-images.com/NME9DO7GFaXbOyM8DPnFEQ__original/img/BFxRBohNGAoxWd_5-CPo8jIBF-U=/0x0/filters:format(jpeg)/pic2643412.jpg",
-      "typicalPlayTimeMinutes": 17
+      "typicalPlayTimeMinutes": 15.5
     },
     {
       "id": 51,
@@ -11090,15 +11090,15 @@
           "versionName": "English edition",
           "acquisitionDate": "2023-08-11",
           "statusOwned": true,
-          "pricePaid": 53.4,
+          "pricePaid": 72.73,
           "currency": "USD"
         }
       ],
-      "playCount": 39,
-      "uniquePlayDays": 39,
+      "playCount": 40,
+      "uniquePlayDays": 40,
       "thumbnailUrl": "https://cf.geekdo-images.com/U6scsOGrPtVym4nCLaYjyw__thumb/img/0kgu-vLB9MQStlEyaR6bgKkemAQ=/fit-in/200x150/filters:strip_icc()/pic7387735.png",
       "coverUrl": "https://cf.geekdo-images.com/U6scsOGrPtVym4nCLaYjyw__original/img/bPFq87JbA919A2vxks_PFF2DwsY=/0x0/filters:format(png)/pic7387735.png",
-      "typicalPlayTimeMinutes": 49
+      "typicalPlayTimeMinutes": 49.5
     },
     {
       "id": 518,
@@ -11124,6 +11124,32 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/IUB2pVEHP164aYDqsRAJuQ__thumb/img/FnykNSMNDLO60YmIPQQPHUdiA88=/fit-in/200x150/filters:strip_icc()/pic8273095.jpg",
       "coverUrl": "https://cf.geekdo-images.com/IUB2pVEHP164aYDqsRAJuQ__original/img/7wwt5Pht6dZSAtJK-IkgqBKZjAU=/0x0/filters:format(jpeg)/pic8273095.jpg",
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 595,
+      "name": "Star Wars: The Deckbuilding Game – Mandalorian Faction Pack",
+      "bggId": 453918,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "a767ed10-aa8e-4c05-8b47-c5a18b316362",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-02-28",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/kfFVVstVXNGyfs5UGw7QTQ__small/img/aUkRCzwpSH2j6P-sv3XCWKr9sD0=/fit-in/200x150/filters:strip_icc()/pic9292165.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/kfFVVstVXNGyfs5UGw7QTQ__original/img/V1MS2fEPb8sz4jxYxcOb6UI9RxM=/0x0/filters:format(jpeg)/pic9292165.jpg",
       "typicalPlayTimeMinutes": null
     },
     {
@@ -11209,7 +11235,7 @@
       "name": "Stowaway 52",
       "bggId": 169984,
       "year": 2015,
-      "rating": null,
+      "rating": 6,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -11224,11 +11250,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 3,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/wSJzUO1N4WcoX-IWt7382w__thumb/img/OVgR4_TwyGuJ2vXZC96Wx1nM3rU=/fit-in/200x150/filters:strip_icc()/pic3048436.jpg",
       "coverUrl": "https://cf.geekdo-images.com/wSJzUO1N4WcoX-IWt7382w__original/img/ShC5D_IDEOuf_m9TFJswGwbe_Sk=/0x0/filters:format(jpeg)/pic3048436.jpg",
-      "typicalPlayTimeMinutes": 9
+      "typicalPlayTimeMinutes": 11
     },
     {
       "id": 222,
@@ -14917,6 +14943,107 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 239,
+      "copyId": "b6028168-4a48-4fff-83b3-b6d92c6d2d01",
+      "date": "2026-03-07",
+      "timestamp": "2026-03-07 13:06:46",
+      "durationMin": 58,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 404,
+      "copyId": "66e2fe89-65e3-460f-8f8c-949fca6505d2",
+      "date": "2026-03-06",
+      "timestamp": "2026-03-06 23:02:16",
+      "durationMin": 13,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 363,
+      "copyId": "3ef1c308-bcce-47cf-9556-32d26d3222a9",
+      "date": "2026-03-05",
+      "timestamp": "2026-03-05 22:07:57",
+      "durationMin": 15,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 589,
+      "copyId": "4cf7c224-be35-4263-a864-95f1e0d1b667",
+      "date": "2026-03-04",
+      "timestamp": "2026-03-04 21:27:38",
+      "durationMin": 62,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 289,
+      "copyId": "a93e0de3-f07d-4023-a0fb-b08eac160e38",
+      "date": "2026-03-03",
+      "timestamp": "2026-03-03 21:46:54",
+      "durationMin": 11,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 578,
+      "copyId": "3b3b797a-6db5-42b6-9715-87421c25a754",
+      "date": "2026-03-02",
+      "timestamp": "2026-03-02 20:18:26",
+      "durationMin": 5,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 578,
+      "copyId": "3b3b797a-6db5-42b6-9715-87421c25a754",
+      "date": "2026-03-02",
+      "timestamp": "2026-03-02 20:11:10",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 38,
+      "copyId": "91ef0289-233d-4464-ae48-9e6e93c7f822",
+      "date": "2026-03-01",
+      "timestamp": "2026-03-01 21:31:44",
+      "durationMin": 11,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 504,
       "copyId": "3839b299-e746-43b5-8691-6845c56004b5",
@@ -44391,5 +44518,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2026-03-01T04:20:27.000Z"
+  "generatedAt": "2026-03-07T20:06:46.000Z"
 }
