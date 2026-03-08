@@ -56,9 +56,9 @@
         <!-- Dashboard Grid - All widgets in a single responsive grid -->
         <div class="dashboard-grid">
             <!-- H-Index Group -->
-            <div class="widget-group-label">H-Index Metrics</div>
+            <div class="widget-group-label">Index Metrics</div>
 
-            <article class="widget widget--2x1 clickable" id="h-index" data-stat="h-index">
+            <article class="widget widget--1x1 clickable" id="h-index" data-stat="h-index">
                 <div class="widget__title" id="h-index-title">
                     H-Index
                     <svg class="info-icon" id="h-index-info-icon" width="14" height="14" viewBox="0 0 16 16" aria-label="Show h-index information">
@@ -70,7 +70,7 @@
                 <div class="widget__description" id="h-index-description">Games ranked by total hours</div>
             </article>
 
-            <article class="widget widget--2x1 clickable" id="people-h-index" data-stat="people-h-index">
+            <article class="widget widget--1x1 clickable" id="people-h-index" data-stat="people-h-index">
                 <div class="widget__title" id="people-h-index-title">
                     People H-Index
                     <span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
@@ -88,6 +88,26 @@
                 </div>
                 <div class="widget__value">--</div>
                 <div class="widget__description" id="people-h-index-description">Games ranked by unique players</div>
+            </article>
+
+            <article class="widget widget--1x1 clickable" id="staircase-level" data-stat="staircase-level">
+                <div class="widget__title" id="staircase-level-title">
+                    Staircase Level
+                    <span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();">
+                        <svg class="experimental-icon" width="14" height="14" viewBox="0 0 16 16" aria-label="Experimental feature">
+                            <path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                            <circle cx="6.5" cy="10.5" r="1" fill="currentColor"/>
+                            <circle cx="9" cy="11.5" r="0.7" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <svg class="info-icon" id="staircase-level-info-icon" width="14" height="14" viewBox="0 0 16 16" aria-label="Show staircase level information">
+                        <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        <text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text>
+                    </svg>
+                </div>
+                <div class="widget__value">--</div>
+                <div class="widget__description" id="staircase-level-description">Games ranked by total hours</div>
             </article>
 
             <!-- Collection Group -->
@@ -498,6 +518,34 @@
                         <li>Games are ranked by number of unique players (excluding yourself)</li>
                         <li>Each game's rank is compared to its unique player count</li>
                         <li>The People H-Index is the largest rank where rank ≤ unique players</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staircase Level Info Modal -->
+    <div id="staircase-level-modal" class="modal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Understanding Staircase Level</h3>
+                <button class="modal-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-definition">
+                    The staircase level measures your gaming engagement using a staircase-shaped threshold. A staircase level of <strong>N</strong> means your top N games each meet a progressively easier bar: the #1 game needs at least <strong>N</strong> of the metric, #2 needs <strong>N&minus;1</strong>, #3 needs <strong>N&minus;2</strong>, and so on down to #N needing just <strong>1</strong>.
+                </p>
+                <div class="modal-example" id="staircase-level-modal-example">
+                    <!-- Dynamic content based on selected metric -->
+                </div>
+                <p class="modal-summary">Unlike the h-index (where every game must meet the same threshold), the staircase level lets your most-played games shine while still requiring you to have enough games to build the full staircase. Growing the staircase requires both depth (more engagement with top games) and breadth (more engagement across all games in the staircase, plus adding another game to extend it).</p>
+                <div class="modal-explanation">
+                    <h4>How it's calculated:</h4>
+                    <ol>
+                        <li>Games are ranked by the selected metric (hours, sessions, or plays)</li>
+                        <li>For each rank, a threshold is set: #1 needs N, #2 needs N&minus;1, and so on</li>
+                        <li>The staircase level is the largest N where every game meets its threshold</li>
                     </ol>
                 </div>
             </div>

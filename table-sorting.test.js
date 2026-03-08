@@ -260,6 +260,18 @@ describe('sortTableData - all table types', () => {
         expect(sortTableData(data, 'people-h-index', 'contributes', 'desc')[0].contributes).toBe(true);
     });
 
+    test('staircase-level sorts by all columns', () => {
+        const data = [
+            { rank: 1, game: { name: 'Catan' }, value: 10, threshold: 5, contributes: true },
+            { rank: 2, game: { name: 'Azul' }, value: 8, threshold: 4, contributes: false },
+        ];
+        expect(sortTableData(data, 'staircase-level', 'rank', 'asc')[0].rank).toBe(1);
+        expect(sortTableData(data, 'staircase-level', 'game', 'asc')[0].game.name).toBe('Azul');
+        expect(sortTableData(data, 'staircase-level', 'value', 'desc')[0].value).toBe(10);
+        expect(sortTableData(data, 'staircase-level', 'threshold', 'desc')[0].threshold).toBe(5);
+        expect(sortTableData(data, 'staircase-level', 'contributes', 'desc')[0].contributes).toBe(true);
+    });
+
     test('players sorts by all columns', () => {
         const data = [
             { name: 'Alice', minutes: 100, sessions: 5, plays: 10 },

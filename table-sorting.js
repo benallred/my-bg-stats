@@ -49,6 +49,13 @@ export const tableColumnConfigs = {
         { key: 'players', getValue: item => item.uniquePlayers, defaultDir: 'desc' },
         { key: 'contributes', getValue: item => item.contributes ? 1 : 0 },
     ],
+    'staircase-level': [
+        { key: 'rank', getValue: item => item.rank },
+        { key: 'game', getValue: item => item.game.name, type: 'string' },
+        { key: 'value', getValue: item => item.value, defaultDir: 'desc' },
+        { key: 'threshold', getValue: item => item.threshold },
+        { key: 'contributes', getValue: item => item.contributes ? 1 : 0 },
+    ],
     'players': [
         { key: 'player', getValue: item => item.name, type: 'string' },
         { key: 'hours', getValue: item => item.minutes },

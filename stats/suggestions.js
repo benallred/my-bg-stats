@@ -9,6 +9,11 @@ import {
   calculatePlaySessionHIndex,
   calculateHourHIndex,
 } from './h-index.js';
+import {
+  calculateHourStaircaseLevel,
+  calculateSessionStaircaseLevel,
+  calculatePlayStaircaseLevel,
+} from './staircase-level.js';
 import { formatCostLabel } from '../formatting.js';
 
 /**
@@ -334,6 +339,121 @@ function suggestForNextHourHIndex(plays, gamePlayData) {
     currentHourHIndex,
     data => data.totalMinutes / 60,
     'Hours'
+  );
+}
+
+/**
+ * Helper: Generic staircase level suggestion algorithm
+ * Unlike h-index (flat threshold), staircase level has position-dependent thresholds:
+ * position i (0-indexed) needs nextLevel - i of the metric.
+ * Suggests a game at a bottleneck position that doesn't meet its new threshold.
+ * @param {Map} gamePlayData - Map of game play data
+ * @param {number} currentLevel - Current staircase level value
+ * @param {Function} getValue - Function to get the metric value from game data
+ * @param {string} metricName - Name of the metric ('Hours', 'Sessions', or 'Plays')
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextStaircaseLevel(gamePlayData, currentLevel, getValue, metricName) {
+  const nextLevel = currentLevel + 1;
+
+  // Sort all played games by metric value descending
+  const sortedGames = Array.from(gamePlayData.values())
+    .filter(data => getValue(data) > 0)
+    .sort((a, b) => getValue(b) - getValue(a));
+
+  // Find bottleneck games: positions where value < threshold for next level
+  // Store threshold alongside each bottleneck for use in stat text
+  const bottlenecks = [];
+  for (let i = 0; i < nextLevel && i < sortedGames.length; i++) {
+    const threshold = nextLevel - i;
+    const value = getValue(sortedGames[i]);
+    if (value < threshold) {
+      bottlenecks.push({ data: sortedGames[i], threshold });
+    }
+  }
+
+  // If we don't have enough games to fill all positions, we need a brand new game
+  // which is handled by other suggestions (shelf of shame, gathering dust)
+  if (bottlenecks.length === 0) return null;
+
+  // Filter out non-replayable games
+  const eligibleBottlenecks = bottlenecks.filter(b => !b.data.game.isNonReplayable);
+  if (eligibleBottlenecks.length === 0) return null;
+
+  const selected = selectRandom(eligibleBottlenecks);
+  const candidate = selected.data;
+  const threshold = selected.threshold;
+
+  // Generate stat description showing current value and threshold
+  const metricValue = getValue(candidate);
+  let statText;
+  let reasonText;
+  if (metricName === 'Hours') {
+    statText = `${metricValue.toFixed(1)} of ${threshold} hours`;
+    reasonText = `Another step: ${nextLevel} hours`;
+  } else if (metricName === 'Sessions') {
+    statText = `${metricValue} of ${threshold} sessions`;
+    reasonText = `Another step: ${nextLevel} sessions`;
+  } else {
+    // Default case handles 'Plays' metric
+    statText = `${metricValue} of ${threshold} plays`;
+    reasonText = `Another step: ${nextLevel} plays`;
+  }
+
+  return {
+    game: candidate.game,
+    reason: reasonText,
+    stat: statText,
+  };
+}
+
+/**
+ * Suggestion: Games needed for next hour staircase level
+ * @param {Array} plays - Array of play objects
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextHourStaircaseLevel(plays, gamePlayData) {
+  const currentLevel = calculateHourStaircaseLevel(plays);
+  return suggestForNextStaircaseLevel(
+    gamePlayData,
+    currentLevel,
+    data => data.totalMinutes / 60,
+    'Hours',
+  );
+}
+
+/**
+ * Suggestion: Games needed for next session staircase level
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextSessionStaircaseLevel(games, plays, gamePlayData) {
+  const currentLevel = calculateSessionStaircaseLevel(games, plays);
+  return suggestForNextStaircaseLevel(
+    gamePlayData,
+    currentLevel,
+    data => data.uniqueDays.size,
+    'Sessions',
+  );
+}
+
+/**
+ * Suggestion: Games needed for next play staircase level
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {Map} gamePlayData - Map of game play data
+ * @returns {Object|null} Suggestion object or null
+ */
+function suggestForNextPlayStaircaseLevel(games, plays, gamePlayData) {
+  const currentLevel = calculatePlayStaircaseLevel(games, plays);
+  return suggestForNextStaircaseLevel(
+    gamePlayData,
+    currentLevel,
+    data => data.playCount,
+    'Plays',
   );
 }
 
@@ -675,6 +795,9 @@ function getSuggestedGames(games, plays) {
     suggestForNextHourHIndex(plays, gamePlayData),             // Squaring up: Hours
     suggestForNextSessionHIndex(games, plays, gamePlayData),   // Squaring up: Sessions
     suggestForNextTraditionalHIndex(games, plays, gamePlayData), // Squaring up: Plays
+    suggestForNextHourStaircaseLevel(plays, gamePlayData),     // Another step: Hours
+    suggestForNextSessionStaircaseLevel(games, plays, gamePlayData), // Another step: Sessions
+    suggestForNextPlayStaircaseLevel(games, plays, gamePlayData), // Another step: Plays
     suggestForNextMilestone(gamePlayData, Metric.HOURS),        // Almost a milestone (hours)
     suggestForNextMilestone(gamePlayData, Metric.SESSIONS),    // Almost a milestone (sessions)
     suggestForNextMilestone(gamePlayData, Metric.PLAYS),       // Almost a milestone (plays)
@@ -722,6 +845,10 @@ export {
   suggestForNextSessionHIndex,
   suggestForNextTraditionalHIndex,
   suggestForNextHourHIndex,
+  suggestForNextStaircaseLevel,
+  suggestForNextHourStaircaseLevel,
+  suggestForNextSessionStaircaseLevel,
+  suggestForNextPlayStaircaseLevel,
   suggestForNextMilestone,
   suggestForNextValueClub,
   suggestHighestCostPerMetric,

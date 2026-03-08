@@ -72,6 +72,14 @@ import {
   getShelfOfShameChanges,
   getPlayedRatingBreakdown,
   getCollectionRatingBreakdown,
+  calculateHourStaircaseLevel,
+  calculateSessionStaircaseLevel,
+  calculatePlayStaircaseLevel,
+  calculateAllTimeStaircaseLevelThroughYear,
+  calculateStaircaseLevelIncrease,
+  getStaircaseLevelBreakdown,
+  getHourStaircaseLevelBreakdown,
+  getNewStaircaseLevelGames,
 } from './stats.js';
 
 import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
@@ -569,6 +577,21 @@ function getCurrentHIndex() {
     }
 }
 
+// Helper function to get current staircase level based on selected base metric
+function getCurrentStaircaseLevel() {
+    if (!statsCache) return 0;
+
+    switch (currentBaseMetric) {
+        case 'sessions':
+            return statsCache.sessionStaircaseLevel;
+        case 'plays':
+            return statsCache.playStaircaseLevel;
+        case 'hours':
+        default:
+            return statsCache.hourStaircaseLevel;
+    }
+}
+
 // Helper function to get current milestones based on selected base metric
 function getCurrentMilestones() {
     if (!statsCache) return { fives: [], dimes: [], quarters: [], centuries: [] };
@@ -746,9 +769,9 @@ function setupBaseMetricFilter() {
 
         // Only refresh sections if not loading from permalink
         if (!isLoadingFromPermalink) {
-            // Refresh h-index detail section if open
-            if (currentlyOpenStatType === 'h-index') {
-                showDetailSection('h-index');
+            // Refresh h-index and staircase-level detail sections if open
+            if (currentlyOpenStatType === 'h-index' || currentlyOpenStatType === 'staircase-level') {
+                showDetailSection(currentlyOpenStatType);
             }
 
             // Refresh milestone detail sections if open
@@ -839,6 +862,9 @@ function updateAllStats() {
         traditionalHIndex: calculateTraditionalHIndex(gameData.games, gameData.plays, currentYear),
         playSessionHIndex: calculatePlaySessionHIndex(gameData.games, gameData.plays, currentYear),
         peopleHIndex: calculatePeopleHIndex(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
+        hourStaircaseLevel: calculateHourStaircaseLevel(gameData.plays, currentYear),
+        sessionStaircaseLevel: calculateSessionStaircaseLevel(gameData.games, gameData.plays, currentYear),
+        playStaircaseLevel: calculatePlayStaircaseLevel(gameData.games, gameData.plays, currentYear),
         totalBGGEntries: getTotalBGGEntries(gameData.games, currentYear),
         totalGamesOwned: getTotalGamesOwned(gameData.games, currentYear),
         expansionsData: getTotalExpansions(gameData.games, currentYear),
@@ -886,6 +912,16 @@ function updateAllStats() {
             sessionsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.SESSIONS),
             playsHIndexPrevious: calculateAllTimeHIndexThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS),
             peopleHIndexPrevious: calculateAllTimePeopleHIndexThroughYear(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear - 1),
+
+            hoursStaircaseLevelIncrease: calculateStaircaseLevelIncrease(gameData.games, gameData.plays, currentYear, Metric.HOURS),
+            sessionsStaircaseLevelIncrease: calculateStaircaseLevelIncrease(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
+            playsStaircaseLevelIncrease: calculateStaircaseLevelIncrease(gameData.games, gameData.plays, currentYear, Metric.PLAYS),
+            hoursStaircaseLevelCurrent: calculateAllTimeStaircaseLevelThroughYear(gameData.games, gameData.plays, currentYear, Metric.HOURS),
+            sessionsStaircaseLevelCurrent: calculateAllTimeStaircaseLevelThroughYear(gameData.games, gameData.plays, currentYear, Metric.SESSIONS),
+            playsStaircaseLevelCurrent: calculateAllTimeStaircaseLevelThroughYear(gameData.games, gameData.plays, currentYear, Metric.PLAYS),
+            hoursStaircaseLevelPrevious: calculateAllTimeStaircaseLevelThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.HOURS),
+            sessionsStaircaseLevelPrevious: calculateAllTimeStaircaseLevelThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.SESSIONS),
+            playsStaircaseLevelPrevious: calculateAllTimeStaircaseLevelThroughYear(gameData.games, gameData.plays, currentYear - 1, Metric.PLAYS),
 
             // Milestone increases - hours
             fivesHoursIncrease: calculateMilestoneIncrease(gameData.games, gameData.plays, currentYear, Metric.HOURS, Milestone.FIVES),
@@ -1012,6 +1048,9 @@ function updateHIndexStats() {
 
     // Update People H-Index
     document.querySelector('#people-h-index .widget__value').textContent = statsCache.peopleHIndex;
+
+    // Update Staircase Level
+    document.querySelector('#staircase-level .widget__value').textContent = getCurrentStaircaseLevel();
 }
 
 /**
@@ -1046,6 +1085,40 @@ function updateHIndexCardLabels() {
     }
 
     descriptionElement.textContent = label.description;
+
+    // Update Staircase Level labels
+    const staircaseTitleElement = document.getElementById('staircase-level-title');
+    const staircaseDescriptionElement = document.getElementById('staircase-level-description');
+
+    const staircaseLabels = {
+        hours: {
+            title: 'Hour Staircase Level',
+            description: 'Games ranked by total hours',
+        },
+        sessions: {
+            title: 'Session Staircase Level',
+            description: 'Games ranked by days played',
+        },
+        plays: {
+            title: 'Play Staircase Level',
+            description: 'Games ranked by play count',
+        },
+    };
+
+    const staircaseLabel = staircaseLabels[currentBaseMetric] || staircaseLabels.hours;
+
+    // Preserve the experimental badge and info icon when updating title
+    const staircaseExperimentalBadge = staircaseTitleElement.querySelector('.experimental-badge');
+    const staircaseInfoIcon = staircaseTitleElement.querySelector('.info-icon');
+    staircaseTitleElement.textContent = staircaseLabel.title;
+    if (staircaseExperimentalBadge) {
+        staircaseTitleElement.appendChild(staircaseExperimentalBadge);
+    }
+    if (staircaseInfoIcon) {
+        staircaseTitleElement.appendChild(staircaseInfoIcon);
+    }
+
+    staircaseDescriptionElement.textContent = staircaseLabel.description;
 }
 
 /**
@@ -1712,6 +1785,28 @@ function setupEventListeners() {
         peopleModalClose.addEventListener('click', hidePeopleHIndexModal);
     }
 
+    // Staircase Level info icon
+    const staircaseLevelInfoIcon = document.getElementById('staircase-level-info-icon');
+    if (staircaseLevelInfoIcon) {
+        staircaseLevelInfoIcon.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click from triggering
+            showStaircaseLevelModal();
+        });
+    }
+
+    // Staircase Level modal close handlers
+    const staircaseModal = document.getElementById('staircase-level-modal');
+    const staircaseModalBackdrop = staircaseModal?.querySelector('.modal-backdrop');
+    const staircaseModalClose = staircaseModal?.querySelector('.modal-close');
+
+    if (staircaseModalBackdrop) {
+        staircaseModalBackdrop.addEventListener('click', hideStaircaseLevelModal);
+    }
+
+    if (staircaseModalClose) {
+        staircaseModalClose.addEventListener('click', hideStaircaseLevelModal);
+    }
+
     // ESC key to close modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -1722,6 +1817,10 @@ function setupEventListeners() {
             const peopleHIndexModal = document.getElementById('people-h-index-modal');
             if (peopleHIndexModal && peopleHIndexModal.style.display === 'flex') {
                 hidePeopleHIndexModal();
+            }
+            const staircaseLevelModal = document.getElementById('staircase-level-modal');
+            if (staircaseLevelModal && staircaseLevelModal.style.display === 'flex') {
+                hideStaircaseLevelModal();
             }
         }
     });
@@ -1841,6 +1940,61 @@ function hidePeopleHIndexModal() {
 }
 
 /**
+ * Show staircase level info modal
+ * Updates content based on current base metric selection
+ */
+function showStaircaseLevelModal() {
+    const modal = document.getElementById('staircase-level-modal');
+    const exampleDiv = document.getElementById('staircase-level-modal-example');
+
+    // Get current base metric and actual staircase level value
+    const baseMetric = document.getElementById('base-metric-select').value;
+    const n = getCurrentStaircaseLevel();
+    const next = n + 1;
+
+    // Generate metric-specific example text using actual staircase level value
+    let exampleText = '';
+    let improveText = '';
+    switch (baseMetric) {
+        case 'sessions':
+            exampleText = `For example, if your sessions staircase level is <strong>${n}</strong>, your #1 game has at least <strong>${n} sessions</strong>, #2 has at least <strong>${n - 1}</strong>, and so on down to your #${n} game with at least <strong>1 session</strong>.`;
+            improveText = `To increase it to <strong>${next}</strong>, each threshold rises by 1 &mdash; every existing game must meet a higher bar, and you need <strong>1 more game</strong> with at least 1 session to add a new step.`;
+            break;
+        case 'plays':
+            exampleText = `For example, if your plays staircase level is <strong>${n}</strong>, your #1 game has at least <strong>${n} plays</strong>, #2 has at least <strong>${n - 1}</strong>, and so on down to your #${n} game with at least <strong>1 play</strong>.`;
+            improveText = `To increase it to <strong>${next}</strong>, each threshold rises by 1 &mdash; every existing game must meet a higher bar, and you need <strong>1 more game</strong> with at least 1 play to add a new step.`;
+            break;
+        case 'hours':
+        default:
+            exampleText = `For example, if your hours staircase level is <strong>${n}</strong>, your #1 game has at least <strong>${n} hours</strong>, #2 has at least <strong>${n - 1}</strong>, and so on down to your #${n} game with at least <strong>1 hour</strong>.`;
+            improveText = `To increase it to <strong>${next}</strong>, each threshold rises by 1 &mdash; every existing game must meet a higher bar, and you need <strong>1 more game</strong> with at least 1 hour to add a new step.`;
+            break;
+    }
+
+    exampleDiv.innerHTML = `<p>${exampleText}</p><p>${improveText}</p>`;
+
+    // Show modal
+    modal.style.display = 'flex';
+
+    // Update URL to include modal state
+    updateURL();
+}
+
+// Make showStaircaseLevelModal globally accessible for inline onclick handlers
+window.showStaircaseLevelModal = showStaircaseLevelModal;
+
+/**
+ * Hide staircase level info modal
+ */
+function hideStaircaseLevelModal() {
+    const modal = document.getElementById('staircase-level-modal');
+    modal.style.display = 'none';
+
+    // Update URL to remove modal state
+    updateURL();
+}
+
+/**
  * Configuration map for stat detail handlers
  * Each handler defines how to display title, summary, and content for a stat type
  */
@@ -1872,6 +2026,24 @@ const statDetailHandlers = {
         render: (detailContent, statsCache) => {
             showPeopleHIndexBreakdown(detailContent, statsCache.peopleHIndex);
         }
+    },
+    'staircase-level': {
+        getTitle: (currentYear) => {
+            const metricTitles = {
+                hours: 'Hour Staircase Level',
+                sessions: 'Session Staircase Level',
+                plays: 'Play Staircase Level',
+            };
+            const title = metricTitles[currentBaseMetric] || 'Staircase Level';
+            const experimentalIcon = '<span class="experimental-badge" data-tooltip="Experimental: This metric is under evaluation and may be modified or removed." onclick="event.stopPropagation();"><svg class="experimental-icon" width="16" height="16" viewBox="0 0 16 16" aria-label="Experimental feature"><path d="M6 2.5V6L3.5 12.5C3.2 13.3 3.8 14 4.5 14H11.5C12.2 14 12.8 13.3 12.5 12.5L10 6V2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="10.5" r="1" fill="currentColor"/><circle cx="9" cy="11.5" r="0.7" fill="currentColor"/></svg></span>';
+            const infoIcon = '<svg class="info-icon" style="margin-left: 0.5rem; cursor: pointer;" width="16" height="16" viewBox="0 0 16 16" aria-label="Show staircase level information" onclick="window.showStaircaseLevelModal(); event.stopPropagation();"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>';
+            const yearText = currentYear ? `<span style="white-space: nowrap">(${currentYear})</span>` : '<span style="white-space: nowrap">(All Time)</span>';
+            return `${title} Breakdown ${yearText}${experimentalIcon}${infoIcon}`;
+        },
+        render: (detailContent, statsCache) => {
+            const staircaseLevel = getCurrentStaircaseLevel();
+            showStaircaseLevelBreakdown(detailContent, currentBaseMetric, staircaseLevel);
+        },
     },
     'total-bgg-entries': {
         getTitle: (currentYear) => currentYear ? `BGG Entries Acquired in <span style="white-space: nowrap">${currentYear}</span>` : 'BGG Entries <span style="white-space: nowrap">(All Time)</span>',
@@ -2446,6 +2618,75 @@ function showPeopleHIndexBreakdown(container, hIndex) {
                     <td>${item.contributes ? '✓' : ''}</td>
                 </tr>
             `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Show Staircase Level breakdown table
+ * @param {HTMLElement} container - Container element
+ * @param {string} metric - Metric type: 'hours', 'sessions', or 'plays'
+ * @param {number} staircaseLevel - Staircase level value
+ */
+function showStaircaseLevelBreakdown(container, metric, staircaseLevel) {
+    const statType = 'staircase-level';
+    let breakdown, columnHeader, valueKey;
+
+    if (metric === 'hours') {
+        breakdown = getHourStaircaseLevelBreakdown(gameData.games, gameData.plays, currentYear);
+        columnHeader = 'Hours';
+        valueKey = 'hours';
+    } else if (metric === 'sessions') {
+        breakdown = getStaircaseLevelBreakdown(gameData.games, gameData.plays, currentYear, true);
+        columnHeader = 'Days Played';
+        valueKey = 'count';
+    } else { // metric === 'plays'
+        breakdown = getStaircaseLevelBreakdown(gameData.games, gameData.plays, currentYear, false);
+        columnHeader = 'Play Count';
+        valueKey = 'count';
+    }
+
+    // Add rank, value, threshold, and contributes properties for sorting
+    breakdown = breakdown.map((item, index) => {
+        const rank = index + 1;
+        const value = item[valueKey];
+        const threshold = rank <= staircaseLevel ? staircaseLevel - rank + 1 : 0;
+        const contributes = rank <= staircaseLevel && value >= threshold;
+        return { ...item, rank, value, threshold, contributes };
+    });
+
+    // Apply current sort
+    breakdown = sortTableData(breakdown, statType, currentSortCol, currentSortDir);
+
+    // Generate sortable headers
+    const headerHtml = createSortableHeaderHtml(statType, [
+        { key: 'rank', label: 'Rank' },
+        { key: 'game', label: 'Game' },
+        { key: 'value', label: columnHeader },
+        { key: 'threshold', label: 'Threshold' },
+        { key: 'contributes', label: 'Contributes?' },
+    ], currentSortCol, currentSortDir);
+
+    const table = document.createElement('table');
+    table.className = 'h-index-table';
+    table.innerHTML = `
+        <thead>
+            <tr>${headerHtml}</tr>
+        </thead>
+        <tbody>
+            ${breakdown.map(item => {
+                const displayValue = metric === 'hours' ? item.value.toFixed(1) : item.value;
+                return `
+                    <tr${item.contributes ? ' class="h-index-contributor"' : ''}>
+                        <td>${item.rank}</td>
+                        <td>${renderGameNameWithThumbnail(item.game)}</td>
+                        <td>${displayValue}</td>
+                        <td>${item.threshold || ''}</td>
+                        <td>${item.contributes ? '✓' : ''}</td>
+                    </tr>
+                `;
+            }).join('')}
         </tbody>
     `;
     container.appendChild(table);
@@ -3499,6 +3740,9 @@ function showYearReviewDetail(container, statsCache) {
     const newSessionsGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'sessions');
     const newPlaysGames = getNewHIndexGames(gameData.games, gameData.plays, currentYear, 'plays');
     const newPeopleGames = getNewPeopleHIndexGames(gameData.games, gameData.plays, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear);
+    const newHoursStaircaseGames = getNewStaircaseLevelGames(gameData.games, gameData.plays, currentYear, 'hours');
+    const newSessionsStaircaseGames = getNewStaircaseLevelGames(gameData.games, gameData.plays, currentYear, 'sessions');
+    const newPlaysStaircaseGames = getNewStaircaseLevelGames(gameData.games, gameData.plays, currentYear, 'plays');
 
     // Helper function to format natural language lists ("A, B, and C")
     const formatNaturalList = (items) => {
@@ -3634,6 +3878,21 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(`Increased ${formatNaturalList(hIndexParts)}`);
     }
 
+    // Staircase Level Growth summary
+    const staircaseParts = [];
+    if (statsCache.yearReview.hoursStaircaseLevelIncrease > 0) {
+        staircaseParts.push(`<span class="metric-name hours">hours</span> staircase level by ${statsCache.yearReview.hoursStaircaseLevelIncrease} (to ${statsCache.yearReview.hoursStaircaseLevelCurrent})`);
+    }
+    if (statsCache.yearReview.sessionsStaircaseLevelIncrease > 0) {
+        staircaseParts.push(`<span class="metric-name sessions">sessions</span> staircase level by ${statsCache.yearReview.sessionsStaircaseLevelIncrease} (to ${statsCache.yearReview.sessionsStaircaseLevelCurrent})`);
+    }
+    if (statsCache.yearReview.playsStaircaseLevelIncrease > 0) {
+        staircaseParts.push(`<span class="metric-name plays">plays</span> staircase level by ${statsCache.yearReview.playsStaircaseLevelIncrease} (to ${statsCache.yearReview.playsStaircaseLevelCurrent})`);
+    }
+    if (staircaseParts.length > 0) {
+        summaryBullets.push(`Increased ${formatNaturalList(staircaseParts)}`);
+    }
+
     // Logging Achievements summary (highest threshold per metric)
     const loggingAchievementsData = statsCache.yearReview.loggingAchievements;
     if (loggingAchievementsData && loggingAchievementsData.length > 0) {
@@ -3723,7 +3982,7 @@ function showYearReviewDetail(container, statsCache) {
     detailDiv.innerHTML = `
         ${summaryHtml}
         <div class="year-review-subsection">
-            <h3 class="year-review-subsection-heading">H-Index Growth</h3>
+            <h3 class="year-review-subsection-heading">Index Growth</h3>
             <table class="year-review-table">
                 <tbody>
                     <tr class="year-review-row year-review-row-clickable" data-metric="hours">
@@ -3826,6 +4085,84 @@ function showYearReviewDetail(container, statsCache) {
                                         </div>
                                     `).join('')
                                     : '<div class="year-review-no-games">No new games added to h-index</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="year-review-row year-review-row-clickable" data-metric="hours">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in all-time <span class="metric-name hours">hours</span> staircase level:
+                        </td>
+                        <td class="year-review-value-detail">${formatIncrease(
+                            statsCache.yearReview.hoursStaircaseLevelIncrease,
+                            statsCache.yearReview.hoursStaircaseLevelPrevious,
+                            statsCache.yearReview.hoursStaircaseLevelCurrent
+                        )}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-metric="hours" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${newHoursStaircaseGames.length > 0
+                                    ? newHoursStaircaseGames.map(item => `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                            <span class="year-review-game-value">${item.value.toFixed(1)} hours (${item.thisYearValue.toFixed(1)} this year)</span>
+                                        </div>
+                                    `).join('')
+                                    : '<div class="year-review-no-games">No new games added to staircase level</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="year-review-row year-review-row-clickable" data-metric="sessions">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in all-time <span class="metric-name sessions">sessions</span> staircase level:
+                        </td>
+                        <td class="year-review-value-detail">${formatIncrease(
+                            statsCache.yearReview.sessionsStaircaseLevelIncrease,
+                            statsCache.yearReview.sessionsStaircaseLevelPrevious,
+                            statsCache.yearReview.sessionsStaircaseLevelCurrent
+                        )}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-metric="sessions" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${newSessionsStaircaseGames.length > 0
+                                    ? newSessionsStaircaseGames.map(item => `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                            <span class="year-review-game-value">${item.value} days (${item.thisYearValue} this year)</span>
+                                        </div>
+                                    `).join('')
+                                    : '<div class="year-review-no-games">No new games added to staircase level</div>'
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="year-review-row year-review-row-clickable" data-metric="plays">
+                        <td class="year-review-label-detail">
+                            <span class="year-review-expand-icon">▶</span>
+                            Increase in all-time <span class="metric-name plays">plays</span> staircase level:
+                        </td>
+                        <td class="year-review-value-detail">${formatIncrease(
+                            statsCache.yearReview.playsStaircaseLevelIncrease,
+                            statsCache.yearReview.playsStaircaseLevelPrevious,
+                            statsCache.yearReview.playsStaircaseLevelCurrent
+                        )}</td>
+                    </tr>
+                    <tr class="year-review-expanded-content" data-metric="plays" style="display: none;">
+                        <td colspan="2">
+                            <div class="year-review-games-list">
+                                ${newPlaysStaircaseGames.length > 0
+                                    ? newPlaysStaircaseGames.map(item => `
+                                        <div class="year-review-game-item">
+                                            <span class="year-review-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                                            <span class="year-review-game-value">${item.value} plays (${item.thisYearValue} this year)</span>
+                                        </div>
+                                    `).join('')
+                                    : '<div class="year-review-no-games">No new games added to staircase level</div>'
                                 }
                             </div>
                         </td>
@@ -4685,6 +5022,8 @@ function loadFromPermalink() {
                 showHIndexModal();
             } else if (modalParam === 'people-h-index') {
                 showPeopleHIndexModal();
+            } else if (modalParam === 'staircase-level') {
+                showStaircaseLevelModal();
             }
 
             // Open stat detail if specified
@@ -4781,6 +5120,12 @@ function updateURL() {
     const peopleModal = document.getElementById('people-h-index-modal');
     if (peopleModal && peopleModal.style.display === 'flex') {
         params.set('modal', 'people-h-index');
+    }
+
+    // Add modal parameter if staircase-level modal is open
+    const staircaseLevelModal = document.getElementById('staircase-level-modal');
+    if (staircaseLevelModal && staircaseLevelModal.style.display === 'flex') {
+        params.set('modal', 'staircase-level');
     }
 
     // Update the URL without reloading the page

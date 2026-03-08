@@ -7,6 +7,7 @@ import {
   suggestRecentlyPlayedWithLowSessions,
   suggestLongestUnplayed,
   suggestForNextHIndex,
+  suggestForNextStaircaseLevel,
   suggestForNextMilestone,
   suggestForNextValueClub,
   suggestHighestCostPerMetric,
@@ -865,6 +866,122 @@ describe('Suggestion Algorithms', () => {
         const getValue = data => data.playCount;
         const result = suggestForNextHIndex(gamePlayData, currentHIndex, getValue, 'Plays');
         expect(result).toBeNull();
+      });
+    });
+
+    describe('suggestForNextStaircaseLevel', () => {
+      test('suggests bottleneck game that does not meet its threshold', () => {
+        const gamePlayData = new Map();
+        // Staircase level 2: game 1 has 2 plays (needs 2), game 2 has 1 play (needs 1)
+        // For next level 3: game 1 needs 3, game 2 needs 2, game 3 needs 1
+        // Game 1 (2 plays < 3) and game 2 (1 play < 2) are bottlenecks
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Game A', isNonReplayable: false },
+          playCount: 2,
+          uniqueDays: new Set(['2023-01-01', '2023-01-02']),
+          totalMinutes: 120,
+        });
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Game B', isNonReplayable: false },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+        });
+
+        const currentLevel = 2;
+        const getValue = data => data.playCount;
+        const result = suggestForNextStaircaseLevel(gamePlayData, currentLevel, getValue, 'Plays');
+        expect(result).not.toBeNull();
+        expect(result.reason).toBe('Another step: 3 plays');
+        expect(['Game A', 'Game B']).toContain(result.game.name);
+      });
+
+      test('returns null when all positions already meet thresholds', () => {
+        const gamePlayData = new Map();
+        // Staircase level 2, but games already meet level 3 thresholds
+        // Game 1: 5 plays >= 3, Game 2: 3 plays >= 2, Game 3: 1 play >= 1
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Game A', isNonReplayable: false },
+          playCount: 5,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 300,
+        });
+        gamePlayData.set(2, {
+          game: { id: 2, name: 'Game B', isNonReplayable: false },
+          playCount: 3,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 180,
+        });
+        gamePlayData.set(3, {
+          game: { id: 3, name: 'Game C', isNonReplayable: false },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+        });
+
+        const currentLevel = 2;
+        const getValue = data => data.playCount;
+        const result = suggestForNextStaircaseLevel(gamePlayData, currentLevel, getValue, 'Plays');
+        expect(result).toBeNull();
+      });
+
+      test('excludes non-replayable games', () => {
+        const gamePlayData = new Map();
+        // Non-replayable game at bottleneck position
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Legacy Game', isNonReplayable: true },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+        });
+
+        const currentLevel = 1;
+        const getValue = data => data.playCount;
+        const result = suggestForNextStaircaseLevel(gamePlayData, currentLevel, getValue, 'Plays');
+        expect(result).toBeNull();
+      });
+
+      test('returns null when no played games exist', () => {
+        const gamePlayData = new Map();
+
+        const currentLevel = 0;
+        const getValue = data => data.playCount;
+        const result = suggestForNextStaircaseLevel(gamePlayData, currentLevel, getValue, 'Plays');
+        expect(result).toBeNull();
+      });
+
+      test('formats hours metric correctly', () => {
+        const gamePlayData = new Map();
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Game A', isNonReplayable: false },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 90,
+        });
+
+        const currentLevel = 1;
+        const getValue = data => data.totalMinutes / 60;
+        const result = suggestForNextStaircaseLevel(gamePlayData, currentLevel, getValue, 'Hours');
+        expect(result).not.toBeNull();
+        expect(result.reason).toBe('Another step: 2 hours');
+        expect(result.stat).toBe('1.5 of 2 hours');
+      });
+
+      test('formats sessions metric correctly', () => {
+        const gamePlayData = new Map();
+        gamePlayData.set(1, {
+          game: { id: 1, name: 'Game A', isNonReplayable: false },
+          playCount: 1,
+          uniqueDays: new Set(['2023-01-01']),
+          totalMinutes: 60,
+        });
+
+        const currentLevel = 1;
+        const getValue = data => data.uniqueDays.size;
+        const result = suggestForNextStaircaseLevel(gamePlayData, currentLevel, getValue, 'Sessions');
+        expect(result).not.toBeNull();
+        expect(result.reason).toBe('Another step: 2 sessions');
+        expect(result.stat).toBe('1 of 2 sessions');
       });
     });
 
