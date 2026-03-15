@@ -2357,11 +2357,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 3,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/lNVa_4IQ3pBHuh5CRzSe-w__thumb/img/ICEhSw8IrhG7i-zNf9k7E3I3rrs=/fit-in/200x150/filters:strip_icc()/pic3661032.jpg",
       "coverUrl": "https://cf.geekdo-images.com/lNVa_4IQ3pBHuh5CRzSe-w__original/img/nDWd2-dY7D1ZoFPZhXvDqQs_BA8=/0x0/filters:format(jpeg)/pic3661032.jpg",
-      "typicalPlayTimeMinutes": 38
+      "typicalPlayTimeMinutes": 31
     },
     {
       "id": 342,
@@ -5648,7 +5648,7 @@
       "name": "Hanabi",
       "bggId": 98778,
       "year": 2010,
-      "rating": null,
+      "rating": 7,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -5663,11 +5663,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 10,
-      "uniquePlayDays": 8,
+      "playCount": 11,
+      "uniquePlayDays": 9,
       "thumbnailUrl": "https://cf.geekdo-images.com/JDVksMwfcqoem1k_xtZrOA__thumb/img/amCeCcEKhYGbVtDvpvIMnu3qTg0=/fit-in/200x150/filters:strip_icc()/pic2007286.jpg",
       "coverUrl": "https://cf.geekdo-images.com/JDVksMwfcqoem1k_xtZrOA__original/img/5vNHZiTEhK4aRDuGXv5KImp9cmQ=/0x0/filters:format(jpeg)/pic2007286.jpg",
-      "typicalPlayTimeMinutes": 31
+      "typicalPlayTimeMinutes": 32
     },
     {
       "id": 309,
@@ -5897,11 +5897,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 12,
-      "uniquePlayDays": 4,
+      "playCount": 16,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/T7_1ABnRxbmZLtJak_qJJg__thumb/img/795XW-PCmTdK2MuYwwmh743DmTE=/fit-in/200x150/filters:strip_icc()/pic4821613.png",
       "coverUrl": "https://cf.geekdo-images.com/T7_1ABnRxbmZLtJak_qJJg__original/img/9m602NCRJvIUTXhy3_hPYyoDo5k=/0x0/filters:format(png)/pic4821613.png",
-      "typicalPlayTimeMinutes": 4.5
+      "typicalPlayTimeMinutes": 4
     },
     {
       "id": 328,
@@ -11371,8 +11371,8 @@
           "currency": "USD"
         }
       ],
-      "playCount": 14,
-      "uniquePlayDays": 14,
+      "playCount": 15,
+      "uniquePlayDays": 15,
       "thumbnailUrl": "https://cf.geekdo-images.com/KshsJJWgb265ZQjcxyZ89w__thumb/img/PFAUP9Kc-FqvZedvcr8zIrmZL2M=/fit-in/200x150/filters:strip_icc()/pic6149210.jpg",
       "coverUrl": "https://cf.geekdo-images.com/KshsJJWgb265ZQjcxyZ89w__original/img/xnOVN46wMhi0thUUWnkkYPB68-k=/0x0/filters:format(jpeg)/pic6149210.jpg",
       "typicalPlayTimeMinutes": 46
@@ -11449,11 +11449,11 @@
           "currency": "USD"
         }
       ],
-      "playCount": 2,
-      "uniquePlayDays": 2,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/pTqrDgvCYTb4ASKBve0I8Q__thumb/img/fxijlggs-W2--HOBeiMByMVt2Ys=/fit-in/200x150/filters:strip_icc()/pic3247729.jpg",
       "coverUrl": "https://cf.geekdo-images.com/pTqrDgvCYTb4ASKBve0I8Q__original/img/BLX1EtGZDwX65S08-97ifJd-T9g=/0x0/filters:format(jpeg)/pic3247729.jpg",
-      "typicalPlayTimeMinutes": 54.5
+      "typicalPlayTimeMinutes": 75
     },
     {
       "id": 175,
@@ -14943,6 +14943,127 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 225,
+      "copyId": "b36ffae0-b363-4fd2-b112-851f62323c35",
+      "date": "2026-03-13",
+      "timestamp": "2026-03-13 22:02:07",
+      "durationMin": 52,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 411,
+      "copyId": "5a6eac49-ef20-4b1d-a0da-86480fab89a6",
+      "date": "2026-03-12",
+      "timestamp": "2026-03-12 20:29:55",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 411,
+      "copyId": "5a6eac49-ef20-4b1d-a0da-86480fab89a6",
+      "date": "2026-03-12",
+      "timestamp": "2026-03-12 20:26:24",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 411,
+      "copyId": "5a6eac49-ef20-4b1d-a0da-86480fab89a6",
+      "date": "2026-03-12",
+      "timestamp": "2026-03-12 20:22:24",
+      "durationMin": 4,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 411,
+      "copyId": "5a6eac49-ef20-4b1d-a0da-86480fab89a6",
+      "date": "2026-03-12",
+      "timestamp": "2026-03-12 20:16:05",
+      "durationMin": 6,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 33,
+      "copyId": "f473b365-0de3-4020-ac37-96e5cb22ff2e",
+      "date": "2026-03-11",
+      "timestamp": "2026-03-11 23:00:42",
+      "durationMin": 17,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 503,
+      "copyId": "a0729369-268f-40f2-b81c-e124f0d8bf1b",
+      "date": "2026-03-10",
+      "timestamp": "2026-03-10 19:45:11",
+      "durationMin": 69,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 274,
+      "copyId": "0e576faf-646e-4712-ba29-84d900281239",
+      "date": "2026-03-09",
+      "timestamp": "2026-03-09 20:58:16",
+      "durationMin": 33,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 503,
+      "copyId": "a0729369-268f-40f2-b81c-e124f0d8bf1b",
+      "date": "2026-03-08",
+      "timestamp": "2026-03-08 19:14:52",
+      "durationMin": 83,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 239,
       "copyId": "b6028168-4a48-4fff-83b3-b6d92c6d2d01",
@@ -44518,5 +44639,5 @@
       "name": "Vacation"
     }
   ],
-  "generatedAt": "2026-03-07T20:06:46.000Z"
+  "generatedAt": "2026-03-14T04:02:07.000Z"
 }
