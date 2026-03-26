@@ -21,7 +21,7 @@ import { isGameOwned } from './game-helpers.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
 
-const typicalData = processData(typicalFixture);
+const typicalData = await processData(typicalFixture);
 
 describe('Suggestion Algorithms', () => {
   beforeEach(() => {

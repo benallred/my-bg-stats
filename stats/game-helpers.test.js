@@ -8,7 +8,7 @@ import {
 import { processData } from '../scripts/transform-game-data.js';
 import minimalFixture from '../tests/fixtures/minimal.json';
 
-const minimalData = processData(minimalFixture);
+const minimalData = await processData(minimalFixture);
 
 describe('isGameOwned', () => {
   test('returns true when game has owned copy', () => {

@@ -13,7 +13,7 @@ import { Metric, ValueClub } from './constants.js';
 import { processData } from '../scripts/transform-game-data.js';
 import typicalFixture from '../tests/fixtures/typical.json';
 
-const typicalData = processData(typicalFixture);
+const typicalData = await processData(typicalFixture);
 
 describe('ValueClub', () => {
   test('has FIVE_DOLLAR tier value', () => {

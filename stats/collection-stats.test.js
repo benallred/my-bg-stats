@@ -22,9 +22,9 @@ import typicalFixture from '../tests/fixtures/typical.json';
 import edgeCasesFixture from '../tests/fixtures/edge-cases.json';
 import expandaloneFixture from '../tests/fixtures/expandalone.json';
 
-const typicalData = processData(typicalFixture);
-const edgeCasesData = processData(edgeCasesFixture);
-const expandaloneData = processData(expandaloneFixture);
+const typicalData = await processData(typicalFixture);
+const edgeCasesData = await processData(edgeCasesFixture);
+const expandaloneData = await processData(expandaloneFixture);
 
 describe('getTotalBGGEntries', () => {
   test('counts all owned copies without year filter', () => {

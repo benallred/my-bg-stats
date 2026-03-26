@@ -9,8 +9,15 @@ const __dirname = path.dirname(__filename);
 // File paths
 const BG_STATS_FILE = path.join(__dirname, '..', 'BGStatsExport.json');
 const OUTPUT_FILE = path.join(__dirname, '..', 'data.json');
+const BGG_CACHE_FILE = path.join(__dirname, '..', 'bgg-base-game-cache.json');
+
+// CLI args
+const forceRefreshBggCache = process.argv.includes('--force-refresh-bgg-cache');
 
 console.log('Starting data preprocessing...');
+if (forceRefreshBggCache) {
+  console.log('Force refreshing BGG cache...');
+}
 
 // Read BG Stats JSON
 console.log('Reading BGStatsExport.json...');
@@ -18,7 +25,10 @@ const bgStatsData = JSON.parse(fs.readFileSync(BG_STATS_FILE, 'utf-8'));
 
 // Process data
 console.log('Processing data...');
-const outputData = processData(bgStatsData);
+const outputData = await processData(bgStatsData, {
+  bggCachePath: BGG_CACHE_FILE,
+  forceRefreshBggCache,
+});
 
 // Write output file
 console.log('Writing data.json...');
@@ -49,4 +59,6 @@ console.log(`  - Owned: ${games.filter(g => g.isExpandalone && isGameOwned(g)).l
 console.log(`Expansions: ${games.filter(g => g.isExpansion).length}`);
 console.log(`  - Owned: ${games.filter(g => g.isExpansion && isGameOwned(g)).length}`);
 console.log(`Games with unknown acquisition date: ${games.filter(hasUnknownAcquisitionDate).length}`);
+const withExpansions = games.filter(g => g.expansionIds !== null && g.expansionIds.length > 0);
+console.log(`Base games with linked expansions: ${withExpansions.length}`);
 console.log(`\nOutput written to: ${OUTPUT_FILE}`);

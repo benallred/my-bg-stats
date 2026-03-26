@@ -16,9 +16,9 @@ import minimalFixture from '../tests/fixtures/minimal.json';
 import typicalFixture from '../tests/fixtures/typical.json';
 import durationMissingFixture from '../tests/fixtures/duration-missing.json';
 
-const minimalData = processData(minimalFixture);
-const typicalData = processData(typicalFixture);
-const durationData = processData(durationMissingFixture);
+const minimalData = await processData(minimalFixture);
+const typicalData = await processData(typicalFixture);
+const durationData = await processData(durationMissingFixture);
 
 describe('getTotalPlays', () => {
   test('counts all plays without year filter', () => {

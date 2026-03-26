@@ -19,8 +19,8 @@ import { processData } from '../scripts/transform-game-data.js';
 import minimalFixture from '../tests/fixtures/minimal.json';
 import typicalFixture from '../tests/fixtures/typical.json';
 
-const minimalData = processData(minimalFixture);
-const typicalData = processData(typicalFixture);
+const minimalData = await processData(minimalFixture);
+const typicalData = await processData(typicalFixture);
 
 describe('calculateHIndexFromSortedValues', () => {
   test('calculates h-index correctly for sorted values', () => {

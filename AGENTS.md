@@ -276,6 +276,10 @@ Before committing changes:
 
 This ensures the codebase remains stable and well-tested at all times.
 
+### No Real BGG API Calls in Tests
+
+Tests must NEVER make real HTTP requests to the BGG API (`api.geekdo.com`). Always mock `globalThis.fetch` when testing code that uses BGG fetching. To enable BGG fetching in tests, pass `bggCachePath` and `forceRefreshBggCache: true` to `processData` along with a mocked fetch. Without `bggCachePath`, BGG fetching is disabled entirely.
+
 ### Running Tests in Git Bash on Windows
 
 **Important**: Vitest's path resolution on Windows is sensitive to drive letter capitalization. You MUST use an explicit `cd` command before running Vitest:

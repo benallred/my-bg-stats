@@ -17,8 +17,8 @@ import { processData } from '../scripts/transform-game-data.js';
 import minimalFixture from '../tests/fixtures/minimal.json';
 import typicalFixture from '../tests/fixtures/typical.json';
 
-const minimalData = processData(minimalFixture);
-const typicalData = processData(typicalFixture);
+const minimalData = await processData(minimalFixture);
+const typicalData = await processData(typicalFixture);
 
 describe('calculateStaircaseLevelFromSortedValues', () => {
   test('calculates staircase level correctly for spec example', () => {

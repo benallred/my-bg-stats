@@ -1,3 +1,5 @@
+import fs from 'fs';
+import readline from 'readline';
 import { calculateMedian } from '../utils.js';
 import { fromZonedTime } from 'date-fns-tz';
 
@@ -507,8 +509,211 @@ function finalizeOutput(gamesMap, plays, players, locations, selfPlayerId, anony
   };
 }
 
+/**
+ * Delay helper for rate limiting BGG API requests.
+ * @param {number} ms - Milliseconds to wait
+ * @returns {Promise<void>}
+ */
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Prompts the user interactively for a base game BGG ID. 
+ * Only works when stdin is a TTY (local terminal).
+ * @param {string} expansionName - Name of the expansion needing a base game
+ * @param {Map} gamesMap - Map of game ID to game object (for validation)
+ * @returns {Promise<number|null>} The internal game ID of the base game, or null if skipped
+ */
+async function promptForBaseGameId(expansionName, gamesMap) {
+  if (!process.stdin.isTTY) return null;
+
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const answer = await new Promise(resolve => {
+    rl.question(`No base game found for "${expansionName}". Enter base game BGG ID (or press Enter to skip): `, resolve);
+  });
+  rl.close();
+
+  const bggId = parseInt(answer.trim(), 10);
+  if (isNaN(bggId)) return null;
+
+  let game = null;
+  for (const [, g] of gamesMap) {
+    if (g.bggId === bggId) { game = g; break; }
+  }
+
+  if (!game) {
+    console.log(`  BGG ID ${bggId} not found in collection, skipping.`);
+    return null;
+  }
+  if (!game.isBaseGame) {
+    console.log(`  Game "${game.name}" (BGG ID ${bggId}) is not a base game, skipping.`);
+    return null;
+  }
+
+  console.log(`  Linked to "${game.name}"`);
+  return game.id;
+}
+
+/**
+ * Fetches linked base game BGG IDs from the BGG API.
+ * @param {number} bggId - BGG ID of the expansion/expandalone
+ * @param {string} linkDataIndex - 'expandsboardgame' for expansions, 'boardgameintegration' for expandalones
+ * @returns {Promise<number[]>} Array of BGG IDs for linked base games
+ */
+async function fetchLinkedBaseGameBggIds(bggId, linkDataIndex) {
+  const url = `https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=${linkDataIndex}&nosession=1&objectid=${bggId}&objecttype=thing&pageid=1&showcount=100&sort=name&subtype=boardgame`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.items.map(item => parseInt(item.objectid, 10));
+}
+
+/**
+ * Loads the BGG base game cache from disk.
+ * @param {string} cachePath - Path to the cache JSON file
+ * @returns {Map<string, number[]>} Map of BGG ID string to array of internal base game IDs
+ */
+function loadBggCache(cachePath) {
+  try {
+    const data = JSON.parse(fs.readFileSync(cachePath, 'utf-8'));
+    return new Map(Object.entries(data));
+  } catch (e) {
+    return new Map();
+  }
+}
+
+/**
+ * Saves the BGG base game cache to disk.
+ * @param {string} cachePath - Path to the cache JSON file
+ * @param {Map<string, number[]>} cache - Map of BGG ID string to array of internal base game IDs
+ */
+function saveBggCache(cachePath, cache) {
+  const obj = Object.fromEntries(cache);
+  fs.writeFileSync(cachePath, JSON.stringify(obj, null, 2) + '\n');
+}
+
+/**
+ * Builds expansion links mapping base game IDs to their expansion/expandalone IDs.
+ * Uses two data sources (both always consulted, results merged):
+ * 1. expansionPlays from play records
+ * 2. BGG API (cached)
+ *
+ * @param {Array} plays - Raw plays array from BGStatsExport
+ * @param {Map} gamesMap - Map of game ID to game object (already classified)
+ * @param {Map<string, number[]>} bggCache - BGG cache (mutated in place with new entries)
+ * @param {boolean} forceRefreshBggCache - If true, re-fetch all BGG data ignoring cache
+ * @param {boolean} bggFetchEnabled - If false, skip BGG API calls entirely (use only expansionPlays)
+ * @returns {Promise<Map<number, number[]>>} Map of base game ID to sorted array of expansion/expandalone IDs
+ */
+async function buildExpansionLinks(plays, gamesMap, bggCache, forceRefreshBggCache, bggFetchEnabled) {
+  const baseToExpansions = new Map(); // baseGameId -> Set<expansionId>
+
+  // Build bggId -> gameId lookup
+  const bggIdToGameId = new Map();
+  gamesMap.forEach(game => {
+    if (game.bggId) bggIdToGameId.set(game.bggId, game.id);
+  });
+
+  // Collect base game IDs for filtering BGG results
+  const baseGameIds = new Set();
+  gamesMap.forEach(game => {
+    if (game.isBaseGame) baseGameIds.add(game.id);
+  });
+
+  // Helper to add an expansion to a base game's set
+  function addLink(baseGameId, expansionId) {
+    if (!baseToExpansions.has(baseGameId)) {
+      baseToExpansions.set(baseGameId, new Set());
+    }
+    baseToExpansions.get(baseGameId).add(expansionId);
+  }
+
+  // Source 1: expansionPlays from play records
+  plays.forEach(play => {
+    if (play.expansionPlays && play.expansionPlays.length > 0) {
+      play.expansionPlays.forEach(ep => {
+        if (gamesMap.has(ep.gameRefId) && gamesMap.has(play.gameRefId)) {
+          addLink(play.gameRefId, ep.gameRefId);
+        }
+      });
+    }
+  });
+
+  // Source 2: BGG API (cached) — only when enabled
+  let fetchCount = 0;
+  if (bggFetchEnabled) {
+    for (const [, game] of gamesMap) {
+      if (!game.isExpansion && !game.isExpandalone) continue;
+      if (!game.bggId) continue;
+
+      const bggIdStr = String(game.bggId);
+
+      if (!forceRefreshBggCache && bggCache.has(bggIdStr)) {
+        // Use cached result
+        const cachedBaseGameIds = bggCache.get(bggIdStr);
+        cachedBaseGameIds.forEach(baseId => addLink(baseId, game.id));
+        continue;
+      }
+
+      // Fetch from BGG API — try primary endpoint, then containedin as fallback
+      const primaryIndex = game.isExpandalone ? 'boardgameintegration' : 'expandsboardgame';
+      try {
+        if (fetchCount > 0) await delay(200);
+        let linkedBggIds = await fetchLinkedBaseGameBggIds(game.bggId, primaryIndex);
+        fetchCount++;
+
+        // Filter to in-collection base games and map BGG IDs to internal IDs
+        let filteredBaseGameIds = linkedBggIds
+          .map(bggId => bggIdToGameId.get(bggId))
+          .filter(id => id !== undefined && baseGameIds.has(id));
+
+        // Fallback: try containedin if primary yielded no results
+        if (filteredBaseGameIds.length === 0) {
+          await delay(200);
+          linkedBggIds = await fetchLinkedBaseGameBggIds(game.bggId, 'containedin');
+          fetchCount++;
+
+          filteredBaseGameIds = linkedBggIds
+            .map(bggId => bggIdToGameId.get(bggId))
+            .filter(id => id !== undefined && baseGameIds.has(id));
+        }
+
+        // If no base game found, prompt user or warn
+        if (filteredBaseGameIds.length === 0) {
+          const manualId = await promptForBaseGameId(game.name, gamesMap);
+          if (manualId !== null) {
+            filteredBaseGameIds = [manualId];
+          } else if (!process.stdin.isTTY) {
+            console.warn(`Warning: No base game found for "${game.name}" (bggId: ${game.bggId})`);
+          }
+        }
+
+        // Only cache non-empty results
+        if (filteredBaseGameIds.length > 0) {
+          bggCache.set(bggIdStr, filteredBaseGameIds);
+          filteredBaseGameIds.forEach(baseId => addLink(baseId, game.id));
+        }
+      } catch (e) {
+        // BGG fetch failed — skip this game, don't cache
+      }
+    }
+  }
+
+  if (fetchCount > 0) {
+    console.log(`Fetched ${fetchCount} expansion links from BGG API`);
+  }
+
+  // Convert Sets to sorted arrays
+  const result = new Map();
+  baseToExpansions.forEach((expansionSet, baseGameId) => {
+    result.set(baseGameId, [...expansionSet].sort((a, b) => a - b));
+  });
+
+  return result;
+}
+
 // Pure transformation function (testable)
-function processData(bgStatsData) {
+async function processData(bgStatsData, { bggCachePath = null, forceRefreshBggCache = false } = {}) {
   // Extract players and locations
   const players = extractPlayers(bgStatsData.players);
   const locations = extractLocations(bgStatsData.locations);
@@ -526,6 +731,21 @@ function processData(bgStatsData) {
   const expandaloneTagId = findExpandaloneTagId(bgStatsData.tags);
   const oneTimeTagId = findOneTimeTagId(bgStatsData.tags);
   const gamesMap = buildGamesMap(bgStatsData.games, expandaloneTagId, oneTimeTagId);
+
+  // Build expansion links (expansionPlays + BGG API when cache path provided)
+  const bggFetchEnabled = bggCachePath !== null;
+  const bggCache = bggFetchEnabled ? loadBggCache(bggCachePath) : new Map();
+  const expansionLinks = await buildExpansionLinks(bgStatsData.plays, gamesMap, bggCache, forceRefreshBggCache, bggFetchEnabled);
+  if (bggFetchEnabled) saveBggCache(bggCachePath, bggCache);
+
+  // Apply expansionIds to games
+  gamesMap.forEach(game => {
+    if (game.isBaseGame) {
+      game.expansionIds = expansionLinks.get(game.id) || [];
+    } else {
+      game.expansionIds = null;
+    }
+  });
 
   // Calculate typical play times for all games
   const gameDurationsMap = collectGameDurations(bgStatsData.plays);
