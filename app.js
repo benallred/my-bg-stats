@@ -2234,6 +2234,15 @@ const statDetailHandlers = {
             showShelfGallery(detailContent);
         },
     },
+    'virtual-shelf': {
+        getTitle: () => 'Virtual Shelf',
+        renderSummary: (summaryElement, detailContent) => {
+            renderVirtualShelfControls(summaryElement, detailContent);
+        },
+        render: (detailContent) => {
+            showVirtualShelf(detailContent);
+        },
+    },
     'total-cost': {
         getTitle: (currentYear) => {
             const yearText = currentYear
@@ -3228,6 +3237,171 @@ function showShelfGallery(container) {
         }).join('');
         container.appendChild(caseDiv);
     }
+}
+
+/**
+ * Virtual shelf state
+ */
+let virtualShelfIncludeUnowned = false;
+
+/**
+ * Show virtual shelf - grid of game cover art
+ */
+function showVirtualShelf(container) {
+
+    // Filter to base games
+    let games = gameData.games.filter(game => game.isBaseGame);
+
+    // Apply ownership filter
+    if (virtualShelfIncludeUnowned) {
+        // Include owned base games + unowned base games that have play data
+        const playedGameIds = new Set(gameData.plays.map(p => p.gameId));
+        games = games.filter(game => isGameOwned(game) || playedGameIds.has(game.id));
+    } else {
+        games = games.filter(game => isGameOwned(game));
+    }
+
+    // Build metric lookup for sorting
+    const hoursBreakdown = getPlayTimeByGame(gameData.games, gameData.plays, currentYear);
+    const sessionsBreakdown = getDaysPlayedByGame(gameData.games, gameData.plays, currentYear);
+
+    const metricMap = new Map();
+    hoursBreakdown.forEach(entry => {
+        metricMap.set(entry.game.id, {
+            totalMinutes: entry.totalMinutes,
+            playCount: entry.playCount,
+            uniqueDays: 0,
+        });
+    });
+    sessionsBreakdown.forEach(entry => {
+        const existing = metricMap.get(entry.game.id);
+        if (existing) {
+            existing.uniqueDays = entry.uniqueDays;
+        } else {
+            metricMap.set(entry.game.id, {
+                totalMinutes: 0,
+                playCount: 0,
+                uniqueDays: entry.uniqueDays,
+            });
+        }
+    });
+
+    const getMetric = (gameId) => metricMap.get(gameId) || { totalMinutes: 0, uniqueDays: 0, playCount: 0 };
+
+    // Sort
+    const sortCol = currentSortCol || 'rating';
+    const sortDir = currentSortDir || 'desc';
+    const dirMul = sortDir === 'asc' ? 1 : -1;
+
+    games.sort((a, b) => {
+        switch (sortCol) {
+            case 'rating': {
+                const rA = a.rating ?? -1;
+                const rB = b.rating ?? -1;
+                return dirMul * (rA - rB);
+            }
+            case 'hours':
+                return dirMul * (getMetric(a.id).totalMinutes - getMetric(b.id).totalMinutes);
+            case 'sessions':
+                return dirMul * (getMetric(a.id).uniqueDays - getMetric(b.id).uniqueDays);
+            case 'plays':
+                return dirMul * (getMetric(a.id).playCount - getMetric(b.id).playCount);
+            case 'name':
+            default:
+                return dirMul * a.name.localeCompare(b.name);
+        }
+    });
+
+    // Render grid
+    const grid = document.createElement('div');
+    grid.className = 'virtual-shelf-grid';
+
+    grid.innerHTML = games.map(game => {
+        const imageUrl = game.coverUrl || game.thumbnailUrl;
+        const initials = getGameInitials(game.name);
+        const imageHtml = imageUrl
+            ? `<img
+                    src="${imageUrl}"
+                    alt="${game.name} cover"
+                    title="${game.name}"
+                    class="game-thumbnail"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');"
+                />
+                <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden" title="${game.name}">
+                    ${initials}
+                </div>`
+            : `<div class="game-thumbnail-placeholder" title="${game.name}">${initials}</div>`;
+        return `
+            <div class="virtual-shelf-item">
+                ${imageHtml}
+                <div class="virtual-shelf-label">${game.name}</div>
+            </div>
+        `;
+    }).join('');
+
+    container.appendChild(grid);
+}
+
+/**
+ * Render virtual shelf sort controls and toggle
+ */
+function renderVirtualShelfControls(summaryElement, detailContent) {
+    const currentSort = currentSortCol || 'rating';
+    const currentDir = currentSortDir || 'desc';
+
+    const sortOptions = [
+        { key: 'name', label: 'Name', defaultDir: 'asc' },
+        { key: 'rating', label: 'Rating', defaultDir: 'desc' },
+        { key: 'hours', label: 'Hours', defaultDir: 'desc' },
+        { key: 'sessions', label: 'Sessions', defaultDir: 'desc' },
+        { key: 'plays', label: 'Plays', defaultDir: 'desc' },
+    ];
+
+    const buttonsHtml = sortOptions.map(opt => {
+        const isActive = currentSort === opt.key;
+        const arrow = isActive ? (currentDir === 'asc' ? ' ↑' : ' ↓') : '';
+        return `<button class="virtual-shelf-sort-btn${isActive ? ' active' : ''}" data-sort-key="${opt.key}" data-default-dir="${opt.defaultDir}">${opt.label}${arrow}</button>`;
+    }).join('');
+
+    const checkedAttr = virtualShelfIncludeUnowned ? ' checked' : '';
+
+    summaryElement.innerHTML = `
+        <div class="virtual-shelf-controls">
+            <div class="virtual-shelf-sort-group">
+                <span class="virtual-shelf-sort-label">Sort:</span>
+                ${buttonsHtml}
+            </div>
+            <div class="virtual-shelf-toggle-group">
+                <input type="checkbox" id="virtual-shelf-include-unowned"${checkedAttr} />
+                <label class="virtual-shelf-toggle-label" for="virtual-shelf-include-unowned">Include unowned played games</label>
+            </div>
+        </div>
+    `;
+    summaryElement.style.display = 'block';
+
+    // Sort button handlers
+    summaryElement.querySelectorAll('.virtual-shelf-sort-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const key = btn.dataset.sortKey;
+            const defaultDir = btn.dataset.defaultDir;
+            if (currentSortCol === key) {
+                currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortCol = key;
+                currentSortDir = defaultDir;
+            }
+            updateURL();
+            rerenderDetailContent('virtual-shelf');
+        });
+    });
+
+    // Toggle handler
+    const toggle = summaryElement.querySelector('#virtual-shelf-include-unowned');
+    toggle.addEventListener('change', () => {
+        virtualShelfIncludeUnowned = toggle.checked;
+        rerenderDetailContent('virtual-shelf');
+    });
 }
 
 /**

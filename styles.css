@@ -532,6 +532,7 @@ header h1 {
         font-size: 0.7rem;
         padding: 0.5rem 0 0.25rem;
     }
+
 }
 
 /* Detail Section - Inline expansion below widgets */
@@ -1072,6 +1073,110 @@ table tbody tr:hover {
 
 .shelf-gallery-image:hover {
     opacity: 0.9;
+}
+
+/* Virtual Shelf */
+.virtual-shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(100px, 15vw, 200px), 1fr));
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.virtual-shelf-item {
+    position: relative;
+}
+
+.virtual-shelf-item .game-thumbnail {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 6px;
+    border: 1px solid var(--border-tertiary);
+    transition: opacity var(--transition-hover), transform var(--transition-hover);
+}
+
+.virtual-shelf-item .game-thumbnail:hover {
+    opacity: 0.85;
+    transform: scale(1.03);
+}
+
+.virtual-shelf-item .game-thumbnail-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    border: 1px solid var(--border-tertiary);
+    background: var(--bg-secondary);
+}
+
+.virtual-shelf-label {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.2;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* Virtual Shelf Controls */
+.virtual-shelf-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.virtual-shelf-sort-group {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.virtual-shelf-sort-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-right: 0.25rem;
+}
+
+.virtual-shelf-sort-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-hover);
+}
+
+.virtual-shelf-sort-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.virtual-shelf-sort-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.virtual-shelf-toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.virtual-shelf-toggle-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    cursor: pointer;
 }
 
 /* Loading state */
