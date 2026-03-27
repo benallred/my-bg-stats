@@ -1857,6 +1857,12 @@ footer p {
     color: var(--text-heading);
 }
 
+.game-detail-rating {
+    margin-top: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
 .game-detail-cover img {
     max-width: 400px;
     max-height: 520px;

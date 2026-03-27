@@ -2152,25 +2152,29 @@ function showGameDetailModal(gameId) {
         return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
     };
 
-    const fmtRating = (rating) => rating !== null && rating !== undefined ? `${rating} / 10` : '—';
-
     // --- Build HTML ---
     let html = '';
 
     // Cover image
     const imageUrl = game.coverUrl || game.thumbnailUrl;
     const initials = getGameInitials(game.name);
+    const ratingDisplay = game.rating !== null && game.rating !== undefined
+        ? `<div class="game-detail-rating">Rating: ${game.rating} / 10</div>`
+        : '';
+
     if (imageUrl) {
         html += `<div class="game-detail-cover">
             <img src="${imageUrl}" alt="${game.name} cover"
                 onerror="this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');" />
             <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden">${initials}</div>
             <div class="game-detail-name">${game.name}</div>
+            ${ratingDisplay}
         </div>`;
     } else {
         html += `<div class="game-detail-cover">
             <div class="game-thumbnail-placeholder">${initials}</div>
             <div class="game-detail-name">${game.name}</div>
+            ${ratingDisplay}
         </div>`;
     }
 
@@ -2203,33 +2207,17 @@ function showGameDetailModal(gameId) {
     // Section cards grid
     html += `<div class="game-detail-sections-grid">`;
 
-    // Game Info section
-    const infoRows = [];
-    infoRows.push({ label: 'Rating', value: fmtRating(game.rating) });
-    if (acquisitionDate) {
-        infoRows.push({ label: 'Acquired', value: formatDateWithYear(acquisitionDate) });
-    }
-    if (firstPlayDate) {
-        const preLogging = acquisitionDate && firstLoggedPlayDate && acquisitionDate < firstLoggedPlayDate;
-        const firstPlayedLabel = preLogging
-            ? `First Played <svg class="info-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Pre-logging notice"><title>Game was acquired before logging started on ${formatDateWithYear(firstLoggedPlayDate)} — there may be earlier unlogged plays</title><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>`
-            : 'First Played';
-        infoRows.push({ label: firstPlayedLabel, value: formatDateWithYear(firstPlayDate) });
-    }
-    if (lastPlayDate) {
-        infoRows.push({ label: 'Last Played', value: formatDateWithYear(lastPlayDate) });
-    }
+    // Ranking section
+    const fmtRank = (rank) => rank > 0 ? `#${rank}` : '—';
+    html += `<div class="game-detail-section-card">`;
+    html += `<h4>Ranking</h4>`;
+    html += `<div class="game-detail-row"><span class="label">By Rating</span><span class="value">${fmtRank(ratingRank)}</span></div>`;
+    html += `<div class="game-detail-row"><span class="label">By Hours</span><span class="value">${fmtRank(hoursRank)}</span></div>`;
+    html += `<div class="game-detail-row"><span class="label">By Sessions</span><span class="value">${fmtRank(sessionsRank)}</span></div>`;
+    html += `<div class="game-detail-row"><span class="label">By Plays</span><span class="value">${fmtRank(playsRank)}</span></div>`;
+    html += `</div>`;
 
-    if (infoRows.length > 0) {
-        html += `<div class="game-detail-section-card">`;
-        html += `<h4>Game Info</h4>`;
-        for (const row of infoRows) {
-            html += `<div class="game-detail-row"><span class="label">${row.label}</span><span class="value">${row.value}</span></div>`;
-        }
-        html += `</div>`;
-    }
-
-    // Play Stats section (duration stats)
+    // Play Duration section
     if (allTimeHoursEntry && allTimeHoursEntry.playCount > 1) {
         html += `<div class="game-detail-section-card">`;
         html += `<h4>Play Duration</h4>`;
@@ -2237,6 +2225,31 @@ function showGameDetailModal(gameId) {
         html += `<div class="game-detail-row"><span class="label">Longest</span><span class="value">${fmtMinutes(allTimeHoursEntry.maxMinutes)}</span></div>`;
         html += `<div class="game-detail-row"><span class="label">Median</span><span class="value">${fmtMinutes(allTimeHoursEntry.medianMinutes)}</span></div>`;
         html += `<div class="game-detail-row"><span class="label">Average</span><span class="value">${fmtMinutes(allTimeHoursEntry.avgMinutes)}</span></div>`;
+        html += `</div>`;
+    }
+
+    // Dates section
+    const dateRows = [];
+    if (acquisitionDate) {
+        dateRows.push({ label: 'Acquired', value: formatDateWithYear(acquisitionDate) });
+    }
+    if (firstPlayDate) {
+        const preLogging = acquisitionDate && firstLoggedPlayDate && acquisitionDate < firstLoggedPlayDate;
+        const firstPlayedLabel = preLogging
+            ? `First Played <svg class="info-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Pre-logging notice"><title>Game was acquired before logging started on ${formatDateWithYear(firstLoggedPlayDate)} — there may be earlier unlogged plays</title><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>`
+            : 'First Played';
+        dateRows.push({ label: firstPlayedLabel, value: formatDateWithYear(firstPlayDate) });
+    }
+    if (lastPlayDate) {
+        dateRows.push({ label: 'Last Played', value: formatDateWithYear(lastPlayDate) });
+    }
+
+    if (dateRows.length > 0) {
+        html += `<div class="game-detail-section-card">`;
+        html += `<h4>Dates</h4>`;
+        for (const row of dateRows) {
+            html += `<div class="game-detail-row"><span class="label">${row.label}</span><span class="value">${row.value}</span></div>`;
+        }
         html += `</div>`;
     }
 
@@ -2258,16 +2271,6 @@ function showGameDetailModal(gameId) {
         html += `<div class="game-detail-row"><span class="label">Unique Locations</span><span class="value">${uniqueLocationIds.size}</span></div>`;
         html += `</div>`;
     }
-
-    // Ranking section
-    const fmtRank = (rank) => rank > 0 ? `#${rank}` : '—';
-    html += `<div class="game-detail-section-card">`;
-    html += `<h4>Ranking</h4>`;
-    html += `<div class="game-detail-row"><span class="label">By Rating</span><span class="value">${fmtRank(ratingRank)}</span></div>`;
-    html += `<div class="game-detail-row"><span class="label">By Hours</span><span class="value">${fmtRank(hoursRank)}</span></div>`;
-    html += `<div class="game-detail-row"><span class="label">By Sessions</span><span class="value">${fmtRank(sessionsRank)}</span></div>`;
-    html += `<div class="game-detail-row"><span class="label">By Plays</span><span class="value">${fmtRank(playsRank)}</span></div>`;
-    html += `</div>`;
 
     // Value Stats section (hidden feature)
     if (pricePaid !== null && isHiddenEnabled()) {
