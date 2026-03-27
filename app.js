@@ -461,6 +461,7 @@ let currentSortDir = null;
 let yearDataCache = null;
 let isLoadingFromPermalink = false;
 let showAllYearReviewMetrics = false;
+let firstLoggedPlayDate = null;
 
 // Cache for calculated statistics (refreshed when year changes)
 let statsCache = null;
@@ -657,6 +658,11 @@ async function loadData() {
         throw new Error('Failed to load data.json');
     }
     gameData = await response.json();
+
+    // Compute first logged play date (global, never changes)
+    firstLoggedPlayDate = gameData.plays.reduce((earliest, play) => {
+        return !earliest || play.date < earliest ? play.date : earliest;
+    }, null);
 }
 
 /**
@@ -2013,14 +2019,32 @@ function initializeGameDetailModal() {
     modal.innerHTML = `
         <div class="modal-backdrop"></div>
         <div class="modal-content game-detail-modal-content">
-            <button class="modal-close game-detail-close" aria-label="Close modal">&times;</button>
+            <div class="game-detail-buttons">
+                <button class="close-btn game-detail-close" aria-label="Close modal">&times;</button>
+                <button class="permalink-btn game-detail-permalink" title="Copy permalink to clipboard">🔗</button>
+            </div>
             <div class="modal-body" id="game-detail-modal-body"></div>
         </div>
     `;
     document.body.appendChild(modal);
 
     modal.querySelector('.modal-backdrop').addEventListener('click', hideGameDetailModal);
-    modal.querySelector('.modal-close').addEventListener('click', hideGameDetailModal);
+    modal.querySelector('.game-detail-close').addEventListener('click', hideGameDetailModal);
+    modal.querySelector('.game-detail-permalink').addEventListener('click', async () => {
+        const btn = modal.querySelector('.game-detail-permalink');
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            const originalContent = btn.textContent;
+            btn.textContent = '✓';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = originalContent;
+                btn.classList.remove('copied');
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy permalink:', err);
+        }
+    });
 }
 
 /**
@@ -2182,7 +2206,11 @@ function showGameDetailModal(gameId) {
         infoRows.push({ label: 'Acquired', value: formatDateWithYear(acquisitionDate) });
     }
     if (firstPlayDate) {
-        infoRows.push({ label: 'First Played', value: formatDateWithYear(firstPlayDate) });
+        const preLogging = acquisitionDate && firstLoggedPlayDate && acquisitionDate < firstLoggedPlayDate;
+        const firstPlayedLabel = preLogging
+            ? `First Played <svg class="info-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Pre-logging notice"><title>Game was acquired before logging started on ${formatDateWithYear(firstLoggedPlayDate)} — there may be earlier unlogged plays</title><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>`
+            : 'First Played';
+        infoRows.push({ label: firstPlayedLabel, value: formatDateWithYear(firstPlayDate) });
     }
     if (lastPlayDate) {
         infoRows.push({ label: 'Last Played', value: formatDateWithYear(lastPlayDate) });

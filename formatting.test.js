@@ -51,10 +51,10 @@ describe('formatDateShort', () => {
 });
 
 describe('formatDateWithYear', () => {
-  test('formats date as "Mon DD, YYYY"', () => {
-    expect(formatDateWithYear('2024-08-11')).toBe('Aug 11, 2024');
-    expect(formatDateWithYear('2024-01-01')).toBe('Jan 1, 2024');
-    expect(formatDateWithYear('2020-12-25')).toBe('Dec 25, 2020');
+  test('formats date as "Mon\u00A0DD, YYYY" with non-breaking space between month and day', () => {
+    expect(formatDateWithYear('2024-08-11')).toBe('Aug\u00A011, 2024');
+    expect(formatDateWithYear('2024-01-01')).toBe('Jan\u00A01, 2024');
+    expect(formatDateWithYear('2020-12-25')).toBe('Dec\u00A025, 2020');
   });
 
   test('returns "-" for null or undefined', () => {

@@ -1835,19 +1835,14 @@ footer p {
     max-width: 550px;
 }
 
-.game-detail-close {
+.game-detail-buttons {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
     z-index: 1;
-    background: var(--bg-secondary);
-    border-radius: 50%;
-    color: var(--text-muted);
-}
-
-.game-detail-close:hover {
-    background: var(--bg-table-row-hover);
-    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
 }
 
 .game-detail-cover {
@@ -1955,6 +1950,7 @@ footer p {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
     padding: 0.2rem 0;
     font-size: 0.85rem;
 }

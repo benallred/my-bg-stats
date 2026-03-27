@@ -38,7 +38,9 @@ export function formatDateWithYear(dateString) {
     if (!dateString) return '-';
     const [year, month, day] = dateString.split('-').map(Number);
     const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const formatted = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    // Replace "Mon D" space with non-breaking space; keep space after comma breakable
+    return formatted.replace(/^(\w+)\s/, '$1\u00A0');
 }
 
 /**
