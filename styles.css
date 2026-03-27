@@ -1835,9 +1835,31 @@ footer p {
     max-width: 550px;
 }
 
+.game-detail-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 1;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    color: var(--text-muted);
+}
+
+.game-detail-close:hover {
+    background: var(--bg-table-row-hover);
+    color: var(--text-primary);
+}
+
 .game-detail-cover {
     text-align: center;
     margin-bottom: 1.25rem;
+}
+
+.game-detail-name {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-heading);
 }
 
 .game-detail-cover img {
@@ -1905,9 +1927,28 @@ footer p {
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    margin-bottom: 0.4rem;
-    padding-bottom: 0.25rem;
-    border-bottom: 1px solid var(--border-primary);
+    margin-bottom: 0.5rem;
+}
+
+.game-detail-sections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.game-detail-section-card {
+    background: var(--bg-table-header);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+}
+
+.game-detail-section-card h4 {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.5rem;
 }
 
 .game-detail-row {
@@ -1922,11 +1963,13 @@ footer p {
     color: var(--text-secondary);
     display: flex;
     align-items: center;
+    white-space: nowrap;
 }
 
 .game-detail-row .value {
     color: var(--text-primary);
     font-weight: 500;
+    text-align: right;
 }
 
 .game-detail-expansions-grid {

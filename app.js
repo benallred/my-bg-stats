@@ -2013,10 +2013,7 @@ function initializeGameDetailModal() {
     modal.innerHTML = `
         <div class="modal-backdrop"></div>
         <div class="modal-content game-detail-modal-content">
-            <div class="modal-header">
-                <h3 id="game-detail-modal-title"></h3>
-                <button class="modal-close" aria-label="Close modal">&times;</button>
-            </div>
+            <button class="modal-close game-detail-close" aria-label="Close modal">&times;</button>
             <div class="modal-body" id="game-detail-modal-body"></div>
         </div>
     `;
@@ -2035,10 +2032,8 @@ function showGameDetailModal(gameId) {
     if (!game) return;
 
     const modal = document.getElementById('game-detail-modal');
-    const titleEl = document.getElementById('game-detail-modal-title');
     const bodyEl = document.getElementById('game-detail-modal-body');
 
-    titleEl.textContent = game.name;
     modal.dataset.gameId = gameId.toString();
 
     // --- Gather stats ---
@@ -2117,7 +2112,8 @@ function showGameDetailModal(gameId) {
     // Expansions
     const expansions = (game.expansionIds || [])
         .map(id => gameData.games.find(g => g.id === id))
-        .filter(Boolean);
+        .filter(Boolean)
+        .sort((a, b) => a.bggId - b.bggId);
 
     // --- Format helpers ---
     const fmtMinutes = (minutes) => {
@@ -2141,10 +2137,12 @@ function showGameDetailModal(gameId) {
             <img src="${imageUrl}" alt="${game.name} cover"
                 onerror="this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');" />
             <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden">${initials}</div>
+            <div class="game-detail-name">${game.name}</div>
         </div>`;
     } else {
         html += `<div class="game-detail-cover">
             <div class="game-thumbnail-placeholder">${initials}</div>
+            <div class="game-detail-name">${game.name}</div>
         </div>`;
     }
 
@@ -2174,6 +2172,9 @@ function showGameDetailModal(gameId) {
 
     html += `</div>`;
 
+    // Section cards grid
+    html += `<div class="game-detail-sections-grid">`;
+
     // Game Info section
     const infoRows = [];
     infoRows.push({ label: 'Rating', value: fmtRating(game.rating) });
@@ -2188,7 +2189,8 @@ function showGameDetailModal(gameId) {
     }
 
     if (infoRows.length > 0) {
-        html += `<div class="game-detail-section"><h4>Game Info</h4>`;
+        html += `<div class="game-detail-section-card">`;
+        html += `<h4>Game Info</h4>`;
         for (const row of infoRows) {
             html += `<div class="game-detail-row"><span class="label">${row.label}</span><span class="value">${row.value}</span></div>`;
         }
@@ -2197,7 +2199,8 @@ function showGameDetailModal(gameId) {
 
     // Play Stats section (duration stats)
     if (allTimeHoursEntry && allTimeHoursEntry.playCount > 1) {
-        html += `<div class="game-detail-section"><h4>Play Duration</h4>`;
+        html += `<div class="game-detail-section-card">`;
+        html += `<h4>Play Duration</h4>`;
         html += `<div class="game-detail-row"><span class="label">Shortest</span><span class="value">${fmtMinutes(allTimeHoursEntry.minMinutes)}</span></div>`;
         html += `<div class="game-detail-row"><span class="label">Longest</span><span class="value">${fmtMinutes(allTimeHoursEntry.maxMinutes)}</span></div>`;
         html += `<div class="game-detail-row"><span class="label">Median</span><span class="value">${fmtMinutes(allTimeHoursEntry.medianMinutes)}</span></div>`;
@@ -2207,7 +2210,8 @@ function showGameDetailModal(gameId) {
 
     // Solo Stats section
     if (soloEntry && soloEntry.plays > 0) {
-        html += `<div class="game-detail-section"><h4>Solo</h4>`;
+        html += `<div class="game-detail-section-card">`;
+        html += `<h4>Solo</h4>`;
         html += `<div class="game-detail-row"><span class="label">Hours</span><span class="value">${fmtMinutes(soloEntry.minutes)}</span></div>`;
         html += `<div class="game-detail-row"><span class="label">Sessions</span><span class="value">${soloEntry.sessions}</span></div>`;
         html += `<div class="game-detail-row"><span class="label">Plays</span><span class="value">${soloEntry.plays}</span></div>`;
@@ -2216,7 +2220,8 @@ function showGameDetailModal(gameId) {
 
     // Social Stats section
     if (uniquePlayerIds.size > 0 || uniqueLocationIds.size > 0) {
-        html += `<div class="game-detail-section"><h4>Social</h4>`;
+        html += `<div class="game-detail-section-card">`;
+        html += `<h4>Social</h4>`;
         html += `<div class="game-detail-row"><span class="label">Unique Players</span><span class="value">${uniquePlayerIds.size}</span></div>`;
         html += `<div class="game-detail-row"><span class="label">Unique Locations</span><span class="value">${uniqueLocationIds.size}</span></div>`;
         html += `</div>`;
@@ -2224,8 +2229,9 @@ function showGameDetailModal(gameId) {
 
     // Value Stats section (hidden feature)
     if (pricePaid !== null && isHiddenEnabled()) {
-        html += `<div class="game-detail-section"><h4>Value</h4>`;
         const priceInfoIcon = '<svg class="info-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Includes price of all owned expansions"><title>Includes price of all owned expansions</title><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>';
+        html += `<div class="game-detail-section-card">`;
+        html += `<h4>Value</h4>`;
         html += `<div class="game-detail-row"><span class="label">Price Paid ${priceInfoIcon}</span><span class="value">${formatCostLabel(pricePaid)}</span></div>`;
         if (totalMinutes > 0) {
             const costPerHour = pricePaid / (totalMinutes / 60);
@@ -2242,12 +2248,14 @@ function showGameDetailModal(gameId) {
         html += `</div>`;
     }
 
+    html += `</div>`; // Close sections grid
+
     // Expansions section
     if (expansions.length > 0) {
         html += `<div class="game-detail-section"><h4>Expansions & Expandalones (${expansions.length})</h4>`;
         html += `<div class="game-detail-expansions-grid">`;
         for (const exp of expansions) {
-            const expImageUrl = exp.coverUrl || exp.thumbnailUrl;
+            const expImageUrl = exp.thumbnailUrl || exp.coverUrl;
             const expInitials = getGameInitials(exp.name);
             if (expImageUrl) {
                 html += `<div class="game-detail-expansion-item">
