@@ -81,6 +81,7 @@ import {
   getHourStaircaseLevelBreakdown,
   getNewStaircaseLevelGames,
   getGamePricePaid,
+  getGameRankings,
 } from './stats.js';
 
 import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber } from './formatting.js';
@@ -2139,6 +2140,9 @@ function showGameDetailModal(gameId) {
         .filter(Boolean)
         .sort((a, b) => a.bggId - b.bggId);
 
+    // Rankings (among base games)
+    const { ratingRank, hoursRank, sessionsRank, playsRank } = getGameRankings(gameData.games, gameData.plays, gameId);
+
     // --- Format helpers ---
     const fmtMinutes = (minutes) => {
         if (!minutes) return '0';
@@ -2254,6 +2258,16 @@ function showGameDetailModal(gameId) {
         html += `<div class="game-detail-row"><span class="label">Unique Locations</span><span class="value">${uniqueLocationIds.size}</span></div>`;
         html += `</div>`;
     }
+
+    // Ranking section
+    const fmtRank = (rank) => rank > 0 ? `#${rank}` : '—';
+    html += `<div class="game-detail-section-card">`;
+    html += `<h4>Ranking</h4>`;
+    html += `<div class="game-detail-row"><span class="label">By Rating</span><span class="value">${fmtRank(ratingRank)}</span></div>`;
+    html += `<div class="game-detail-row"><span class="label">By Hours</span><span class="value">${fmtRank(hoursRank)}</span></div>`;
+    html += `<div class="game-detail-row"><span class="label">By Sessions</span><span class="value">${fmtRank(sessionsRank)}</span></div>`;
+    html += `<div class="game-detail-row"><span class="label">By Plays</span><span class="value">${fmtRank(playsRank)}</span></div>`;
+    html += `</div>`;
 
     // Value Stats section (hidden feature)
     if (pricePaid !== null && isHiddenEnabled()) {
@@ -3615,19 +3629,62 @@ function showVirtualShelf(container) {
     const sortDir = currentSortDir || 'desc';
     const dirMul = sortDir === 'asc' ? 1 : -1;
 
+    // Build all-time metric lookup for tiebreaking (independent of year filter)
+    const allTimeHoursBreakdown = getPlayTimeByGame(gameData.games, gameData.plays, null);
+    const allTimeSessionsBreakdown = getDaysPlayedByGame(gameData.games, gameData.plays, null);
+
+    const allTimeMetricMap = new Map();
+    allTimeHoursBreakdown.forEach(entry => {
+        allTimeMetricMap.set(entry.game.id, {
+            totalMinutes: entry.totalMinutes,
+            playCount: entry.playCount,
+            uniqueDays: 0,
+        });
+    });
+    allTimeSessionsBreakdown.forEach(entry => {
+        const existing = allTimeMetricMap.get(entry.game.id);
+        if (existing) {
+            existing.uniqueDays = entry.uniqueDays;
+        } else {
+            allTimeMetricMap.set(entry.game.id, {
+                totalMinutes: 0,
+                playCount: 0,
+                uniqueDays: entry.uniqueDays,
+            });
+        }
+    });
+
+    const getAllTime = (gameId) => allTimeMetricMap.get(gameId) || { totalMinutes: 0, uniqueDays: 0, playCount: 0 };
+
+    const metricTiebreak = (aId, bId) =>
+        (getAllTime(bId).totalMinutes - getAllTime(aId).totalMinutes)
+        || (getAllTime(bId).uniqueDays - getAllTime(aId).uniqueDays)
+        || (getAllTime(bId).playCount - getAllTime(aId).playCount);
+
     games.sort((a, b) => {
+        let primary;
         switch (sortCol) {
             case 'rating': {
                 const rA = a.rating ?? -1;
                 const rB = b.rating ?? -1;
-                return dirMul * (rA - rB);
+                primary = dirMul * (rA - rB);
+                return primary || metricTiebreak(a.id, b.id);
             }
             case 'hours':
-                return dirMul * (getMetric(a.id).totalMinutes - getMetric(b.id).totalMinutes);
+                primary = dirMul * (getMetric(a.id).totalMinutes - getMetric(b.id).totalMinutes);
+                return primary
+                    || (getAllTime(b.id).uniqueDays - getAllTime(a.id).uniqueDays)
+                    || (getAllTime(b.id).playCount - getAllTime(a.id).playCount);
             case 'sessions':
-                return dirMul * (getMetric(a.id).uniqueDays - getMetric(b.id).uniqueDays);
+                primary = dirMul * (getMetric(a.id).uniqueDays - getMetric(b.id).uniqueDays);
+                return primary
+                    || (getAllTime(b.id).totalMinutes - getAllTime(a.id).totalMinutes)
+                    || (getAllTime(b.id).playCount - getAllTime(a.id).playCount);
             case 'plays':
-                return dirMul * (getMetric(a.id).playCount - getMetric(b.id).playCount);
+                primary = dirMul * (getMetric(a.id).playCount - getMetric(b.id).playCount);
+                return primary
+                    || (getAllTime(b.id).totalMinutes - getAllTime(a.id).totalMinutes)
+                    || (getAllTime(b.id).uniqueDays - getAllTime(a.id).uniqueDays);
             case 'name':
             default:
                 return dirMul * a.name.localeCompare(b.name);
