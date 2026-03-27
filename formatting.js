@@ -30,6 +30,18 @@ export function formatDateShort(dateString) {
 }
 
 /**
+ * Format a YYYY-MM-DD date string as "Aug 11, 2024"
+ * @param {string} dateString - Date in YYYY-MM-DD format
+ * @returns {string} Formatted date string or '-' if invalid
+ */
+export function formatDateWithYear(dateString) {
+    if (!dateString) return '-';
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+/**
  * Format a YYYY-MM-DD date string as "Mon, Aug 11"
  * @param {string} dateString - Date in YYYY-MM-DD format
  * @returns {string} Formatted date string or '-' if invalid
@@ -65,5 +77,5 @@ export function formatCostLabel(value) {
     if (value >= 1) {
         return Number.isInteger(value) ? `$${value}` : `$${value.toFixed(2)}`;
     }
-    return `${value * 100}¢`;
+    return `${Math.round(value * 100)}¢`;
 }

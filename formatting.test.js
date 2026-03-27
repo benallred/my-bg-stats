@@ -4,6 +4,7 @@ import {
   formatCostLabel,
   formatDateShort,
   formatDateWithWeekday,
+  formatDateWithYear,
   formatLargeNumber,
 } from './formatting.js';
 
@@ -46,6 +47,20 @@ describe('formatDateShort', () => {
     expect(formatDateShort(null)).toBe('-');
     expect(formatDateShort(undefined)).toBe('-');
     expect(formatDateShort('')).toBe('-');
+  });
+});
+
+describe('formatDateWithYear', () => {
+  test('formats date as "Mon DD, YYYY"', () => {
+    expect(formatDateWithYear('2024-08-11')).toBe('Aug 11, 2024');
+    expect(formatDateWithYear('2024-01-01')).toBe('Jan 1, 2024');
+    expect(formatDateWithYear('2020-12-25')).toBe('Dec 25, 2020');
+  });
+
+  test('returns "-" for null or undefined', () => {
+    expect(formatDateWithYear(null)).toBe('-');
+    expect(formatDateWithYear(undefined)).toBe('-');
+    expect(formatDateWithYear('')).toBe('-');
   });
 });
 
@@ -100,6 +115,7 @@ describe('formatCostLabel', () => {
     expect(formatCostLabel(0.5)).toBe('50¢');
     expect(formatCostLabel(0.25)).toBe('25¢');
     expect(formatCostLabel(0.99)).toBe('99¢');
+    expect(formatCostLabel(0.0654)).toBe('7¢');
   });
 
   test('handles edge case at $1 boundary', () => {

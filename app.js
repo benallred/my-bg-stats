@@ -80,9 +80,10 @@ import {
   getStaircaseLevelBreakdown,
   getHourStaircaseLevelBreakdown,
   getNewStaircaseLevelGames,
+  getGamePricePaid,
 } from './stats.js';
 
-import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatLargeNumber } from './formatting.js';
+import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber } from './formatting.js';
 import { tableColumnConfigs, getDefaultSort, sortTableData, createSortableHeaderHtml } from './table-sorting.js';
 
 /**
@@ -617,8 +618,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Load data
         await loadData();
 
-        // Initialize image modal
+        // Initialize modals
         initializeImageModal();
+        initializeGameDetailModal();
 
         // Setup year filter
         setupYearFilter();
@@ -1810,6 +1812,11 @@ function setupEventListeners() {
     // ESC key to close modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            const gameDetailModal = document.getElementById('game-detail-modal');
+            if (gameDetailModal && gameDetailModal.style.display === 'flex') {
+                hideGameDetailModal();
+                return;
+            }
             const hIndexModal = document.getElementById('h-index-modal');
             if (hIndexModal && hIndexModal.style.display === 'flex') {
                 hideHIndexModal();
@@ -1991,6 +1998,285 @@ function hideStaircaseLevelModal() {
     modal.style.display = 'none';
 
     // Update URL to remove modal state
+    updateURL();
+}
+
+/**
+ * Initialize game detail modal for virtual shelf
+ * Creates modal element and sets up close handlers
+ */
+function initializeGameDetailModal() {
+    const modal = document.createElement('div');
+    modal.id = 'game-detail-modal';
+    modal.className = 'modal';
+    modal.style.display = 'none';
+    modal.innerHTML = `
+        <div class="modal-backdrop"></div>
+        <div class="modal-content game-detail-modal-content">
+            <div class="modal-header">
+                <h3 id="game-detail-modal-title"></h3>
+                <button class="modal-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body" id="game-detail-modal-body"></div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelector('.modal-backdrop').addEventListener('click', hideGameDetailModal);
+    modal.querySelector('.modal-close').addEventListener('click', hideGameDetailModal);
+}
+
+/**
+ * Show game detail modal with comprehensive per-game stats
+ * @param {number} gameId - ID of the game to show details for
+ */
+function showGameDetailModal(gameId) {
+    const game = gameData.games.find(g => g.id === gameId);
+    if (!game) return;
+
+    const modal = document.getElementById('game-detail-modal');
+    const titleEl = document.getElementById('game-detail-modal-title');
+    const bodyEl = document.getElementById('game-detail-modal-body');
+
+    titleEl.textContent = game.name;
+    modal.dataset.gameId = gameId.toString();
+
+    // --- Gather stats ---
+
+    // Play time (year + all-time)
+    const allTimeHours = getPlayTimeByGame(gameData.games, gameData.plays, null);
+    const allTimeSessions = getDaysPlayedByGame(gameData.games, gameData.plays, null);
+    const allTimeHoursEntry = allTimeHours.find(e => e.game.id === gameId);
+    const allTimeSessionsEntry = allTimeSessions.find(e => e.game.id === gameId);
+
+    let yearHoursEntry = null;
+    let yearSessionsEntry = null;
+    if (currentYear) {
+        const yearHours = getPlayTimeByGame(gameData.games, gameData.plays, currentYear);
+        const yearSessions = getDaysPlayedByGame(gameData.games, gameData.plays, currentYear);
+        yearHoursEntry = yearHours.find(e => e.game.id === gameId);
+        yearSessionsEntry = yearSessions.find(e => e.game.id === gameId);
+    }
+
+    const totalMinutes = allTimeHoursEntry?.totalMinutes || 0;
+    const totalSessions = allTimeSessionsEntry?.uniqueDays || 0;
+    const totalPlays = allTimeHoursEntry?.playCount || 0;
+    const yearMinutes = yearHoursEntry?.totalMinutes || 0;
+    const yearSessions = yearSessionsEntry?.uniqueDays || 0;
+    const yearPlays = yearHoursEntry?.playCount || 0;
+
+    // Solo stats
+    const soloAllTime = getSoloGameStats(gameData.plays, gameData.games, gameData.selfPlayerId, null);
+    const soloEntry = soloAllTime.gameDetails.find(e => e.game.id === gameId);
+
+    // Unique players (excluding self)
+    const gamePlays = gameData.plays.filter(p => p.gameId === gameId);
+    const uniquePlayerIds = new Set();
+    for (const play of gamePlays) {
+        for (const pid of play.players) {
+            if (pid !== gameData.selfPlayerId) {
+                uniquePlayerIds.add(pid);
+            }
+        }
+    }
+
+    // Unique locations
+    const uniqueLocationIds = new Set();
+    for (const play of gamePlays) {
+        if (play.locationId) {
+            uniqueLocationIds.add(play.locationId);
+        }
+    }
+
+    // Price paid
+    const pricePaid = getGamePricePaid(game);
+
+    // Longest single play
+    let longestPlay = null;
+    for (const play of gamePlays) {
+        if (!longestPlay || play.durationMin > longestPlay.durationMin) {
+            longestPlay = play;
+        }
+    }
+
+    // First and last played dates
+    let firstPlayDate = null;
+    let lastPlayDate = null;
+    for (const play of gamePlays) {
+        if (!firstPlayDate || play.date < firstPlayDate) {
+            firstPlayDate = play.date;
+        }
+        if (!lastPlayDate || play.date > lastPlayDate) {
+            lastPlayDate = play.date;
+        }
+    }
+
+    // Acquisition date
+    const acquisitionDate = getGameAcquisitionDate(game);
+
+    // Expansions
+    const expansions = (game.expansionIds || [])
+        .map(id => gameData.games.find(g => g.id === id))
+        .filter(Boolean);
+
+    // --- Format helpers ---
+    const fmtMinutes = (minutes) => {
+        if (!minutes) return '0';
+        const hrs = Math.floor(minutes / 60);
+        const mins = Math.round(minutes % 60);
+        if (hrs === 0) return `${mins}m`;
+        return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
+    };
+
+    const fmtRating = (rating) => rating !== null && rating !== undefined ? `${rating} / 10` : '—';
+
+    // --- Build HTML ---
+    let html = '';
+
+    // Cover image
+    const imageUrl = game.coverUrl || game.thumbnailUrl;
+    const initials = getGameInitials(game.name);
+    if (imageUrl) {
+        html += `<div class="game-detail-cover">
+            <img src="${imageUrl}" alt="${game.name} cover"
+                onerror="this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');" />
+            <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden">${initials}</div>
+        </div>`;
+    } else {
+        html += `<div class="game-detail-cover">
+            <div class="game-thumbnail-placeholder">${initials}</div>
+        </div>`;
+    }
+
+    // Primary stats: Hours | Sessions | Plays
+    html += `<div class="game-detail-primary-stats">`;
+
+    // Hours
+    html += `<div class="game-detail-stat-card">
+        <div class="stat-label">Hours</div>
+        <div class="stat-value">${fmtMinutes(totalMinutes)}</div>
+        ${currentYear ? `<div class="stat-year-value">${fmtMinutes(yearMinutes)} in ${currentYear}</div>` : ''}
+    </div>`;
+
+    // Sessions
+    html += `<div class="game-detail-stat-card">
+        <div class="stat-label">Sessions</div>
+        <div class="stat-value">${totalSessions}</div>
+        ${currentYear ? `<div class="stat-year-value">${yearSessions} in ${currentYear}</div>` : ''}
+    </div>`;
+
+    // Plays
+    html += `<div class="game-detail-stat-card">
+        <div class="stat-label">Plays</div>
+        <div class="stat-value">${totalPlays}</div>
+        ${currentYear ? `<div class="stat-year-value">${yearPlays} in ${currentYear}</div>` : ''}
+    </div>`;
+
+    html += `</div>`;
+
+    // Game Info section
+    const infoRows = [];
+    infoRows.push({ label: 'Rating', value: fmtRating(game.rating) });
+    if (acquisitionDate) {
+        infoRows.push({ label: 'Acquired', value: formatDateWithYear(acquisitionDate) });
+    }
+    if (firstPlayDate) {
+        infoRows.push({ label: 'First Played', value: formatDateWithYear(firstPlayDate) });
+    }
+    if (lastPlayDate) {
+        infoRows.push({ label: 'Last Played', value: formatDateWithYear(lastPlayDate) });
+    }
+
+    if (infoRows.length > 0) {
+        html += `<div class="game-detail-section"><h4>Game Info</h4>`;
+        for (const row of infoRows) {
+            html += `<div class="game-detail-row"><span class="label">${row.label}</span><span class="value">${row.value}</span></div>`;
+        }
+        html += `</div>`;
+    }
+
+    // Play Stats section (duration stats)
+    if (allTimeHoursEntry && allTimeHoursEntry.playCount > 1) {
+        html += `<div class="game-detail-section"><h4>Play Duration</h4>`;
+        html += `<div class="game-detail-row"><span class="label">Shortest</span><span class="value">${fmtMinutes(allTimeHoursEntry.minMinutes)}</span></div>`;
+        html += `<div class="game-detail-row"><span class="label">Longest</span><span class="value">${fmtMinutes(allTimeHoursEntry.maxMinutes)}</span></div>`;
+        html += `<div class="game-detail-row"><span class="label">Median</span><span class="value">${fmtMinutes(allTimeHoursEntry.medianMinutes)}</span></div>`;
+        html += `<div class="game-detail-row"><span class="label">Average</span><span class="value">${fmtMinutes(allTimeHoursEntry.avgMinutes)}</span></div>`;
+        html += `</div>`;
+    }
+
+    // Solo Stats section
+    if (soloEntry && soloEntry.plays > 0) {
+        html += `<div class="game-detail-section"><h4>Solo</h4>`;
+        html += `<div class="game-detail-row"><span class="label">Hours</span><span class="value">${fmtMinutes(soloEntry.minutes)}</span></div>`;
+        html += `<div class="game-detail-row"><span class="label">Sessions</span><span class="value">${soloEntry.sessions}</span></div>`;
+        html += `<div class="game-detail-row"><span class="label">Plays</span><span class="value">${soloEntry.plays}</span></div>`;
+        html += `</div>`;
+    }
+
+    // Social Stats section
+    if (uniquePlayerIds.size > 0 || uniqueLocationIds.size > 0) {
+        html += `<div class="game-detail-section"><h4>Social</h4>`;
+        html += `<div class="game-detail-row"><span class="label">Unique Players</span><span class="value">${uniquePlayerIds.size}</span></div>`;
+        html += `<div class="game-detail-row"><span class="label">Unique Locations</span><span class="value">${uniqueLocationIds.size}</span></div>`;
+        html += `</div>`;
+    }
+
+    // Value Stats section (hidden feature)
+    if (pricePaid !== null && isHiddenEnabled()) {
+        html += `<div class="game-detail-section"><h4>Value</h4>`;
+        const priceInfoIcon = '<svg class="info-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Includes price of all owned expansions"><title>Includes price of all owned expansions</title><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>';
+        html += `<div class="game-detail-row"><span class="label">Price Paid ${priceInfoIcon}</span><span class="value">${formatCostLabel(pricePaid)}</span></div>`;
+        if (totalMinutes > 0) {
+            const costPerHour = pricePaid / (totalMinutes / 60);
+            html += `<div class="game-detail-row"><span class="label">Cost per Hour</span><span class="value">${formatCostLabel(costPerHour)}</span></div>`;
+        }
+        if (totalSessions > 0) {
+            const costPerSession = pricePaid / totalSessions;
+            html += `<div class="game-detail-row"><span class="label">Cost per Session</span><span class="value">${formatCostLabel(costPerSession)}</span></div>`;
+        }
+        if (totalPlays > 0) {
+            const costPerPlay = pricePaid / totalPlays;
+            html += `<div class="game-detail-row"><span class="label">Cost per Play</span><span class="value">${formatCostLabel(costPerPlay)}</span></div>`;
+        }
+        html += `</div>`;
+    }
+
+    // Expansions section
+    if (expansions.length > 0) {
+        html += `<div class="game-detail-section"><h4>Expansions & Expandalones (${expansions.length})</h4>`;
+        html += `<div class="game-detail-expansions-grid">`;
+        for (const exp of expansions) {
+            const expImageUrl = exp.coverUrl || exp.thumbnailUrl;
+            const expInitials = getGameInitials(exp.name);
+            if (expImageUrl) {
+                html += `<div class="game-detail-expansion-item">
+                    <img src="${expImageUrl}" alt="${exp.name}" loading="lazy"
+                        onerror="this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');" />
+                    <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden">${expInitials}</div>
+                    <div class="expansion-name">${exp.name}</div>
+                </div>`;
+            } else {
+                html += `<div class="game-detail-expansion-item">
+                    <div class="game-thumbnail-placeholder">${expInitials}</div>
+                    <div class="expansion-name">${exp.name}</div>
+                </div>`;
+            }
+        }
+        html += `</div></div>`;
+    }
+
+    bodyEl.innerHTML = html;
+    modal.style.display = 'flex';
+    updateURL();
+}
+
+/**
+ * Hide game detail modal
+ */
+function hideGameDetailModal() {
+    const modal = document.getElementById('game-detail-modal');
+    modal.style.display = 'none';
     updateURL();
 }
 
@@ -3333,7 +3619,7 @@ function showVirtualShelf(container) {
                 </div>`
             : `<div class="game-thumbnail-placeholder" title="${game.name}">${initials}</div>`;
         return `
-            <div class="virtual-shelf-item">
+            <div class="virtual-shelf-item" data-game-id="${game.id}">
                 ${imageHtml}
                 <div class="virtual-shelf-label">${game.name}</div>
             </div>
@@ -3341,6 +3627,14 @@ function showVirtualShelf(container) {
     }).join('');
 
     container.appendChild(grid);
+
+    // Click handler for game detail modal
+    grid.addEventListener('click', (e) => {
+        const item = e.target.closest('.virtual-shelf-item');
+        if (item) {
+            showGameDetailModal(parseInt(item.dataset.gameId));
+        }
+    });
 }
 
 /**
@@ -3361,7 +3655,7 @@ function renderVirtualShelfControls(summaryElement, detailContent) {
     const buttonsHtml = sortOptions.map(opt => {
         const isActive = currentSort === opt.key;
         const arrow = isActive ? (currentDir === 'asc' ? ' ↑' : ' ↓') : '';
-        return `<button class="virtual-shelf-sort-btn${isActive ? ' active' : ''}" data-sort-key="${opt.key}" data-default-dir="${opt.defaultDir}">${opt.label}${arrow}</button>`;
+        return `<button class="virtual-shelf-sort-btn${isActive ? ' active' : ''}" data-sort-key="${opt.key}" data-default-dir="${opt.defaultDir}" data-label="${opt.label}">${opt.label}${arrow}</button>`;
     }).join('');
 
     const checkedAttr = virtualShelfIncludeUnowned ? ' checked' : '';
@@ -3373,15 +3667,19 @@ function renderVirtualShelfControls(summaryElement, detailContent) {
                 ${buttonsHtml}
             </div>
             <div class="virtual-shelf-toggle-group">
-                <input type="checkbox" id="virtual-shelf-include-unowned"${checkedAttr} />
-                <label class="virtual-shelf-toggle-label" for="virtual-shelf-include-unowned">Include unowned played games</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="virtual-shelf-include-unowned"${checkedAttr}>
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Include unowned played games</span>
             </div>
         </div>
     `;
     summaryElement.style.display = 'block';
 
     // Sort button handlers
-    summaryElement.querySelectorAll('.virtual-shelf-sort-btn').forEach(btn => {
+    const sortButtons = summaryElement.querySelectorAll('.virtual-shelf-sort-btn');
+    sortButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const key = btn.dataset.sortKey;
             const defaultDir = btn.dataset.defaultDir;
@@ -3391,8 +3689,18 @@ function renderVirtualShelfControls(summaryElement, detailContent) {
                 currentSortCol = key;
                 currentSortDir = defaultDir;
             }
+            // Update active button and arrow indicator
+            sortButtons.forEach(b => {
+                const isActive = b.dataset.sortKey === currentSortCol;
+                b.classList.toggle('active', isActive);
+                const arrow = currentSortDir === 'asc' ? ' ↑' : ' ↓';
+                b.textContent = isActive ? `${b.dataset.label}${arrow}` : b.dataset.label;
+            });
             updateURL();
-            rerenderDetailContent('virtual-shelf');
+            // Re-render only the grid content, not the summary
+            const detailContent = document.getElementById('detail-content');
+            detailContent.innerHTML = '';
+            showVirtualShelf(detailContent);
         });
     });
 
@@ -3400,7 +3708,10 @@ function renderVirtualShelfControls(summaryElement, detailContent) {
     const toggle = summaryElement.querySelector('#virtual-shelf-include-unowned');
     toggle.addEventListener('change', () => {
         virtualShelfIncludeUnowned = toggle.checked;
-        rerenderDetailContent('virtual-shelf');
+        // Re-render only the grid content, not the summary (preserves toggle transition)
+        const detailContent = document.getElementById('detail-content');
+        detailContent.innerHTML = '';
+        showVirtualShelf(detailContent);
     });
 }
 
@@ -5148,13 +5459,14 @@ function loadFromPermalink() {
     const showAllMetricsParam = urlParams.get('showAllMetrics');
     const sortColParam = urlParams.get('sortCol');
     const sortDirParam = urlParams.get('sortDir');
+    const shelfGameParam = urlParams.get('shelfGame');
 
     // Initialize showAllYearReviewMetrics from URL before early return check
     if (showAllMetricsParam === 'true') {
         showAllYearReviewMetrics = true;
     }
 
-    if (!yearParam && !baseMetricParam && !statParam && !modalParam) {
+    if (!yearParam && !baseMetricParam && !statParam && !modalParam && !shelfGameParam) {
         return; // No permalink parameters
     }
 
@@ -5189,7 +5501,7 @@ function loadFromPermalink() {
     }
 
     // Open the specified stat or modal after a short delay to ensure stats are loaded
-    if (statParam || modalParam) {
+    if (statParam || modalParam || shelfGameParam) {
         setTimeout(() => {
             // Open modal if specified
             if (modalParam === 'h-index') {
@@ -5203,6 +5515,11 @@ function loadFromPermalink() {
             // Open stat detail if specified
             if (statParam) {
                 showDetailSection(statParam);
+            }
+
+            // Open game detail modal if specified
+            if (shelfGameParam) {
+                showGameDetailModal(parseInt(shelfGameParam));
             }
 
             isLoadingFromPermalink = false;
@@ -5300,6 +5617,12 @@ function updateURL() {
     const staircaseLevelModal = document.getElementById('staircase-level-modal');
     if (staircaseLevelModal && staircaseLevelModal.style.display === 'flex') {
         params.set('modal', 'staircase-level');
+    }
+
+    // Add shelfGame parameter if game detail modal is open
+    const gameDetailModal = document.getElementById('game-detail-modal');
+    if (gameDetailModal && gameDetailModal.style.display === 'flex') {
+        params.set('shelfGame', gameDetailModal.dataset.gameId);
     }
 
     // Update the URL without reloading the page

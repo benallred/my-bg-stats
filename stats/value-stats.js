@@ -536,4 +536,5 @@ export {
   getCostPerMetricStats,
   getShelfOfShame,
   getShelfOfShameChanges,
+  getGamePricePaid,
 };
