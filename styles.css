@@ -1604,27 +1604,15 @@ footer p {
     transform: scale(1.1);
 }
 
-/* Experimental Badge */
-.experimental-badge {
+/* Shared tooltip (used by any element with data-tooltip) */
+[data-tooltip] {
     position: relative;
     display: inline-block;
-    margin-left: 0.5rem;
     vertical-align: middle;
     cursor: help;
 }
 
-.experimental-icon {
-    display: block;
-    opacity: 0.6;
-    transition: opacity var(--transition-hover), transform var(--transition-hover);
-}
-
-.experimental-badge:hover .experimental-icon {
-    opacity: 1;
-    transform: scale(1.1);
-}
-
-.experimental-badge::after {
+[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: 125%;
@@ -1650,9 +1638,41 @@ footer p {
     pointer-events: none;
 }
 
-.experimental-badge:hover::after {
+[data-tooltip]:hover::after {
     opacity: 1;
     visibility: visible;
+}
+
+/* Info Tooltip */
+.info-tooltip {
+    margin-left: 0.25rem;
+}
+
+.info-tooltip .info-tooltip-icon {
+    display: block;
+    opacity: 0.6;
+    transition: opacity var(--transition-hover), transform var(--transition-hover);
+}
+
+.info-tooltip:hover .info-tooltip-icon {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Experimental Badge */
+.experimental-badge {
+    margin-left: 0.5rem;
+}
+
+.experimental-icon {
+    display: block;
+    opacity: 0.6;
+    transition: opacity var(--transition-hover), transform var(--transition-hover);
+}
+
+.experimental-badge:hover .experimental-icon {
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 /* Modal */

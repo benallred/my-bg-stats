@@ -2236,7 +2236,7 @@ function showGameDetailModal(gameId) {
     if (firstPlayDate) {
         const preLogging = acquisitionDate && firstLoggedPlayDate && acquisitionDate < firstLoggedPlayDate;
         const firstPlayedLabel = preLogging
-            ? `First Played <svg class="info-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Pre-logging notice"><title>Game was acquired before logging started on ${formatDateWithYear(firstLoggedPlayDate)} — there may be earlier unlogged plays</title><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>`
+            ? `First Played <span class="info-tooltip" data-tooltip="Game was acquired before logging started on ${formatDateWithYear(firstLoggedPlayDate)} — there may be earlier unlogged plays"><svg class="info-tooltip-icon" width="12" height="12" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg></span>`
             : 'First Played';
         dateRows.push({ label: firstPlayedLabel, value: formatDateWithYear(firstPlayDate) });
     }
@@ -2274,7 +2274,7 @@ function showGameDetailModal(gameId) {
 
     // Value Stats section (hidden feature)
     if (pricePaid !== null && isHiddenEnabled()) {
-        const priceInfoIcon = '<svg class="info-icon" width="12" height="12" viewBox="0 0 16 16" aria-label="Includes price of all owned expansions"><title>Includes price of all owned expansions</title><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg>';
+        const priceInfoIcon = '<span class="info-tooltip" data-tooltip="Includes price of all owned expansions"><svg class="info-tooltip-icon" width="12" height="12" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="8" y="11.5" font-size="10" font-weight="bold" text-anchor="middle" fill="currentColor">i</text></svg></span>';
         html += `<div class="game-detail-section-card">`;
         html += `<h4>Value</h4>`;
         html += `<div class="game-detail-row"><span class="label">Price Paid ${priceInfoIcon}</span><span class="value">${formatCostLabel(pricePaid)}</span></div>`;
