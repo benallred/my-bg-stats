@@ -3600,9 +3600,9 @@ function showVirtualShelf(container) {
         games = games.filter(game => isGameOwned(game));
     }
 
-    // Build metric lookup for sorting
-    const hoursBreakdown = getPlayTimeByGame(gameData.games, gameData.plays, currentYear);
-    const sessionsBreakdown = getDaysPlayedByGame(gameData.games, gameData.plays, currentYear);
+    // Build metric lookup for sorting (always all-time, not year-filtered)
+    const hoursBreakdown = getPlayTimeByGame(gameData.games, gameData.plays, null);
+    const sessionsBreakdown = getDaysPlayedByGame(gameData.games, gameData.plays, null);
 
     const metricMap = new Map();
     hoursBreakdown.forEach(entry => {
@@ -3632,37 +3632,10 @@ function showVirtualShelf(container) {
     const sortDir = currentSortDir || 'desc';
     const dirMul = sortDir === 'asc' ? 1 : -1;
 
-    // Build all-time metric lookup for tiebreaking (independent of year filter)
-    const allTimeHoursBreakdown = getPlayTimeByGame(gameData.games, gameData.plays, null);
-    const allTimeSessionsBreakdown = getDaysPlayedByGame(gameData.games, gameData.plays, null);
-
-    const allTimeMetricMap = new Map();
-    allTimeHoursBreakdown.forEach(entry => {
-        allTimeMetricMap.set(entry.game.id, {
-            totalMinutes: entry.totalMinutes,
-            playCount: entry.playCount,
-            uniqueDays: 0,
-        });
-    });
-    allTimeSessionsBreakdown.forEach(entry => {
-        const existing = allTimeMetricMap.get(entry.game.id);
-        if (existing) {
-            existing.uniqueDays = entry.uniqueDays;
-        } else {
-            allTimeMetricMap.set(entry.game.id, {
-                totalMinutes: 0,
-                playCount: 0,
-                uniqueDays: entry.uniqueDays,
-            });
-        }
-    });
-
-    const getAllTime = (gameId) => allTimeMetricMap.get(gameId) || { totalMinutes: 0, uniqueDays: 0, playCount: 0 };
-
     const metricTiebreak = (aId, bId) =>
-        (getAllTime(bId).totalMinutes - getAllTime(aId).totalMinutes)
-        || (getAllTime(bId).uniqueDays - getAllTime(aId).uniqueDays)
-        || (getAllTime(bId).playCount - getAllTime(aId).playCount);
+        (getMetric(bId).totalMinutes - getMetric(aId).totalMinutes)
+        || (getMetric(bId).uniqueDays - getMetric(aId).uniqueDays)
+        || (getMetric(bId).playCount - getMetric(aId).playCount);
 
     games.sort((a, b) => {
         let primary;
@@ -3676,18 +3649,18 @@ function showVirtualShelf(container) {
             case 'hours':
                 primary = dirMul * (getMetric(a.id).totalMinutes - getMetric(b.id).totalMinutes);
                 return primary
-                    || (getAllTime(b.id).uniqueDays - getAllTime(a.id).uniqueDays)
-                    || (getAllTime(b.id).playCount - getAllTime(a.id).playCount);
+                    || (getMetric(b.id).uniqueDays - getMetric(a.id).uniqueDays)
+                    || (getMetric(b.id).playCount - getMetric(a.id).playCount);
             case 'sessions':
                 primary = dirMul * (getMetric(a.id).uniqueDays - getMetric(b.id).uniqueDays);
                 return primary
-                    || (getAllTime(b.id).totalMinutes - getAllTime(a.id).totalMinutes)
-                    || (getAllTime(b.id).playCount - getAllTime(a.id).playCount);
+                    || (getMetric(b.id).totalMinutes - getMetric(a.id).totalMinutes)
+                    || (getMetric(b.id).playCount - getMetric(a.id).playCount);
             case 'plays':
                 primary = dirMul * (getMetric(a.id).playCount - getMetric(b.id).playCount);
                 return primary
-                    || (getAllTime(b.id).totalMinutes - getAllTime(a.id).totalMinutes)
-                    || (getAllTime(b.id).uniqueDays - getAllTime(a.id).uniqueDays);
+                    || (getMetric(b.id).totalMinutes - getMetric(a.id).totalMinutes)
+                    || (getMetric(b.id).uniqueDays - getMetric(a.id).uniqueDays);
             case 'name':
             default:
                 return dirMul * a.name.localeCompare(b.name);
