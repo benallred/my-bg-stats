@@ -2293,6 +2293,56 @@ function showGameDetailModal(gameId) {
         html += `</div>`;
     }
 
+    // Achievements section
+    const milestoneLabels = { 5: 'Nickel', 10: 'Dime', 25: 'Quarter', 100: 'Century' };
+    const valueClubLabels = { 5: '$5 Club', 2.5: '$2.50 Club', 1: '$1 Club', 0.5: '50¢ Club' };
+
+    const hoursMilestone = Milestone.getTierForValue(totalMinutes / 60);
+    const sessionsMilestone = Milestone.getTierForValue(totalSessions);
+    const playsMilestone = Milestone.getTierForValue(totalPlays);
+
+    let hoursValueClub = null;
+    let sessionsValueClub = null;
+    let playsValueClub = null;
+    if (pricePaid !== null && pricePaid > 0) {
+        if (totalMinutes > 0) {
+            hoursValueClub = ValueClub.getTierForValue(pricePaid / (totalMinutes / 60));
+        }
+        if (totalSessions > 0) {
+            sessionsValueClub = ValueClub.getTierForValue(pricePaid / totalSessions);
+        }
+        if (totalPlays > 0) {
+            playsValueClub = ValueClub.getTierForValue(pricePaid / totalPlays);
+        }
+    }
+
+    const hasAchievements = hoursMilestone || sessionsMilestone || playsMilestone
+        || hoursValueClub || sessionsValueClub || playsValueClub;
+
+    if (hasAchievements) {
+        html += `<div class="game-detail-section-card">`;
+        html += `<h4>Achievements</h4>`;
+        if (hoursMilestone) {
+            html += `<div class="game-detail-row"><span class="label">Hours Milestone</span><span class="value">${milestoneLabels[hoursMilestone]}</span></div>`;
+        }
+        if (sessionsMilestone) {
+            html += `<div class="game-detail-row"><span class="label">Sessions Milestone</span><span class="value">${milestoneLabels[sessionsMilestone]}</span></div>`;
+        }
+        if (playsMilestone) {
+            html += `<div class="game-detail-row"><span class="label">Plays Milestone</span><span class="value">${milestoneLabels[playsMilestone]}</span></div>`;
+        }
+        if (hoursValueClub) {
+            html += `<div class="game-detail-row"><span class="label">Hours Value Club</span><span class="value">${valueClubLabels[hoursValueClub]}</span></div>`;
+        }
+        if (sessionsValueClub) {
+            html += `<div class="game-detail-row"><span class="label">Sessions Value Club</span><span class="value">${valueClubLabels[sessionsValueClub]}</span></div>`;
+        }
+        if (playsValueClub) {
+            html += `<div class="game-detail-row"><span class="label">Plays Value Club</span><span class="value">${valueClubLabels[playsValueClub]}</span></div>`;
+        }
+        html += `</div>`;
+    }
+
     html += `</div>`; // Close sections grid
 
     // Expansions section
