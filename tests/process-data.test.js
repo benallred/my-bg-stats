@@ -110,6 +110,7 @@ describe('process-data.js transformation logic', () => {
       expect(output.games[0].copies[0].acquisitionDate).toBeNull();
       expect(output.games[0].copies[0].pricePaid).toBeNull();
       expect(output.games[0].copies[0].currency).toBeNull();
+      expect(output.games[0].copies[0].publicComment).toBeNull();
     });
 
     test('extracts versionName from copy', async () => {
@@ -125,6 +126,37 @@ describe('process-data.js transformation logic', () => {
       const game = output.games.find(g => g.name === 'Test Base Game');
 
       expect(game.copies[0].versionName).toBeNull();
+    });
+
+    test('extracts and trims publicComment from metaData JSON', async () => {
+      const output = await processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Base Game');
+
+      expect(game.copies[0].publicComment).toBe('Great game for beginners.');
+    });
+
+    test('handles missing publicComment as null', async () => {
+      const output = await processData(minimalFixture);
+      const game = output.games.find(g => g.name === 'Test Expansion');
+
+      expect(game.copies[0].publicComment).toBeNull();
+    });
+
+    test('handles whitespace-only publicComment as null', async () => {
+      const fixtureWithWhitespace = {
+        ...minimalFixture,
+        games: [{
+          ...minimalFixture.games[0],
+          copies: [{
+            uuid: 'test-uuid',
+            statusOwned: true,
+            metaData: '{"PublicComment":"  \\n  "}',
+          }],
+        }],
+      };
+
+      const output = await processData(fixtureWithWhitespace);
+      expect(output.games[0].copies[0].publicComment).toBeNull();
     });
   });
 

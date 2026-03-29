@@ -104,6 +104,7 @@ function extractCopyMetadata(copies) {
       let pricePaid = null;
       let currency = null;
       let rating = null;
+      let publicComment = null;
 
       if (copy.metaData) {
         try {
@@ -126,6 +127,12 @@ function extractCopyMetadata(copies) {
               rating = parsedRating;
             }
           }
+          if (metadata.PublicComment) {
+            const trimmed = metadata.PublicComment.trim();
+            if (trimmed) {
+              publicComment = trimmed;
+            }
+          }
         } catch (e) {
           // Invalid JSON in metaData, skip
         }
@@ -138,6 +145,7 @@ function extractCopyMetadata(copies) {
         statusOwned: copy.statusOwned === true,
         pricePaid: pricePaid,
         currency: currency,
+        publicComment: publicComment,
         rating: rating,
       });
     });
