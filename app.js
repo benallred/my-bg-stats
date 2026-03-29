@@ -133,13 +133,7 @@ function getGameInitials(name) {
  * @returns {string} HTML string for table cell content
  */
 function renderGameNameWithThumbnail(game) {
-  // Determine if we have an image or need placeholder
   const hasImage = !!game.thumbnailUrl;
-  const modalClass = game.coverUrl ? ' game-image-clickable' : '';
-  const fullImageAttr = game.coverUrl
-    ? ` data-full-image="${game.coverUrl}"`
-    : '';
-
   const initials = getGameInitials(game.name);
 
   let imageHTML;
@@ -148,7 +142,7 @@ function renderGameNameWithThumbnail(game) {
       <img
         src="${game.thumbnailUrl}"
         alt="${game.name} cover"
-        class="game-thumbnail${modalClass}"${fullImageAttr}
+        class="game-thumbnail"
         onerror="this.classList.add('game-thumbnail-error'); this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');"
       />
       <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden">
@@ -164,7 +158,7 @@ function renderGameNameWithThumbnail(game) {
   }
 
   return `
-    <div class="game-name-with-image">
+    <div class="game-name-with-image game-image-clickable" data-game-id="${game.id}">
       ${imageHTML}
       <span class="game-name">${game.name}</span>
     </div>
@@ -179,11 +173,6 @@ function renderGameNameWithThumbnail(game) {
  */
 function renderGameThumbnailOnly(game) {
   const hasImage = !!game.thumbnailUrl;
-  const modalClass = game.coverUrl ? ' game-image-clickable' : '';
-  const fullImageAttr = game.coverUrl
-    ? ` data-full-image="${game.coverUrl}"`
-    : '';
-
   const initials = getGameInitials(game.name);
 
   if (hasImage) {
@@ -192,16 +181,17 @@ function renderGameThumbnailOnly(game) {
         src="${game.thumbnailUrl}"
         alt="${game.name} cover"
         title="${game.name}"
-        class="game-thumbnail${modalClass}"${fullImageAttr}
+        class="game-thumbnail game-image-clickable"
+        data-game-id="${game.id}"
         onerror="this.classList.add('game-thumbnail-error'); this.style.display='none'; this.nextElementSibling.classList.remove('game-thumbnail-placeholder-hidden');"
       />
-      <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden" title="${game.name}">
+      <div class="game-thumbnail-placeholder game-thumbnail-placeholder-hidden game-image-clickable" data-game-id="${game.id}" title="${game.name}">
         ${initials}
       </div>
     `;
   } else {
     return `
-      <div class="game-thumbnail-placeholder" title="${game.name}">
+      <div class="game-thumbnail-placeholder game-image-clickable" data-game-id="${game.id}" title="${game.name}">
         ${initials}
       </div>
     `;
@@ -215,16 +205,11 @@ function renderGameThumbnailOnly(game) {
  * @returns {string} HTML string with tiny image and bold name
  */
 function renderGameNameWithTinyThumbnail(game) {
-  const modalClass = game.coverUrl ? ' game-image-clickable' : '';
-  const fullImageAttr = game.coverUrl
-    ? ` data-full-image="${game.coverUrl}"`
-    : '';
-
   const imageHTML = game.thumbnailUrl
-    ? `<img src="${game.thumbnailUrl}" alt="" class="game-thumbnail-tiny${modalClass}"${fullImageAttr} />`
+    ? `<img src="${game.thumbnailUrl}" alt="" class="game-thumbnail-tiny" />`
     : '';
 
-  return `${imageHTML}<strong>${game.name}</strong>`;
+  return `<span class="game-image-clickable" data-game-id="${game.id}">${imageHTML}<strong>${game.name}</strong></span>`;
 }
 
 // Shelf gallery photos
@@ -436,17 +421,23 @@ function initializeImageModal() {
     const thumbnail = e.target.closest('.game-image-clickable');
     if (thumbnail) {
       e.stopPropagation(); // Prevent click from bubbling to parent row handlers
-      const fullImageUrl = thumbnail.dataset.fullImage;
-      if (fullImageUrl) {
-        // Check if this is a gallery image and track index
-        const galleryIndex = shelfPhotos.findIndex(p => p.src === fullImageUrl);
-        currentGalleryIndex = galleryIndex;
+      const gameId = thumbnail.dataset.gameId;
+      if (gameId) {
+        // Game thumbnail/name → open game detail modal
+        showGameDetailModal(parseInt(gameId));
+      } else {
+        // Shelf gallery photo → open image modal
+        const fullImageUrl = thumbnail.dataset.fullImage;
+        if (fullImageUrl) {
+          const galleryIndex = shelfPhotos.findIndex(p => p.src === fullImageUrl);
+          currentGalleryIndex = galleryIndex;
 
-        resetZoom();
-        modalImg.src = fullImageUrl;
-        modalImg.alt = thumbnail.alt;
-        modal.classList.add('active');
-        updateNavButtons();
+          resetZoom();
+          modalImg.src = fullImageUrl;
+          modalImg.alt = thumbnail.alt;
+          modal.classList.add('active');
+          updateNavButtons();
+        }
       }
     }
   });

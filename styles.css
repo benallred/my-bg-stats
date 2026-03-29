@@ -847,17 +847,13 @@ table tbody tr:hover {
     transition: opacity var(--transition-hover);
 }
 
-.game-thumbnail:hover {
-    opacity: 0.85;
-}
 
-.game-thumbnail.game-image-clickable {
+.game-image-clickable {
     cursor: pointer;
 }
 
-.game-thumbnail.game-image-clickable:hover {
-    opacity: 0.7;
-    border-color: var(--color-primary);
+.game-image-clickable:hover .game-name {
+    text-decoration: underline;
 }
 
 /* Tiny inline thumbnails for summary text */
@@ -870,13 +866,6 @@ table tbody tr:hover {
     margin-right: 0.25rem;
 }
 
-.game-thumbnail-tiny.game-image-clickable {
-    cursor: pointer;
-}
-
-.game-thumbnail-tiny.game-image-clickable:hover {
-    opacity: 0.7;
-}
 
 /* Placeholder for missing images */
 .game-thumbnail-placeholder {
