@@ -3738,6 +3738,9 @@ function showVirtualShelf(container) {
 
     container.appendChild(grid);
 
+    // Update title with game count
+    document.getElementById('detail-title').innerHTML = `Virtual Shelf (${games.length} game${games.length !== 1 ? 's' : ''})`;
+
     // Click handler for game detail modal
     grid.addEventListener('click', (e) => {
         const item = e.target.closest('.virtual-shelf-item');
@@ -3751,6 +3754,10 @@ function showVirtualShelf(container) {
  * Render virtual shelf sort controls and toggle
  */
 function renderVirtualShelfControls(summaryElement, detailContent) {
+    const baseGames = gameData.games.filter(game => game.isBaseGame);
+    const playedGameIds = new Set(gameData.plays.map(p => p.gameId));
+    const unownedPlayedCount = baseGames.filter(game => !isGameOwned(game) && playedGameIds.has(game.id)).length;
+
     const currentSort = currentSortCol || 'rating';
     const currentDir = currentSortDir || 'desc';
 
@@ -3781,7 +3788,7 @@ function renderVirtualShelfControls(summaryElement, detailContent) {
                     <input type="checkbox" id="virtual-shelf-include-unowned"${checkedAttr}>
                     <span class="toggle-slider"></span>
                 </label>
-                <span class="toggle-label">Include unowned played games</span>
+                <span class="toggle-label">Also show ${unownedPlayedCount} more unowned played game${unownedPlayedCount !== 1 ? 's' : ''}</span>
             </div>
         </div>
     `;
