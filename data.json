@@ -4070,6 +4070,24 @@
       "typicalPlayTimeMinutes": 40
     },
     {
+      "id": 619,
+      "name": "Dominion",
+      "bggId": 36218,
+      "year": 2008,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [],
+      "playCount": 1,
+      "uniquePlayDays": 1,
+      "thumbnailUrl": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__small/img/B2u2ghwlmI_qsUtCwuvcbnBcIqU=/fit-in/200x150/filters:strip_icc()/pic394356.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__original/img/96COuakNiLRrjDLc1sM4Zxsw4WE=/0x0/filters:format(jpeg)/pic394356.jpg",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": 52
+    },
+    {
       "id": 578,
       "name": "DONUTS",
       "bggId": 341358,
@@ -8679,12 +8697,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 3,
+      "playCount": 5,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/KDrRxEKQMmHyM0QQ2ONX4Q__small/img/EusjojuWYxwkxaP7eAnaBn1QzLg=/fit-in/200x150/filters:strip_icc()/pic8638247.jpg",
       "coverUrl": "https://cf.geekdo-images.com/KDrRxEKQMmHyM0QQ2ONX4Q__original/img/XD-aeaMShk-TN_n0n6O9kbczxNY=/0x0/filters:format(jpeg)/pic8638247.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 62
+      "typicalPlayTimeMinutes": 63
     },
     {
       "id": 66,
@@ -9843,7 +9861,7 @@
       "name": "Raptor",
       "bggId": 177639,
       "year": 2015,
-      "rating": null,
+      "rating": 8,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -9856,11 +9874,11 @@
           "statusOwned": true,
           "pricePaid": 18.8,
           "currency": "USD",
-          "publicComment": null
+          "publicComment": "Dropping half a point because some rules are scattered through the rulebook and hard to find."
         }
       ],
-      "playCount": 17,
-      "uniquePlayDays": 16,
+      "playCount": 18,
+      "uniquePlayDays": 17,
       "thumbnailUrl": "https://cf.geekdo-images.com/-Ro5KFX55FbZBWehBy9LKg__thumb/img/yHZjXqMjgYpXCZZDVQsCJfABYA4=/fit-in/200x150/filters:strip_icc()/pic6974678.jpg",
       "coverUrl": "https://cf.geekdo-images.com/-Ro5KFX55FbZBWehBy9LKg__original/img/17jLBJbMVzZssJLpRh503itz008=/0x0/filters:format(jpeg)/pic6974678.jpg",
       "expansionIds": [],
@@ -16992,6 +17010,49 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 285,
+      "copyId": "d74da117-ddfd-4620-b118-ad4cc06727e5",
+      "date": "2026-07-17",
+      "timestamp": "2026-07-17 18:22:32",
+      "durationMin": 23,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 607,
+      "copyId": "39d2fd99-92e2-4ffd-8d17-e7ac90940aa7",
+      "date": "2026-07-14",
+      "timestamp": "2026-07-14 20:02:05",
+      "durationMin": 63,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 619,
+      "copyId": null,
+      "date": "2026-07-14",
+      "timestamp": "2026-07-14 12:13:40",
+      "durationMin": 52,
+      "durationEstimated": false,
+      "players": [
+        3,
+        12,
+        78,
+        116
+      ],
+      "locationId": 5
+    },
     {
       "gameId": 82,
       "copyId": "503d36f5-1775-4f0b-aec6-8a9951eb13ed",
@@ -48958,6 +49019,10 @@
     {
       "playerId": 115,
       "name": "Ben Olson"
+    },
+    {
+      "playerId": 116,
+      "name": "Jon Turner"
     }
   ],
   "locations": [
@@ -49014,5 +49079,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-07-13T01:04:11.000Z"
+  "generatedAt": "2026-07-18T00:22:32.000Z"
 }
