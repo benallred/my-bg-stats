@@ -1880,6 +1880,30 @@ footer p {
     color: var(--text-secondary);
 }
 
+.game-detail-comments {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-width: 22rem;
+    text-align: left;
+}
+
+.game-detail-comment {
+    font-style: italic;
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: var(--text-secondary);
+    white-space: pre-line;
+}
+
+.game-detail-comment::before {
+    content: '\201C';
+}
+
+.game-detail-comment::after {
+    content: '\201D';
+}
+
 /* BGG-style rating hexagon */
 .rating-hex {
     display: inline-flex;

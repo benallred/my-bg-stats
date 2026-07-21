@@ -84,7 +84,7 @@ import {
   getGameRankings,
 } from './stats.js';
 
-import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber, renderRatingHexagon } from './formatting.js';
+import { escapeHtml, formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber, renderRatingHexagon } from './formatting.js';
 import { tableColumnConfigs, getDefaultSort, sortTableData, createSortableHeaderHtml } from './table-sorting.js';
 
 /**
@@ -2151,9 +2151,21 @@ function showGameDetailModal(gameId) {
     const initials = getGameInitials(game.name);
     const isRated = game.rating !== null && game.rating !== undefined;
     const ratingScale = isRated ? '/ 10' : 'Not rated';
+
+    // Collect public comments across all copies (deduped); each is quoted separately
+    const copyComments = game.copies
+        ? [...new Set(game.copies.map(copy => copy.publicComment).filter(Boolean))]
+        : [];
+    const commentDisplay = copyComments.length > 0
+        ? `<div class="game-detail-comments">${
+            copyComments.map(comment => `<div class="game-detail-comment">${escapeHtml(comment)}</div>`).join('')
+          }</div>`
+        : '';
+
     const ratingDisplay = `<div class="game-detail-rating">
         ${renderRatingHexagon(game.rating, 'rating-hex--lg')}
         <span class="game-detail-rating-scale">${ratingScale}</span>
+        ${commentDisplay}
     </div>`;
 
     if (imageUrl) {

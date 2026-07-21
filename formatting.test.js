@@ -8,6 +8,7 @@ import {
   formatLargeNumber,
   getRatingColor,
   renderRatingHexagon,
+  escapeHtml,
 } from './formatting.js';
 
 describe('formatApproximateHours', () => {
@@ -191,5 +192,22 @@ describe('renderRatingHexagon', () => {
   test('combines the no-rating and extra classes', () => {
     const html = renderRatingHexagon(null, 'rating-hex--lg');
     expect(html).toContain('class="rating-hex rating-hex--none rating-hex--lg"');
+  });
+});
+
+describe('escapeHtml', () => {
+  test('escapes ampersands, less-than, and greater-than', () => {
+    expect(escapeHtml('Tom & Jerry')).toBe('Tom &amp; Jerry');
+    expect(escapeHtml('a < b > c')).toBe('a &lt; b &gt; c');
+    expect(escapeHtml('<script>')).toBe('&lt;script&gt;');
+  });
+
+  test('escapes ampersands before entities to avoid double-escaping issues', () => {
+    expect(escapeHtml('&lt;')).toBe('&amp;lt;');
+  });
+
+  test('leaves plain text and newlines untouched', () => {
+    expect(escapeHtml('Line one\nLine two')).toBe('Line one\nLine two');
+    expect(escapeHtml("Player's choice")).toBe("Player's choice");
   });
 });

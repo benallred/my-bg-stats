@@ -68,6 +68,18 @@ export function formatLargeNumber(num) {
 }
 
 /**
+ * Escape HTML-significant characters for safe insertion as element text content.
+ * @param {string} str - Raw text
+ * @returns {string} Escaped text
+ */
+export function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+/**
  * Get the BGG rating color for a given rating value.
  * Uses BoardGameGeek's rating color bands (floor-banded, so decimals take the
  * color of their integer floor — e.g. 7.3 is blue like 7, 4.5 is red like 4).
