@@ -168,6 +168,27 @@ describe('process-data.js transformation logic', () => {
       expect(game.rating).toBe(8);
     });
 
+    test('preserves half-step ratings', async () => {
+      const fixture = {
+        ...minimalFixture,
+        games: [{
+          id: 1,
+          name: 'Half Step Game',
+          bggId: 1001,
+          isBaseGame: 1,
+          isExpansion: 0,
+          copies: [{
+            uuid: 'test-uuid',
+            statusOwned: true,
+            metaData: '{"Rating":"7.5"}',
+          }],
+        }],
+      };
+
+      const output = await processData(fixture);
+      expect(output.games[0].rating).toBe(7.5);
+    });
+
     test('handles missing rating as null', async () => {
       const output = await processData(minimalFixture);
       const game = output.games.find(g => g.name === 'Test Expansion');

@@ -122,7 +122,7 @@ function extractCopyMetadata(copies) {
             currency = metadata.PricePaidCurrency;
           }
           if (metadata.Rating) {
-            const parsedRating = parseInt(metadata.Rating, 10);
+            const parsedRating = parseFloat(metadata.Rating);
             if (!isNaN(parsedRating)) {
               rating = parsedRating;
             }
