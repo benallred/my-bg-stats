@@ -6,6 +6,8 @@ import {
   formatDateWithWeekday,
   formatDateWithYear,
   formatLargeNumber,
+  getRatingColor,
+  renderRatingHexagon,
 } from './formatting.js';
 
 describe('formatApproximateHours', () => {
@@ -121,5 +123,73 @@ describe('formatCostLabel', () => {
   test('handles edge case at $1 boundary', () => {
     expect(formatCostLabel(1)).toBe('$1');
     expect(formatCostLabel(0.99)).toBe('99¢');
+  });
+});
+
+describe('getRatingColor', () => {
+  test('returns BGG green for 9-10', () => {
+    expect(getRatingColor(10)).toBe('#249563');
+    expect(getRatingColor(9)).toBe('#249563');
+  });
+
+  test('returns BGG green for 8 band', () => {
+    expect(getRatingColor(8)).toBe('#2fc482');
+    expect(getRatingColor(8.5)).toBe('#2fc482');
+  });
+
+  test('returns BGG blue for 7 band', () => {
+    expect(getRatingColor(7)).toBe('#1d8acd');
+    expect(getRatingColor(7.3)).toBe('#1d8acd');
+    expect(getRatingColor(7.9)).toBe('#1d8acd');
+  });
+
+  test('returns BGG slate blue for 5-6 band', () => {
+    expect(getRatingColor(6.5)).toBe('#5369a2');
+    expect(getRatingColor(5)).toBe('#5369a2');
+  });
+
+  test('returns BGG red for 3-4 band', () => {
+    expect(getRatingColor(4.5)).toBe('#df4751');
+    expect(getRatingColor(3)).toBe('#df4751');
+  });
+
+  test('returns BGG dark red for 1-2 band', () => {
+    expect(getRatingColor(2)).toBe('#db303b');
+    expect(getRatingColor(1)).toBe('#db303b');
+  });
+
+  test('returns gray for null, undefined, or below 1', () => {
+    expect(getRatingColor(null)).toBe('#6b7785');
+    expect(getRatingColor(undefined)).toBe('#6b7785');
+    expect(getRatingColor(0)).toBe('#6b7785');
+  });
+});
+
+describe('renderRatingHexagon', () => {
+  test('renders a hexagon span with the band color and rating value', () => {
+    const html = renderRatingHexagon(8.5);
+    expect(html).toContain('class="rating-hex"');
+    expect(html).toContain('background-color: #2fc482;');
+    expect(html).toContain('>8.5</span>');
+  });
+
+  test('appends an extra class when provided', () => {
+    const html = renderRatingHexagon(10, 'rating-hex--lg');
+    expect(html).toContain('class="rating-hex rating-hex--lg"');
+    expect(html).toContain('background-color: #249563;');
+  });
+
+  test('renders a muted gray "no rating" hexagon for null or undefined', () => {
+    const html = renderRatingHexagon(null);
+    expect(html).toContain('class="rating-hex rating-hex--none"');
+    expect(html).toContain('background-color: #6b7785;');
+    expect(html).toContain('title="No rating"');
+    expect(html).toContain('></span>');
+    expect(renderRatingHexagon(undefined)).toContain('rating-hex--none');
+  });
+
+  test('combines the no-rating and extra classes', () => {
+    const html = renderRatingHexagon(null, 'rating-hex--lg');
+    expect(html).toContain('class="rating-hex rating-hex--none rating-hex--lg"');
   });
 });

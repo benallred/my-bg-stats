@@ -1867,9 +1867,41 @@ footer p {
 }
 
 .game-detail-rating {
-    margin-top: 0.25rem;
-    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.game-detail-rating-scale {
+    font-size: 0.9rem;
+    font-weight: 600;
     color: var(--text-secondary);
+}
+
+/* BGG-style rating hexagon */
+.rating-hex {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1em;
+    height: 2.42em; /* pointy-top hexagon: height ≈ width * 2/√3 */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    line-height: 1;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+}
+
+.rating-hex--lg {
+    font-size: 1.15rem;
+}
+
+.rating-hex--none {
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .game-detail-cover img {

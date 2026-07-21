@@ -68,6 +68,43 @@ export function formatLargeNumber(num) {
 }
 
 /**
+ * Get the BGG rating color for a given rating value.
+ * Uses BoardGameGeek's rating color bands (floor-banded, so decimals take the
+ * color of their integer floor — e.g. 7.3 is blue like 7, 4.5 is red like 4).
+ * @param {number|null} rating - Rating value (1-10) or null
+ * @returns {string} Hex color string
+ */
+export function getRatingColor(rating) {
+    if (rating === null || rating === undefined) return '#6b7785';
+    if (rating >= 9) return '#249563'; // 9-10 dark green
+    if (rating >= 8) return '#2fc482'; // 8 green
+    if (rating >= 7) return '#1d8acd'; // 7 blue
+    if (rating >= 5) return '#5369a2'; // 5-6 slate blue
+    if (rating >= 3) return '#df4751'; // 3-4 red
+    if (rating >= 1) return '#db303b'; // 1-2 dark red
+    return '#6b7785'; // below 1 / unrated
+}
+
+/**
+ * Render a BGG-style rating hexagon as an HTML string, colored by rating band.
+ * Unrated games (null/undefined) render a muted gray "no rating" hexagon.
+ * @param {number|null} rating - Rating value (1-10) or null
+ * @param {string|null} extraClass - Optional extra CSS class (e.g. 'rating-hex--lg')
+ * @returns {string} HTML string
+ */
+export function renderRatingHexagon(rating, extraClass = null) {
+    const isRated = rating !== null && rating !== undefined;
+    const color = getRatingColor(rating);
+    const classes = ['rating-hex'];
+    if (!isRated) classes.push('rating-hex--none');
+    if (extraClass) classes.push(extraClass);
+    const cls = classes.join(' ');
+    const title = isRated ? '' : ' title="No rating"';
+    const label = isRated ? rating : '';
+    return `<span class="${cls}" style="background-color: ${color};"${title}>${label}</span>`;
+}
+
+/**
  * Format a cost value as a currency label
  * - Integer dollar values: "$5", "$1"
  * - Decimal dollar values: "$2.50"

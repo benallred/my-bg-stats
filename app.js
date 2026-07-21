@@ -84,7 +84,7 @@ import {
   getGameRankings,
 } from './stats.js';
 
-import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber } from './formatting.js';
+import { formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber, renderRatingHexagon } from './formatting.js';
 import { tableColumnConfigs, getDefaultSort, sortTableData, createSortableHeaderHtml } from './table-sorting.js';
 
 /**
@@ -2149,9 +2149,12 @@ function showGameDetailModal(gameId) {
     // Cover image
     const imageUrl = game.coverUrl || game.thumbnailUrl;
     const initials = getGameInitials(game.name);
-    const ratingDisplay = game.rating !== null && game.rating !== undefined
-        ? `<div class="game-detail-rating">Rating: ${game.rating} / 10</div>`
-        : '';
+    const isRated = game.rating !== null && game.rating !== undefined;
+    const ratingScale = isRated ? '/ 10' : 'Not rated';
+    const ratingDisplay = `<div class="game-detail-rating">
+        ${renderRatingHexagon(game.rating, 'rating-hex--lg')}
+        <span class="game-detail-rating-scale">${ratingScale}</span>
+    </div>`;
 
     if (imageUrl) {
         html += `<div class="game-detail-cover">
@@ -4241,7 +4244,7 @@ function showCollectionRatingBreakdown(container) {
             ${sortedGames.map(item => `
                 <tr>
                     <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
-                    <td>${item.rating}</td>
+                    <td>${renderRatingHexagon(item.rating)}</td>
                     <td>${formatAcquisitionDate(item.acquisitionDate)}</td>
                 </tr>
             `).join('')}
@@ -4313,7 +4316,7 @@ function showPlayedRatingBreakdown(container) {
             ${sortedGames.map(item => `
                 <tr>
                     <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
-                    <td>${item.rating}</td>
+                    <td>${renderRatingHexagon(item.rating)}</td>
                     <td>${getMetricValue(item)}</td>
                     <td>${item.playData.owned ? '' : '👥'}</td>
                 </tr>
