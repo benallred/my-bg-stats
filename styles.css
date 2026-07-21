@@ -1875,6 +1875,8 @@ footer p {
 }
 
 .game-detail-rating-scale {
+    flex-shrink: 0;
+    white-space: nowrap;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-secondary);
@@ -1909,6 +1911,7 @@ footer p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0; /* never squish when used as a flex item (e.g. modal rating row) */
     width: 2.1em;
     height: 2.42em; /* pointy-top hexagon: height ≈ width * 2/√3 */
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
