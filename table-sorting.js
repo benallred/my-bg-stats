@@ -85,6 +85,7 @@ export const tableColumnConfigs = {
         { key: 'hours', getValue: item => item.playData.totalMinutes },
         { key: 'sessions', getValue: item => item.playData.uniqueDates },
         { key: 'plays', getValue: item => item.playData.playCount },
+        { key: 'weight', getValue: item => item.weightShare },
         { key: 'status', sortable: false },
     ],
     'fives': [

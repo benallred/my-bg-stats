@@ -429,6 +429,16 @@ describe('sortTableData - all table types', () => {
         expect(sortTableData(data, 'played-rating', 'plays', 'desc')[0].playData.playCount).toBe(6);
     });
 
+    test('played-rating sorts by weight share', () => {
+        const data = [
+            { game: { name: 'Catan' }, rating: 7, weightShare: 0.25, playData: { totalMinutes: 120, uniqueDates: 3, playCount: 5 } },
+            { game: { name: 'Azul' }, rating: 9, weightShare: 0.6, playData: { totalMinutes: 60, uniqueDates: 2, playCount: 3 } },
+            { game: { name: 'Wingspan' }, rating: 8, weightShare: 0.15, playData: { totalMinutes: 180, uniqueDates: 4, playCount: 6 } },
+        ];
+        expect(sortTableData(data, 'played-rating', 'weight', 'desc')[0].weightShare).toBe(0.6);
+        expect(sortTableData(data, 'played-rating', 'weight', 'asc')[0].weightShare).toBe(0.15);
+    });
+
     test('played-rating handles null ratings by sorting them last', () => {
         const data = [
             { game: { name: 'Catan' }, rating: 7, playData: { totalMinutes: 120, uniqueDates: 3, playCount: 5 } },

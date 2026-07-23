@@ -45,15 +45,33 @@ function getPlayedRatingBreakdown(games, plays, year = null) {
   let ratedCount = 0;
   const gameRatings = [];
 
+  // Weighted-rating accumulators: each rated game's rating is weighted by its
+  // share of the metric (minutes for hours, sessions, plays). Ordering follows
+  // the hours/sessions/plays convention.
+  let weightedMinutesSum = 0;
+  let totalMinutes = 0;
+  let weightedSessionsSum = 0;
+  let totalSessions = 0;
+  let weightedPlaysSum = 0;
+  let totalPlays = 0;
+
   playDataPerGame.forEach((playData, gameId) => {
     const game = games.find(g => g.id === gameId);
     if (!game) return;
 
     const hasRating = game.rating !== null && game.rating !== undefined;
+    const sessions = playData.uniqueDates.size;
 
     if (hasRating) {
       sumRatings += game.rating;
       ratedCount++;
+
+      weightedMinutesSum += playData.totalMinutes * game.rating;
+      totalMinutes += playData.totalMinutes;
+      weightedSessionsSum += sessions * game.rating;
+      totalSessions += sessions;
+      weightedPlaysSum += playData.playCount * game.rating;
+      totalPlays += playData.playCount;
     }
 
     gameRatings.push({
@@ -62,7 +80,7 @@ function getPlayedRatingBreakdown(games, plays, year = null) {
       playData: {
         totalMinutes: playData.totalMinutes,
         playCount: playData.playCount,
-        uniqueDates: playData.uniqueDates.size,
+        uniqueDates: sessions,
         owned: playData.owned,
       },
     });
@@ -70,6 +88,11 @@ function getPlayedRatingBreakdown(games, plays, year = null) {
 
   return {
     average: ratedCount > 0 ? sumRatings / ratedCount : null,
+    weightedAverage: {
+      hours: totalMinutes > 0 ? weightedMinutesSum / totalMinutes : null,
+      sessions: totalSessions > 0 ? weightedSessionsSum / totalSessions : null,
+      plays: totalPlays > 0 ? weightedPlaysSum / totalPlays : null,
+    },
     ratedCount,
     totalCount: playDataPerGame.size,
     gameRatings,

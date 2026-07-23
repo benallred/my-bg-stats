@@ -766,6 +766,7 @@ function setupBaseMetricFilter() {
         updateCostAnalysisStats();
         updateValueClubsStats();
         updateSocialLocationStats();
+        updatePlayedRatingStats();
 
         // Only refresh sections if not loading from permalink
         if (!isLoadingFromPermalink) {
@@ -789,6 +790,11 @@ function setupBaseMetricFilter() {
             // Refresh solo detail section if open
             if (currentlyOpenStatType === 'solo') {
                 showDetailSection('solo');
+            }
+
+            // Refresh played-rating detail section if open (metric-aware column)
+            if (currentlyOpenStatType === 'played-rating') {
+                showDetailSection('played-rating');
             }
 
             // Update year-review filter if open and toggle is not checked
@@ -1392,10 +1398,20 @@ function updateCollectionRatingStats() {
 function updatePlayedRatingStats() {
     const avgPlayed = statsCache.playedRatingData;
 
-    // Update main value (avg rating of played games)
+    // Metric-aware title reflects which weighting the value uses
+    const titles = {
+        hours: 'Hours-Weighted Rating',
+        sessions: 'Sessions-Weighted Rating',
+        plays: 'Plays-Weighted Rating',
+    };
+    const titleElement = document.querySelector('#played-rating .widget__title');
+    titleElement.textContent = titles[currentBaseMetric] || titles.hours;
+
+    // Main value: play-weighted rating for the current base metric
+    const weighted = avgPlayed.weightedAverage[currentBaseMetric];
     const mainValue = document.querySelector('#played-rating .widget__value');
-    mainValue.textContent = avgPlayed.average !== null
-        ? avgPlayed.average.toFixed(1)
+    mainValue.textContent = weighted !== null
+        ? weighted.toFixed(1)
         : '--';
 
     // Update "games rated" substat - only show when some games lack ratings
@@ -4291,9 +4307,31 @@ function showPlayedRatingBreakdown(container) {
         return;
     }
 
+    // Raw metric weight for a game, in the current base metric's units
+    const getMetricWeight = (item) => {
+        switch (currentBaseMetric) {
+            case Metric.SESSIONS:
+                return item.playData.uniqueDates;
+            case Metric.PLAYS:
+                return item.playData.playCount;
+            case Metric.HOURS:
+            default:
+                return item.playData.totalMinutes;
+        }
+    };
+
+    // Each rated game's share of the weighted rating drives the weighted average,
+    // so surface it as a sortable "% of metric" column. Shares are relative to
+    // the rated games shown, so they sum to 100%.
+    const totalWeight = ratedGames.reduce((sum, item) => sum + getMetricWeight(item), 0);
+    const weightedGames = ratedGames.map(item => ({
+        ...item,
+        weightShare: totalWeight > 0 ? getMetricWeight(item) / totalWeight : 0,
+    }));
+
     // Apply current sort
     const sortedGames = sortTableData(
-        ratedGames,
+        weightedGames,
         statType,
         currentSortCol,
         currentSortDir,
@@ -4307,6 +4345,12 @@ function showPlayedRatingBreakdown(container) {
         plays: 'Plays',
     };
     const metricHeader = metricHeaders[currentBaseMetric] || 'Hours';
+    const shareHeaders = {
+        hours: '% of Hours',
+        sessions: '% of Sessions',
+        plays: '% of Plays',
+    };
+    const shareHeader = shareHeaders[currentBaseMetric] || '% of Hours';
 
     const getMetricValue = (item) => {
         switch (currentBaseMetric) {
@@ -4325,6 +4369,7 @@ function showPlayedRatingBreakdown(container) {
         { key: 'game', label: 'Game' },
         { key: 'rating', label: 'Rating' },
         { key: currentBaseMetric, label: metricHeader },
+        { key: 'weight', label: shareHeader },
         { key: 'status', label: 'Others\' 👥' },
     ], currentSortCol || 'rating', currentSortDir || 'desc');
 
@@ -4339,6 +4384,7 @@ function showPlayedRatingBreakdown(container) {
                     <td>${item.game ? renderGameNameWithThumbnail(item.game) : 'Unknown Game'}</td>
                     <td>${renderRatingHexagon(item.rating)}</td>
                     <td>${getMetricValue(item)}</td>
+                    <td>${(item.weightShare * 100).toFixed(1)}%</td>
                     <td>${item.playData.owned ? '' : '👥'}</td>
                 </tr>
             `).join('')}

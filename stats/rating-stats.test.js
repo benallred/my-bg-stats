@@ -136,6 +136,76 @@ describe('getPlayedRatingBreakdown', () => {
     expect(result.gameRatings[0].playData.totalMinutes).toBe(60); // Only valid duration counted
     expect(result.gameRatings[0].playData.playCount).toBe(3);
   });
+
+  test('returns null weighted averages when no plays', () => {
+    const result = getPlayedRatingBreakdown(games, []);
+
+    expect(result.weightedAverage.hours).toBeNull();
+    expect(result.weightedAverage.sessions).toBeNull();
+    expect(result.weightedAverage.plays).toBeNull();
+  });
+});
+
+describe('getPlayedRatingBreakdown - play-weighted rating', () => {
+  // A long, highly-rated game vs. a short, lower-rated filler played more often.
+  // Each metric weights the ratings differently, so all three values diverge.
+  const games = [
+    { id: 1, name: 'Long', rating: 10 },
+    { id: 2, name: 'Filler', rating: 4 },
+    { id: 3, name: 'Unrated', rating: null },
+  ];
+
+  const plays = [
+    { gameId: 1, date: '2024-01-01', durationMin: 300, copyId: 'c1' }, // 1 session, 1 play, 300 min
+    { gameId: 2, date: '2024-02-01', durationMin: 40, copyId: 'c2' }, // session 1
+    { gameId: 2, date: '2024-02-01', durationMin: 10, copyId: 'c2' }, // same day -> still session 1
+    { gameId: 2, date: '2024-02-02', durationMin: 10, copyId: 'c2' }, // session 2
+    { gameId: 3, date: '2024-03-01', durationMin: 1000, copyId: 'c3' }, // unrated, must be ignored
+  ];
+
+  test('weights each game rating by its share of the metric', () => {
+    const result = getPlayedRatingBreakdown(games, plays);
+
+    // hours: (10*300 + 4*60) / 360 = 9.0 (long game dominates)
+    expect(result.weightedAverage.hours).toBeCloseTo(9.0, 5);
+    // sessions: (10*1 + 4*2) / 3 = 6.0
+    expect(result.weightedAverage.sessions).toBeCloseTo(6.0, 5);
+    // plays: (10*1 + 4*3) / 4 = 5.5 (filler pulls it down most)
+    expect(result.weightedAverage.plays).toBeCloseTo(5.5, 5);
+  });
+
+  test('excludes unrated games from the weighted average', () => {
+    // The unrated game has 1000 minutes; if it leaked in it would crush the average.
+    const result = getPlayedRatingBreakdown(games, plays);
+
+    expect(result.weightedAverage.hours).toBeGreaterThan(4);
+  });
+
+  test('hours weighting is null when all rated plays lack durations', () => {
+    const durationlessPlays = [
+      { gameId: 1, date: '2024-01-01', durationMin: null, copyId: 'c1' },
+    ];
+
+    const result = getPlayedRatingBreakdown(games, durationlessPlays);
+
+    expect(result.weightedAverage.hours).toBeNull(); // total minutes = 0
+    expect(result.weightedAverage.sessions).toBeCloseTo(10, 5);
+    expect(result.weightedAverage.plays).toBeCloseTo(10, 5);
+  });
+
+  test('respects the year filter', () => {
+    const multiYearPlays = [
+      { gameId: 1, date: '2024-01-01', durationMin: 300, copyId: 'c1' },
+      { gameId: 2, date: '2023-06-01', durationMin: 300, copyId: 'c2' }, // prior year, excluded
+    ];
+
+    const result = getPlayedRatingBreakdown(games, multiYearPlays, 2024);
+
+    // Only Game 1 (rating 10) remains, so every weighting equals 10.
+    expect(result.weightedAverage.hours).toBeCloseTo(10, 5);
+    expect(result.weightedAverage.sessions).toBeCloseTo(10, 5);
+    expect(result.weightedAverage.plays).toBeCloseTo(10, 5);
+  });
 });
 
 describe('getCollectionRatingBreakdown', () => {
