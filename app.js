@@ -2168,6 +2168,12 @@ function showGameDetailModal(gameId) {
         ${commentDisplay}
     </div>`;
 
+    const bggLink = game.bggId
+        ? `<div class="game-detail-links">
+            <a class="game-detail-bgg-link" href="https://boardgamegeek.com/boardgame/${game.bggId}" target="_blank" rel="noopener noreferrer">View on BoardGameGeek</a>
+        </div>`
+        : '';
+
     if (imageUrl) {
         html += `<div class="game-detail-cover">
             <img src="${imageUrl}" alt="${game.name} cover"
@@ -2374,6 +2380,9 @@ function showGameDetailModal(gameId) {
         }
         html += `</div></div>`;
     }
+
+    // BGG link
+    html += bggLink;
 
     bodyEl.innerHTML = html;
     modal.style.display = 'flex';

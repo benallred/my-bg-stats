@@ -1882,6 +1882,23 @@ footer p {
     color: var(--text-secondary);
 }
 
+.game-detail-links {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.game-detail-bgg-link {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+
+.game-detail-bgg-link:hover {
+    color: var(--color-primary);
+}
+
 .game-detail-comments {
     display: flex;
     flex-direction: column;
