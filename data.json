@@ -1611,7 +1611,7 @@
       "name": "Battleship",
       "bggId": 2425,
       "year": 1931,
-      "rating": null,
+      "rating": 5,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -2733,7 +2733,7 @@
       "name": "Chess",
       "bggId": 171,
       "year": 1475,
-      "rating": null,
+      "rating": 5.5,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -2773,7 +2773,7 @@
           "statusOwned": true,
           "pricePaid": 10.99,
           "currency": "USD",
-          "publicComment": null
+          "publicComment": "Cardinal Industries Wood Chess Set"
         }
       ],
       "playCount": 4,
@@ -2788,7 +2788,7 @@
       "name": "Chinese Checkers",
       "bggId": 2386,
       "year": 1893,
-      "rating": null,
+      "rating": 4,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -2916,7 +2916,7 @@
       "name": "Clue",
       "bggId": 1294,
       "year": 1949,
-      "rating": null,
+      "rating": 5,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -3440,11 +3440,39 @@
       "typicalPlayTimeMinutes": null
     },
     {
+      "id": 626,
+      "name": "Cozy Stickerville",
+      "bggId": 456440,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": true,
+      "copies": [
+        {
+          "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
+          "versionName": null,
+          "acquisitionDate": "2026-06-24",
+          "statusOwned": true,
+          "pricePaid": 24.97,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__small/img/SRpAFFgh4mpyvCqzq8kc3B6_7F4=/fit-in/200x150/filters:strip_icc()/pic9171780.png",
+      "coverUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__original/img/9ai5WpyU0jn1cCwAiRaGIQy-VqQ=/0x0/filters:format(png)/pic9171780.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 4,
       "name": "Crokinole",
       "bggId": 521,
       "year": 1876,
-      "rating": null,
+      "rating": 7,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -3460,8 +3488,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 28,
-      "uniquePlayDays": 20,
+      "playCount": 29,
+      "uniquePlayDays": 21,
       "thumbnailUrl": "https://cf.geekdo-images.com/7ejbxsn-UtLl3ehamuAEdw__thumb/img/AX0pNTuAzpUfxlvtwirM6zAK4ws=/fit-in/200x150/filters:strip_icc()/pic79413.jpg",
       "coverUrl": "https://cf.geekdo-images.com/7ejbxsn-UtLl3ehamuAEdw__original/img/HJOZG6y87_skppfIqX-voRlhNxE=/0x0/filters:format(jpeg)/pic79413.jpg",
       "expansionIds": [],
@@ -4634,7 +4662,7 @@
       "name": "Fabled Fruit",
       "bggId": 203427,
       "year": 2016,
-      "rating": null,
+      "rating": 8.5,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -4647,17 +4675,17 @@
           "statusOwned": true,
           "pricePaid": 42.31,
           "currency": "USD",
-          "publicComment": null
+          "publicComment": "Drops half a point for very occasional rules ambiguity and the feels-bad when everyone else seems to get strong actions and you're always stuck with drawing a single card."
         }
       ],
-      "playCount": 26,
-      "uniquePlayDays": 26,
+      "playCount": 27,
+      "uniquePlayDays": 27,
       "thumbnailUrl": "https://cf.geekdo-images.com/as7-SsHhtfKyuTbhHVCEkg__thumb/img/-gz5nsWLViy7VBE0uD1-qsilWHk=/fit-in/200x150/filters:strip_icc()/pic3086825.jpg",
       "coverUrl": "https://cf.geekdo-images.com/as7-SsHhtfKyuTbhHVCEkg__original/img/c6V5rJEGGFVCD0QXUwwf7IAGmBg=/0x0/filters:format(jpeg)/pic3086825.jpg",
       "expansionIds": [
         36
       ],
-      "typicalPlayTimeMinutes": 38
+      "typicalPlayTimeMinutes": 37
     },
     {
       "id": 36,
@@ -5442,9 +5470,39 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/EEcBICSVGbH0Epy_LKpiVw__small/img/5pAE-HkT5IxtknnDq1oD5SRLJeQ=/fit-in/200x150/filters:strip_icc()/pic8964384.jpg",
       "coverUrl": "https://cf.geekdo-images.com/EEcBICSVGbH0Epy_LKpiVw__original/img/oC3sW6J1iWaZfr1mOEjVy7dF1IY=/0x0/filters:format(jpeg)/pic8964384.jpg",
       "expansionIds": [
-        569
+        569,
+        618,
+        629
       ],
       "typicalPlayTimeMinutes": 29
+    },
+    {
+      "id": 629,
+      "name": "FlipToons: Big Button 2 Mini-Expansion",
+      "bggId": 474020,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "7cbd8e48-3e3f-44cf-8d05-77c06d9d9fc9",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-07-01",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/b1WFrKdyT2SQg2puAITfHg__small/img/KX8AlJeWOB6v1waMXFKTzLKwvLs=/fit-in/200x150/filters:strip_icc()/pic9669231.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/b1WFrKdyT2SQg2puAITfHg__original/img/4WpMu36OoI2IJrKEZPJ8JNX5dcQ=/0x0/filters:format(jpeg)/pic9669231.jpg",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 569,
@@ -5480,9 +5538,9 @@
       "bggId": 473739,
       "year": 2026,
       "rating": null,
-      "isBaseGame": true,
+      "isBaseGame": false,
       "isExpansion": false,
-      "isExpandalone": false,
+      "isExpandalone": true,
       "isNonReplayable": false,
       "copies": [
         {
@@ -5499,7 +5557,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/LOB8jAKdZjqYZBwF5KQECQ__small/img/VNZdpDa_BoESjF4rKoU6sM9pf3o=/fit-in/200x150/filters:strip_icc()/pic9667430.png",
       "coverUrl": "https://cf.geekdo-images.com/LOB8jAKdZjqYZBwF5KQECQ__original/img/Yazoh9B5TTKzzg14lXLLiH-Snk4=/0x0/filters:format(png)/pic9667430.png",
-      "expansionIds": [],
+      "expansionIds": null,
       "typicalPlayTimeMinutes": null
     },
     {
@@ -5731,6 +5789,34 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/Mqa-jWxFTjSyFIWqH67qnw__thumb/img/lHkosQgu8wdRFGPUIDq9f-KJs6M=/fit-in/200x150/filters:strip_icc()/pic5885244.jpg",
       "coverUrl": "https://cf.geekdo-images.com/Mqa-jWxFTjSyFIWqH67qnw__original/img/P5gVe0Bn_dawP_wk4g49u2WnqnU=/0x0/filters:format(jpeg)/pic5885244.jpg",
       "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 621,
+      "name": "Friday",
+      "bggId": 43570,
+      "year": 2011,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
+          "versionName": null,
+          "acquisitionDate": "2026-05-18",
+          "statusOwned": true,
+          "pricePaid": 14.97,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__small/img/Bjg_3ovfjRqjGtYEaEj6107UGWY=/fit-in/200x150/filters:strip_icc()/pic1513328.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__original/img/_tiZYJMEc26kgt7uNF6IM8A-8As=/0x0/filters:format(jpeg)/pic1513328.jpg",
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -6665,6 +6751,34 @@
       "typicalPlayTimeMinutes": null
     },
     {
+      "id": 625,
+      "name": "Heat: Legends",
+      "bggId": 463405,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "205ee7f3-4ce4-4bab-a364-cba9f1c04389",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-05-13",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/456T_oFNw3uulcp1vyKcMg__small/img/KBtR52ldl8mTNtJK107yDuAQeBk=/fit-in/200x150/filters:strip_icc()/pic9373818.png",
+      "coverUrl": "https://cf.geekdo-images.com/456T_oFNw3uulcp1vyKcMg__original/img/RofxSKZFpMFgO9nAj53jm9-HE3s=/0x0/filters:format(png)/pic9373818.png",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 488,
       "name": "Heat: Pedal to the Metal",
       "bggId": 366013,
@@ -6680,7 +6794,7 @@
           "versionName": "English edition 2023",
           "acquisitionDate": "2024-08-30",
           "statusOwned": true,
-          "pricePaid": 96.78,
+          "pricePaid": 140.74,
           "currency": "USD",
           "publicComment": null
         }
@@ -6691,9 +6805,39 @@
       "coverUrl": "https://cf.geekdo-images.com/-vOrd4bOspibyohYExLqWg__original/img/iXU8a9WaVlwrkiEiOxWN06y9y5g=/0x0/filters:format(png)/pic6940449.png",
       "expansionIds": [
         501,
-        537
+        537,
+        622,
+        625
       ],
       "typicalPlayTimeMinutes": 74
+    },
+    {
+      "id": 622,
+      "name": "Heat: Rocky Roads",
+      "bggId": 459763,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "8c32606a-3c0c-4924-8797-7119abd93589",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-06-23",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/6DfO2EfUiXNmvdfKTIqqiw__small/img/NOzFaxdaBt8Y4qW6sBu3ztskRao=/fit-in/200x150/filters:strip_icc()/pic9288354.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/6DfO2EfUiXNmvdfKTIqqiw__original/img/Lryypg_nPwY94IMC4krQ0dHG8Hg=/0x0/filters:format(jpeg)/pic9288354.jpg",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 537,
@@ -7254,6 +7398,34 @@
       "coverUrl": "https://cf.geekdo-images.com/opYVPUHSEj3IX8Nn4jdUBA__original/img/VCvYSLZqIJaUNHhoHg7Cg4rRlRA=/0x0/filters:format(jpeg)/pic7994065.jpg",
       "expansionIds": [],
       "typicalPlayTimeMinutes": 32
+    },
+    {
+      "id": 620,
+      "name": "ito",
+      "bggId": 327778,
+      "year": 2019,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+          "versionName": null,
+          "acquisitionDate": "2026-05-18",
+          "statusOwned": true,
+          "pricePaid": 13.47,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 1,
+      "uniquePlayDays": 1,
+      "thumbnailUrl": "https://cf.geekdo-images.com/CaGsrg17dVTXSP_7sjbm9w__small/img/8ETGKUTLt4EU-wmmPZwoIcNmPxk=/fit-in/200x150/filters:strip_icc()/pic8381709.png",
+      "coverUrl": "https://cf.geekdo-images.com/CaGsrg17dVTXSP_7sjbm9w__original/img/ihUpUOGP4Pms1ukM5GitbCeFni8=/0x0/filters:format(png)/pic8381709.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": 19
     },
     {
       "id": 438,
@@ -9344,6 +9516,34 @@
       "typicalPlayTimeMinutes": 15.5
     },
     {
+      "id": 627,
+      "name": "Onitama",
+      "bggId": 160477,
+      "year": 2014,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+          "versionName": null,
+          "acquisitionDate": "2026-05-18",
+          "statusOwned": true,
+          "pricePaid": 21.97,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 4,
+      "uniquePlayDays": 3,
+      "thumbnailUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__small/img/Q3W4poMS4btD-HZLervgqbSCtmE=/fit-in/200x150/filters:strip_icc()/pic7070194.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__original/img/oRsIxp72iv58128KFdqvjG6Gz64=/0x0/filters:format(jpeg)/pic7070194.jpg",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": 26
+    },
+    {
       "id": 616,
       "name": "Orapa Mine",
       "bggId": 424152,
@@ -9364,12 +9564,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__small/img/7rgnYRe9NpOSpixs0FXmEGkKfxU=/fit-in/200x150/filters:strip_icc()/pic8307047.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__original/img/pY5DDByB6SA60PwWuuzWgFG2soc=/0x0/filters:format(jpeg)/pic8307047.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 20
     },
     {
       "id": 598,
@@ -9590,8 +9790,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 17,
-      "uniquePlayDays": 7,
+      "playCount": 21,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/-Qer2BBPG7qGGDu6KcVDIw__thumb/img/NQQcjS31TO0DE246N9rpt0hd9eo=/fit-in/200x150/filters:strip_icc()/pic2452831.png",
       "coverUrl": "https://cf.geekdo-images.com/-Qer2BBPG7qGGDu6KcVDIw__original/img/PlzAH7swN1nsFxOXbfUvE3TkE5w=/0x0/filters:format(png)/pic2452831.png",
       "expansionIds": [],
@@ -9853,6 +10053,34 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/Wzzr2s_CorvLITnuBOvEEQ__thumb/img/nRaArAgz9rCfBETnHLQNekx7d3M=/fit-in/200x150/filters:strip_icc()/pic4300399.jpg",
       "coverUrl": "https://cf.geekdo-images.com/Wzzr2s_CorvLITnuBOvEEQ__original/img/LQMmcqA4bOxJcARImiUAsiuPHZ4=/0x0/filters:format(jpeg)/pic4300399.jpg",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 628,
+      "name": "Race for the Galaxy",
+      "bggId": 28143,
+      "year": 2007,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "1d30d8c4-287e-4b4c-852d-f066cbfefef4",
+          "versionName": null,
+          "acquisitionDate": "2026-05-18",
+          "statusOwned": true,
+          "pricePaid": 29.97,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/-DOqixs8uwKUvvWPKI4f9w__small/img/xLs-ldTPwaADbvzkOpF0sgWzwck=/fit-in/200x150/filters:strip_icc()/pic5261714.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/-DOqixs8uwKUvvWPKI4f9w__original/img/Vh-DCkTPa8OU45LaJdUywwhiYqE=/0x0/filters:format(jpeg)/pic5261714.jpg",
       "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
@@ -11261,7 +11489,7 @@
       "copies": [
         {
           "copyId": "7127ce77-45aa-4bbe-b7af-31d3b851f6b2",
-          "versionName": null,
+          "versionName": "English standard edition",
           "acquisitionDate": "2019-05-27",
           "statusOwned": true,
           "pricePaid": 3.2,
@@ -13053,6 +13281,34 @@
       "typicalPlayTimeMinutes": 75
     },
     {
+      "id": 623,
+      "name": "Sushi Go Party Chef's Special",
+      "bggId": 467999,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "e7a57707-330a-4b82-aede-2c8640bfdfed",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-04-04",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": null,
+      "coverUrl": null,
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 175,
       "name": "Sushi Go Party!",
       "bggId": 192291,
@@ -13068,7 +13324,7 @@
           "versionName": null,
           "acquisitionDate": "2020-12-02",
           "statusOwned": true,
-          "pricePaid": 44.83,
+          "pricePaid": 68.8,
           "currency": "USD",
           "publicComment": null
         }
@@ -16040,7 +16296,7 @@
           "versionName": "English second edition",
           "acquisitionDate": "2024-04-28",
           "statusOwned": true,
-          "pricePaid": 14.97,
+          "pricePaid": 20.94,
           "currency": "USD",
           "publicComment": null
         }
@@ -16049,8 +16305,38 @@
       "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/Hzz6QQXswRm6Zq9p_iOfZQ__thumb/img/h0axN590c2xEGLGbTLet0DMvYGo=/fit-in/200x150/filters:strip_icc()/pic4802509.png",
       "coverUrl": "https://cf.geekdo-images.com/Hzz6QQXswRm6Zq9p_iOfZQ__original/img/RMrgWTjVig5nPns5_sK797oPvE8=/0x0/filters:format(png)/pic4802509.png",
-      "expansionIds": [],
+      "expansionIds": [
+        624
+      ],
       "typicalPlayTimeMinutes": 81
+    },
+    {
+      "id": 624,
+      "name": "War of the Worlds: The New Wave – The Irish Sea",
+      "bggId": 275980,
+      "year": 2019,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "copies": [
+        {
+          "copyId": "5555b447-ce52-4e20-8b12-9e6341281275",
+          "versionName": "English/Russian edition",
+          "acquisitionDate": "2026-03-08",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/gOZivOnghyznjzsn4TxvPw__small/img/GYco_jrq5inL2w_0J8sLM30OF7s=/fit-in/200x150/filters:strip_icc()/pic4645413.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/gOZivOnghyznjzsn4TxvPw__original/img/4ARhxHiHerjM76P35tz32w7JZcU=/0x0/filters:format(jpeg)/pic4645413.jpg",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 608,
@@ -17011,6 +17297,177 @@
   ],
   "plays": [
     {
+      "gameId": 412,
+      "copyId": "6b35b1cd-70c8-43fa-b770-09b0873c22f2",
+      "date": "2026-07-23",
+      "timestamp": "2026-07-23 23:31:41",
+      "durationMin": 45,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4,
+        23,
+        32
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 412,
+      "copyId": "6b35b1cd-70c8-43fa-b770-09b0873c22f2",
+      "date": "2026-07-23",
+      "timestamp": "2026-07-23 22:20:00",
+      "durationMin": 72,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4,
+        23,
+        32
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 412,
+      "copyId": "6b35b1cd-70c8-43fa-b770-09b0873c22f2",
+      "date": "2026-07-23",
+      "timestamp": "2026-07-23 21:17:26",
+      "durationMin": 62,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4,
+        23,
+        32
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 412,
+      "copyId": "6b35b1cd-70c8-43fa-b770-09b0873c22f2",
+      "date": "2026-07-23",
+      "timestamp": "2026-07-23 20:05:25",
+      "durationMin": 72,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4,
+        23,
+        32
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-07-22",
+      "timestamp": "2026-07-22 20:58:11",
+      "durationMin": 25,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-07-21",
+      "timestamp": "2026-07-21 21:21:46",
+      "durationMin": 31,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-07-20",
+      "timestamp": "2026-07-20 21:38:09",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-07-20",
+      "timestamp": "2026-07-20 21:08:47",
+      "durationMin": 27,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-07-20",
+      "timestamp": "2026-07-20 19:02:28",
+      "durationMin": 19,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 82,
+      "copyId": "503d36f5-1775-4f0b-aec6-8a9951eb13ed",
+      "date": "2026-07-19",
+      "timestamp": "2026-07-19 19:59:40",
+      "durationMin": 29,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 616,
+      "copyId": "583211f1-6412-4f3b-a524-d8feb52179c4",
+      "date": "2026-07-19",
+      "timestamp": "2026-07-19 17:45:29",
+      "durationMin": 20,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 4,
+      "copyId": "4d1303da-9c48-4b19-9969-43efa8d8f130",
+      "date": "2026-07-19",
+      "timestamp": "2026-07-19 13:35:11",
+      "durationMin": 34,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "locationId": 1
+    },
+    {
       "gameId": 285,
       "copyId": "d74da117-ddfd-4620-b118-ad4cc06727e5",
       "date": "2026-07-17",
@@ -17515,7 +17972,7 @@
       "copyId": "503d36f5-1775-4f0b-aec6-8a9951eb13ed",
       "date": "2026-06-21",
       "timestamp": "2026-06-21 22:29:52",
-      "durationMin": 38,
+      "durationMin": 37,
       "durationEstimated": true,
       "players": [
         2,
@@ -49079,5 +49536,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-07-18T00:22:32.000Z"
+  "generatedAt": "2026-07-24T05:31:41.000Z"
 }
