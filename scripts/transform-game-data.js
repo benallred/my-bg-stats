@@ -155,12 +155,13 @@ function extractCopyMetadata(copies) {
 }
 
 /**
- * Finds the expandalone tag ID from the tags array.
+ * Finds the expandalone tag ID from the tags array. The tag is named
+ * "Data:Expandalone" in BG Stats (a data-mapping tag, not a descriptive one).
  * @param {Array} tags - Array of tag objects from BG Stats
  * @returns {number|undefined} Tag ID if found, undefined otherwise
  */
 function findExpandaloneTagId(tags) {
-  return tags.find(t => t.name.toLowerCase() === 'expandalone')?.id;
+  return tags.find(t => t.name.toLowerCase() === 'data:expandalone')?.id;
 }
 
 /**
@@ -176,6 +177,8 @@ function findOneTimeTagId(tags) {
  * Builds a lookup of game-descriptive tags (type "Personal") keyed by tag ID.
  * Excludes tags that are promoted to dedicated game properties (e.g. Expandalone,
  * One Time), since those are surfaced as booleans rather than as string tags.
+ * Also excludes "Data:"-prefixed tags, which drive source-data mapping rather
+ * than describe the game.
  * @param {Array} tags - Array of tag objects from BG Stats
  * @param {Array<number|undefined>} promotedTagIds - Tag IDs promoted to properties
  * @returns {Map<number, string>} Map of tag ID to tag name
@@ -185,7 +188,7 @@ function buildGameTagLookup(tags, promotedTagIds) {
   const lookup = new Map();
 
   tags.forEach(tag => {
-    if (tag.type === 'Personal' && !promoted.has(tag.id)) {
+    if (tag.type === 'Personal' && !promoted.has(tag.id) && !tag.name.startsWith('Data:')) {
       lookup.set(tag.id, tag.name);
     }
   });

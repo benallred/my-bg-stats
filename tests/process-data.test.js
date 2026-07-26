@@ -61,10 +61,11 @@ describe('process-data.js transformation logic', () => {
       tags: [
         { id: 1, name: 'Deckbuilder', type: 'Personal', group: 'Default', isInternal: false },
         { id: 2, name: 'Abstract', type: 'Personal', group: 'Default', isInternal: false },
-        { id: 3, name: 'Expandalone', type: 'Personal', group: 'Default', isInternal: false },
+        { id: 3, name: 'Data:Expandalone', type: 'Personal', group: 'Default', isInternal: false },
         { id: 4, name: 'One Time', type: 'Personal', group: 'Default', isInternal: false },
         { id: 5, name: 'Work', type: 'Player', group: 'Default', isInternal: false },
         { id: 6, name: 'default_play_tag_digital', type: 'Play', group: 'Default', isInternal: false },
+        { id: 7, name: 'Data:Same Game', type: 'Personal', group: 'Default', isInternal: false },
       ],
       players: [{ id: 1, name: 'Player 1', isAnonymous: false }],
       locations: [{ id: 1, name: 'Home' }],
@@ -77,8 +78,8 @@ describe('process-data.js transformation logic', () => {
         {
           id: 20, name: 'Mixed Tag Game', bggId: 5002, bggYear: 2019,
           isBaseGame: 1, isExpansion: 0, copies: [],
-          // Personal (kept), promoted Expandalone + One Time (excluded), Player + Play (excluded)
-          tags: [{ tagRefId: 2 }, { tagRefId: 3 }, { tagRefId: 4 }, { tagRefId: 5 }, { tagRefId: 6 }],
+          // Personal (kept), promoted Expandalone + One Time (excluded), Player + Play (excluded), Data: (excluded)
+          tags: [{ tagRefId: 2 }, { tagRefId: 3 }, { tagRefId: 4 }, { tagRefId: 5 }, { tagRefId: 6 }, { tagRefId: 7 }],
         },
         {
           id: 30, name: 'Untagged Game', bggId: 5003, bggYear: 2021,
@@ -99,8 +100,16 @@ describe('process-data.js transformation logic', () => {
       const output = await processData(tagsFixture);
       const game = output.games.find(g => g.name === 'Mixed Tag Game');
 
-      // Only Abstract survives: Expandalone/One Time are promoted, Work/Play are non-Personal
+      // Only Abstract survives: Expandalone/One Time are promoted, Work/Play are
+      // non-Personal, and Data:Same Game is a Data-prefixed mapping tag
       expect(game.tags).toEqual(['Abstract']);
+    });
+
+    test('excludes "Data:"-prefixed tags', async () => {
+      const output = await processData(tagsFixture);
+      const game = output.games.find(g => g.name === 'Mixed Tag Game');
+
+      expect(game.tags).not.toContain('Data:Same Game');
     });
 
     test('returns an empty array for games with no tags', async () => {
@@ -782,7 +791,7 @@ describe('process-data.js transformation logic', () => {
     const expansionLinkingFixture = {
       userInfo: { meRefId: 1 },
       tags: [
-        { uuid: 'expandalone-tag-uuid', id: 1, name: 'expandalone', type: 'Game', group: 'Default', isInternal: false },
+        { uuid: 'expandalone-tag-uuid', id: 1, name: 'Data:Expandalone', type: 'Game', group: 'Default', isInternal: false },
       ],
       players: [{ id: 1, name: 'Player 1', isAnonymous: false }],
       locations: [{ id: 1, name: 'Home' }],

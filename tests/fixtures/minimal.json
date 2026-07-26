@@ -6,7 +6,7 @@
     {
       "uuid": "expandalone-tag-uuid",
       "id": 1,
-      "name": "expandalone",
+      "name": "Data:Expandalone",
       "type": "Game",
       "group": "Default",
       "isInternal": false
