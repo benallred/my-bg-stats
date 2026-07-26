@@ -173,6 +173,27 @@ function findOneTimeTagId(tags) {
 }
 
 /**
+ * Builds a lookup of game-descriptive tags (type "Personal") keyed by tag ID.
+ * Excludes tags that are promoted to dedicated game properties (e.g. Expandalone,
+ * One Time), since those are surfaced as booleans rather than as string tags.
+ * @param {Array} tags - Array of tag objects from BG Stats
+ * @param {Array<number|undefined>} promotedTagIds - Tag IDs promoted to properties
+ * @returns {Map<number, string>} Map of tag ID to tag name
+ */
+function buildGameTagLookup(tags, promotedTagIds) {
+  const promoted = new Set(promotedTagIds.filter(id => id !== undefined));
+  const lookup = new Map();
+
+  tags.forEach(tag => {
+    if (tag.type === 'Personal' && !promoted.has(tag.id)) {
+      lookup.set(tag.id, tag.name);
+    }
+  });
+
+  return lookup;
+}
+
+/**
  * Extracts players from players array.
  * @param {Array} players - Array of player objects from BG Stats
  * @returns {Array} Array of player objects with playerId and name
@@ -237,9 +258,10 @@ function classifyGame(game, isExpandalone) {
  * @param {Array} games - Array of game objects from BG Stats
  * @param {number|undefined} expandaloneTagId - ID of the expandalone tag
  * @param {number|undefined} oneTimeTagId - ID of the "One Time" tag
+ * @param {Map<number, string>} gameTagLookup - Map of tag ID to name for game-descriptive tags
  * @returns {Map} Map of game ID to enhanced game object
  */
-function buildGamesMap(games, expandaloneTagId, oneTimeTagId) {
+function buildGamesMap(games, expandaloneTagId, oneTimeTagId, gameTagLookup) {
   const gamesMap = new Map();
 
   games.forEach(game => {
@@ -256,6 +278,12 @@ function buildGamesMap(games, expandaloneTagId, oneTimeTagId) {
 
     // Classify game based on mutually exclusive rules
     const classification = classifyGame(game, isExpandalone);
+
+    // Resolve game-descriptive tags (Personal type, promoted tags excluded)
+    const tags = (game.tags || [])
+      .map(tag => gameTagLookup.get(tag.tagRefId))
+      .filter(name => name !== undefined)
+      .sort((a, b) => a.localeCompare(b));
 
     // Extract image URLs: prefer game-level, then earliest owned copy, then null
     let thumbnailUrl = game.urlThumb || null;
@@ -290,6 +318,7 @@ function buildGamesMap(games, expandaloneTagId, oneTimeTagId) {
       isExpansion: classification.isExpansion,
       isExpandalone: classification.isExpandalone,
       isNonReplayable: isNonReplayable,
+      tags: tags,
       copies: outputCopies,
       playCount: 0,
       uniquePlayDays: new Set(),
@@ -738,7 +767,8 @@ async function processData(bgStatsData, { bggCachePath = null, forceRefreshBggCa
   // Build games map from BG Stats
   const expandaloneTagId = findExpandaloneTagId(bgStatsData.tags);
   const oneTimeTagId = findOneTimeTagId(bgStatsData.tags);
-  const gamesMap = buildGamesMap(bgStatsData.games, expandaloneTagId, oneTimeTagId);
+  const gameTagLookup = buildGameTagLookup(bgStatsData.tags, [expandaloneTagId, oneTimeTagId]);
+  const gamesMap = buildGamesMap(bgStatsData.games, expandaloneTagId, oneTimeTagId, gameTagLookup);
 
   // Build expansion links (expansionPlays + BGG API when cache path provided)
   const bggFetchEnabled = bggCachePath !== null;
