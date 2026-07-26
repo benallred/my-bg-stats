@@ -739,8 +739,11 @@ function suggestOwnedUnratedGame(gamePlayData) {
  * @returns {Array} Array of {game, reasons, stats} in priority order
  */
 function getSuggestedGames(games, plays) {
-  // Filter to owned base games only
-  const ownedBaseGames = games.filter(game => game.isBaseGame && isGameOwned(game));
+  // Filter to owned base games only, excluding games tagged Classic
+  // (games the owner is content to leave unplayed)
+  const ownedBaseGames = games.filter(game =>
+    game.isBaseGame && isGameOwned(game) && !game.tags.includes('Classic'),
+  );
 
   // Build play data for each game
   const gamePlayData = new Map();

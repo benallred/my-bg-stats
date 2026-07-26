@@ -154,6 +154,17 @@ describe('Suggestion Algorithms', () => {
       });
     });
 
+    test('excludes games tagged Classic', () => {
+      const testGames = [
+        { id: 1, name: 'Fine Unplayed', isBaseGame: true, isExpansion: false, isExpandalone: false, tags: [], copies: [{ statusOwned: true }] },
+        { id: 2, name: 'Content Unplayed', isBaseGame: true, isExpansion: false, isExpandalone: false, tags: ['Classic'], copies: [{ statusOwned: true }] },
+      ];
+      const suggestions = getSuggestedGames(testGames, []);
+      const suggestedNames = suggestions.map(s => s.game.name);
+      expect(suggestedNames).toContain('Fine Unplayed');
+      expect(suggestedNames).not.toContain('Content Unplayed');
+    });
+
     test('merges duplicate game suggestions', () => {
       const suggestions = getSuggestedGames(typicalData.games, typicalData.plays);
       const gameIds = suggestions.map(s => s.game.id);
@@ -180,6 +191,7 @@ describe('Suggestion Algorithms', () => {
           isBaseGame: true,
           isExpansion: false,
           isExpandalone: false,
+          tags: [],
           copies: [{ statusOwned: true }],
         },
       ];
@@ -201,6 +213,7 @@ describe('Suggestion Algorithms', () => {
           isBaseGame: true,
           isExpansion: false,
           isExpandalone: false,
+          tags: [],
           copies: [{ statusOwned: true }],
         },
       ];
@@ -249,6 +262,7 @@ describe('Suggestion Algorithms', () => {
           isBaseGame: true,
           isExpansion: false,
           isExpandalone: false,
+          tags: [],
           copies: [{ statusOwned: true }],
         },
       ];
@@ -275,6 +289,7 @@ describe('Suggestion Algorithms', () => {
           isBaseGame: true,
           isExpansion: false,
           isExpandalone: false,
+          tags: [],
           copies: [{ statusOwned: true }],
         },
         {
@@ -283,6 +298,7 @@ describe('Suggestion Algorithms', () => {
           isBaseGame: true,
           isExpansion: false,
           isExpandalone: false,
+          tags: [],
           copies: [{ statusOwned: true }],
         },
         {
@@ -291,6 +307,7 @@ describe('Suggestion Algorithms', () => {
           isBaseGame: true,
           isExpansion: false,
           isExpandalone: false,
+          tags: [],
           copies: [{ statusOwned: true }],
         },
       ];
@@ -328,6 +345,7 @@ describe('Suggestion Algorithms', () => {
           isBaseGame: true,
           isExpansion: false,
           isExpandalone: false,
+          tags: [],
           copies: [{ statusOwned: true }],
         },
       ];
@@ -1442,7 +1460,7 @@ describe('Suggestion Algorithms', () => {
   describe('Edge cases for uncovered branches', () => {
     test('milestone suggestion shows singular session text when at 1 session', () => {
       const testGames = [
-        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, tags: [], copies: [{ statusOwned: true }] },
       ];
       // Only 1 session (need 4 more to reach milestone of 5)
       const testPlays = [
@@ -1460,7 +1478,7 @@ describe('Suggestion Algorithms', () => {
 
     test('milestone suggestion shows singular play text when at 1 play', () => {
       const testGames = [
-        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, tags: [], copies: [{ statusOwned: true }] },
       ];
       // Only 1 play (need 4 more to reach milestone of 5)
       const testPlays = [
@@ -1478,7 +1496,7 @@ describe('Suggestion Algorithms', () => {
 
     test('h-index suggestion shows singular play text when at 1 play', () => {
       const testGames = [
-        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, tags: [], copies: [{ statusOwned: true }] },
       ];
       // Only 1 play gives h-index of 1, next target is 2
       const testPlays = [
@@ -1499,7 +1517,7 @@ describe('Suggestion Algorithms', () => {
 
     test('milestone suggestion returns null when all games past 100 milestone', () => {
       const testGames = [
-        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, copies: [{ statusOwned: true }] },
+        { id: 1, name: 'Game A', isBaseGame: true, isExpansion: false, isExpandalone: false, tags: [], copies: [{ statusOwned: true }] },
       ];
       // Create 101 plays on 101 different sessions (over multiple years)
       const testPlays = [];
