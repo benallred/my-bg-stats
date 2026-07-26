@@ -227,8 +227,6 @@ const shelfPhotos = [
 
 // Track current gallery index for arrow key navigation
 let currentGalleryIndex = -1;
-// Assigned in initializeImageModal; lets permalink restore reopen ?photo=<index>.
-let openImageModalTo = null;
 
 /**
  * Initialize image modal for click-to-enlarge functionality
@@ -275,39 +273,41 @@ function initializeImageModal() {
 
   function navigatePrev() {
     if (currentGalleryIndex > 0) {
-      openImageAt(currentGalleryIndex - 1);
+      replaceModal((p) => p.set('photo', String(currentGalleryIndex - 1)));
     }
   }
 
   function navigateNext() {
     if (currentGalleryIndex >= 0 && currentGalleryIndex < shelfPhotos.length - 1) {
-      openImageAt(currentGalleryIndex + 1);
+      replaceModal((p) => p.set('photo', String(currentGalleryIndex + 1)));
     }
   }
 
-  function openImageAt(index) {
-    if (!(index >= 0 && index < shelfPhotos.length)) return;
+  function renderImageModal(photoParam) {
+    const index = photoParam === null ? -1 : parseInt(photoParam, 10);
+    const isValid = index >= 0 && index < shelfPhotos.length;
+
+    if (!isValid) {
+      if (modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        currentGalleryIndex = -1;
+        resetZoom();
+        setTimeout(() => {
+          modalImg.src = '';
+        }, 200); // Clear after fade-out
+      }
+      return;
+    }
+
     currentGalleryIndex = index;
     resetZoom();
     modalImg.src = shelfPhotos[index].src;
     modalImg.alt = `Shelf photo ${index + 1}`;
     modal.classList.add('active');
     updateNavButtons();
-    updateURL();
   }
 
-  openImageModalTo = openImageAt;
-
-  // Close modal and reset gallery index
-  function closeModal() {
-    modal.classList.remove('active');
-    currentGalleryIndex = -1;
-    resetZoom();
-    updateURL();
-    setTimeout(() => {
-      modalImg.src = '';
-    }, 200); // Clear after fade-out
-  }
+  setImageModalState = renderImageModal;
 
   // Navigation button clicks
   prevBtn.addEventListener('click', (e) => {
@@ -357,7 +357,7 @@ function initializeImageModal() {
   // Close on backdrop click (not image)
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
-      closeModal();
+      requestCloseModal();
     }
   });
 
@@ -369,7 +369,7 @@ function initializeImageModal() {
       if (isZoomed) {
         resetZoom();
       } else {
-        closeModal();
+        requestCloseModal();
       }
     } else if (e.key === 'ArrowLeft') {
       navigatePrev();
@@ -432,14 +432,14 @@ function initializeImageModal() {
       const gameId = thumbnail.dataset.gameId;
       if (gameId) {
         // Game thumbnail/name → open game detail modal
-        showGameDetailModal(parseInt(gameId));
+        openGameDetailModal(parseInt(gameId));
       } else {
         // Shelf gallery photo → open image modal
         const fullImageUrl = thumbnail.dataset.fullImage;
         if (fullImageUrl) {
           const galleryIndex = shelfPhotos.findIndex(p => p.src === fullImageUrl);
           if (galleryIndex >= 0) {
-            openImageAt(galleryIndex);
+            openModal((p) => p.set('photo', String(galleryIndex)));
           }
         }
       }
@@ -458,6 +458,10 @@ let yearDataCache = null;
 let isLoadingFromPermalink = false;
 let showAllYearReviewMetrics = false;
 let firstLoggedPlayDate = null;
+
+// Assigned in initializeImageModal; renderModals drives the image modal through
+// this handle because its state (zoom, gallery index) is encapsulated there.
+let setImageModalState = null;
 
 // Cache for calculated statistics (refreshed when year changes)
 let statsCache = null;
@@ -1761,94 +1765,35 @@ function setupEventListeners() {
         themeToggle.addEventListener('click', toggleTheme);
     }
 
-    // H-Index info icon
-    const hIndexInfoIcon = document.getElementById('h-index-info-icon');
-    if (hIndexInfoIcon) {
-        hIndexInfoIcon.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent card click from triggering
-            showHIndexModal();
-        });
-    }
+    document.getElementById('h-index-info-icon')?.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent card click from triggering
+        openHIndexModal();
+    });
+    document.getElementById('people-h-index-info-icon')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPeopleHIndexModal();
+    });
+    document.getElementById('staircase-level-info-icon')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openStaircaseLevelModal();
+    });
 
-    // H-Index modal close handlers
-    const modal = document.getElementById('h-index-modal');
-    const modalBackdrop = modal?.querySelector('.modal-backdrop');
-    const modalClose = modal?.querySelector('.modal-close');
+    ['h-index-modal', 'people-h-index-modal', 'staircase-level-modal'].forEach((id) => {
+        const m = document.getElementById(id);
+        m?.querySelector('.modal-backdrop')?.addEventListener('click', requestCloseModal);
+        m?.querySelector('.modal-close')?.addEventListener('click', requestCloseModal);
+    });
 
-    if (modalBackdrop) {
-        modalBackdrop.addEventListener('click', hideHIndexModal);
-    }
-
-    if (modalClose) {
-        modalClose.addEventListener('click', hideHIndexModal);
-    }
-
-    // People H-Index info icon
-    const peopleHIndexInfoIcon = document.getElementById('people-h-index-info-icon');
-    if (peopleHIndexInfoIcon) {
-        peopleHIndexInfoIcon.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent card click from triggering
-            showPeopleHIndexModal();
-        });
-    }
-
-    // People H-Index modal close handlers
-    const peopleModal = document.getElementById('people-h-index-modal');
-    const peopleModalBackdrop = peopleModal?.querySelector('.modal-backdrop');
-    const peopleModalClose = peopleModal?.querySelector('.modal-close');
-
-    if (peopleModalBackdrop) {
-        peopleModalBackdrop.addEventListener('click', hidePeopleHIndexModal);
-    }
-
-    if (peopleModalClose) {
-        peopleModalClose.addEventListener('click', hidePeopleHIndexModal);
-    }
-
-    // Staircase Level info icon
-    const staircaseLevelInfoIcon = document.getElementById('staircase-level-info-icon');
-    if (staircaseLevelInfoIcon) {
-        staircaseLevelInfoIcon.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent card click from triggering
-            showStaircaseLevelModal();
-        });
-    }
-
-    // Staircase Level modal close handlers
-    const staircaseModal = document.getElementById('staircase-level-modal');
-    const staircaseModalBackdrop = staircaseModal?.querySelector('.modal-backdrop');
-    const staircaseModalClose = staircaseModal?.querySelector('.modal-close');
-
-    if (staircaseModalBackdrop) {
-        staircaseModalBackdrop.addEventListener('click', hideStaircaseLevelModal);
-    }
-
-    if (staircaseModalClose) {
-        staircaseModalClose.addEventListener('click', hideStaircaseLevelModal);
-    }
-
-    // ESC key to close modals
+    // The image modal handles its own Esc (including zoom-out), so skip it here.
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const gameDetailModal = document.getElementById('game-detail-modal');
-            if (gameDetailModal && gameDetailModal.style.display === 'flex') {
-                hideGameDetailModal();
-                return;
-            }
-            const hIndexModal = document.getElementById('h-index-modal');
-            if (hIndexModal && hIndexModal.style.display === 'flex') {
-                hideHIndexModal();
-            }
-            const peopleHIndexModal = document.getElementById('people-h-index-modal');
-            if (peopleHIndexModal && peopleHIndexModal.style.display === 'flex') {
-                hidePeopleHIndexModal();
-            }
-            const staircaseLevelModal = document.getElementById('staircase-level-modal');
-            if (staircaseLevelModal && staircaseLevelModal.style.display === 'flex') {
-                hideStaircaseLevelModal();
-            }
+        if (e.key !== 'Escape') return;
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('modal') || params.get('shelfGame')) {
+            requestCloseModal();
         }
     });
+
+    window.addEventListener('popstate', renderModals);
 
     // Sortable table header click handler (event delegation)
     document.addEventListener('click', (e) => {
@@ -1876,7 +1821,7 @@ function setupEventListeners() {
  * Show h-index info modal
  * Updates content based on current base metric selection
  */
-function showHIndexModal() {
+function renderHIndexModal() {
     const modal = document.getElementById('h-index-modal');
     const exampleDiv = document.getElementById('h-index-modal-example');
 
@@ -1906,31 +1851,13 @@ function showHIndexModal() {
 
     exampleDiv.innerHTML = `<p>${exampleText}</p><p>${improveText}</p>`;
 
-    // Show modal
     modal.style.display = 'flex';
-
-    // Update URL to include modal state
-    updateURL();
-}
-
-// Make showHIndexModal globally accessible for inline onclick handlers
-window.showHIndexModal = showHIndexModal;
-
-/**
- * Hide h-index info modal
- */
-function hideHIndexModal() {
-    const modal = document.getElementById('h-index-modal');
-    modal.style.display = 'none';
-
-    // Update URL to remove modal state
-    updateURL();
 }
 
 /**
  * Show People H-Index info modal
  */
-function showPeopleHIndexModal() {
+function renderPeopleHIndexModal() {
     const modal = document.getElementById('people-h-index-modal');
     const exampleDiv = document.getElementById('people-h-index-modal-example');
 
@@ -1945,30 +1872,13 @@ function showPeopleHIndexModal() {
     `;
 
     modal.style.display = 'flex';
-
-    // Update URL to include modal state
-    updateURL();
-}
-
-// Make showPeopleHIndexModal globally accessible for inline onclick handlers
-window.showPeopleHIndexModal = showPeopleHIndexModal;
-
-/**
- * Hide People H-Index info modal
- */
-function hidePeopleHIndexModal() {
-    const modal = document.getElementById('people-h-index-modal');
-    modal.style.display = 'none';
-
-    // Update URL to remove modal state
-    updateURL();
 }
 
 /**
  * Show staircase level info modal
  * Updates content based on current base metric selection
  */
-function showStaircaseLevelModal() {
+function renderStaircaseLevelModal() {
     const modal = document.getElementById('staircase-level-modal');
     const exampleDiv = document.getElementById('staircase-level-modal-example');
 
@@ -1998,25 +1908,7 @@ function showStaircaseLevelModal() {
 
     exampleDiv.innerHTML = `<p>${exampleText}</p><p>${improveText}</p>`;
 
-    // Show modal
     modal.style.display = 'flex';
-
-    // Update URL to include modal state
-    updateURL();
-}
-
-// Make showStaircaseLevelModal globally accessible for inline onclick handlers
-window.showStaircaseLevelModal = showStaircaseLevelModal;
-
-/**
- * Hide staircase level info modal
- */
-function hideStaircaseLevelModal() {
-    const modal = document.getElementById('staircase-level-modal');
-    modal.style.display = 'none';
-
-    // Update URL to remove modal state
-    updateURL();
 }
 
 /**
@@ -2040,8 +1932,8 @@ function initializeGameDetailModal() {
     `;
     document.body.appendChild(modal);
 
-    modal.querySelector('.modal-backdrop').addEventListener('click', hideGameDetailModal);
-    modal.querySelector('.game-detail-close').addEventListener('click', hideGameDetailModal);
+    modal.querySelector('.modal-backdrop').addEventListener('click', requestCloseModal);
+    modal.querySelector('.game-detail-close').addEventListener('click', requestCloseModal);
     modal.querySelector('.game-detail-permalink').addEventListener('click', async () => {
         const btn = modal.querySelector('.game-detail-permalink');
         try {
@@ -2063,7 +1955,7 @@ function initializeGameDetailModal() {
  * Show game detail modal with comprehensive per-game stats
  * @param {number} gameId - ID of the game to show details for
  */
-function showGameDetailModal(gameId) {
+function renderGameDetailModal(gameId) {
     const game = gameData.games.find(g => g.id === gameId);
     if (!game) return;
 
@@ -2406,16 +2298,6 @@ function showGameDetailModal(gameId) {
 
     bodyEl.innerHTML = html;
     modal.style.display = 'flex';
-    updateURL();
-}
-
-/**
- * Hide game detail modal
- */
-function hideGameDetailModal() {
-    const modal = document.getElementById('game-detail-modal');
-    modal.style.display = 'none';
-    updateURL();
 }
 
 /**
@@ -3789,7 +3671,7 @@ function showVirtualShelf(container) {
     grid.addEventListener('click', (e) => {
         const item = e.target.closest('.virtual-shelf-item');
         if (item) {
-            showGameDetailModal(parseInt(item.dataset.gameId));
+            openGameDetailModal(parseInt(item.dataset.gameId));
         }
     });
 }
@@ -5695,31 +5577,26 @@ function loadFromPermalink() {
     // Open the specified stat or modal after a short delay to ensure stats are loaded
     if (statParam || modalParam || shelfGameParam || photoParam) {
         setTimeout(() => {
-            // Open modal if specified
-            if (modalParam === 'h-index') {
-                showHIndexModal();
-            } else if (modalParam === 'people-h-index') {
-                showPeopleHIndexModal();
-            } else if (modalParam === 'staircase-level') {
-                showStaircaseLevelModal();
-            }
-
-            // Open stat detail if specified
+            // Stat detail is a section, not a modal (no history entry).
             if (statParam) {
                 showDetailSection(statParam);
             }
 
-            // Open game detail modal if specified
-            if (shelfGameParam) {
-                showGameDetailModal(parseInt(shelfGameParam));
-            }
-
-            // Open image modal to the shared gallery photo if specified
-            if (photoParam !== null && openImageModalTo) {
-                openImageModalTo(parseInt(photoParam));
-            }
-
             isLoadingFromPermalink = false;
+
+            // If the permalink opens a modal, insert a clean (modal-free) entry
+            // beneath it so Back closes the modal instead of leaving the site,
+            // then render the modal from the URL.
+            if (modalParam || shelfGameParam || photoParam) {
+                const modalUrl = window.location.href;
+                const clean = new URLSearchParams(window.location.search);
+                clean.delete('modal');
+                clean.delete('shelfGame');
+                clean.delete('photo');
+                window.history.replaceState({}, '', modalUrlFromParams(clean));
+                window.history.pushState({}, '', modalUrl);
+            }
+            renderModals();
         }, 100);
     } else {
         isLoadingFromPermalink = false;
@@ -5751,6 +5628,83 @@ async function copyPermalink() {
     } catch (err) {
         console.error('Failed to copy permalink:', err);
         alert('Failed to copy permalink to clipboard');
+    }
+}
+
+// Modal navigation: the URL is the single source of truth for which modal is
+// open. Opening pushes a history entry; closing anything is a history "back";
+// renderModals() reconciles the DOM to the URL and is the only place a modal is
+// shown or hidden — on initial load, Back, and Forward alike.
+
+function modalUrlFromParams(params) {
+    const qs = params.toString();
+    return qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+}
+
+function openModal(mutate) {
+    const params = new URLSearchParams(window.location.search);
+    mutate(params);
+    window.history.pushState({}, '', modalUrlFromParams(params));
+    renderModals();
+}
+
+// replaceState (not push) so paging within a gallery keeps one entry and Back
+// closes the whole thing.
+function replaceModal(mutate) {
+    const params = new URLSearchParams(window.location.search);
+    mutate(params);
+    window.history.replaceState({}, '', modalUrlFromParams(params));
+    renderModals();
+}
+
+function requestCloseModal() {
+    window.history.back();
+}
+
+function openHIndexModal() { openModal((p) => p.set('modal', 'h-index')); }
+function openPeopleHIndexModal() { openModal((p) => p.set('modal', 'people-h-index')); }
+function openStaircaseLevelModal() { openModal((p) => p.set('modal', 'staircase-level')); }
+function openGameDetailModal(gameId) { openModal((p) => p.set('shelfGame', gameId.toString())); }
+
+// Global for the inline onclick handlers in stat detail headers.
+window.showHIndexModal = openHIndexModal;
+window.showPeopleHIndexModal = openPeopleHIndexModal;
+window.showStaircaseLevelModal = openStaircaseLevelModal;
+
+function renderModalTo(id, shouldOpen, renderOpen) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const isOpen = el.style.display === 'flex';
+    if (shouldOpen && !isOpen) {
+        renderOpen();
+    } else if (!shouldOpen && isOpen) {
+        el.style.display = 'none';
+    }
+}
+
+function renderModals() {
+    const params = new URLSearchParams(window.location.search);
+    const infoModal = params.get('modal');
+
+    renderModalTo('h-index-modal', infoModal === 'h-index', renderHIndexModal);
+    renderModalTo('people-h-index-modal', infoModal === 'people-h-index', renderPeopleHIndexModal);
+    renderModalTo('staircase-level-modal', infoModal === 'staircase-level', renderStaircaseLevelModal);
+
+    const shelfGame = params.get('shelfGame');
+    const gameDetailModal = document.getElementById('game-detail-modal');
+    if (gameDetailModal) {
+        const isOpen = gameDetailModal.style.display === 'flex';
+        if (shelfGame) {
+            if (!isOpen || gameDetailModal.dataset.gameId !== shelfGame) {
+                renderGameDetailModal(parseInt(shelfGame));
+            }
+        } else if (isOpen) {
+            gameDetailModal.style.display = 'none';
+        }
+    }
+
+    if (setImageModalState) {
+        setImageModalState(params.get('photo'));
     }
 }
 
@@ -5798,34 +5752,13 @@ function updateURL() {
         params.set('showAllMetrics', 'true');
     }
 
-    // Add modal parameter if h-index modal is open
-    const modal = document.getElementById('h-index-modal');
-    if (modal && modal.style.display === 'flex') {
-        params.set('modal', 'h-index');
-    }
-
-    // Add modal parameter if people-h-index modal is open
-    const peopleModal = document.getElementById('people-h-index-modal');
-    if (peopleModal && peopleModal.style.display === 'flex') {
-        params.set('modal', 'people-h-index');
-    }
-
-    // Add modal parameter if staircase-level modal is open
-    const staircaseLevelModal = document.getElementById('staircase-level-modal');
-    if (staircaseLevelModal && staircaseLevelModal.style.display === 'flex') {
-        params.set('modal', 'staircase-level');
-    }
-
-    // Add shelfGame parameter if game detail modal is open
-    const gameDetailModal = document.getElementById('game-detail-modal');
-    if (gameDetailModal && gameDetailModal.style.display === 'flex') {
-        params.set('shelfGame', gameDetailModal.dataset.gameId);
-    }
-
-    // Add photo parameter if the image modal is showing a gallery photo
-    const imageModal = document.getElementById('image-modal');
-    if (imageModal && imageModal.classList.contains('active') && currentGalleryIndex >= 0) {
-        params.set('photo', currentGalleryIndex.toString());
+    // Preserve any open-modal params — those are owned by the modal navigation
+    // functions (openModal/renderModals), not by this function.
+    const current = new URLSearchParams(window.location.search);
+    for (const key of ['modal', 'shelfGame', 'photo']) {
+        if (current.has(key)) {
+            params.set(key, current.get(key));
+        }
     }
 
     // Update the URL without reloading the page
