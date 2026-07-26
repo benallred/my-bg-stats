@@ -81,7 +81,6 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "5DollarClub",
         "Deckbuilder"
       ],
       "copies": [
@@ -168,11 +167,13 @@
       "bggId": 446075,
       "year": 2025,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "e86bab74-a41a-4b72-9314-7ebd1c147187",
@@ -188,7 +189,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/a7hJP-Df6mKF4l0ed19eEw__thumb/img/XOCCIya5DxJIr_TKAgBlwZI3uog=/fit-in/200x150/filters:strip_icc()/pic8937972.jpg",
       "coverUrl": "https://cf.geekdo-images.com/a7hJP-Df6mKF4l0ed19eEw__original/img/kPhreCp-NvhIoGsGUmoBY-_1PwE=/0x0/filters:format(jpeg)/pic8937972.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -202,7 +203,6 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "5DollarClub",
         "Two Player"
       ],
       "copies": [
@@ -264,12 +264,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/Mo2apZXThsIU0vIWNeDV4A__small/img/gT5Oz7I5uoGil6ELuaqVXn0zqrs=/fit-in/200x150/filters:strip_icc()/pic9014143.png",
       "coverUrl": "https://cf.geekdo-images.com/Mo2apZXThsIU0vIWNeDV4A__original/img/jtI6TzSVlvCAqMcHn9UAvMYiUtg=/0x0/filters:format(png)/pic9014143.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 32
     },
     {
       "id": 323,
@@ -301,7 +301,6 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "5DollarClub",
         "Outside"
       ],
       "copies": [
@@ -548,11 +547,13 @@
       "bggId": 404711,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "340734ee-4316-4d20-ac77-f4c27a0745a0",
@@ -568,7 +569,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/uegBe6X0AIUFPDkpCd100A__thumb/img/rKLDrg7-XDkSXl3y_AWm3PvkN-0=/fit-in/200x150/filters:strip_icc()/pic7823423.jpg",
       "coverUrl": "https://cf.geekdo-images.com/uegBe6X0AIUFPDkpCd100A__original/img/M3fRL6FxDAnR7wbQkC-hWYqXMW0=/0x0/filters:format(jpeg)/pic7823423.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -582,8 +583,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Same Game",
         "Deckbuilder",
-        "Same Game",
         "Two Player"
       ],
       "copies": [
@@ -3158,7 +3159,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Same Game"
+        "Data:Same Game"
       ],
       "copies": [],
       "playCount": 0,
@@ -3735,10 +3736,7 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/mK2jITNJ3vgNWKbliMpErQ__thumb/img/irnxGy1_lItTKz8J_4OjgwB7oGA=/fit-in/200x150/filters:strip_icc()/pic2772192.jpg",
       "coverUrl": "https://cf.geekdo-images.com/mK2jITNJ3vgNWKbliMpErQ__original/img/Klr6u2U7Qq7VkfftF6B2zVeza6E=/0x0/filters:format(jpeg)/pic2772192.jpg",
       "expansionIds": [
-        52,
-        78,
-        159,
-        252
+        159
       ],
       "typicalPlayTimeMinutes": 48
     },
@@ -3748,11 +3746,12 @@
       "bggId": 191597,
       "year": 2016,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -3770,7 +3769,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/3W2uUAqtkK1PjPyrcNYUhA__thumb/img/kMAdOr1CkifVcF0lbKmCRlhH48s=/fit-in/200x150/filters:strip_icc()/pic2986642.jpg",
       "coverUrl": "https://cf.geekdo-images.com/3W2uUAqtkK1PjPyrcNYUhA__original/img/DeC8rP3Xq1gBx1xxBFDyvspD3PY=/0x0/filters:format(jpeg)/pic2986642.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -3779,11 +3778,12 @@
       "bggId": 299452,
       "year": 2020,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -3801,7 +3801,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/6Raxf5KpYBRwLD3nphwwJA__thumb/img/VdpHib4ieHrBvs0rj7k6TDDLSnY=/fit-in/200x150/filters:strip_icc()/pic5245872.jpg",
       "coverUrl": "https://cf.geekdo-images.com/6Raxf5KpYBRwLD3nphwwJA__original/img/-XQj6ZLhcfQ4ULYF0RZb1XDs3fg=/0x0/filters:format(jpeg)/pic5245872.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -3810,11 +3810,12 @@
       "bggId": 251551,
       "year": 2019,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -3832,7 +3833,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/imMFmaNwVwePRQV2tBZKSw__thumb/img/B_scUlbXWIVjMkjijt-YGBvv4i8=/fit-in/200x150/filters:strip_icc()/pic4096852.jpg",
       "coverUrl": "https://cf.geekdo-images.com/imMFmaNwVwePRQV2tBZKSw__original/img/tihxc6wF-qnmMqO9AIJNkbhhj2I=/0x0/filters:format(jpeg)/pic4096852.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4036,14 +4037,7 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/7Ej5V5Dq92QdvVFvISfl_A__thumb/img/8tU6KCVSI5dlcibYTT6mq3K9ljk=/fit-in/200x150/filters:strip_icc()/pic4216110.jpg",
       "coverUrl": "https://cf.geekdo-images.com/7Ej5V5Dq92QdvVFvISfl_A__original/img/XHykA7cqZ0F4tYiKXw095TvHRno=/0x0/filters:format(jpeg)/pic4216110.jpg",
       "expansionIds": [
-        17,
-        44,
-        77,
-        182,
-        413,
-        414,
-        466,
-        468
+        413
       ],
       "typicalPlayTimeMinutes": 44
     },
@@ -4053,11 +4047,13 @@
       "bggId": 352764,
       "year": 2022,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "c8722558-20af-49e2-82a8-2da0596dc1b6",
@@ -4073,7 +4069,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/p2AffonSuYOAnxCm7KGzCQ__thumb/img/yEHVy2b1zkDZUhlflpmxF5UY53Q=/fit-in/200x150/filters:strip_icc()/pic6560851.png",
       "coverUrl": "https://cf.geekdo-images.com/p2AffonSuYOAnxCm7KGzCQ__original/img/8nret2QbaYDLOeJf-qjv2LbNgz0=/0x0/filters:format(png)/pic6560851.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4082,11 +4078,13 @@
       "bggId": 331050,
       "year": 2021,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "7468ae95-d342-435a-8d28-b2a2d88e91b3",
@@ -4102,7 +4100,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/Cjb2U8tHS1N1RCDThguFIg__thumb/img/q8F34EZDlOOODSo8V49i4BHxwTI=/fit-in/200x150/filters:strip_icc()/pic5974997.png",
       "coverUrl": "https://cf.geekdo-images.com/Cjb2U8tHS1N1RCDThguFIg__original/img/pyJkjZBOIbGwp5NDGhMlm2bGg7w=/0x0/filters:format(png)/pic5974997.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4111,11 +4109,13 @@
       "bggId": 284760,
       "year": 2019,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "bb176c28-3f8b-462b-bdf6-640534d3c707",
@@ -4131,7 +4131,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/iEfri2p4Vqh6QFIxc5IlCg__thumb/img/9xcLYtvW_gKIQV1s0XPm7kkclhw=/fit-in/200x150/filters:strip_icc()/pic4849477.jpg",
       "coverUrl": "https://cf.geekdo-images.com/iEfri2p4Vqh6QFIxc5IlCg__original/img/it21m6c_rGzW6-K8aGDtbDswGAk=/0x0/filters:format(jpeg)/pic4849477.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4169,11 +4169,13 @@
       "bggId": 391561,
       "year": 2023,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "7587ddcf-1216-416f-8eca-fcab170a1e07",
@@ -4189,7 +4191,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/4yZc588BSpRj7B7T1p2D-Q__thumb/img/xvFHoifOCqtAXs38tjB0oDx3cGw=/fit-in/200x150/filters:strip_icc()/pic8272755.png",
       "coverUrl": "https://cf.geekdo-images.com/4yZc588BSpRj7B7T1p2D-Q__original/img/B99VmvjHcksLfVepiMWJa6YtyQM=/0x0/filters:format(png)/pic8272755.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4198,11 +4200,13 @@
       "bggId": 299047,
       "year": 2020,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "469335b9-2f08-46be-a120-4ce817ced583",
@@ -4218,7 +4222,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/luhDc_P5vImhEiiwVt8IgA__thumb/img/UmWQAK4JTYFi8nfs4DjR0mTj-g4=/fit-in/200x150/filters:strip_icc()/pic5172286.png",
       "coverUrl": "https://cf.geekdo-images.com/luhDc_P5vImhEiiwVt8IgA__original/img/M6thVohYkKMerLClgOpLLgDoN4k=/0x0/filters:format(png)/pic5172286.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4227,11 +4231,13 @@
       "bggId": 411003,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "3c04e2cd-5d6a-4440-8a6b-f10b7b232711",
@@ -4247,7 +4253,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/zLLrkvUXpOvA_5Uvc8e2UQ__thumb/img/3dprq9yqSnOFQyvZNukbpfUEzUg=/fit-in/200x150/filters:strip_icc()/pic7949384.png",
       "coverUrl": "https://cf.geekdo-images.com/zLLrkvUXpOvA_5Uvc8e2UQ__original/img/_uxrza4OYL_OJF7uQ7PveYohPLo=/0x0/filters:format(png)/pic7949384.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4256,11 +4262,13 @@
       "bggId": 271518,
       "year": 2019,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "38a514c3-e69c-4a78-bc3b-77fc07a9e184",
@@ -4276,7 +4284,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/StWdDnw-pdafavsxZHEc-Q__thumb/img/aUnAHcKDK6aQ3o0pxjZ1PnNk1jY=/fit-in/200x150/filters:strip_icc()/pic4559890.jpg",
       "coverUrl": "https://cf.geekdo-images.com/StWdDnw-pdafavsxZHEc-Q__original/img/HEeGUzR0LEU4ve3TfxIn29dtiNA=/0x0/filters:format(jpeg)/pic4559890.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -4988,7 +4996,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Same Game"
+        "Data:Same Game"
       ],
       "copies": [],
       "playCount": 0,
@@ -5656,7 +5664,6 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/JmRLUZzu8RSra-ifZybRXA__thumb/img/r-48b61eRGu-4mNe_76spqEP1cc=/fit-in/200x150/filters:strip_icc()/pic2499620.png",
       "coverUrl": "https://cf.geekdo-images.com/JmRLUZzu8RSra-ifZybRXA__original/img/lgcQbRRoBzc3azoGQNVznXu6cJc=/0x0/filters:format(png)/pic2499620.png",
       "expansionIds": [
-        233,
         269
       ],
       "typicalPlayTimeMinutes": 30.5
@@ -5696,11 +5703,12 @@
       "bggId": 198029,
       "year": 2016,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -5718,7 +5726,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/4tXUZfmZMSHojaxhOJU7CA__thumb/img/zfo3iu1LAlhfm2S1zGXXcUdpnDQ=/fit-in/200x150/filters:strip_icc()/pic3372243.png",
       "coverUrl": "https://cf.geekdo-images.com/4tXUZfmZMSHojaxhOJU7CA__original/img/I7R9jnP5xR30wq-DaiI1My5Ijzg=/0x0/filters:format(png)/pic3372243.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -5751,7 +5759,6 @@
       "coverUrl": "https://cf.geekdo-images.com/EEcBICSVGbH0Epy_LKpiVw__original/img/oC3sW6J1iWaZfr1mOEjVy7dF1IY=/0x0/filters:format(jpeg)/pic8964384.jpg",
       "expansionIds": [
         569,
-        618,
         629
       ],
       "typicalPlayTimeMinutes": 29
@@ -5820,11 +5827,12 @@
       "bggId": 473739,
       "year": 2026,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -5842,7 +5850,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/LOB8jAKdZjqYZBwF5KQECQ__small/img/VNZdpDa_BoESjF4rKoU6sM9pf3o=/fit-in/200x150/filters:strip_icc()/pic9667430.png",
       "coverUrl": "https://cf.geekdo-images.com/LOB8jAKdZjqYZBwF5KQECQ__original/img/Yazoh9B5TTKzzg14lXLLiH-Snk4=/0x0/filters:format(png)/pic9667430.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -8010,8 +8018,7 @@
         416,
         417,
         418,
-        419,
-        469
+        419
       ],
       "typicalPlayTimeMinutes": 33
     },
@@ -8021,11 +8028,13 @@
       "bggId": 403240,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "9d75134d-d8a2-4596-832f-727169caf683",
@@ -8041,7 +8050,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/0F9WfwIY6p13EzQgKbvZ1A__thumb/img/wh1KJ6IN2suNhkz6rbOwSwy2GZU=/fit-in/200x150/filters:strip_icc()/pic7924163.png",
       "coverUrl": "https://cf.geekdo-images.com/0F9WfwIY6p13EzQgKbvZ1A__original/img/zU_NWnh3hmzVPecPHq5-Wks9Lrg=/0x0/filters:format(png)/pic7924163.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -9216,11 +9225,12 @@
       "bggId": 420522,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -9238,7 +9248,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/AKikLupHPR1flXkUJs_xwg__small/img/CLkD4VxPzBOEnWAJN1sbVol0Tgw=/fit-in/200x150/filters:strip_icc()/pic8183768.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AKikLupHPR1flXkUJs_xwg__original/img/u-eO4qlnsSfU4qEw14WqxXlQOn8=/0x0/filters:format(jpeg)/pic8183768.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -9270,10 +9280,7 @@
       "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/357c0c_c2aZzYum_yRE_Sg__thumb/img/m4fnBp66pYuQhjAk__m9ore_WXs=/fit-in/200x150/filters:strip_icc()/pic8183753.png",
       "coverUrl": "https://cf.geekdo-images.com/357c0c_c2aZzYum_yRE_Sg__original/img/_qEL-Af1FsUypMkEpD65lnhVsRs=/0x0/filters:format(png)/pic8183753.png",
-      "expansionIds": [
-        580,
-        581
-      ],
+      "expansionIds": [],
       "typicalPlayTimeMinutes": 121
     },
     {
@@ -9282,11 +9289,12 @@
       "bggId": 420523,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -9304,7 +9312,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/GKvwjNqfZkLK_o0dULfvVg__small/img/LvWu-jJ7rlOyiA4cMXkAayBaVJA=/fit-in/200x150/filters:strip_icc()/pic8183798.jpg",
       "coverUrl": "https://cf.geekdo-images.com/GKvwjNqfZkLK_o0dULfvVg__original/img/B6j7HQses1fSPHJ0ovI0bDqfQi0=/0x0/filters:format(jpeg)/pic8183798.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -12272,8 +12280,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside",
-        "Same Game"
+        "Data:Same Game",
+        "Outside"
       ],
       "copies": [
         {
@@ -12383,11 +12391,13 @@
       "bggId": 367625,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "34edb700-da82-4213-bde6-05afcb7668ca",
@@ -12403,7 +12413,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/HmUxa92nnooCKC7RYGL9-g__thumb/img/m3AyLXWV3aJfjesjcmfaZRl-crM=/fit-in/200x150/filters:strip_icc()/pic6978734.jpg",
       "coverUrl": "https://cf.geekdo-images.com/HmUxa92nnooCKC7RYGL9-g__original/img/bjhH_xl172XG8BujTWeZhoV0rxw=/0x0/filters:format(jpeg)/pic6978734.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -12441,11 +12451,13 @@
       "bggId": 307386,
       "year": 2021,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "7b4280eb-8601-46d8-87ce-91da98d4379f",
@@ -12461,7 +12473,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/pMpADO0OpHoxGuwgmy5tXg__thumb/img/w498Ni8-Cp2fQwfZtooMm-MdOnI=/fit-in/200x150/filters:strip_icc()/pic5354512.png",
       "coverUrl": "https://cf.geekdo-images.com/pMpADO0OpHoxGuwgmy5tXg__original/img/nCtqrlZTq6CUSIo7NBDunmpVRY4=/0x0/filters:format(png)/pic5354512.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -12533,7 +12545,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Same Game"
+        "Data:Same Game"
       ],
       "copies": [],
       "playCount": 0,
@@ -12554,8 +12566,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder",
-        "Same Game"
+        "Data:Same Game",
+        "Deckbuilder"
       ],
       "copies": [
         {
@@ -12945,10 +12957,7 @@
       "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/38PBUUq1Qr2eMUODogvQvA__small/img/sh7x4yF17AyYvpLMZOXNpvEePp8=/fit-in/200x150/filters:strip_icc()/pic9080145.jpg",
       "coverUrl": "https://cf.geekdo-images.com/38PBUUq1Qr2eMUODogvQvA__small/img/sh7x4yF17AyYvpLMZOXNpvEePp8=/fit-in/200x150/filters:strip_icc()/pic9080145.jpg",
-      "expansionIds": [
-        565,
-        566
-      ],
+      "expansionIds": [],
       "typicalPlayTimeMinutes": 161
     },
     {
@@ -12957,11 +12966,12 @@
       "bggId": 448522,
       "year": 2025,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -12979,7 +12989,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/hgP8ye1G22AZDfV5mqNIUQ__thumb/img/iq_2nGSXCkHU6IGurRUiQyljPHg=/fit-in/200x150/filters:strip_icc()/pic7691788.png",
       "coverUrl": "https://cf.geekdo-images.com/hgP8ye1G22AZDfV5mqNIUQ__original/img/PRAu_6Fn0zv4Lj5e78DPZu_Lktw=/0x0/filters:format(png)/pic7691788.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -12988,11 +12998,12 @@
       "bggId": 389226,
       "year": 2025,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -13010,7 +13021,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/Z-2Ubc-NFhwWGImxvfffAA__thumb/img/NetXEkF1s7OWS3DI3FLiLS8AZeg=/fit-in/200x150/filters:strip_icc()/pic7531376.png",
       "coverUrl": "https://cf.geekdo-images.com/Z-2Ubc-NFhwWGImxvfffAA__original/img/ycVipJGNp7IDJ764sQWn4KkbgR8=/0x0/filters:format(png)/pic7531376.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -13041,12 +13052,7 @@
       "uniquePlayDays": 16,
       "thumbnailUrl": "https://cf.geekdo-images.com/RqRrHKqKuUZcXvNk4KOzIQ__thumb/img/V5WTaGqRxwPOdWCqgpYumhkjB28=/fit-in/200x150/filters:strip_icc()/pic7823420.jpg",
       "coverUrl": "https://cf.geekdo-images.com/RqRrHKqKuUZcXvNk4KOzIQ__original/img/0yhO_hvrLkEKnlhdYoYOE0TcoSk=/0x0/filters:format(jpeg)/pic7823420.jpg",
-      "expansionIds": [
-        365,
-        366,
-        558,
-        559
-      ],
+      "expansionIds": [],
       "typicalPlayTimeMinutes": 49.5
     },
     {
@@ -13245,10 +13251,7 @@
       "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/aq9LGSoVavCJbhY2cOTUTg__thumb/img/mFnBV2fvhjb_ESEggUaH7clIRHk=/fit-in/200x150/filters:strip_icc()/pic6741829.png",
       "coverUrl": "https://cf.geekdo-images.com/aq9LGSoVavCJbhY2cOTUTg__original/img/NdUU-szOJfqk36roSP2WVfkC1dA=/0x0/filters:format(png)/pic6741829.png",
-      "expansionIds": [
-        512,
-        538
-      ],
+      "expansionIds": [],
       "typicalPlayTimeMinutes": 84.5
     },
     {
@@ -13257,11 +13260,13 @@
       "bggId": 417130,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "a3e2a212-aa17-4d13-a866-323884bb237b",
@@ -13277,7 +13282,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/W8X9uX57mWIsSopzlvfAIw__thumb/img/3B7Am6hVPcg0-QKBl8_K-1yL1zM=/fit-in/200x150/filters:strip_icc()/pic8091825.png",
       "coverUrl": "https://cf.geekdo-images.com/W8X9uX57mWIsSopzlvfAIw__original/img/I-_K00KFyX0OTJL8RpEFyuvM1sY=/0x0/filters:format(png)/pic8091825.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -13286,11 +13291,13 @@
       "bggId": 387836,
       "year": 2023,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "f6c1ea21-b06a-46e0-b1f6-69bf27834c70",
@@ -13306,7 +13313,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/2cEXtWezMuHX3CInEIh3qA__thumb/img/xwyw_I93y5HdRvpDpkWil9jf420=/fit-in/200x150/filters:strip_icc()/pic7648370.png",
       "coverUrl": "https://cf.geekdo-images.com/2cEXtWezMuHX3CInEIh3qA__original/img/r6hZACnRN7hDHb2bdY35CoeFU0E=/0x0/filters:format(png)/pic7648370.png",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -13569,7 +13576,6 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/U6scsOGrPtVym4nCLaYjyw__thumb/img/0kgu-vLB9MQStlEyaR6bgKkemAQ=/fit-in/200x150/filters:strip_icc()/pic7387735.png",
       "coverUrl": "https://cf.geekdo-images.com/U6scsOGrPtVym4nCLaYjyw__original/img/bPFq87JbA919A2vxks_PFF2DwsY=/0x0/filters:format(png)/pic7387735.png",
       "expansionIds": [
-        518,
         595
       ],
       "typicalPlayTimeMinutes": 49.5
@@ -13580,11 +13586,12 @@
       "bggId": 422332,
       "year": 2024,
       "rating": 10,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Data:Expandalone",
         "Deckbuilder"
       ],
       "copies": [
@@ -13602,7 +13609,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/IUB2pVEHP164aYDqsRAJuQ__thumb/img/FnykNSMNDLO60YmIPQQPHUdiA88=/fit-in/200x150/filters:strip_icc()/pic8273095.jpg",
       "coverUrl": "https://cf.geekdo-images.com/IUB2pVEHP164aYDqsRAJuQ__original/img/7wwt5Pht6dZSAtJK-IkgqBKZjAU=/0x0/filters:format(jpeg)/pic8273095.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -14177,7 +14184,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Same Game"
+        "Data:Same Game"
       ],
       "copies": [
         {
@@ -14866,7 +14873,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Same Game"
+        "Data:Same Game"
       ],
       "copies": [
         {
@@ -15707,11 +15714,13 @@
       "bggId": 446074,
       "year": 2025,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "77399955-69cd-4a0c-8f23-b1c542ddfc31",
@@ -15727,7 +15736,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/FDRUjuEfD9eRUE-RRsWh9w__thumb/img/nInCXmSwmqDg7NDFh5D7BOqVayI=/fit-in/200x150/filters:strip_icc()/pic8937971.jpg",
       "coverUrl": "https://cf.geekdo-images.com/FDRUjuEfD9eRUE-RRsWh9w__original/img/SPBabNj1aylq5qdSWgFcnDfifIg=/0x0/filters:format(jpeg)/pic8937971.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -16706,7 +16715,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Same Game"
+        "Data:Same Game"
       ],
       "copies": [
         {
@@ -17316,11 +17325,13 @@
       "bggId": 404712,
       "year": 2024,
       "rating": null,
-      "isBaseGame": false,
+      "isBaseGame": true,
       "isExpansion": false,
-      "isExpandalone": true,
+      "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Data:Expandalone"
+      ],
       "copies": [
         {
           "copyId": "a2edc938-b866-4588-80b5-f573ce6ccde7",
@@ -17336,7 +17347,7 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/AcbAOh-JqBdAOUsg3GqW2w__thumb/img/_FanK-K9BpLkPf_mfKnUIoAF-So=/fit-in/200x150/filters:strip_icc()/pic7823418.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AcbAOh-JqBdAOUsg3GqW2w__original/img/S42EpSwF0Rmb68IWJhdmuq8v5oU=/0x0/filters:format(jpeg)/pic7823418.jpg",
-      "expansionIds": null,
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -17953,7 +17964,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Same Game"
+        "Data:Same Game"
       ],
       "copies": [
         {
@@ -18209,6 +18220,19 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 614,
+      "copyId": "cf8ff776-e71b-4c0a-8f0b-c8f5b428ef14",
+      "date": "2026-07-26",
+      "timestamp": "2026-07-26 13:57:00",
+      "durationMin": 32,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 615,
       "copyId": "d3908b9f-1a47-4f2a-887d-a7a0a6ec0412",
@@ -50476,5 +50500,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-07-26T03:10:54.000Z"
+  "generatedAt": "2026-07-26T19:57:00.000Z"
 }
