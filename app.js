@@ -227,6 +227,8 @@ const shelfPhotos = [
 
 // Track current gallery index for arrow key navigation
 let currentGalleryIndex = -1;
+// Assigned in initializeImageModal; lets permalink restore reopen ?photo=<index>.
+let openImageModalTo = null;
 
 /**
  * Initialize image modal for click-to-enlarge functionality
@@ -273,29 +275,35 @@ function initializeImageModal() {
 
   function navigatePrev() {
     if (currentGalleryIndex > 0) {
-      resetZoom();
-      currentGalleryIndex--;
-      modalImg.src = shelfPhotos[currentGalleryIndex].src;
-      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
-      updateNavButtons();
+      openImageAt(currentGalleryIndex - 1);
     }
   }
 
   function navigateNext() {
     if (currentGalleryIndex >= 0 && currentGalleryIndex < shelfPhotos.length - 1) {
-      resetZoom();
-      currentGalleryIndex++;
-      modalImg.src = shelfPhotos[currentGalleryIndex].src;
-      modalImg.alt = `Shelf photo ${currentGalleryIndex + 1}`;
-      updateNavButtons();
+      openImageAt(currentGalleryIndex + 1);
     }
   }
+
+  function openImageAt(index) {
+    if (!(index >= 0 && index < shelfPhotos.length)) return;
+    currentGalleryIndex = index;
+    resetZoom();
+    modalImg.src = shelfPhotos[index].src;
+    modalImg.alt = `Shelf photo ${index + 1}`;
+    modal.classList.add('active');
+    updateNavButtons();
+    updateURL();
+  }
+
+  openImageModalTo = openImageAt;
 
   // Close modal and reset gallery index
   function closeModal() {
     modal.classList.remove('active');
     currentGalleryIndex = -1;
     resetZoom();
+    updateURL();
     setTimeout(() => {
       modalImg.src = '';
     }, 200); // Clear after fade-out
@@ -430,13 +438,9 @@ function initializeImageModal() {
         const fullImageUrl = thumbnail.dataset.fullImage;
         if (fullImageUrl) {
           const galleryIndex = shelfPhotos.findIndex(p => p.src === fullImageUrl);
-          currentGalleryIndex = galleryIndex;
-
-          resetZoom();
-          modalImg.src = fullImageUrl;
-          modalImg.alt = thumbnail.alt;
-          modal.classList.add('active');
-          updateNavButtons();
+          if (galleryIndex >= 0) {
+            openImageAt(galleryIndex);
+          }
         }
       }
     }
@@ -5647,13 +5651,14 @@ function loadFromPermalink() {
     const sortColParam = urlParams.get('sortCol');
     const sortDirParam = urlParams.get('sortDir');
     const shelfGameParam = urlParams.get('shelfGame');
+    const photoParam = urlParams.get('photo');
 
     // Initialize showAllYearReviewMetrics from URL before early return check
     if (showAllMetricsParam === 'true') {
         showAllYearReviewMetrics = true;
     }
 
-    if (!yearParam && !baseMetricParam && !statParam && !modalParam && !shelfGameParam) {
+    if (!yearParam && !baseMetricParam && !statParam && !modalParam && !shelfGameParam && !photoParam) {
         return; // No permalink parameters
     }
 
@@ -5688,7 +5693,7 @@ function loadFromPermalink() {
     }
 
     // Open the specified stat or modal after a short delay to ensure stats are loaded
-    if (statParam || modalParam || shelfGameParam) {
+    if (statParam || modalParam || shelfGameParam || photoParam) {
         setTimeout(() => {
             // Open modal if specified
             if (modalParam === 'h-index') {
@@ -5707,6 +5712,11 @@ function loadFromPermalink() {
             // Open game detail modal if specified
             if (shelfGameParam) {
                 showGameDetailModal(parseInt(shelfGameParam));
+            }
+
+            // Open image modal to the shared gallery photo if specified
+            if (photoParam !== null && openImageModalTo) {
+                openImageModalTo(parseInt(photoParam));
             }
 
             isLoadingFromPermalink = false;
@@ -5810,6 +5820,12 @@ function updateURL() {
     const gameDetailModal = document.getElementById('game-detail-modal');
     if (gameDetailModal && gameDetailModal.style.display === 'flex') {
         params.set('shelfGame', gameDetailModal.dataset.gameId);
+    }
+
+    // Add photo parameter if the image modal is showing a gallery photo
+    const imageModal = document.getElementById('image-modal');
+    if (imageModal && imageModal.classList.contains('active') && currentGalleryIndex >= 0) {
+        params.set('photo', currentGalleryIndex.toString());
     }
 
     // Update the URL without reloading the page
