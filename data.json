@@ -1699,7 +1699,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay",
+        "Classic",
         "Two Player"
       ],
       "copies": [
@@ -2847,7 +2847,7 @@
       "isNonReplayable": false,
       "tags": [
         "Abstract",
-        "NoPlayOkay",
+        "Classic",
         "Outside",
         "Two Player"
       ],
@@ -2941,7 +2941,7 @@
       "isNonReplayable": false,
       "tags": [
         "Abstract",
-        "NoPlayOkay"
+        "Classic"
       ],
       "copies": [
         {
@@ -3077,7 +3077,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay"
+        "Classic"
       ],
       "copies": [
         {
@@ -4002,12 +4002,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/bb7tVh1li4_3sNNhlKJ1xw__small/img/KZUKK-9fG6VGBXgImM8It0g5O-Y=/fit-in/200x150/filters:strip_icc()/pic8688119.png",
       "coverUrl": "https://cf.geekdo-images.com/bb7tVh1li4_3sNNhlKJ1xw__original/img/2iPud3zi_vpUp_ufR_NTX3TIzto=/0x0/filters:format(png)/pic8688119.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 30
     },
     {
       "id": 223,
@@ -9161,7 +9161,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay"
+        "Classic"
       ],
       "copies": [
         {
@@ -10430,7 +10430,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay",
+        "Classic",
         "Outside"
       ],
       "copies": [
@@ -10925,7 +10925,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay"
+        "Classic"
       ],
       "copies": [
         {
@@ -12826,7 +12826,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay",
+        "Classic",
         "Outside"
       ],
       "copies": [
@@ -13060,7 +13060,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay"
+        "Classic"
       ],
       "copies": [
         {
@@ -13766,7 +13766,7 @@
       "isNonReplayable": false,
       "tags": [
         "Abstract",
-        "NoPlayOkay",
+        "Classic",
         "Two Player"
       ],
       "copies": [
@@ -15789,7 +15789,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay",
+        "Classic",
         "Outside"
       ],
       "copies": [
@@ -16607,7 +16607,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay",
+        "Classic",
         "Outside"
       ],
       "copies": [
@@ -17560,7 +17560,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "NoPlayOkay",
+        "Classic",
         "Outside"
       ],
       "copies": [
@@ -18171,12 +18171,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/nsTlpzyPeulRD8ua9o8sHw__small/img/Rf0U9MOrz59mfu4cNflOYy6GN9I=/fit-in/200x150/filters:strip_icc()/pic7906949.jpg",
       "coverUrl": "https://cf.geekdo-images.com/nsTlpzyPeulRD8ua9o8sHw__original/img/ifKV7GEHF5U6zvQN5Gq4R2W8Qbw=/0x0/filters:format(jpeg)/pic7906949.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 22
     },
     {
       "id": 453,
@@ -18209,6 +18209,33 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 615,
+      "copyId": "d3908b9f-1a47-4f2a-887d-a7a0a6ec0412",
+      "date": "2026-07-25",
+      "timestamp": "2026-07-25 21:10:54",
+      "durationMin": 22,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 613,
+      "copyId": "aaf98b32-bd17-4cad-a658-d6ce4070f1e1",
+      "date": "2026-07-25",
+      "timestamp": "2026-07-25 14:43:13",
+      "durationMin": 30,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 412,
       "copyId": "6b35b1cd-70c8-43fa-b770-09b0873c22f2",
@@ -50449,5 +50476,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-07-24T05:31:41.000Z"
+  "generatedAt": "2026-07-26T03:10:54.000Z"
 }
