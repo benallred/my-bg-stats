@@ -82,6 +82,7 @@ import {
   getNewStaircaseLevelGames,
   getGamePricePaid,
   getGameRankings,
+  getTopGamesByTag,
 } from './stats.js';
 
 import { escapeHtml, formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber, renderRatingHexagon } from './formatting.js';
@@ -638,6 +639,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Setup event listeners
         setupEventListeners();
 
+        // Generate per-tag Top 10 cards (attach their own click handlers)
+        renderTopTenCards();
+
         // Setup sticky header
         setupStickyHeader();
 
@@ -706,6 +710,7 @@ function setupYearFilter() {
         updateHeaderScrollMargin();
         updateSectionVisibility();
         updateAllStats();
+        renderTopTenCards();
 
         // Only close sections if not loading from permalink
         if (!isLoadingFromPermalink) {
@@ -771,6 +776,7 @@ function setupBaseMetricFilter() {
         statsCache.twoFiftyClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.TWO_FIFTY, currentYear);
         statsCache.oneDollarClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.ONE_DOLLAR, currentYear);
         statsCache.fiftyCentClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.FIFTY_CENTS, currentYear);
+        statsCache.topGamesByTag = getTopGamesByTag(gameData.games, gameData.plays, currentBaseMetric, currentYear);
         updateCostAnalysisStats();
         updateValueClubsStats();
         updateSocialLocationStats();
@@ -803,6 +809,11 @@ function setupBaseMetricFilter() {
             // Refresh played-rating detail section if open (metric-aware column)
             if (currentlyOpenStatType === 'played-rating') {
                 showDetailSection('played-rating');
+            }
+
+            // Refresh Top 10 tag detail section if open (metric-aware column)
+            if (currentlyOpenStatType?.startsWith('top-ten:')) {
+                showDetailSection(currentlyOpenStatType);
             }
 
             // Update year-review filter if open and toggle is not checked
@@ -901,6 +912,8 @@ function updateAllStats() {
         // Rating stats
         playedRatingData: getPlayedRatingBreakdown(gameData.games, gameData.plays, currentYear),
         collectionRatingData: getCollectionRatingBreakdown(gameData.games, currentYear),
+        // Top 10's by tag (rating-ranked, metric column respects the year filter)
+        topGamesByTag: getTopGamesByTag(gameData.games, gameData.plays, currentBaseMetric, currentYear),
         // Cost Analysis stats (hidden)
         totalCostData: getTotalCost(gameData.games, currentYear),
         costPerMetricData: getCostPerMetricStats(gameData.games, gameData.plays, currentBaseMetric, currentYear),
@@ -2748,7 +2761,23 @@ function showDetailSection(statType) {
     detailStatSummary.style.display = 'none';
 
     // Get handler for this stat type
-    const handler = statDetailHandlers[statType];
+    let handler = statDetailHandlers[statType];
+
+    // Per-tag Top 10 stats are resolved dynamically since tags come from data
+    if (!handler && statType.startsWith('top-ten:')) {
+        const tag = statType.slice('top-ten:'.length);
+        const exists = (statsCache.topGamesByTag || []).some(g => g.tag === tag);
+        if (!exists) {
+            // Tag has no games in the current filter (e.g. year changed) — close instead
+            closeDetailSection();
+            return;
+        }
+        handler = {
+            getTitle: (currentYear) => topTenTagTitle(tag, currentYear),
+            render: (detailContent) => showTopTenTagBreakdown(detailContent, tag),
+        };
+    }
+
     if (!handler) {
         console.error(`No handler found for stat type: ${statType}`);
         return;
@@ -2863,7 +2892,7 @@ function showHIndexBreakdown(container, metric, hIndex) {
     ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
-    table.className = 'h-index-table';
+    table.className = 'breakdown-table';
     table.innerHTML = `
         <thead>
             <tr>${headerHtml}</tr>
@@ -2919,7 +2948,7 @@ function showPeopleHIndexBreakdown(container, hIndex) {
     ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
-    table.className = 'h-index-table';
+    table.className = 'breakdown-table';
     table.innerHTML = `
         <thead>
             <tr>${headerHtml}</tr>
@@ -2984,7 +3013,7 @@ function showStaircaseLevelBreakdown(container, metric, staircaseLevel) {
     ], currentSortCol, currentSortDir);
 
     const table = document.createElement('table');
-    table.className = 'h-index-table';
+    table.className = 'breakdown-table';
     table.innerHTML = `
         <thead>
             <tr>${headerHtml}</tr>
@@ -4121,6 +4150,106 @@ function showLocationsBreakdown(container) {
 /**
  * Show collection rating breakdown by game
  */
+/**
+ * Build the detail title for a single tag's Top 10.
+ */
+function topTenTagTitle(tag, currentYear) {
+    const yearText = currentYear
+        ? `<span style="white-space: nowrap">(${currentYear})</span>`
+        : '<span style="white-space: nowrap">(All Time)</span>';
+    return `Top 10 ${escapeHtml(tag)} ${yearText}`;
+}
+
+/**
+ * Show a single tag's ranked table: base games sorted by rating descending.
+ * The first 10 rows are highlighted like h-index contributors.
+ */
+function showTopTenTagBreakdown(container, tag) {
+    const group = (statsCache.topGamesByTag || []).find(g => g.tag === tag);
+
+    if (!group || group.games.length === 0) {
+        container.innerHTML = '<p>No games to rank for this tag.</p>';
+        return;
+    }
+
+    const metricHeaders = {
+        hours: 'Hours',
+        sessions: 'Sessions',
+        plays: 'Plays',
+    };
+    const metricHeader = metricHeaders[currentBaseMetric] || 'Hours';
+
+    const formatMetricValue = (value) =>
+        currentBaseMetric === Metric.HOURS ? value.toFixed(1) : value;
+
+    const rows = group.games.map((item, index) => {
+        const rank = index + 1;
+        const highlightClass = rank <= 10 ? ' class="top-ten-highlight"' : '';
+        return `
+            <tr${highlightClass}>
+                <td>${rank}</td>
+                <td>${renderGameNameWithThumbnail(item.game)}</td>
+                <td>${renderRatingHexagon(item.rating)}</td>
+                <td>${formatMetricValue(item.metricValue)}</td>
+            </tr>
+        `;
+    }).join('');
+
+    const table = document.createElement('table');
+    table.className = 'breakdown-table';
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Game</th>
+                <th>Rating</th>
+                <th>${metricHeader}</th>
+            </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Render one dashboard stat card per tag under the "Top 10's" group.
+ * Rebuilt whenever the tag set changes (e.g. on year change), so each card
+ * carries its own click handler rather than relying on the one-time setup.
+ */
+function renderTopTenCards() {
+    const label = document.getElementById('top-tens-section');
+    if (!label) return;
+
+    // Remove previously generated cards
+    document.querySelectorAll('.top-ten-tag-card').forEach(el => el.remove());
+
+    const groups = statsCache.topGamesByTag || [];
+    label.style.display = groups.length === 0 ? 'none' : '';
+
+    let anchor = label;
+    groups.forEach(({ tag, games }) => {
+        const card = document.createElement('article');
+        card.className = 'widget widget--1x1 clickable top-ten-tag-card';
+        card.dataset.stat = `top-ten:${tag}`;
+        const gameCountLabel = `${games.length} tagged game${games.length === 1 ? '' : 's'}`;
+        card.innerHTML = `
+            <div class="widget__title">Top 10</div>
+            <div class="widget__value">${escapeHtml(tag)}</div>
+            <div class="widget__description">${gameCountLabel}</div>
+        `;
+        card.addEventListener('click', () => {
+            const statType = card.dataset.stat;
+            if (statType === currentlyOpenStatType) {
+                closeDetailSection();
+            } else {
+                showDetailSection(statType);
+            }
+        });
+        anchor.after(card);
+        anchor = card;
+    });
+}
+
 function showCollectionRatingBreakdown(container) {
     const statType = 'collection-rating';
     const data = statsCache.collectionRatingData;

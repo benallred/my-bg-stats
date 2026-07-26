@@ -8,8 +8,8 @@
     --bg-table-row-even: #f8fbff;
     --bg-table-row-hover: #f8f9fa;
     --bg-card-active: #e3f2fd;
-    --bg-h-index-contributor: #e3f2fd;
-    --bg-h-index-contributor-even: #d1e7f8;
+    --bg-row-highlight: #e3f2fd;
+    --bg-row-highlight-even: #d1e7f8;
     --bg-year-badge: #f8f9fa;
     --bg-info-section: #fff3cd;
 
@@ -69,8 +69,8 @@
     --bg-table-row-even: #2a2a2a;
     --bg-table-row-hover: #333333;
     --bg-card-active: #1e3a5f;
-    --bg-h-index-contributor: #1e3a5f;
-    --bg-h-index-contributor-even: #1a3352;
+    --bg-row-highlight: #1e3a5f;
+    --bg-row-highlight-even: #1a3352;
     --bg-year-badge: #383838;
     --bg-info-section: #3d3520;
 
@@ -774,50 +774,54 @@ table tbody tr:hover td:first-child {
     background: var(--bg-table-row-hover);
 }
 
-/* H-Index tables: make second column (Game) sticky instead of first (Rank) */
-table.h-index-table th:first-child,
-table.h-index-table td:first-child {
+/* Breakdown tables: make second column (Game) sticky instead of first (Rank) */
+table.breakdown-table th:first-child,
+table.breakdown-table td:first-child {
     position: static;
     background: inherit;
     box-shadow: none;
 }
 
-table.h-index-table th:nth-child(2),
-table.h-index-table td:nth-child(2) {
+table.breakdown-table th:nth-child(2),
+table.breakdown-table td:nth-child(2) {
     position: sticky;
     left: 0;
     z-index: 10;
 }
 
-table.h-index-table th:nth-child(2) {
+table.breakdown-table th:nth-child(2) {
     background: var(--bg-table-header);
     box-shadow: var(--shadow-sticky);
 }
 
-table.h-index-table td:nth-child(2) {
+table.breakdown-table td:nth-child(2) {
     background: inherit;
     box-shadow: var(--shadow-sticky);
 }
 
-table.h-index-table tbody tr:nth-child(even) td:nth-child(2) {
+table.breakdown-table tbody tr:nth-child(even) td:nth-child(2) {
     background: var(--bg-table-row-even);
 }
 
-table.h-index-table tbody tr:hover td:nth-child(2) {
+table.breakdown-table tbody tr:hover td:nth-child(2) {
     background: var(--bg-table-row-hover);
 }
 
-/* H-Index contributing rows */
-table.h-index-table tbody tr.h-index-contributor {
-    background: var(--bg-h-index-contributor);
+/* Highlighted breakdown rows: h-index/staircase contributors and Top 10 rows */
+table.breakdown-table tbody tr.h-index-contributor,
+table.breakdown-table tbody tr.top-ten-highlight {
+    background: var(--bg-row-highlight);
 }
 
-table.h-index-table tbody tr.h-index-contributor:nth-child(even) {
-    background: var(--bg-h-index-contributor-even);
+table.breakdown-table tbody tr.h-index-contributor:nth-child(even),
+table.breakdown-table tbody tr.top-ten-highlight:nth-child(even) {
+    background: var(--bg-row-highlight-even);
 }
 
-table.h-index-table tbody tr.h-index-contributor td:first-child,
-table.h-index-table tbody tr.h-index-contributor td:nth-child(2) {
+table.breakdown-table tbody tr.h-index-contributor td:first-child,
+table.breakdown-table tbody tr.h-index-contributor td:nth-child(2),
+table.breakdown-table tbody tr.top-ten-highlight td:first-child,
+table.breakdown-table tbody tr.top-ten-highlight td:nth-child(2) {
     background: inherit;
 }
 
@@ -1175,8 +1179,8 @@ table td:first-child .game-name-with-image {
     overflow: visible;
 }
 
-table.h-index-table th:nth-child(2) .game-name-with-image,
-table.h-index-table td:nth-child(2) .game-name-with-image {
+table.breakdown-table th:nth-child(2) .game-name-with-image,
+table.breakdown-table td:nth-child(2) .game-name-with-image {
     overflow: visible;
 }
 

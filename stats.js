@@ -16,3 +16,4 @@ export * from './stats/social-stats.js';
 export * from './stats/value-stats.js';
 export * from './stats/rating-stats.js';
 export * from './stats/ranking-stats.js';
+export * from './stats/tag-stats.js';
