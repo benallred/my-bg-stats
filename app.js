@@ -81,6 +81,7 @@ import {
   getHourStaircaseLevelBreakdown,
   getNewStaircaseLevelGames,
   getGamePricePaid,
+  calculateCostPerMetric,
   getGameRankings,
   getTopGamesByTag,
 } from './stats.js';
@@ -2216,15 +2217,15 @@ function renderGameDetailModal(gameId) {
         html += `<h4>Value</h4>`;
         html += `<div class="game-detail-row"><span class="label">Price Paid ${priceInfoIcon}</span><span class="value">${formatCostLabel(pricePaid)}</span></div>`;
         if (totalMinutes > 0) {
-            const costPerHour = pricePaid / (totalMinutes / 60);
+            const costPerHour = calculateCostPerMetric(pricePaid, totalMinutes / 60);
             html += `<div class="game-detail-row"><span class="label">Cost per Hour</span><span class="value">${formatCostLabel(costPerHour)}</span></div>`;
         }
         if (totalSessions > 0) {
-            const costPerSession = pricePaid / totalSessions;
+            const costPerSession = calculateCostPerMetric(pricePaid, totalSessions);
             html += `<div class="game-detail-row"><span class="label">Cost per Session</span><span class="value">${formatCostLabel(costPerSession)}</span></div>`;
         }
         if (totalPlays > 0) {
-            const costPerPlay = pricePaid / totalPlays;
+            const costPerPlay = calculateCostPerMetric(pricePaid, totalPlays);
             html += `<div class="game-detail-row"><span class="label">Cost per Play</span><span class="value">${formatCostLabel(costPerPlay)}</span></div>`;
         }
         html += `</div>`;
@@ -2243,13 +2244,13 @@ function renderGameDetailModal(gameId) {
     let playsValueClub = null;
     if (pricePaid !== null && pricePaid > 0) {
         if (totalMinutes > 0) {
-            hoursValueClub = ValueClub.getTierForValue(pricePaid / (totalMinutes / 60));
+            hoursValueClub = ValueClub.getTierForValue(calculateCostPerMetric(pricePaid, totalMinutes / 60));
         }
         if (totalSessions > 0) {
-            sessionsValueClub = ValueClub.getTierForValue(pricePaid / totalSessions);
+            sessionsValueClub = ValueClub.getTierForValue(calculateCostPerMetric(pricePaid, totalSessions));
         }
         if (totalPlays > 0) {
-            playsValueClub = ValueClub.getTierForValue(pricePaid / totalPlays);
+            playsValueClub = ValueClub.getTierForValue(calculateCostPerMetric(pricePaid, totalPlays));
         }
     }
 

@@ -116,6 +116,19 @@ function getTotalCost(games, year = null) {
 }
 
 /**
+ * Calculate cost per metric for a game, capped at pricePaid.
+ * Capping ensures cost/metric never exceeds what was paid when the metric
+ * value is less than 1 (e.g. a game played under an hour). This is the single
+ * source of truth for the calculation, shared by cards and the game detail modal.
+ * @param {number} pricePaid - Total price paid for the game
+ * @param {number} metricValue - Metric value (hours, sessions, or plays)
+ * @returns {number} Cost per metric, capped at pricePaid
+ */
+function calculateCostPerMetric(pricePaid, metricValue) {
+  return Math.min(pricePaid / metricValue, pricePaid);
+}
+
+/**
  * Get value club value (cost per metric) for a game
  * Note: Assumes game passes valueClubGameFilter (owned base game)
  * @param {Object} game - Game object
@@ -131,8 +144,7 @@ function getValueClubValue(game, playData, metric) {
   const metricValue = getMetricValueFromPlayData(playData, metric);
   if (metricValue === 0) return null;
 
-  // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
-  return Math.min(pricePaid / metricValue, pricePaid);
+  return calculateCostPerMetric(pricePaid, metricValue);
 }
 
 /**
@@ -372,8 +384,7 @@ function getCostPerMetricStats(games, plays, metric, year = null) {
         plays,
       });
     } else {
-      // Cap at pricePaid so cost/metric never exceeds what was paid (handles metric < 1)
-      const costPerMetric = Math.min(pricePaid / metricValue, pricePaid);
+      const costPerMetric = calculateCostPerMetric(pricePaid, metricValue);
 
       eligibleGames.push({
         game,
@@ -537,4 +548,5 @@ export {
   getShelfOfShame,
   getShelfOfShameChanges,
   getGamePricePaid,
+  calculateCostPerMetric,
 };
