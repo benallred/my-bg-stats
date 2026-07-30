@@ -763,8 +763,8 @@ async function processData(bgStatsData, { bggCachePath = null, forceRefreshBggCa
   const anonymousPlayer = bgStatsData.players.find(p => p.isAnonymous);
   const anonymousPlayerId = anonymousPlayer ? anonymousPlayer.id : null;
 
-  // Find home location ID (location named "Home")
-  const homeLocation = bgStatsData.locations.find(loc => loc.name === 'Home');
+  // Find home location ID (location named "🏡 Home")
+  const homeLocation = bgStatsData.locations.find(loc => loc.name === '🏡 Home');
   const homeLocationId = homeLocation ? homeLocation.id : null;
 
   // Build games map from BG Stats

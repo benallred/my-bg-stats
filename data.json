@@ -1,7 +1,7 @@
 {
   "selfPlayerId": 3,
   "anonymousPlayerId": 1,
-  "homeLocationId": null,
+  "homeLocationId": 1,
   "games": [
     {
       "id": 515,
