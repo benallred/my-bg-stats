@@ -5836,6 +5836,9 @@ function renderModals() {
     if (setImageModalState) {
         setImageModalState(params.get('photo'));
     }
+
+    const anyModalOpen = Boolean(infoModal || shelfGame || params.get('photo'));
+    document.body.classList.toggle('modal-open', anyModalOpen);
 }
 
 /**
