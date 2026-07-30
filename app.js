@@ -4467,7 +4467,7 @@ function showYearReviewDetail(container, statsCache) {
     const topPlayerHours = statsCache.yearReview.topPlayerByHours;
     const playerCount = statsCache.playerStats?.uniquePlayerCount || 0;
     if (playerCount > 0) {
-        let playerBullet = `Played with more than ${playerCount} player${playerCount === 1 ? '' : 's'}`;
+        let playerBullet = `Played with more than ${playerCount} ${playerCount === 1 ? 'person' : 'people'}`;
         if (topPlayerHours) {
             playerBullet += ` with the top being ${topPlayerHours.name} (${formatApproximateHours(topPlayerHours.value)} <span class="metric-name hours">hours</span>)`;
         }
