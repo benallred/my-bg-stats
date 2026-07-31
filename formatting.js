@@ -56,6 +56,19 @@ export function formatDateWithWeekday(dateString) {
 }
 
 /**
+ * Format a date as "Sun, Aug 11, 2024"
+ * @param {string} dateString - Date in YYYY-MM-DD format, or a timestamp with a
+ *   leading YYYY-MM-DD (e.g. "2024-08-11 14:30:00"); the time portion is ignored
+ * @returns {string} Formatted date string or '-' if invalid
+ */
+export function formatDateWithWeekdayAndYear(dateString) {
+    if (!dateString) return '-';
+    const [year, month, day] = dateString.slice(0, 10).split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+/**
  * Format a number with commas. If >= 1000, rounds to whole number; otherwise shows 1 decimal.
  * @param {number} num - The number to format
  * @returns {string} Formatted number string (e.g., "1,038" or "937.8")

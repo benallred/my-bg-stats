@@ -2136,3 +2136,26 @@ body.modal-open {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Achievements */
+/* Type chip: colored badge carrying the achievement type's icon. Each type gets
+   its own modifier class for icon + accent color. */
+.achievement-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    border: 1px solid var(--achievement-chip-color, var(--color-warning));
+    background: color-mix(in srgb, var(--achievement-chip-color, var(--color-warning)) 15%, transparent);
+}
+
+.achievement-chip__icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.achievement-chip--logging {
+    --achievement-chip-color: var(--color-warning);
+}

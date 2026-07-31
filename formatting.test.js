@@ -4,6 +4,7 @@ import {
   formatCostLabel,
   formatDateShort,
   formatDateWithWeekday,
+  formatDateWithWeekdayAndYear,
   formatDateWithYear,
   formatLargeNumber,
   getRatingColor,
@@ -78,6 +79,24 @@ describe('formatDateWithWeekday', () => {
     expect(formatDateWithWeekday(null)).toBe('-');
     expect(formatDateWithWeekday(undefined)).toBe('-');
     expect(formatDateWithWeekday('')).toBe('-');
+  });
+});
+
+describe('formatDateWithWeekdayAndYear', () => {
+  test('formats date as "Day, Mon DD, YYYY"', () => {
+    expect(formatDateWithWeekdayAndYear('2024-08-11')).toBe('Sun, Aug 11, 2024');
+    expect(formatDateWithWeekdayAndYear('2024-01-01')).toBe('Mon, Jan 1, 2024');
+    expect(formatDateWithWeekdayAndYear('2020-12-25')).toBe('Fri, Dec 25, 2020');
+  });
+
+  test('accepts a timestamp and ignores the time portion', () => {
+    expect(formatDateWithWeekdayAndYear('2024-08-11 14:30:00')).toBe('Sun, Aug 11, 2024');
+  });
+
+  test('returns "-" for null or undefined', () => {
+    expect(formatDateWithWeekdayAndYear(null)).toBe('-');
+    expect(formatDateWithWeekdayAndYear(undefined)).toBe('-');
+    expect(formatDateWithWeekdayAndYear('')).toBe('-');
   });
 });
 

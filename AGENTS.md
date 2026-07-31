@@ -20,6 +20,13 @@ A "session" is approximated as a unique calendar day. Multiple plays may occur d
 - Use the term "session" (not "day") when describing this concept in code and UI
 - One session = one unique date, regardless of how many plays occurred
 
+### Milestone vs. Logging Achievement
+
+Do NOT use the word "milestone" for cumulative totals of hours, sessions, or plays. These two concepts are distinct:
+
+- **Milestone**: A per-game play-count tier — fives (5+), dimes (10+), quarters (25+), centuries (100+). See `getMilestones` and the `Milestone` tier collection. "Milestone" refers only to these per-game tiers.
+- **Logging achievement**: A cumulative all-time (or year) total of a metric crossing a round-number threshold (e.g. logging your 100th hour, 250th play). See `getLoggingAchievements` (Year in Review) and `getCumulativeLoggingAchievements` (Achievements). Never call these "milestones".
+
 ## Metric Ordering Convention
 
 When hours, sessions, and plays are used together for any reason, they MUST always appear in this order:

@@ -12,6 +12,7 @@ export * from './stats/play-stats.js';
 export * from './stats/collection-stats.js';
 export * from './stats/suggestions.js';
 export * from './stats/year-review.js';
+export * from './stats/achievements.js';
 export * from './stats/social-stats.js';
 export * from './stats/value-stats.js';
 export * from './stats/rating-stats.js';

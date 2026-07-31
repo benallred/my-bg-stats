@@ -84,9 +84,11 @@ import {
   calculateCostPerMetric,
   getGameRankings,
   getTopGamesByTag,
+  AchievementType,
+  getAchievements,
 } from './stats.js';
 
-import { escapeHtml, formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithYear, formatLargeNumber, renderRatingHexagon } from './formatting.js';
+import { escapeHtml, formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithWeekdayAndYear, formatDateWithYear, formatLargeNumber, renderRatingHexagon } from './formatting.js';
 import { tableColumnConfigs, getDefaultSort, sortTableData, createSortableHeaderHtml } from './table-sorting.js';
 
 /**
@@ -906,6 +908,7 @@ function updateAllStats() {
         unratedGames: getOwnedBaseGamesWithoutRating(gameData.games, gameData.plays),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
+        achievements: getAchievements({ games: gameData.games, plays: gameData.plays }),
         // Social & Locations stats
         playerStats: getPlayerStats(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
         locationStats: getLocationStats(gameData.plays, gameData.locations, currentYear),
@@ -1065,6 +1068,7 @@ function updateAllStats() {
     updateCostAnalysisStats();
     updateValueClubsStats();
     updateYearInReview();
+    updateAchievements();
 }
 
 /**
@@ -1741,6 +1745,15 @@ function updateYearInReview() {
         yearReviewCard.style.display = 'none';
         yearReviewLink.style.display = 'none';
     }
+}
+
+/**
+ * Update Achievements card visibility. Shown only on All Time, occupying the slot
+ * that Year in Review uses when a specific year is selected (mutually exclusive).
+ */
+function updateAchievements() {
+    const achievementsCard = document.getElementById('achievements-card');
+    achievementsCard.style.display = currentYear === null ? 'block' : 'none';
 }
 
 /**
@@ -2547,6 +2560,12 @@ const statDetailHandlers = {
         render: (detailContent, statsCache) => {
             showYearReviewDetail(detailContent, statsCache);
         }
+    },
+    'achievements': {
+        getTitle: () => 'Achievements <span style="white-space: nowrap">(All Time)</span>',
+        render: (detailContent, statsCache) => {
+            showAchievementsDetail(detailContent, statsCache);
+        },
     },
     'shelf-gallery': {
         getTitle: () => 'Shelf Gallery',
@@ -4144,6 +4163,64 @@ function showLocationsBreakdown(container) {
                 </tr>
             `).join('')}
         </tbody>
+    `;
+    container.appendChild(table);
+}
+
+/**
+ * Display metadata per achievement type: icon, color chip class, and a text
+ * renderer for the achievement description. Add an entry here for each new
+ * AchievementType so it renders in the running list.
+ */
+const ACHIEVEMENT_TYPE_META = {
+    [AchievementType.LOGGING]: {
+        label: 'Logging Achievement',
+        icon: '🏆',
+        chipClass: 'achievement-chip--logging',
+        renderText: (row) => {
+            const metricLabel = { hours: 'Hour', sessions: 'Session', plays: 'Play' }[row.metric];
+            return `Logged ${row.threshold.toLocaleString()}th <span class="metric-name ${row.metric}">${metricLabel}</span>`;
+        },
+    },
+};
+
+/**
+ * Show the all-time Achievements running list (most recent first).
+ */
+function showAchievementsDetail(container, statsCache) {
+    const achievements = statsCache.achievements;
+
+    if (!achievements || achievements.length === 0) {
+        container.innerHTML = '<p>No achievements earned yet.</p>';
+        return;
+    }
+
+    const rows = achievements.map(achievement => {
+        const meta = ACHIEVEMENT_TYPE_META[achievement.type];
+        return `
+            <tr>
+                <td>
+                    <span class="achievement-chip ${meta.chipClass}" title="${meta.label}">
+                        <span class="achievement-chip__icon">${meta.icon}</span>
+                    </span>
+                </td>
+                <td>${meta.renderText(achievement)}</td>
+                <td>${formatDateWithWeekdayAndYear(achievement.timestamp)}</td>
+            </tr>
+        `;
+    }).join('');
+
+    const table = document.createElement('table');
+    table.className = 'breakdown-table';
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Achievement</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>${rows}</tbody>
     `;
     container.appendChild(table);
 }
