@@ -31,7 +31,7 @@ const PLAY_THRESHOLD_STEP = 250;
  * Generate cumulative logging achievements across all logged plays:
  * total hours, sessions, and plays crossing round-number thresholds.
  * @param {Array} plays - Array of play objects
- * @returns {Array} Rows of { type, timestamp, metric, threshold }
+ * @returns {Array} Rows of { type, timestamp, gameId, metric, threshold }
  */
 function getCumulativeLoggingAchievements(plays) {
   // Sort plays chronologically (oldest first) so thresholds cross in order
@@ -54,6 +54,7 @@ function getCumulativeLoggingAchievements(plays) {
       achievements.push({
         type: AchievementType.LOGGING,
         timestamp: play.timestamp,
+        gameId: play.gameId,
         metric: Metric.HOURS,
         threshold: nextHourThreshold,
       });
@@ -69,6 +70,7 @@ function getCumulativeLoggingAchievements(plays) {
         achievements.push({
           type: AchievementType.LOGGING,
           timestamp: play.timestamp,
+          gameId: play.gameId,
           metric: Metric.SESSIONS,
           threshold: nextSessionThreshold,
         });
@@ -82,6 +84,7 @@ function getCumulativeLoggingAchievements(plays) {
       achievements.push({
         type: AchievementType.LOGGING,
         timestamp: play.timestamp,
+        gameId: play.gameId,
         metric: Metric.PLAYS,
         threshold: nextPlayThreshold,
       });

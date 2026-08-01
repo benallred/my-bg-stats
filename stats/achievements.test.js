@@ -7,8 +7,8 @@ import {
 } from './achievements.js';
 
 // Build a play with the fields the achievements generators read.
-function play(date, durationMin, time = '12:00:00') {
-  return { date, timestamp: `${date} ${time}`, durationMin };
+function play(date, durationMin, time = '12:00:00', gameId = 1) {
+  return { date, timestamp: `${date} ${time}`, durationMin, gameId };
 }
 
 describe('getCumulativeLoggingAchievements', () => {
@@ -18,16 +18,22 @@ describe('getCumulativeLoggingAchievements', () => {
 
   test('emits an hours achievement when the 100th hour is crossed', () => {
     // 6000 minutes = 100 hours
-    const result = getCumulativeLoggingAchievements([play('2024-01-01', 6000)]);
+    const result = getCumulativeLoggingAchievements([play('2024-01-01', 6000, '12:00:00', 42)]);
 
     expect(result).toEqual([
       {
         type: AchievementType.LOGGING,
         timestamp: '2024-01-01 12:00:00',
+        gameId: 42,
         metric: Metric.HOURS,
         threshold: 100,
       },
     ]);
+  });
+
+  test('records the triggering game on each achievement', () => {
+    const result = getCumulativeLoggingAchievements([play('2024-01-01', 6000, '12:00:00', 7)]);
+    expect(result.every(a => a.gameId === 7)).toBe(true);
   });
 
   test('emits multiple hours achievements when several thresholds cross in one play', () => {

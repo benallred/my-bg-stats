@@ -2159,3 +2159,31 @@ body.modal-open {
 .achievement-chip--logging {
     --achievement-chip-color: var(--color-warning);
 }
+
+/* Shrink the type column to just fit the icon chip. */
+.achievement-type-col {
+    width: 1%;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Flow the triggering game's thumbnail inline with the achievement sentence. */
+.achievements-table .achievement-desc {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+/* Use the muted metric colors, matching the Year in Review summary. */
+.achievements-table .metric-name.hours {
+    color: var(--color-metric-hours-muted);
+}
+
+.achievements-table .metric-name.sessions {
+    color: var(--color-metric-sessions-muted);
+}
+
+.achievements-table .metric-name.plays {
+    color: var(--color-metric-plays-muted);
+}

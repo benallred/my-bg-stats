@@ -736,14 +736,17 @@ function setupYearFilter() {
 
             // Close detail section if:
             // - It's a play-related stat and year is pre-logging, OR
-            // - It's the year-review stat and switching to All Time (or pre-logging year)
+            // - It's the year-review stat and switching to All Time (or pre-logging year), OR
+            // - It's the achievements stat and switching away from All Time
             if (currentlyOpenStatType) {
                 const shouldCloseYearReview = currentlyOpenStatType === 'year-review' &&
                     (currentYear === null || isNewYearPreLogging);
                 const shouldClosePlayRelated = isNewYearPreLogging &&
                     playRelatedStats.includes(currentlyOpenStatType);
+                const shouldCloseAchievements = currentlyOpenStatType === 'achievements' &&
+                    currentYear !== null;
 
-                if (shouldCloseYearReview || shouldClosePlayRelated) {
+                if (shouldCloseYearReview || shouldClosePlayRelated || shouldCloseAchievements) {
                     closeDetailSection();
                 } else {
                     // Refresh the detail section with updated data for the new year
@@ -4177,9 +4180,8 @@ const ACHIEVEMENT_TYPE_META = {
         label: 'Logging Achievement',
         icon: '🏆',
         chipClass: 'achievement-chip--logging',
-        renderText: (row) => {
-            const metricLabel = { hours: 'Hour', sessions: 'Session', plays: 'Play' }[row.metric];
-            return `Logged ${row.threshold.toLocaleString()}th <span class="metric-name ${row.metric}">${metricLabel}</span>`;
+        renderText: (row, gameHtml) => {
+            return `Reached ${row.threshold.toLocaleString()} total <span class="metric-name ${row.metric}">${row.metric}</span> logged while playing ${gameHtml}`;
         },
     },
 };
@@ -4195,27 +4197,30 @@ function showAchievementsDetail(container, statsCache) {
         return;
     }
 
+    const gameById = new Map(gameData.games.map(g => [g.id, g]));
+
     const rows = achievements.map(achievement => {
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
+        const game = gameById.get(achievement.gameId);
         return `
             <tr>
-                <td>
+                <td class="achievement-type-col">
                     <span class="achievement-chip ${meta.chipClass}" title="${meta.label}">
                         <span class="achievement-chip__icon">${meta.icon}</span>
                     </span>
                 </td>
-                <td>${meta.renderText(achievement)}</td>
+                <td class="achievement-desc">${meta.renderText(achievement, renderGameNameWithThumbnail(game))}</td>
                 <td>${formatDateWithWeekdayAndYear(achievement.timestamp)}</td>
             </tr>
         `;
     }).join('');
 
     const table = document.createElement('table');
-    table.className = 'breakdown-table';
+    table.className = 'breakdown-table achievements-table';
     table.innerHTML = `
         <thead>
             <tr>
-                <th>Type</th>
+                <th class="achievement-type-col"></th>
                 <th>Achievement</th>
                 <th>Date</th>
             </tr>
