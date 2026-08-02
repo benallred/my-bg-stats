@@ -12,6 +12,8 @@
  */
 
 import { Metric, Milestone } from './constants.js';
+import { calculateHIndexFromSortedValues } from './h-index.js';
+import { calculateStaircaseLevelFromSortedValues } from './staircase-level.js';
 
 /**
  * Achievement type identifiers. Add a new entry here for each new achievement kind.
@@ -21,7 +23,13 @@ import { Metric, Milestone } from './constants.js';
 const AchievementType = {
   LOGGING: 'logging',
   MILESTONE: 'milestone',
+  H_INDEX: 'h-index',
+  PEOPLE_H_INDEX: 'people-h-index',
+  STAIRCASE: 'staircase',
 };
+
+// Pseudo-metric for the people h-index (which is not a per-game hours/sessions/plays value)
+const PEOPLE_METRIC = 'people';
 
 // Cumulative thresholds for logging achievements (matches Year in Review logging achievements)
 const HOUR_THRESHOLD_STEP = 100;
@@ -153,6 +161,86 @@ function getMilestoneAchievements(games, plays) {
   return achievements;
 }
 
+// Build a descending-sorted array of per-game values from an accumulator map.
+function sortedDescValues(perGameMap, valueOf) {
+  return Array.from(perGameMap.values(), valueOf).sort((a, b) => b - a);
+}
+
+/**
+ * Generate index-progression achievements: one each time an h-index (hours,
+ * sessions, plays), the people h-index, or a staircase level (hours, sessions,
+ * plays) rises to a new value. These indices are monotonic over all time, so a
+ * rise is always attributable to the game whose play triggered the recompute.
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @param {number} selfPlayerId - Player ID representing the user (excluded from people h-index)
+ * @param {number} anonymousPlayerId - Player ID for anonymous players (counted per occurrence)
+ * @returns {Array} Rows of { type, timestamp, gameId, metric, threshold }
+ */
+function getIndexAchievements(games, plays, selfPlayerId, anonymousPlayerId) {
+  const validGameIds = new Set(games.map(g => g.id));
+  const sortedPlays = [...plays].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+
+  const minutesPerGame = new Map();
+  const datesPerGame = new Map();
+  const playsPerGame = new Map();
+  const peoplePerGame = new Map();
+
+  // Each tracker recomputes its index from the current per-game values and
+  // remembers the highest value reached so far (indices never decrease all-time).
+  const trackers = [
+    { type: AchievementType.H_INDEX, metric: Metric.HOURS, index: calculateHIndexFromSortedValues, reached: 0 },
+    { type: AchievementType.H_INDEX, metric: Metric.SESSIONS, index: calculateHIndexFromSortedValues, reached: 0 },
+    { type: AchievementType.H_INDEX, metric: Metric.PLAYS, index: calculateHIndexFromSortedValues, reached: 0 },
+    { type: AchievementType.PEOPLE_H_INDEX, metric: PEOPLE_METRIC, index: calculateHIndexFromSortedValues, reached: 0 },
+    { type: AchievementType.STAIRCASE, metric: Metric.HOURS, index: calculateStaircaseLevelFromSortedValues, reached: 0 },
+    { type: AchievementType.STAIRCASE, metric: Metric.SESSIONS, index: calculateStaircaseLevelFromSortedValues, reached: 0 },
+    { type: AchievementType.STAIRCASE, metric: Metric.PLAYS, index: calculateStaircaseLevelFromSortedValues, reached: 0 },
+  ];
+
+  const achievements = [];
+
+  for (const play of sortedPlays) {
+    if (!validGameIds.has(play.gameId)) continue;
+
+    minutesPerGame.set(play.gameId, (minutesPerGame.get(play.gameId) || 0) + play.durationMin);
+    if (!datesPerGame.has(play.gameId)) datesPerGame.set(play.gameId, new Set());
+    datesPerGame.get(play.gameId).add(play.date);
+    playsPerGame.set(play.gameId, (playsPerGame.get(play.gameId) || 0) + 1);
+    if (!peoplePerGame.has(play.gameId)) peoplePerGame.set(play.gameId, { players: new Set(), anonymousCount: 0 });
+    const people = peoplePerGame.get(play.gameId);
+    for (const playerId of play.players) {
+      if (playerId === selfPlayerId) continue;
+      if (playerId === anonymousPlayerId) people.anonymousCount++;
+      else people.players.add(playerId);
+    }
+
+    const valuesByMetric = {
+      [Metric.HOURS]: sortedDescValues(minutesPerGame, minutes => minutes / 60),
+      [Metric.SESSIONS]: sortedDescValues(datesPerGame, dates => dates.size),
+      [Metric.PLAYS]: sortedDescValues(playsPerGame, count => count),
+      [PEOPLE_METRIC]: sortedDescValues(peoplePerGame, p => p.players.size + p.anonymousCount),
+    };
+
+    for (const tracker of trackers) {
+      const level = tracker.index(valuesByMetric[tracker.metric]);
+      // A single play can lift an index by more than one step; emit each new level.
+      for (let newLevel = tracker.reached + 1; newLevel <= level; newLevel++) {
+        achievements.push({
+          type: tracker.type,
+          timestamp: play.timestamp,
+          gameId: play.gameId,
+          metric: tracker.metric,
+          threshold: newLevel,
+        });
+      }
+      tracker.reached = level;
+    }
+  }
+
+  return achievements;
+}
+
 /**
  * Registry of achievement generators. Each receives the shared data context and
  * returns an array of achievement rows. Add new generators here to extend the list.
@@ -160,9 +248,10 @@ function getMilestoneAchievements(games, plays) {
 const ACHIEVEMENT_GENERATORS = [
   (context) => getCumulativeLoggingAchievements(context.plays),
   (context) => getMilestoneAchievements(context.games, context.plays),
+  (context) => getIndexAchievements(context.games, context.plays, context.selfPlayerId, context.anonymousPlayerId),
 ];
 
-const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2 };
+const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2, [PEOPLE_METRIC]: 3 };
 
 /**
  * Comparator ordering achievements most-recent first by play timestamp. When a
@@ -203,4 +292,5 @@ export {
   getAchievements,
   getCumulativeLoggingAchievements,
   getMilestoneAchievements,
+  getIndexAchievements,
 };

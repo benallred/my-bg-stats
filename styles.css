@@ -30,6 +30,9 @@
     --color-error: #e74c3c;
     --color-warning: #ffc107;
     --color-milestone: #9b59b6;
+    --color-hindex: #16a085;
+    --color-staircase: #6c5ce7;
+    --color-people: #e84393;
 
     /* Metric colors */
     --color-metric-hours: #27ae60;
@@ -92,6 +95,9 @@
     --color-error: #e74c3c;
     --color-warning: #f39c12;
     --color-milestone: #b07cc6;
+    --color-hindex: #1abc9c;
+    --color-staircase: #a29bfe;
+    --color-people: #fd79a8;
 
     /* Metric colors */
     --color-metric-hours: #2ecc71;
@@ -2164,6 +2170,18 @@ body.modal-open {
 
 .achievement-chip--milestone {
     --achievement-chip-color: var(--color-milestone);
+}
+
+.achievement-chip--h-index {
+    --achievement-chip-color: var(--color-hindex);
+}
+
+.achievement-chip--people-h-index {
+    --achievement-chip-color: var(--color-people);
+}
+
+.achievement-chip--staircase {
+    --achievement-chip-color: var(--color-staircase);
 }
 
 /* Shrink the type column to just fit the icon chip. */

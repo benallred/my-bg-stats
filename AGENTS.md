@@ -167,6 +167,30 @@ When displaying metric keywords (hours, sessions, plays) in Year in Review UI, a
 `Solo plays:`
 ```
 
+## Achievement Sentence Structure
+
+Each achievement in the Achievements list renders as a single sentence that includes the game whose play triggered it. Where the game goes in that sentence depends on the game's role in the achievement:
+
+- **The game is the subject** — the game itself reached something → **game first**.
+- **The game is only the trigger** — an overall/collection stat advanced and this play happened to push it over → **game last** (after "while playing").
+
+Apply this rule to every new achievement type: lead with the game only when the game is what the achievement is about.
+
+**Examples:**
+
+```javascript
+// CORRECT - milestone: the game reached the tier, so game leads
+`${gameHtml} reached a dime — 10 <span class="metric-name plays">plays</span>`
+
+// CORRECT - logging total / h-index / staircase: an overall stat advanced,
+// the game is only the trigger, so game goes last
+`Reached 1,200 total <span class="metric-name hours">hours</span> logged while playing ${gameHtml}`
+`Raised your <span class="metric-name hours">hours</span> h-index to 25 while playing ${gameHtml}`
+
+// INCORRECT - game leads even though it is only the trigger
+`${gameHtml} pushed your hours h-index to 25`
+```
+
 ## Trailing Commas
 
 Always use trailing commas in multi-line constructs where they are syntactically valid:

@@ -5,11 +5,23 @@ import {
   getAchievements,
   getCumulativeLoggingAchievements,
   getMilestoneAchievements,
+  getIndexAchievements,
 } from './achievements.js';
+import {
+  calculateHourHIndex,
+  calculatePlaySessionHIndex,
+  calculateTraditionalHIndex,
+  calculatePeopleHIndex,
+} from './h-index.js';
+import {
+  calculateHourStaircaseLevel,
+  calculateSessionStaircaseLevel,
+  calculatePlayStaircaseLevel,
+} from './staircase-level.js';
 
 // Build a play with the fields the achievements generators read.
-function play(date, durationMin, time = '12:00:00', gameId = 1) {
-  return { date, timestamp: `${date} ${time}`, durationMin, gameId };
+function play(date, durationMin, time = '12:00:00', gameId = 1, players = []) {
+  return { date, timestamp: `${date} ${time}`, durationMin, gameId, players };
 }
 
 // Distinct dates so each play is its own session, starting 2024-01-01.
@@ -231,5 +243,85 @@ describe('getMilestoneAchievements', () => {
   test('ignores plays for unknown games', () => {
     const plays = Array.from({ length: 5 }, (_, i) => play(dayN(i), 30, '12:00:00', 999));
     expect(getMilestoneAchievements(games, plays)).toEqual([]);
+  });
+});
+
+describe('getIndexAchievements', () => {
+  const games = [{ id: 1 }, { id: 2 }];
+  const SELF = 3;
+  const ANON = 1;
+
+  test('returns empty array for no plays', () => {
+    expect(getIndexAchievements(games, [], SELF, ANON)).toEqual([]);
+  });
+
+  test('emits h-index steps for a metric as it rises', () => {
+    // Two games each reaching 2 plays -> plays h-index climbs 1 then 2
+    const plays = [
+      play(dayN(0), 30, '10:00:00', 1, [SELF, 10]),
+      play(dayN(1), 30, '11:00:00', 2, [SELF, 11]),
+      play(dayN(2), 30, '12:00:00', 1, [SELF, 10]),
+      play(dayN(3), 30, '13:00:00', 2, [SELF, 11]),
+    ];
+    const playsH = getIndexAchievements(games, plays, SELF, ANON)
+      .filter(a => a.type === AchievementType.H_INDEX && a.metric === Metric.PLAYS);
+
+    expect(playsH.map(a => a.threshold)).toEqual([1, 2]);
+    expect(playsH[1].gameId).toBe(2); // game 2's play pushed it to 2
+  });
+
+  test('emits people h-index steps, excluding self and counting anonymous per occurrence', () => {
+    const plays = [
+      play(dayN(0), 30, '10:00:00', 1, [SELF, ANON]), // game1: 1 anonymous -> 1
+      play(dayN(1), 30, '11:00:00', 2, [SELF, 10]),   // game2: 1 named -> [1, 1]
+      play(dayN(2), 30, '12:00:00', 1, [SELF, ANON]), // game1: 2 anonymous -> [2, 1]
+      play(dayN(3), 30, '13:00:00', 2, [SELF, 11]),   // game2: 2 named -> [2, 2] -> 2
+    ];
+    const people = getIndexAchievements(games, plays, SELF, ANON)
+      .filter(a => a.type === AchievementType.PEOPLE_H_INDEX);
+
+    expect(people.map(a => a.threshold)).toEqual([1, 2]);
+    expect(people.every(a => a.metric === 'people')).toBe(true);
+  });
+
+  test('emits staircase-level steps', () => {
+    const plays = [
+      play(dayN(0), 30, '10:00:00', 1, [SELF]),
+      play(dayN(1), 30, '11:00:00', 1, [SELF]),
+      play(dayN(2), 30, '12:00:00', 2, [SELF]),
+      play(dayN(3), 30, '13:00:00', 2, [SELF]),
+    ];
+    const stair = getIndexAchievements(games, plays, SELF, ANON)
+      .filter(a => a.type === AchievementType.STAIRCASE && a.metric === Metric.PLAYS);
+
+    expect(stair.map(a => a.threshold)).toEqual([1, 2]);
+  });
+
+  test('ignores plays for unknown games', () => {
+    const plays = [play(dayN(0), 6000, '10:00:00', 999, [SELF, 10])];
+    expect(getIndexAchievements(games, plays, SELF, ANON)).toEqual([]);
+  });
+
+  test('final levels match the canonical all-time index calculations', () => {
+    const plays = [
+      play(dayN(0), 200, '10:00:00', 1, [SELF, 10, ANON]),
+      play(dayN(1), 400, '11:00:00', 2, [SELF, 11]),
+      play(dayN(2), 100, '12:00:00', 1, [SELF, 12]),
+      play(dayN(3), 700, '13:00:00', 2, [SELF, ANON]),
+      play(dayN(4), 60, '14:00:00', 1, [SELF, 10]),
+    ];
+    const result = getIndexAchievements(games, plays, SELF, ANON);
+    const maxLevel = (type, metric) =>
+      result
+        .filter(a => a.type === type && a.metric === metric)
+        .reduce((max, a) => Math.max(max, a.threshold), 0);
+
+    expect(maxLevel(AchievementType.H_INDEX, Metric.HOURS)).toBe(calculateHourHIndex(plays));
+    expect(maxLevel(AchievementType.H_INDEX, Metric.SESSIONS)).toBe(calculatePlaySessionHIndex(games, plays));
+    expect(maxLevel(AchievementType.H_INDEX, Metric.PLAYS)).toBe(calculateTraditionalHIndex(games, plays));
+    expect(maxLevel(AchievementType.PEOPLE_H_INDEX, 'people')).toBe(calculatePeopleHIndex(games, plays, SELF, ANON));
+    expect(maxLevel(AchievementType.STAIRCASE, Metric.HOURS)).toBe(calculateHourStaircaseLevel(plays));
+    expect(maxLevel(AchievementType.STAIRCASE, Metric.SESSIONS)).toBe(calculateSessionStaircaseLevel(games, plays));
+    expect(maxLevel(AchievementType.STAIRCASE, Metric.PLAYS)).toBe(calculatePlayStaircaseLevel(games, plays));
   });
 });

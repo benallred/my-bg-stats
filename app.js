@@ -911,7 +911,12 @@ function updateAllStats() {
         unratedGames: getOwnedBaseGamesWithoutRating(gameData.games, gameData.plays),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
-        achievements: getAchievements({ games: gameData.games, plays: gameData.plays }),
+        achievements: getAchievements({
+            games: gameData.games,
+            plays: gameData.plays,
+            selfPlayerId: gameData.selfPlayerId,
+            anonymousPlayerId: gameData.anonymousPlayerId,
+        }),
         // Social & Locations stats
         playerStats: getPlayerStats(gameData.plays, gameData.players, gameData.selfPlayerId, gameData.anonymousPlayerId, currentYear),
         locationStats: getLocationStats(gameData.plays, gameData.locations, currentYear),
@@ -4191,6 +4196,30 @@ const ACHIEVEMENT_TYPE_META = {
         renderText: (row, gameHtml) => {
             const milestoneName = { 5: 'five', 10: 'dime', 25: 'quarter', 100: 'century' }[row.threshold];
             return `${gameHtml} reached a ${milestoneName} — ${row.threshold} <span class="metric-name ${row.metric}">${row.metric}</span>`;
+        },
+    },
+    [AchievementType.H_INDEX]: {
+        label: 'H-Index',
+        icon: '📈',
+        chipClass: 'achievement-chip--h-index',
+        renderText: (row, gameHtml) => {
+            return `Raised your <span class="metric-name ${row.metric}">${row.metric}</span> h-index to ${row.threshold} while playing ${gameHtml}`;
+        },
+    },
+    [AchievementType.PEOPLE_H_INDEX]: {
+        label: 'People H-Index',
+        icon: '👥',
+        chipClass: 'achievement-chip--people-h-index',
+        renderText: (row, gameHtml) => {
+            return `Raised your people h-index to ${row.threshold} while playing ${gameHtml}`;
+        },
+    },
+    [AchievementType.STAIRCASE]: {
+        label: 'Staircase Level',
+        icon: '🪜',
+        chipClass: 'achievement-chip--staircase',
+        renderText: (row, gameHtml) => {
+            return `Raised your <span class="metric-name ${row.metric}">${row.metric}</span> staircase level to ${row.threshold} while playing ${gameHtml}`;
         },
     },
 };
