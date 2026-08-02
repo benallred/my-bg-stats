@@ -462,8 +462,8 @@ let yearDataCache = null;
 let isLoadingFromPermalink = false;
 let showAllYearReviewMetrics = false;
 let firstLoggedPlayDate = null;
-// Achievement types hidden via the Achievements filter (empty = all visible); persists across reopen
 const hiddenAchievementTypes = new Set();
+let showAllAchievementMetrics = false;
 
 // Assigned in initializeImageModal; renderModals drives the image modal through
 // this handle because its state (zoom, gallery index) is encapsulated there.
@@ -831,6 +831,11 @@ function setupBaseMetricFilter() {
                 if (toggleCheckbox && detailDiv && !toggleCheckbox.checked) {
                     applyYearReviewMetricFilter(detailDiv, false);
                 }
+            }
+
+            // Refresh achievements detail if open (metric-aware rows)
+            if (currentlyOpenStatType === 'achievements') {
+                showDetailSection('achievements');
             }
         }
 
@@ -4230,7 +4235,7 @@ const ACHIEVEMENT_TYPE_META = {
  * Apply the current achievement type filter: show/hide rows and reflect each
  * toggle's active state within the given Achievements detail root.
  */
-function applyAchievementTypeFilter(root) {
+function applyAchievementFilters(root) {
     root.querySelectorAll('.achievements-filter-toggle[data-type]').forEach(button => {
         const active = !hiddenAchievementTypes.has(button.dataset.type);
         button.classList.toggle('active', active);
@@ -4241,8 +4246,15 @@ function applyAchievementTypeFilter(root) {
     const allActive = hiddenAchievementTypes.size === 0;
     allButton.classList.toggle('active', allActive);
     allButton.setAttribute('aria-pressed', String(allActive));
+
+    const baseMetrics = Object.values(Metric);
     root.querySelectorAll('tr[data-achievement-type]').forEach(row => {
-        row.style.display = hiddenAchievementTypes.has(row.dataset.achievementType) ? 'none' : '';
+        const typeHidden = hiddenAchievementTypes.has(row.dataset.achievementType);
+        // Rows with no base metric (e.g. people h-index) always pass the metric filter
+        const metricHidden = !showAllAchievementMetrics
+            && baseMetrics.includes(row.dataset.metric)
+            && row.dataset.metric !== currentBaseMetric;
+        row.style.display = (typeHidden || metricHidden) ? 'none' : '';
     });
 }
 
@@ -4275,7 +4287,7 @@ function showAchievementsDetail(container, statsCache) {
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
         const game = gameById.get(achievement.gameId);
         return `
-            <tr data-achievement-type="${achievement.type}">
+            <tr data-achievement-type="${achievement.type}" data-metric="${achievement.metric}">
                 <td class="achievement-type-col">
                     <span class="achievement-chip ${meta.chipClass}" title="${meta.label}">
                         <span class="achievement-chip__icon">${meta.icon}</span>
@@ -4289,6 +4301,13 @@ function showAchievementsDetail(container, statsCache) {
 
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
+        <div class="achievements-toggle">
+            <label class="toggle-switch">
+                <input type="checkbox" id="achievements-show-all-metrics" ${showAllAchievementMetrics ? 'checked' : ''}>
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Show all base metrics</span>
+        </div>
         <div class="achievements-filter">
             <button type="button" class="achievements-filter-toggle achievements-filter-all" data-filter-all>
                 <span class="achievement-chip achievement-chip--all"><span class="achievement-chip__icon">🏆</span></span>
@@ -4316,18 +4335,24 @@ function showAchievementsDetail(container, statsCache) {
             } else {
                 hiddenAchievementTypes.add(type);
             }
-            applyAchievementTypeFilter(wrapper);
+            applyAchievementFilters(wrapper);
             updateURL();
         });
     });
 
     wrapper.querySelector('.achievements-filter-all').addEventListener('click', () => {
         hiddenAchievementTypes.clear();
-        applyAchievementTypeFilter(wrapper);
+        applyAchievementFilters(wrapper);
         updateURL();
     });
 
-    applyAchievementTypeFilter(wrapper);
+    wrapper.querySelector('#achievements-show-all-metrics').addEventListener('change', (e) => {
+        showAllAchievementMetrics = e.target.checked;
+        applyAchievementFilters(wrapper);
+        updateURL();
+    });
+
+    applyAchievementFilters(wrapper);
     container.appendChild(wrapper);
 }
 
@@ -5848,10 +5873,16 @@ function loadFromPermalink() {
     const shelfGameParam = urlParams.get('shelfGame');
     const photoParam = urlParams.get('photo');
     const achievementTypesParam = urlParams.get('achievementTypes');
+    const achievementAllMetricsParam = urlParams.get('achievementAllMetrics');
 
     // Initialize showAllYearReviewMetrics from URL before early return check
     if (showAllMetricsParam === 'true') {
         showAllYearReviewMetrics = true;
+    }
+
+    // Initialize the achievements "show all base metrics" toggle from URL
+    if (achievementAllMetricsParam === 'true') {
+        showAllAchievementMetrics = true;
     }
 
     // Restore the achievements filter: the param lists the selected (visible)
@@ -5885,7 +5916,7 @@ function loadFromPermalink() {
     }
 
     // Set base metric if specified
-    if (baseMetricParam && ['hours', 'sessions', 'plays'].includes(baseMetricParam)) {
+    if (baseMetricParam && Object.values(Metric).includes(baseMetricParam)) {
         const baseMetricSelect = document.getElementById('base-metric-select');
         if (baseMetricSelect) {
             baseMetricSelect.value = baseMetricParam;
@@ -6081,6 +6112,11 @@ function updateURL() {
             const selectedTypes = Object.keys(ACHIEVEMENT_TYPE_META)
                 .filter(type => !hiddenAchievementTypes.has(type));
             params.set('achievementTypes', selectedTypes.join(','));
+        }
+
+        // For the achievements list, encode the "show all base metrics" toggle when on
+        if (currentlyOpenStatType === 'achievements' && showAllAchievementMetrics) {
+            params.set('achievementAllMetrics', 'true');
         }
     }
 

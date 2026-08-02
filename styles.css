@@ -2195,6 +2195,14 @@ body.modal-open {
     text-align: center;
 }
 
+/* Achievements "show all base metrics" toggle */
+.achievements-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
 /* Achievement type filter bar */
 .achievements-filter {
     display: flex;
