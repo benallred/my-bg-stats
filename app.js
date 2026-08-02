@@ -4317,12 +4317,14 @@ function showAchievementsDetail(container, statsCache) {
                 hiddenAchievementTypes.add(type);
             }
             applyAchievementTypeFilter(wrapper);
+            updateURL();
         });
     });
 
     wrapper.querySelector('.achievements-filter-all').addEventListener('click', () => {
         hiddenAchievementTypes.clear();
         applyAchievementTypeFilter(wrapper);
+        updateURL();
     });
 
     applyAchievementTypeFilter(wrapper);
@@ -5845,10 +5847,23 @@ function loadFromPermalink() {
     const sortDirParam = urlParams.get('sortDir');
     const shelfGameParam = urlParams.get('shelfGame');
     const photoParam = urlParams.get('photo');
+    const achievementTypesParam = urlParams.get('achievementTypes');
 
     // Initialize showAllYearReviewMetrics from URL before early return check
     if (showAllMetricsParam === 'true') {
         showAllYearReviewMetrics = true;
+    }
+
+    // Restore the achievements filter: the param lists the selected (visible)
+    // types, so hide every known type that isn't in it. Absent param = all shown.
+    if (achievementTypesParam !== null) {
+        const selectedTypes = new Set(achievementTypesParam.split(',').filter(Boolean));
+        hiddenAchievementTypes.clear();
+        for (const type of Object.keys(ACHIEVEMENT_TYPE_META)) {
+            if (!selectedTypes.has(type)) {
+                hiddenAchievementTypes.add(type);
+            }
+        }
     }
 
     if (!yearParam && !baseMetricParam && !statParam && !modalParam && !shelfGameParam && !photoParam) {
@@ -6058,6 +6073,14 @@ function updateURL() {
                 params.set('sortCol', currentSortCol);
                 params.set('sortDir', currentSortDir);
             }
+        }
+
+        // For the achievements list, encode the selected (visible) types.
+        // Nothing hidden means all are selected, so no param is needed.
+        if (currentlyOpenStatType === 'achievements' && hiddenAchievementTypes.size > 0) {
+            const selectedTypes = Object.keys(ACHIEVEMENT_TYPE_META)
+                .filter(type => !hiddenAchievementTypes.has(type));
+            params.set('achievementTypes', selectedTypes.join(','));
         }
     }
 
