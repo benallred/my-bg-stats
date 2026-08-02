@@ -31,7 +31,7 @@
     --color-warning: #ffc107;
     --color-milestone: #9b59b6;
     --color-hindex: #16a085;
-    --color-staircase: #6c5ce7;
+    --color-staircase: #a0682d;
     --color-people: #e84393;
 
     /* Metric colors */
@@ -96,7 +96,7 @@
     --color-warning: #f39c12;
     --color-milestone: #b07cc6;
     --color-hindex: #1abc9c;
-    --color-staircase: #a29bfe;
+    --color-staircase: #c69c6d;
     --color-people: #fd79a8;
 
     /* Metric colors */
@@ -2184,11 +2184,55 @@ body.modal-open {
     --achievement-chip-color: var(--color-staircase);
 }
 
+.achievement-chip--all {
+    --achievement-chip-color: var(--text-muted);
+}
+
 /* Shrink the type column to just fit the icon chip. */
 .achievement-type-col {
     width: 1%;
     white-space: nowrap;
     text-align: center;
+}
+
+/* Achievement type filter bar */
+.achievements-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.achievements-filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.7rem 0.25rem 0.3rem;
+    border: 1px solid var(--border-primary);
+    border-radius: 999px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.achievements-filter-toggle:not(.active) {
+    opacity: 0.4;
+    background: transparent;
+}
+
+.achievements-filter-toggle .achievement-chip {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.achievements-filter-toggle .achievement-chip__icon {
+    font-size: 0.85rem;
+}
+
+.achievements-filter-label {
+    white-space: nowrap;
 }
 
 /* Flow the triggering game's thumbnail inline with the achievement sentence. */

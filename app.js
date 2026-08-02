@@ -462,6 +462,8 @@ let yearDataCache = null;
 let isLoadingFromPermalink = false;
 let showAllYearReviewMetrics = false;
 let firstLoggedPlayDate = null;
+// Achievement types hidden via the Achievements filter (empty = all visible); persists across reopen
+const hiddenAchievementTypes = new Set();
 
 // Assigned in initializeImageModal; renderModals drives the image modal through
 // this handle because its state (zoom, gallery index) is encapsulated there.
@@ -4182,8 +4184,8 @@ function showLocationsBreakdown(container) {
  */
 const ACHIEVEMENT_TYPE_META = {
     [AchievementType.LOGGING]: {
-        label: 'Logging Achievement',
-        icon: '🏆',
+        label: 'Logging',
+        icon: '🧮',
         chipClass: 'achievement-chip--logging',
         renderText: (row, gameHtml) => {
             return `Reached ${row.threshold.toLocaleString()} total <span class="metric-name ${row.metric}">${row.metric}</span> logged while playing ${gameHtml}`;
@@ -4225,7 +4227,28 @@ const ACHIEVEMENT_TYPE_META = {
 };
 
 /**
- * Show the all-time Achievements running list (most recent first).
+ * Apply the current achievement type filter: show/hide rows and reflect each
+ * toggle's active state within the given Achievements detail root.
+ */
+function applyAchievementTypeFilter(root) {
+    root.querySelectorAll('.achievements-filter-toggle[data-type]').forEach(button => {
+        const active = !hiddenAchievementTypes.has(button.dataset.type);
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+    });
+    // "All" is active only when nothing is hidden
+    const allButton = root.querySelector('.achievements-filter-all');
+    const allActive = hiddenAchievementTypes.size === 0;
+    allButton.classList.toggle('active', allActive);
+    allButton.setAttribute('aria-pressed', String(allActive));
+    root.querySelectorAll('tr[data-achievement-type]').forEach(row => {
+        row.style.display = hiddenAchievementTypes.has(row.dataset.achievementType) ? 'none' : '';
+    });
+}
+
+/**
+ * Show the all-time Achievements running list (most recent first), with a filter
+ * bar above the table for toggling visibility of each achievement type.
  */
 function showAchievementsDetail(container, statsCache) {
     const achievements = statsCache.achievements;
@@ -4237,11 +4260,22 @@ function showAchievementsDetail(container, statsCache) {
 
     const gameById = new Map(gameData.games.map(g => [g.id, g]));
 
+    // Filter toggles for every achievement type, in meta declaration order
+    const filterButtons = Object.keys(ACHIEVEMENT_TYPE_META).map(type => {
+        const meta = ACHIEVEMENT_TYPE_META[type];
+        return `
+            <button type="button" class="achievements-filter-toggle" data-type="${type}">
+                <span class="achievement-chip ${meta.chipClass}"><span class="achievement-chip__icon">${meta.icon}</span></span>
+                <span class="achievements-filter-label">${meta.label}</span>
+            </button>
+        `;
+    }).join('');
+
     const rows = achievements.map(achievement => {
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
         const game = gameById.get(achievement.gameId);
         return `
-            <tr>
+            <tr data-achievement-type="${achievement.type}">
                 <td class="achievement-type-col">
                     <span class="achievement-chip ${meta.chipClass}" title="${meta.label}">
                         <span class="achievement-chip__icon">${meta.icon}</span>
@@ -4253,19 +4287,46 @@ function showAchievementsDetail(container, statsCache) {
         `;
     }).join('');
 
-    const table = document.createElement('table');
-    table.className = 'breakdown-table achievements-table';
-    table.innerHTML = `
-        <thead>
-            <tr>
-                <th class="achievement-type-col"></th>
-                <th>Achievement</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>${rows}</tbody>
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+        <div class="achievements-filter">
+            <button type="button" class="achievements-filter-toggle achievements-filter-all" data-filter-all>
+                <span class="achievement-chip achievement-chip--all"><span class="achievement-chip__icon">🏆</span></span>
+                <span class="achievements-filter-label">All</span>
+            </button>
+            ${filterButtons}
+        </div>
+        <table class="breakdown-table achievements-table">
+            <thead>
+                <tr>
+                    <th class="achievement-type-col"></th>
+                    <th>Achievement</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+        </table>
     `;
-    container.appendChild(table);
+
+    wrapper.querySelectorAll('.achievements-filter-toggle[data-type]').forEach(button => {
+        button.addEventListener('click', () => {
+            const type = button.dataset.type;
+            if (hiddenAchievementTypes.has(type)) {
+                hiddenAchievementTypes.delete(type);
+            } else {
+                hiddenAchievementTypes.add(type);
+            }
+            applyAchievementTypeFilter(wrapper);
+        });
+    });
+
+    wrapper.querySelector('.achievements-filter-all').addEventListener('click', () => {
+        hiddenAchievementTypes.clear();
+        applyAchievementTypeFilter(wrapper);
+    });
+
+    applyAchievementTypeFilter(wrapper);
+    container.appendChild(wrapper);
 }
 
 /**
