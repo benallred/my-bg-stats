@@ -4,11 +4,17 @@ import {
   AchievementType,
   getAchievements,
   getCumulativeLoggingAchievements,
+  getMilestoneAchievements,
 } from './achievements.js';
 
 // Build a play with the fields the achievements generators read.
 function play(date, durationMin, time = '12:00:00', gameId = 1) {
   return { date, timestamp: `${date} ${time}`, durationMin, gameId };
+}
+
+// Distinct dates so each play is its own session, starting 2024-01-01.
+function dayN(n) {
+  return new Date(Date.UTC(2024, 0, 1 + n)).toISOString().split('T')[0];
 }
 
 describe('getCumulativeLoggingAchievements', () => {
@@ -155,5 +161,75 @@ describe('getAchievements', () => {
     for (const a of result) {
       expect(a.timestamp).toBe('2024-01-01 12:00:00');
     }
+  });
+
+  test('is deterministic when logging and milestone tie on timestamp, metric, and threshold', () => {
+    // A single 6000-minute play (100 hours) for game 1 crosses the 100th total
+    // hour (logging) and the game's century (milestone) at the same instant.
+    const result = getAchievements({ games: [{ id: 1 }], plays: [play('2024-01-01', 6000)] });
+    const hundredHour = result.filter(a => a.metric === Metric.HOURS && a.threshold === 100);
+
+    expect(hundredHour.map(a => a.type)).toEqual([AchievementType.LOGGING, AchievementType.MILESTONE]);
+  });
+
+  test('includes both logging and milestone achievements', () => {
+    const result = getAchievements({ games: [{ id: 1 }], plays: [play('2024-01-01', 6000)] });
+    expect(result.some(a => a.type === AchievementType.LOGGING)).toBe(true);
+    expect(result.some(a => a.type === AchievementType.MILESTONE)).toBe(true);
+  });
+});
+
+describe('getMilestoneAchievements', () => {
+  const games = [{ id: 1 }, { id: 2 }];
+
+  test('returns empty array for no plays', () => {
+    expect(getMilestoneAchievements(games, [])).toEqual([]);
+  });
+
+  test('emits a plays milestone when a game reaches five plays', () => {
+    const plays = Array.from({ length: 5 }, (_, i) => play(dayN(i), 30));
+    const result = getMilestoneAchievements(games, plays).filter(a => a.metric === Metric.PLAYS);
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({
+      type: AchievementType.MILESTONE,
+      gameId: 1,
+      metric: Metric.PLAYS,
+      threshold: 5,
+    });
+  });
+
+  test('emits an hours milestone from accumulated minutes (five = 5 hours)', () => {
+    // A single 300-minute play = 5.0 hours (and only 1 session / 1 play)
+    const result = getMilestoneAchievements(games, [play(dayN(0), 300)]).filter(a => a.metric === Metric.HOURS);
+    expect(result.map(a => a.threshold)).toEqual([5]);
+  });
+
+  test('emits a sessions milestone when a game is played on five unique days', () => {
+    const plays = Array.from({ length: 5 }, (_, i) => play(dayN(i), 30));
+    const result = getMilestoneAchievements(games, plays).filter(a => a.metric === Metric.SESSIONS);
+    expect(result.map(a => a.threshold)).toEqual([5]);
+  });
+
+  test('crosses multiple tiers in one play', () => {
+    // 6000 minutes = 100 hours in one play -> five, dime, quarter, century
+    const result = getMilestoneAchievements(games, [play(dayN(0), 6000)]).filter(a => a.metric === Metric.HOURS);
+    expect(result.map(a => a.threshold)).toEqual([5, 10, 25, 100]);
+  });
+
+  test('tracks each game independently', () => {
+    const plays = [
+      ...Array.from({ length: 5 }, (_, i) => play(dayN(i), 30, '12:00:00', 1)),
+      ...Array.from({ length: 5 }, (_, i) => play(dayN(i), 30, '13:00:00', 2)),
+    ];
+    const fives = getMilestoneAchievements(games, plays)
+      .filter(a => a.metric === Metric.PLAYS && a.threshold === 5);
+
+    expect(fives.map(a => a.gameId).sort()).toEqual([1, 2]);
+  });
+
+  test('ignores plays for unknown games', () => {
+    const plays = Array.from({ length: 5 }, (_, i) => play(dayN(i), 30, '12:00:00', 999));
+    expect(getMilestoneAchievements(games, plays)).toEqual([]);
   });
 });

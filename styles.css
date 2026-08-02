@@ -29,6 +29,7 @@
     --color-success: #27ae60;
     --color-error: #e74c3c;
     --color-warning: #ffc107;
+    --color-milestone: #9b59b6;
 
     /* Metric colors */
     --color-metric-hours: #27ae60;
@@ -90,6 +91,7 @@
     --color-success: #2ecc71;
     --color-error: #e74c3c;
     --color-warning: #f39c12;
+    --color-milestone: #b07cc6;
 
     /* Metric colors */
     --color-metric-hours: #2ecc71;
@@ -2158,6 +2160,10 @@ body.modal-open {
 
 .achievement-chip--logging {
     --achievement-chip-color: var(--color-warning);
+}
+
+.achievement-chip--milestone {
+    --achievement-chip-color: var(--color-milestone);
 }
 
 /* Shrink the type column to just fit the icon chip. */

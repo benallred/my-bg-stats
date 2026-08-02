@@ -4184,6 +4184,15 @@ const ACHIEVEMENT_TYPE_META = {
             return `Reached ${row.threshold.toLocaleString()} total <span class="metric-name ${row.metric}">${row.metric}</span> logged while playing ${gameHtml}`;
         },
     },
+    [AchievementType.MILESTONE]: {
+        label: 'Milestone',
+        icon: '🏅',
+        chipClass: 'achievement-chip--milestone',
+        renderText: (row, gameHtml) => {
+            const milestoneName = { 5: 'five', 10: 'dime', 25: 'quarter', 100: 'century' }[row.threshold];
+            return `${gameHtml} reached a ${milestoneName} — ${row.threshold} <span class="metric-name ${row.metric}">${row.metric}</span>`;
+        },
+    },
 };
 
 /**
