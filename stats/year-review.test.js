@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import {
   getTimeAndActivityStats,
-  getLoggingAchievements,
+  getLoggingTotals,
   getSoloStats,
   getLongestSinglePlays,
   getTopGamesByUniquePlayers,
@@ -204,14 +204,14 @@ describe('getTimeAndActivityStats', () => {
   });
 });
 
-describe('getLoggingAchievements', () => {
+describe('getLoggingTotals', () => {
   test('returns empty array when no thresholds crossed in year', () => {
     const plays = [
       { gameId: 1, date: '2024-01-15', durationMin: 30 },
       { gameId: 2, date: '2024-01-16', durationMin: 30 },
     ];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toEqual([]);
   });
@@ -222,7 +222,7 @@ describe('getLoggingAchievements', () => {
       { gameId: 2, date: '2024-01-16', durationMin: 100 },
     ];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-16' });
   });
@@ -239,7 +239,7 @@ describe('getLoggingAchievements', () => {
       });
     }
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toContainEqual(expect.objectContaining({ metric: 'sessions', threshold: 100 }));
   });
@@ -254,7 +254,7 @@ describe('getLoggingAchievements', () => {
       });
     }
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toContainEqual({ metric: 'plays', threshold: 250, date: '2024-01-15' });
   });
@@ -265,7 +265,7 @@ describe('getLoggingAchievements', () => {
       { gameId: 2, date: '2024-01-20', durationMin: 1000 },
     ];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     const hourAchievement = result.find(a => a.metric === 'hours' && a.threshold === 100);
     expect(hourAchievement.date).toBe('2024-01-20');
@@ -277,7 +277,7 @@ describe('getLoggingAchievements', () => {
       { gameId: 2, date: '2024-06-15', durationMin: 6000 },
     ];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-15' });
     expect(result).toContainEqual({ metric: 'hours', threshold: 200, date: '2024-06-15' });
@@ -289,7 +289,7 @@ describe('getLoggingAchievements', () => {
       { gameId: 2, date: '2024-01-15', durationMin: 100 },
     ];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-15' });
   });
@@ -297,7 +297,7 @@ describe('getLoggingAchievements', () => {
   test('excludes thresholds crossed in other years', () => {
     const plays = [{ gameId: 1, date: '2023-06-15', durationMin: 6000 }];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toEqual([]);
   });
@@ -314,7 +314,7 @@ describe('getLoggingAchievements', () => {
       });
     }
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     const metrics = result.map(a => a.metric);
     const hoursEndIndex = metrics.lastIndexOf('hours');
@@ -337,7 +337,7 @@ describe('getLoggingAchievements', () => {
       { gameId: 3, date: '2024-01-15', durationMin: 30 },
     ];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     const sessionAchievements = result.filter(a => a.metric === 'sessions');
     expect(sessionAchievements).toEqual([]);
@@ -346,7 +346,7 @@ describe('getLoggingAchievements', () => {
   test('handles crossing multiple thresholds in single play', () => {
     const plays = [{ gameId: 1, date: '2024-01-15', durationMin: 12500 }];
 
-    const result = getLoggingAchievements(plays, 2024);
+    const result = getLoggingTotals(plays, 2024);
 
     expect(result).toContainEqual({ metric: 'hours', threshold: 100, date: '2024-01-15' });
     expect(result).toContainEqual({ metric: 'hours', threshold: 200, date: '2024-01-15' });

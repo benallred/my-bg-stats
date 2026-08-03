@@ -48,7 +48,7 @@ import {
   getTopNewToMeGames,
   getTopReturningGames,
   getTimeAndActivityStats,
-  getLoggingAchievements,
+  getLoggingTotals,
   getSoloStats,
   getPlayerStats,
   getLocationStats,
@@ -1032,7 +1032,7 @@ function updateAllStats() {
             topGamesByUniqueLocations: getTopGamesByUniqueLocations(gameData.games, gameData.plays, currentYear, 3),
 
             // Logging achievements (cumulative thresholds crossed)
-            loggingAchievements: getLoggingAchievements(gameData.plays, currentYear),
+            loggingTotals: getLoggingTotals(gameData.plays, currentYear),
 
             // Solo gaming stats
             soloStats: getSoloStats(gameData.plays, gameData.selfPlayerId, currentYear),
@@ -4189,7 +4189,7 @@ function showLocationsBreakdown(container) {
  */
 const ACHIEVEMENT_TYPE_META = {
     [AchievementType.LOGGING]: {
-        label: 'Logging',
+        label: 'Logging Total',
         icon: '🧮',
         chipClass: 'achievement-chip--logging',
         renderText: (row, gameHtml) => {
@@ -4912,12 +4912,12 @@ function showYearReviewDetail(container, statsCache) {
         summaryBullets.push(`Increased ${formatNaturalList(staircaseParts)}`);
     }
 
-    // Logging Achievements summary (highest threshold per metric)
-    const loggingAchievementsData = statsCache.yearReview.loggingAchievements;
-    if (loggingAchievementsData && loggingAchievementsData.length > 0) {
+    // Logging Totals summary (highest threshold per metric)
+    const loggingTotalsData = statsCache.yearReview.loggingTotals;
+    if (loggingTotalsData && loggingTotalsData.length > 0) {
         // Find highest threshold for each metric
         const highestByMetric = {};
-        loggingAchievementsData.forEach(a => {
+        loggingTotalsData.forEach(a => {
             if (!highestByMetric[a.metric] || a.threshold > highestByMetric[a.metric]) {
                 highestByMetric[a.metric] = a.threshold;
             }
@@ -5543,9 +5543,9 @@ function showYearReviewDetail(container, statsCache) {
         detailDiv.appendChild(timeActivitySubsection);
     }
 
-    // Add Logging Achievements subsection
-    const loggingAchievements = statsCache.yearReview.loggingAchievements;
-    if (loggingAchievements && loggingAchievements.length > 0) {
+    // Add Logging Totals subsection
+    const loggingTotals = statsCache.yearReview.loggingTotals;
+    if (loggingTotals && loggingTotals.length > 0) {
         const formatThreshold = (threshold) => {
             return threshold.toLocaleString();
         };
@@ -5559,7 +5559,7 @@ function showYearReviewDetail(container, statsCache) {
             }
         };
 
-        const achievementRows = loggingAchievements.map(achievement => {
+        const achievementRows = loggingTotals.map(achievement => {
             const metricLabel = getMetricLabel(achievement.metric);
             const formattedThreshold = formatThreshold(achievement.threshold);
             const formattedDate = formatDateWithWeekday(achievement.date);
@@ -5574,17 +5574,17 @@ function showYearReviewDetail(container, statsCache) {
             `;
         }).join('');
 
-        const loggingAchievementsSubsection = document.createElement('div');
-        loggingAchievementsSubsection.className = 'year-review-subsection';
-        loggingAchievementsSubsection.innerHTML = `
-            <h3 class="year-review-subsection-heading">Logging Achievements</h3>
+        const loggingTotalsSubsection = document.createElement('div');
+        loggingTotalsSubsection.className = 'year-review-subsection';
+        loggingTotalsSubsection.innerHTML = `
+            <h3 class="year-review-subsection-heading">Logging Totals</h3>
             <table class="year-review-table">
                 <tbody>
                     ${achievementRows}
                 </tbody>
             </table>
         `;
-        detailDiv.appendChild(loggingAchievementsSubsection);
+        detailDiv.appendChild(loggingTotalsSubsection);
     }
 
     // Build milestone rows dynamically - only show rows with increase > 0

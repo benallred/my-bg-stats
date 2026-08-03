@@ -176,12 +176,12 @@ function getTimeAndActivityStats(plays, year = null) {
 }
 
 /**
- * Get logging achievements (cumulative totals crossing round-number thresholds) for a year
+ * Get logging totals (cumulative totals crossing round-number thresholds) for a year
  * @param {Array} plays - Array of play objects
- * @param {number} year - Year to filter achievements by
+ * @param {number} year - Year to filter logging totals by
  * @returns {Array} Array of { metric: Metric.HOURS|Metric.SESSIONS|Metric.PLAYS, threshold: number, date: string }
  */
-function getLoggingAchievements(plays, year) {
+function getLoggingTotals(plays, year) {
   // Sort plays chronologically (oldest first)
   const sortedPlays = [...plays].sort((a, b) => a.date.localeCompare(b.date));
 
@@ -228,7 +228,7 @@ function getLoggingAchievements(plays, year) {
     }
   }
 
-  // Filter to achievements where date is in specified year
+  // Filter to logging totals where date is in specified year
   // Sort by: hours first, then sessions, then plays (per metric ordering convention)
   // Within each metric, sort by threshold ascending
   const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2 };
@@ -516,7 +516,7 @@ function getMostConsistentGame(games, plays, year) {
 
 export {
   getTimeAndActivityStats,
-  getLoggingAchievements,
+  getLoggingTotals,
   getSoloStats,
   getLongestSinglePlays,
   getTopGamesByUniquePlayers,

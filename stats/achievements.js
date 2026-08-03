@@ -1,5 +1,5 @@
 /**
- * Achievements - all-time running list of logging achievements and notable events.
+ * Achievements - all-time running list of logging totals and notable events.
  *
  * The structure is generator-based so new achievement kinds can be added without
  * touching the aggregation or sort logic: implement a generator that returns rows
@@ -17,8 +17,6 @@ import { calculateStaircaseLevelFromSortedValues } from './staircase-level.js';
 
 /**
  * Achievement type identifiers. Add a new entry here for each new achievement kind.
- * ("Milestone" is a per-game play-count/metric tier — five, dime, quarter, century;
- * cumulative total-metric thresholds are "logging achievements" — see AGENTS.md.)
  */
 const AchievementType = {
   LOGGING: 'logging',
@@ -31,18 +29,18 @@ const AchievementType = {
 // Pseudo-metric for the people h-index (which is not a per-game hours/sessions/plays value)
 const PEOPLE_METRIC = 'people';
 
-// Cumulative thresholds for logging achievements (matches Year in Review logging achievements)
+// Cumulative thresholds for logging totals (matches Year in Review logging totals)
 const HOUR_THRESHOLD_STEP = 100;
 const SESSION_THRESHOLD_STEP = 100;
 const PLAY_THRESHOLD_STEP = 250;
 
 /**
- * Generate cumulative logging achievements across all logged plays:
+ * Generate cumulative logging totals across all logged plays:
  * total hours, sessions, and plays crossing round-number thresholds.
  * @param {Array} plays - Array of play objects
  * @returns {Array} Rows of { type, timestamp, gameId, metric, threshold }
  */
-function getCumulativeLoggingAchievements(plays) {
+function getCumulativeLoggingTotals(plays) {
   // Sort plays chronologically (oldest first) so thresholds cross in order
   const sortedPlays = [...plays].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 
@@ -246,7 +244,7 @@ function getIndexAchievements(games, plays, selfPlayerId, anonymousPlayerId) {
  * returns an array of achievement rows. Add new generators here to extend the list.
  */
 const ACHIEVEMENT_GENERATORS = [
-  (context) => getCumulativeLoggingAchievements(context.plays),
+  (context) => getCumulativeLoggingTotals(context.plays),
   (context) => getMilestoneAchievements(context.games, context.plays),
   (context) => getIndexAchievements(context.games, context.plays, context.selfPlayerId, context.anonymousPlayerId),
 ];
@@ -290,7 +288,7 @@ function getAchievements(context) {
 export {
   AchievementType,
   getAchievements,
-  getCumulativeLoggingAchievements,
+  getCumulativeLoggingTotals,
   getMilestoneAchievements,
   getIndexAchievements,
 };

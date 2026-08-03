@@ -3,7 +3,7 @@ import { Metric } from './constants.js';
 import {
   AchievementType,
   getAchievements,
-  getCumulativeLoggingAchievements,
+  getCumulativeLoggingTotals,
   getMilestoneAchievements,
   getIndexAchievements,
 } from './achievements.js';
@@ -29,14 +29,14 @@ function dayN(n) {
   return new Date(Date.UTC(2024, 0, 1 + n)).toISOString().split('T')[0];
 }
 
-describe('getCumulativeLoggingAchievements', () => {
+describe('getCumulativeLoggingTotals', () => {
   test('returns empty array for no plays', () => {
-    expect(getCumulativeLoggingAchievements([])).toEqual([]);
+    expect(getCumulativeLoggingTotals([])).toEqual([]);
   });
 
   test('emits an hours achievement when the 100th hour is crossed', () => {
     // 6000 minutes = 100 hours
-    const result = getCumulativeLoggingAchievements([play('2024-01-01', 6000, '12:00:00', 42)]);
+    const result = getCumulativeLoggingTotals([play('2024-01-01', 6000, '12:00:00', 42)]);
 
     expect(result).toEqual([
       {
@@ -50,13 +50,13 @@ describe('getCumulativeLoggingAchievements', () => {
   });
 
   test('records the triggering game on each achievement', () => {
-    const result = getCumulativeLoggingAchievements([play('2024-01-01', 6000, '12:00:00', 7)]);
+    const result = getCumulativeLoggingTotals([play('2024-01-01', 6000, '12:00:00', 7)]);
     expect(result.every(a => a.gameId === 7)).toBe(true);
   });
 
   test('emits multiple hours achievements when several thresholds cross in one play', () => {
     // 15000 minutes = 250 hours -> crosses 100 and 200
-    const result = getCumulativeLoggingAchievements([play('2024-01-01', 15000)]);
+    const result = getCumulativeLoggingTotals([play('2024-01-01', 15000)]);
     const hours = result.filter(a => a.metric === Metric.HOURS);
 
     expect(hours.map(a => a.threshold)).toEqual([100, 200]);
@@ -67,7 +67,7 @@ describe('getCumulativeLoggingAchievements', () => {
     const plays = Array.from({ length: 99 }, (_, i) =>
       play(`2024-${String(Math.floor(i / 28) + 1).padStart(2, '0')}-${String((i % 28) + 1).padStart(2, '0')}`, 60)
     );
-    expect(getCumulativeLoggingAchievements(plays)).toEqual([]);
+    expect(getCumulativeLoggingTotals(plays)).toEqual([]);
   });
 
   test('emits a sessions achievement on the 100th unique day', () => {
@@ -77,7 +77,7 @@ describe('getCumulativeLoggingAchievements', () => {
       return play(day, 1);
     });
 
-    const result = getCumulativeLoggingAchievements(plays);
+    const result = getCumulativeLoggingTotals(plays);
     const sessions = result.filter(a => a.metric === Metric.SESSIONS);
 
     expect(sessions).toHaveLength(1);
@@ -90,7 +90,7 @@ describe('getCumulativeLoggingAchievements', () => {
       play('2024-01-01', 1, '09:00:00'),
       play('2024-01-01', 1, '10:00:00'),
     ];
-    const sessions = getCumulativeLoggingAchievements(plays).filter(a => a.metric === Metric.SESSIONS);
+    const sessions = getCumulativeLoggingTotals(plays).filter(a => a.metric === Metric.SESSIONS);
     expect(sessions).toEqual([]);
   });
 
@@ -101,7 +101,7 @@ describe('getCumulativeLoggingAchievements', () => {
       return play(day, 1);
     });
 
-    const result = getCumulativeLoggingAchievements(plays);
+    const result = getCumulativeLoggingTotals(plays);
     const playAchievements = result.filter(a => a.metric === Metric.PLAYS);
 
     expect(playAchievements).toHaveLength(1);
@@ -114,7 +114,7 @@ describe('getCumulativeLoggingAchievements', () => {
       play('2024-06-01', 3000, '12:00:00'), // later
       play('2024-01-01', 3000, '12:00:00'), // earlier -> crosses 100h first
     ];
-    const result = getCumulativeLoggingAchievements(plays);
+    const result = getCumulativeLoggingTotals(plays);
     const hours = result.filter(a => a.metric === Metric.HOURS);
 
     expect(hours).toHaveLength(1);
