@@ -652,6 +652,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Update footer
         updateFooter();
+
+        // Surface recent achievements (hidden feature)
+        maybeShowRecentAchievementToasts();
     } catch (error) {
         console.error('Error initializing app:', error);
         alert('Failed to load data. Please make sure data.json exists.');
@@ -4354,6 +4357,129 @@ function showAchievementsDetail(container, statsCache) {
 
     applyAchievementFilters(wrapper);
     container.appendChild(wrapper);
+}
+
+// ---- Recent achievement toasts (hidden feature) ----
+
+const ACKED_ACHIEVEMENTS_KEY = 'ackedAchievements';
+const RECENT_ACHIEVEMENT_DAYS = 30;
+
+function achievementAckKey(achievement) {
+    return `${achievement.type}|${achievement.metric}|${achievement.threshold}|${achievement.timestamp}`;
+}
+
+function getAckedAchievements() {
+    const raw = localStorage.getItem(ACKED_ACHIEVEMENTS_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+}
+
+function ackAchievement(key) {
+    const acked = getAckedAchievements();
+    acked.add(key);
+    localStorage.setItem(ACKED_ACHIEVEMENTS_KEY, JSON.stringify([...acked]));
+}
+
+/**
+ * Format a date/timestamp relative to today: "Today", "Yesterday", or "N days ago".
+ */
+function formatRelativeDate(dateString) {
+    const [year, month, day] = dateString.slice(0, 10).split('-').map(Number);
+    const then = new Date(year, month - 1, day);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const days = Math.round((today - then) / (1000 * 60 * 60 * 24));
+    if (days <= 0) return 'Today';
+    if (days === 1) return 'Yesterday';
+    return `${days} days ago`;
+}
+
+/**
+ * Recent achievements (within the last RECENT_ACHIEVEMENT_DAYS) not yet acknowledged,
+ * oldest first.
+ */
+function getRecentUnackedAchievements() {
+    const achievements = statsCache.achievements || [];
+    const acked = getAckedAchievements();
+
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - RECENT_ACHIEVEMENT_DAYS);
+    const cutoffStr = `${cutoff.getFullYear()}-${String(cutoff.getMonth() + 1).padStart(2, '0')}-${String(cutoff.getDate()).padStart(2, '0')}`;
+
+    return achievements
+        .filter(a => a.timestamp.slice(0, 10) >= cutoffStr && !acked.has(achievementAckKey(a)))
+        .sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+}
+
+/**
+ * On load (hidden feature only), walk recent unacked achievements one at a time,
+ * oldest first. "Yea!" acknowledges the current one (persisted) and advances;
+ * dismissing (Later / backdrop / Esc) closes the walkthrough without acking, so
+ * unacked ones reappear next load.
+ */
+function maybeShowRecentAchievementToasts() {
+    if (!isHiddenEnabled()) return;
+
+    const queue = getRecentUnackedAchievements();
+    if (queue.length === 0) return;
+
+    const gameById = new Map(gameData.games.map(g => [g.id, g]));
+    let index = 0;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'achievement-toast-overlay';
+    const card = document.createElement('div');
+    card.className = 'achievement-toast';
+    overlay.appendChild(card);
+
+    const close = () => {
+        overlay.remove();
+        document.removeEventListener('keydown', onKey);
+    };
+    const onKey = (e) => {
+        if (e.key === 'Escape') close();
+    };
+
+    const renderCurrent = () => {
+        const achievement = queue[index];
+        const meta = ACHIEVEMENT_TYPE_META[achievement.type];
+        const game = gameById.get(achievement.gameId);
+        const progress = queue.length > 1 ? `<span class="achievement-toast-progress">${index + 1} of ${queue.length}</span>` : '';
+        card.innerHTML = `
+            <div class="achievement-toast-header">
+                <span class="achievement-toast-cover">${renderGameThumbnailOnly(game)}</span>
+                <div class="achievement-toast-sentence">${meta.renderText(achievement, `<strong>${game.name}</strong>`)}</div>
+            </div>
+            <div class="achievement-toast-actions">
+                <div class="achievement-toast-info">
+                    <span class="achievement-chip ${meta.chipClass}"><span class="achievement-chip__icon">${meta.icon}</span></span>
+                    <div class="achievement-toast-meta">${formatRelativeDate(achievement.timestamp)}${progress}</div>
+                </div>
+                <div class="achievement-toast-buttons">
+                    <button type="button" class="achievement-toast-later">Later</button>
+                    <button type="button" class="achievement-toast-yea">Yea! 🎉</button>
+                </div>
+            </div>
+        `;
+        card.querySelector('.achievement-toast-yea').addEventListener('click', () => {
+            ackAchievement(achievementAckKey(queue[index]));
+            index++;
+            if (index >= queue.length) {
+                close();
+            } else {
+                renderCurrent();
+            }
+        });
+        card.querySelector('.achievement-toast-later').addEventListener('click', close);
+    };
+
+    // Clicks inside the card must not dismiss the walkthrough or open the game modal
+    card.addEventListener('click', (e) => e.stopPropagation());
+    // A click on the backdrop dismisses without acking
+    overlay.addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+
+    renderCurrent();
+    document.body.appendChild(overlay);
 }
 
 /**
