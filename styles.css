@@ -2311,9 +2311,16 @@ body.modal-open {
     line-height: 1.4;
 }
 
+.achievement-toast-info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
 .achievement-toast-meta {
     display: flex;
-    gap: 0.6rem;
+    flex-direction: column;
+    line-height: 1.25;
     font-size: 0.8rem;
     color: var(--text-muted);
 }
@@ -2323,12 +2330,6 @@ body.modal-open {
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-}
-
-.achievement-toast-info {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
 }
 
 /* Bigger chip in the toast action row to draw attention */
@@ -2351,6 +2352,7 @@ body.modal-open {
     border-radius: 8px;
     font-size: 0.9rem;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .achievement-toast-later {

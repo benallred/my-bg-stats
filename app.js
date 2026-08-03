@@ -4443,7 +4443,7 @@ function maybeShowRecentAchievementToasts() {
         const achievement = queue[index];
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
         const game = gameById.get(achievement.gameId);
-        const progress = queue.length > 1 ? `<span class="achievement-toast-progress">${index + 1} of ${queue.length}</span>` : '';
+        const progress = queue.length > 1 ? `<span>${index + 1} of ${queue.length}</span>` : '';
         card.innerHTML = `
             <div class="achievement-toast-header">
                 <span class="achievement-toast-cover">${renderGameThumbnailOnly(game)}</span>
@@ -4452,7 +4452,7 @@ function maybeShowRecentAchievementToasts() {
             <div class="achievement-toast-actions">
                 <div class="achievement-toast-info">
                     <span class="achievement-chip ${meta.chipClass}"><span class="achievement-chip__icon">${meta.icon}</span></span>
-                    <div class="achievement-toast-meta">${formatRelativeDate(achievement.timestamp)}${progress}</div>
+                    <div class="achievement-toast-meta"><span>${formatRelativeDate(achievement.timestamp)}</span>${progress}</div>
                 </div>
                 <div class="achievement-toast-buttons">
                     <button type="button" class="achievement-toast-later">Later</button>
@@ -6273,6 +6273,11 @@ function toggleHiddenFeatures(element) {
     const current = localStorage.getItem('hiddenFeatures') === 'true';
     const newValue = !current;
     localStorage.setItem('hiddenFeatures', newValue);
+
+    // Disabling hidden features clears acked achievements, so re-enabling replays them
+    if (!newValue) {
+        localStorage.removeItem(ACKED_ACHIEVEMENTS_KEY);
+    }
 
     // Persistent color indicates flag state
     element.style.color = newValue ? 'var(--color-primary)' : '';
