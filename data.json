@@ -3635,12 +3635,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__small/img/SRpAFFgh4mpyvCqzq8kc3B6_7F4=/fit-in/200x150/filters:strip_icc()/pic9171780.png",
       "coverUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__original/img/9ai5WpyU0jn1cCwAiRaGIQy-VqQ=/0x0/filters:format(png)/pic9171780.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 76
     },
     {
       "id": 4,
@@ -7792,8 +7792,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 3,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/CaGsrg17dVTXSP_7sjbm9w__small/img/8ETGKUTLt4EU-wmmPZwoIcNmPxk=/fit-in/200x150/filters:strip_icc()/pic8381709.png",
       "coverUrl": "https://cf.geekdo-images.com/CaGsrg17dVTXSP_7sjbm9w__original/img/ihUpUOGP4Pms1ukM5GitbCeFni8=/0x0/filters:format(png)/pic8381709.png",
       "expansionIds": [],
@@ -10024,12 +10024,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 3,
+      "playCount": 5,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__small/img/Q3W4poMS4btD-HZLervgqbSCtmE=/fit-in/200x150/filters:strip_icc()/pic7070194.jpg",
       "coverUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__original/img/oRsIxp72iv58128KFdqvjG6Gz64=/0x0/filters:format(jpeg)/pic7070194.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 26
+      "typicalPlayTimeMinutes": 27
     },
     {
       "id": 616,
@@ -14176,8 +14176,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 3,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/Fn3PSPZVxa3YurlorITQ1Q__thumb/img/6XF493O0tSyLyZP5ArlcZrOTMXQ=/fit-in/200x150/filters:strip_icc()/pic1900075.jpg",
       "coverUrl": "https://cf.geekdo-images.com/Fn3PSPZVxa3YurlorITQ1Q__original/img/5vRsn2TT9eJmq27i9HtLWKpB_xs=/0x0/filters:format(jpeg)/pic1900075.jpg",
       "expansionIds": [
@@ -14185,7 +14185,7 @@
         202,
         213
       ],
-      "typicalPlayTimeMinutes": 14
+      "typicalPlayTimeMinutes": 13
     },
     {
       "id": 305,
@@ -18189,6 +18189,80 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 626,
+      "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
+      "date": "2026-08-02",
+      "timestamp": "2026-08-02 19:18:04",
+      "durationMin": 76,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-08-02",
+      "timestamp": "2026-08-02 14:37:34",
+      "durationMin": 32,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 207,
+      "copyId": "e461f937-74fb-40c4-8589-a7cb953f0041",
+      "date": "2026-07-30",
+      "timestamp": "2026-07-30 20:53:26",
+      "durationMin": 12,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-07-26",
+      "timestamp": "2026-07-26 19:18:13",
+      "durationMin": 25,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-07-26",
+      "timestamp": "2026-07-26 19:02:41",
+      "durationMin": 15,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 614,
       "copyId": "cf8ff776-e71b-4c0a-8f0b-c8f5b428ef14",
@@ -50469,5 +50543,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-07-26T19:57:00.000Z"
+  "generatedAt": "2026-08-03T01:18:04.000Z"
 }
