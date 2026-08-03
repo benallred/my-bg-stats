@@ -2263,9 +2263,6 @@ function renderGameDetailModal(gameId) {
     }
 
     // Achievements section
-    const milestoneLabels = { 5: 'Nickel', 10: 'Dime', 25: 'Quarter', 100: 'Century' };
-    const valueClubLabels = { 5: '$5 Club', 2.5: '$2.50 Club', 1: '$1 Club', 0.5: '50¢ Club' };
-
     const hoursMilestone = Milestone.getTierForValue(totalMinutes / 60);
     const sessionsMilestone = Milestone.getTierForValue(totalSessions);
     const playsMilestone = Milestone.getTierForValue(totalPlays);
@@ -2292,22 +2289,22 @@ function renderGameDetailModal(gameId) {
         html += `<div class="game-detail-section-card">`;
         html += `<h4>Achievements</h4>`;
         if (hoursMilestone) {
-            html += `<div class="game-detail-row"><span class="label">Hours Milestone</span><span class="value">${milestoneLabels[hoursMilestone]}</span></div>`;
+            html += `<div class="game-detail-row"><span class="label">Hours Milestone</span><span class="value">${Milestone.getLabel(hoursMilestone)}</span></div>`;
         }
         if (sessionsMilestone) {
-            html += `<div class="game-detail-row"><span class="label">Sessions Milestone</span><span class="value">${milestoneLabels[sessionsMilestone]}</span></div>`;
+            html += `<div class="game-detail-row"><span class="label">Sessions Milestone</span><span class="value">${Milestone.getLabel(sessionsMilestone)}</span></div>`;
         }
         if (playsMilestone) {
-            html += `<div class="game-detail-row"><span class="label">Plays Milestone</span><span class="value">${milestoneLabels[playsMilestone]}</span></div>`;
+            html += `<div class="game-detail-row"><span class="label">Plays Milestone</span><span class="value">${Milestone.getLabel(playsMilestone)}</span></div>`;
         }
         if (hoursValueClub) {
-            html += `<div class="game-detail-row"><span class="label">Hours Value Club</span><span class="value">${valueClubLabels[hoursValueClub]}</span></div>`;
+            html += `<div class="game-detail-row"><span class="label">Hours Value Club</span><span class="value">${ValueClub.getLabel(hoursValueClub)}</span></div>`;
         }
         if (sessionsValueClub) {
-            html += `<div class="game-detail-row"><span class="label">Sessions Value Club</span><span class="value">${valueClubLabels[sessionsValueClub]}</span></div>`;
+            html += `<div class="game-detail-row"><span class="label">Sessions Value Club</span><span class="value">${ValueClub.getLabel(sessionsValueClub)}</span></div>`;
         }
         if (playsValueClub) {
-            html += `<div class="game-detail-row"><span class="label">Plays Value Club</span><span class="value">${valueClubLabels[playsValueClub]}</span></div>`;
+            html += `<div class="game-detail-row"><span class="label">Plays Value Club</span><span class="value">${ValueClub.getLabel(playsValueClub)}</span></div>`;
         }
         html += `</div>`;
     }
@@ -4204,7 +4201,7 @@ const ACHIEVEMENT_TYPE_META = {
         icon: '🏅',
         chipClass: 'achievement-chip--milestone',
         renderText: (row, gameHtml) => {
-            const milestoneName = { 5: 'five', 10: 'dime', 25: 'quarter', 100: 'century' }[row.threshold];
+            const milestoneName = Milestone.getLabel(row.threshold).toLowerCase();
             return `${gameHtml} reached a ${milestoneName} — ${row.threshold} <span class="metric-name ${row.metric}">${row.metric}</span>`;
         },
     },

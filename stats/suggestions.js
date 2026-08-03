@@ -510,13 +510,7 @@ function suggestForNextMilestone(gamePlayData, metric) {
   const candidate = selectRandomWeightedBySqrtRarity(closestGames, game => game.target);
 
   // Create pithy reason based on milestone target
-  const milestoneNames = {
-    5: 'five',
-    10: 'dime',
-    25: 'quarter',
-    100: 'century',
-  };
-  const milestoneName = milestoneNames[candidate.target];
+  const milestoneName = Milestone.getLabel(candidate.target).toLowerCase();
 
   // Determine if within 90% of target (rounded down)
   const prefix = candidate.currentValue >= Math.floor(candidate.target * 0.9) ? 'Almost a' : 'Closest to a';

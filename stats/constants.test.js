@@ -102,6 +102,17 @@ describe('Milestone Tier Collection', () => {
     expect(Milestone.getNextTarget(100)).toBeNull();
     expect(Milestone.getNextTarget(500)).toBeNull();
   });
+
+  test('getLabel returns the display label for each tier value', () => {
+    expect(Milestone.getLabel(5)).toBe('Five');
+    expect(Milestone.getLabel(10)).toBe('Dime');
+    expect(Milestone.getLabel(25)).toBe('Quarter');
+    expect(Milestone.getLabel(100)).toBe('Century');
+  });
+
+  test('getLabel returns null for unknown tier value', () => {
+    expect(Milestone.getLabel(999)).toBeNull();
+  });
 });
 
 describe('ValueClub Tier Collection', () => {
@@ -201,5 +212,16 @@ describe('ValueClub Tier Collection', () => {
     const lastTier = ValueClub.values[ValueClub.values.length - 1];
     expect(ValueClub.getNextTarget(lastTier)).toBeNull();
     expect(ValueClub.getNextTarget(lastTier / 2)).toBeNull();
+  });
+
+  test('getLabel returns the display label for each tier value', () => {
+    expect(ValueClub.getLabel(5)).toBe('$5 Club');
+    expect(ValueClub.getLabel(2.5)).toBe('$2.50 Club');
+    expect(ValueClub.getLabel(1)).toBe('$1 Club');
+    expect(ValueClub.getLabel(0.5)).toBe('50¢ Club');
+  });
+
+  test('getLabel returns null for unknown tier value', () => {
+    expect(ValueClub.getLabel(999)).toBeNull();
   });
 });

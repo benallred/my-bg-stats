@@ -13,7 +13,7 @@ const Metric = {
 
 /**
  * Create a tier collection with computed thresholds
- * @param {Object} tiers - Object mapping TIER_KEY to value (e.g., { FIVES: 5, DIMES: 10 })
+ * @param {Object} tiers - Object mapping TIER_KEY to { value, label } (e.g., { FIVES: { value: 5, label: 'Five' } })
  * @param {Object} options - { direction: 'ascending' | 'descending' }
  * @returns {Object} Tier collection with tier values and helper methods
  */
@@ -21,7 +21,7 @@ function createTierCollection(tiers, { direction }) {
   const entries = Object.entries(tiers);
 
   // Sort values by direction
-  const values = entries.map(([, value]) => value)
+  const values = entries.map(([, { value }]) => value)
     .sort((a, b) => direction === 'ascending' ? a - b : b - a);
 
   // Build the collection object
@@ -31,9 +31,15 @@ function createTierCollection(tiers, { direction }) {
   };
 
   // Add named properties (e.g., collection.FIVES = 5)
-  entries.forEach(([key, value]) => {
+  entries.forEach(([key, { value }]) => {
     collection[key] = value;
   });
+
+  // Map each tier value to its display label
+  const labelByValue = new Map(entries.map(([, { value, label }]) => [value, label]));
+
+  // getLabel: get the display label for a tier value
+  collection.getLabel = (value) => labelByValue.get(value) ?? null;
 
   // getThreshold: get threshold and next threshold for a tier value
   collection.getThreshold = (tier) => {
@@ -96,20 +102,20 @@ function createTierCollection(tiers, { direction }) {
  * Milestone tiers for achievement tracking (ascending: higher values = higher tiers)
  */
 const Milestone = createTierCollection({
-  FIVES: 5,
-  DIMES: 10,
-  QUARTERS: 25,
-  CENTURIES: 100,
+  FIVES: { value: 5, label: 'Five' },
+  DIMES: { value: 10, label: 'Dime' },
+  QUARTERS: { value: 25, label: 'Quarter' },
+  CENTURIES: { value: 100, label: 'Century' },
 }, { direction: 'ascending' });
 
 /**
  * Value club tiers (descending: lower cost per metric = better tier)
  */
 const ValueClub = createTierCollection({
-  FIVE_DOLLAR: 5,
-  TWO_FIFTY: 2.5,
-  ONE_DOLLAR: 1,
-  FIFTY_CENTS: 0.5,
+  FIVE_DOLLAR: { value: 5, label: '$5 Club' },
+  TWO_FIFTY: { value: 2.5, label: '$2.50 Club' },
+  ONE_DOLLAR: { value: 1, label: '$1 Club' },
+  FIFTY_CENTS: { value: 0.5, label: '50¢ Club' },
 }, { direction: 'descending' });
 
 /**
