@@ -26,6 +26,7 @@ const AchievementType = {
   PEOPLE_H_INDEX: 'people-h-index',
   STAIRCASE: 'staircase',
   VALUE_CLUB: 'value-club',
+  INDIVIDUAL: 'individual',
 };
 
 // Pseudo-metric for the people h-index (which is not a per-game hours/sessions/plays value)
@@ -313,6 +314,90 @@ function getValueClubAchievements(games, plays) {
 }
 
 /**
+ * Generate per-individual achievements: each time the cumulative hours, sessions,
+ * or plays you've logged *with* a specific person crosses a round-number threshold
+ * (every 100 hours, 100 sessions, 250 plays). Self and anonymous players are
+ * excluded. The person is the subject; the game whose play triggered it is the trigger.
+ * @param {Array} plays - Array of play objects
+ * @param {number} selfPlayerId - Player ID representing the user (excluded)
+ * @param {number} anonymousPlayerId - Player ID for anonymous players (excluded)
+ * @returns {Array} Rows of { type, timestamp, gameId, playerId, metric, threshold }
+ */
+function getIndividualAchievements(plays, selfPlayerId, anonymousPlayerId) {
+  const sortedPlays = [...plays].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+
+  // Per-person running totals and the next threshold not yet reached per metric
+  const perPlayer = new Map();
+  const achievements = [];
+
+  for (const play of sortedPlays) {
+    for (const playerId of play.players) {
+      if (playerId === selfPlayerId || playerId === anonymousPlayerId) continue;
+
+      if (!perPlayer.has(playerId)) {
+        perPlayer.set(playerId, {
+          totalMinutes: 0,
+          uniqueDates: new Set(),
+          playCount: 0,
+          nextHourThreshold: HOUR_THRESHOLD_STEP,
+          nextSessionThreshold: SESSION_THRESHOLD_STEP,
+          nextPlayThreshold: PLAY_THRESHOLD_STEP,
+        });
+      }
+      const progress = perPlayer.get(playerId);
+
+      // Hours with this person
+      progress.totalMinutes += play.durationMin;
+      const hours = Math.floor(progress.totalMinutes / 60);
+      while (progress.nextHourThreshold <= hours) {
+        achievements.push({
+          type: AchievementType.INDIVIDUAL,
+          timestamp: play.timestamp,
+          gameId: play.gameId,
+          playerId,
+          metric: Metric.HOURS,
+          threshold: progress.nextHourThreshold,
+        });
+        progress.nextHourThreshold += HOUR_THRESHOLD_STEP;
+      }
+
+      // Sessions with this person (unique days)
+      const prevSessions = progress.uniqueDates.size;
+      progress.uniqueDates.add(play.date);
+      if (progress.uniqueDates.size > prevSessions) {
+        while (progress.nextSessionThreshold <= progress.uniqueDates.size) {
+          achievements.push({
+            type: AchievementType.INDIVIDUAL,
+            timestamp: play.timestamp,
+            gameId: play.gameId,
+            playerId,
+            metric: Metric.SESSIONS,
+            threshold: progress.nextSessionThreshold,
+          });
+          progress.nextSessionThreshold += SESSION_THRESHOLD_STEP;
+        }
+      }
+
+      // Plays with this person
+      progress.playCount += 1;
+      while (progress.nextPlayThreshold <= progress.playCount) {
+        achievements.push({
+          type: AchievementType.INDIVIDUAL,
+          timestamp: play.timestamp,
+          gameId: play.gameId,
+          playerId,
+          metric: Metric.PLAYS,
+          threshold: progress.nextPlayThreshold,
+        });
+        progress.nextPlayThreshold += PLAY_THRESHOLD_STEP;
+      }
+    }
+  }
+
+  return achievements;
+}
+
+/**
  * Registry of achievement generators. Each receives the shared data context and
  * returns an array of achievement rows. Add new generators here to extend the list.
  */
@@ -321,6 +406,7 @@ const ACHIEVEMENT_GENERATORS = [
   (context) => getMilestoneAchievements(context.games, context.plays),
   (context) => getIndexAchievements(context.games, context.plays, context.selfPlayerId, context.anonymousPlayerId),
   (context) => getValueClubAchievements(context.games, context.plays),
+  (context) => getIndividualAchievements(context.plays, context.selfPlayerId, context.anonymousPlayerId),
 ];
 
 const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2, [PEOPLE_METRIC]: 3 };
@@ -366,4 +452,5 @@ export {
   getMilestoneAchievements,
   getIndexAchievements,
   getValueClubAchievements,
+  getIndividualAchievements,
 };

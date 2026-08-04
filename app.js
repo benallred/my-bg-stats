@@ -4200,7 +4200,7 @@ const ACHIEVEMENT_TYPE_META = {
     },
     [AchievementType.PEOPLE_H_INDEX]: {
         label: 'People H-Index',
-        icon: '👥',
+        icon: '🧑‍🤝‍🧑',
         chipClass: 'achievement-chip--people-h-index',
         renderText: (row, gameHtml) => {
             return `Raised your people h-index to ${row.threshold} while playing ${gameHtml}`;
@@ -4229,6 +4229,14 @@ const ACHIEVEMENT_TYPE_META = {
         renderText: (row, gameHtml) => {
             const milestoneName = Milestone.getLabel(row.threshold).toLowerCase();
             return `${gameHtml} reached a ${milestoneName} — ${row.threshold} <span class="metric-name ${row.metric}">${row.metric}</span>`;
+        },
+    },
+    [AchievementType.INDIVIDUAL]: {
+        label: 'Buddies',
+        icon: '🤗',
+        chipClass: 'achievement-chip--individual',
+        renderText: (row, gameHtml, playerName) => {
+            return `Reached ${row.threshold.toLocaleString()} <span class="metric-name ${row.metric}">${row.metric}</span> played with <strong>${escapeHtml(playerName)}</strong> while playing ${gameHtml}`;
         },
     },
     [AchievementType.VALUE_CLUB]: {
@@ -4282,6 +4290,7 @@ function showAchievementsDetail(container, statsCache) {
     }
 
     const gameById = new Map(gameData.games.map(g => [g.id, g]));
+    const playerNameById = new Map(gameData.players.map(p => [p.playerId, p.name]));
 
     // Filter toggles for every achievement type, in meta declaration order
     const filterButtons = Object.keys(ACHIEVEMENT_TYPE_META).map(type => {
@@ -4297,6 +4306,7 @@ function showAchievementsDetail(container, statsCache) {
     const rows = achievements.map(achievement => {
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
         const game = gameById.get(achievement.gameId);
+        const playerName = playerNameById.get(achievement.playerId);
         return `
             <tr data-achievement-type="${achievement.type}" data-metric="${achievement.metric}">
                 <td class="achievement-type-col">
@@ -4304,7 +4314,7 @@ function showAchievementsDetail(container, statsCache) {
                         <span class="achievement-chip__icon">${meta.icon}</span>
                     </span>
                 </td>
-                <td class="achievement-desc">${meta.renderText(achievement, renderGameNameWithThumbnail(game))}</td>
+                <td class="achievement-desc">${meta.renderText(achievement, renderGameNameWithThumbnail(game), playerName)}</td>
                 <td>${formatDateWithWeekdayAndYear(achievement.timestamp)}</td>
             </tr>
         `;
@@ -4431,6 +4441,7 @@ function maybeShowRecentAchievementToasts() {
     if (queue.length === 0) return;
 
     const gameById = new Map(gameData.games.map(g => [g.id, g]));
+    const playerNameById = new Map(gameData.players.map(p => [p.playerId, p.name]));
     let index = 0;
 
     const overlay = document.createElement('div');
@@ -4455,7 +4466,7 @@ function maybeShowRecentAchievementToasts() {
         card.innerHTML = `
             <div class="achievement-toast-header">
                 <span class="achievement-toast-cover">${renderGameThumbnailOnly(game)}</span>
-                <div class="achievement-toast-sentence">${meta.renderText(achievement, `<strong>${game.name}</strong>`)}</div>
+                <div class="achievement-toast-sentence">${meta.renderText(achievement, `<strong>${game.name}</strong>`, playerNameById.get(achievement.playerId))}</div>
             </div>
             <div class="achievement-toast-actions">
                 <div class="achievement-toast-info">
