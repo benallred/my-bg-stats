@@ -4187,24 +4187,9 @@ function showLocationsBreakdown(container) {
  * renderer for the achievement description. Add an entry here for each new
  * AchievementType so it renders in the running list.
  */
+// Order matches the corresponding stat cards on the main dashboard, so the filter
+// pills read in the same order as the page.
 const ACHIEVEMENT_TYPE_META = {
-    [AchievementType.LOGGING]: {
-        label: 'Logging Total',
-        icon: '🧮',
-        chipClass: 'achievement-chip--logging',
-        renderText: (row, gameHtml) => {
-            return `Reached ${row.threshold.toLocaleString()} total <span class="metric-name ${row.metric}">${row.metric}</span> logged while playing ${gameHtml}`;
-        },
-    },
-    [AchievementType.MILESTONE]: {
-        label: 'Milestone',
-        icon: '🏅',
-        chipClass: 'achievement-chip--milestone',
-        renderText: (row, gameHtml) => {
-            const milestoneName = Milestone.getLabel(row.threshold).toLowerCase();
-            return `${gameHtml} reached a ${milestoneName} — ${row.threshold} <span class="metric-name ${row.metric}">${row.metric}</span>`;
-        },
-    },
     [AchievementType.H_INDEX]: {
         label: 'H-Index',
         icon: '📈',
@@ -4227,6 +4212,32 @@ const ACHIEVEMENT_TYPE_META = {
         chipClass: 'achievement-chip--staircase',
         renderText: (row, gameHtml) => {
             return `Raised your <span class="metric-name ${row.metric}">${row.metric}</span> staircase level to ${row.threshold} while playing ${gameHtml}`;
+        },
+    },
+    [AchievementType.LOGGING]: {
+        label: 'Logging Total',
+        icon: '🧮',
+        chipClass: 'achievement-chip--logging',
+        renderText: (row, gameHtml) => {
+            return `Reached ${row.threshold.toLocaleString()} total <span class="metric-name ${row.metric}">${row.metric}</span> logged while playing ${gameHtml}`;
+        },
+    },
+    [AchievementType.MILESTONE]: {
+        label: 'Milestone',
+        icon: '🏅',
+        chipClass: 'achievement-chip--milestone',
+        renderText: (row, gameHtml) => {
+            const milestoneName = Milestone.getLabel(row.threshold).toLowerCase();
+            return `${gameHtml} reached a ${milestoneName} — ${row.threshold} <span class="metric-name ${row.metric}">${row.metric}</span>`;
+        },
+    },
+    [AchievementType.VALUE_CLUB]: {
+        label: 'Value Club',
+        icon: '💰',
+        chipClass: 'achievement-chip--value-club',
+        renderText: (row, gameHtml) => {
+            const unit = { hours: 'hour', sessions: 'session', plays: 'play' }[row.metric];
+            return `${gameHtml} joined the ${formatCostLabel(row.threshold)} per <span class="metric-name ${row.metric}">${unit}</span> club`;
         },
     },
 };

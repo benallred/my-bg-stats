@@ -33,6 +33,7 @@
     --color-hindex: #16a085;
     --color-staircase: #a0682d;
     --color-people: #e84393;
+    --color-value: #b8860b;
 
     /* Metric colors */
     --color-metric-hours: #27ae60;
@@ -98,6 +99,7 @@
     --color-hindex: #1abc9c;
     --color-staircase: #c69c6d;
     --color-people: #fd79a8;
+    --color-value: #d4af37;
 
     /* Metric colors */
     --color-metric-hours: #2ecc71;
@@ -2182,6 +2184,10 @@ body.modal-open {
 
 .achievement-chip--staircase {
     --achievement-chip-color: var(--color-staircase);
+}
+
+.achievement-chip--value-club {
+    --achievement-chip-color: var(--color-value);
 }
 
 .achievement-chip--all {

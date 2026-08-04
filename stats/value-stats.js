@@ -549,4 +549,5 @@ export {
   getShelfOfShameChanges,
   getGamePricePaid,
   calculateCostPerMetric,
+  valueClubGameFilter,
 };

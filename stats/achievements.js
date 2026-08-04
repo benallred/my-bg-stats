@@ -11,9 +11,10 @@
  * display layer decides how much of it to show (e.g. just the date).
  */
 
-import { Metric, Milestone } from './constants.js';
+import { Metric, Milestone, ValueClub } from './constants.js';
 import { calculateHIndexFromSortedValues } from './h-index.js';
 import { calculateStaircaseLevelFromSortedValues } from './staircase-level.js';
+import { calculateCostPerMetric, getGamePricePaid, valueClubGameFilter } from './value-stats.js';
 
 /**
  * Achievement type identifiers. Add a new entry here for each new achievement kind.
@@ -24,6 +25,7 @@ const AchievementType = {
   H_INDEX: 'h-index',
   PEOPLE_H_INDEX: 'people-h-index',
   STAIRCASE: 'staircase',
+  VALUE_CLUB: 'value-club',
 };
 
 // Pseudo-metric for the people h-index (which is not a per-game hours/sessions/plays value)
@@ -240,6 +242,77 @@ function getIndexAchievements(games, plays, selfPlayerId, anonymousPlayerId) {
 }
 
 /**
+ * Generate value-club achievements: each time an owned base game's cost per metric
+ * (hours, sessions, or plays) drops to a new ValueClub tier ($5, $2.50, $1, $0.50).
+ * Cost per metric falls as the game is played more, so tiers are reached in order.
+ * The game is the subject of the achievement.
+ * @param {Array} games - Array of game objects
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} Rows of { type, timestamp, gameId, metric, threshold }
+ */
+function getValueClubAchievements(games, plays) {
+  // Eligible games: owned base games with a known price paid
+  const pricePaidByGame = new Map();
+  for (const game of games) {
+    if (!valueClubGameFilter(game)) continue;
+    const pricePaid = getGamePricePaid(game);
+    if (pricePaid === null) continue;
+    pricePaidByGame.set(game.id, pricePaid);
+  }
+
+  const sortedPlays = [...plays].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+
+  // Per-game running totals plus the index of the next tier not yet reached per metric
+  const gameProgress = new Map();
+  const achievements = [];
+
+  for (const play of sortedPlays) {
+    if (!pricePaidByGame.has(play.gameId)) continue;
+
+    if (!gameProgress.has(play.gameId)) {
+      gameProgress.set(play.gameId, {
+        totalMinutes: 0,
+        uniqueDates: new Set(),
+        playCount: 0,
+        nextTierIndex: { [Metric.HOURS]: 0, [Metric.SESSIONS]: 0, [Metric.PLAYS]: 0 },
+      });
+    }
+    const progress = gameProgress.get(play.gameId);
+
+    progress.totalMinutes += play.durationMin;
+    progress.uniqueDates.add(play.date);
+    progress.playCount += 1;
+
+    const pricePaid = pricePaidByGame.get(play.gameId);
+    const values = {
+      [Metric.HOURS]: progress.totalMinutes / 60,
+      [Metric.SESSIONS]: progress.uniqueDates.size,
+      [Metric.PLAYS]: progress.playCount,
+    };
+
+    for (const metric of [Metric.HOURS, Metric.SESSIONS, Metric.PLAYS]) {
+      const metricValue = values[metric];
+      if (metricValue === 0) continue;
+      const costPerMetric = calculateCostPerMetric(pricePaid, metricValue);
+      // ValueClub tiers descend ($5 → $0.50); a lower cost per metric reaches a better tier
+      while (progress.nextTierIndex[metric] < ValueClub.values.length &&
+             costPerMetric <= ValueClub.values[progress.nextTierIndex[metric]]) {
+        achievements.push({
+          type: AchievementType.VALUE_CLUB,
+          timestamp: play.timestamp,
+          gameId: play.gameId,
+          metric,
+          threshold: ValueClub.values[progress.nextTierIndex[metric]],
+        });
+        progress.nextTierIndex[metric] += 1;
+      }
+    }
+  }
+
+  return achievements;
+}
+
+/**
  * Registry of achievement generators. Each receives the shared data context and
  * returns an array of achievement rows. Add new generators here to extend the list.
  */
@@ -247,6 +320,7 @@ const ACHIEVEMENT_GENERATORS = [
   (context) => getCumulativeLoggingTotals(context.plays),
   (context) => getMilestoneAchievements(context.games, context.plays),
   (context) => getIndexAchievements(context.games, context.plays, context.selfPlayerId, context.anonymousPlayerId),
+  (context) => getValueClubAchievements(context.games, context.plays),
 ];
 
 const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2, [PEOPLE_METRIC]: 3 };
@@ -291,4 +365,5 @@ export {
   getCumulativeLoggingTotals,
   getMilestoneAchievements,
   getIndexAchievements,
+  getValueClubAchievements,
 };

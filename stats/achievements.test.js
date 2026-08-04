@@ -6,6 +6,7 @@ import {
   getCumulativeLoggingTotals,
   getMilestoneAchievements,
   getIndexAchievements,
+  getValueClubAchievements,
 } from './achievements.js';
 import {
   calculateHourHIndex,
@@ -323,5 +324,52 @@ describe('getIndexAchievements', () => {
     expect(maxLevel(AchievementType.STAIRCASE, Metric.HOURS)).toBe(calculateHourStaircaseLevel(plays));
     expect(maxLevel(AchievementType.STAIRCASE, Metric.SESSIONS)).toBe(calculateSessionStaircaseLevel(games, plays));
     expect(maxLevel(AchievementType.STAIRCASE, Metric.PLAYS)).toBe(calculatePlayStaircaseLevel(games, plays));
+  });
+});
+
+describe('getValueClubAchievements', () => {
+  const valueGame = (id, pricePaid) => ({ id, isBaseGame: true, copies: [{ statusOwned: true, pricePaid }] });
+
+  test('returns empty array for no plays', () => {
+    expect(getValueClubAchievements([valueGame(1, 50)], [])).toEqual([]);
+  });
+
+  test('reaches value club tiers as cost per play falls', () => {
+    // $10 game: cost/play hits $5 at 2 plays, $2.50 at 4, $1 at 10, $0.50 at 20
+    const plays = Array.from({ length: 20 }, (_, i) => play(dayN(i), 30, '12:00:00', 1));
+    const result = getValueClubAchievements([valueGame(1, 10)], plays)
+      .filter(a => a.metric === Metric.PLAYS);
+
+    expect(result.map(a => a.threshold)).toEqual([5, 2.5, 1, 0.5]);
+    expect(result.every(a => a.type === AchievementType.VALUE_CLUB && a.gameId === 1)).toBe(true);
+  });
+
+  test('crosses multiple tiers in one play', () => {
+    // $10 game, first play is 10 hours -> cost/hour = $1 immediately: $5, $2.50, $1 at once
+    const result = getValueClubAchievements([valueGame(1, 10)], [play(dayN(0), 600, '12:00:00', 1)])
+      .filter(a => a.metric === Metric.HOURS);
+
+    expect(result.map(a => a.threshold)).toEqual([5, 2.5, 1]);
+  });
+
+  test('ignores a metric whose value is zero (missing duration)', () => {
+    // Duration 0 -> hours value stays 0; expensive game so plays/sessions don't qualify either
+    const result = getValueClubAchievements([valueGame(1, 100)], [play(dayN(0), 0, '12:00:00', 1)]);
+    expect(result).toEqual([]);
+  });
+
+  test('ignores games without a price, unowned games, and non-base games', () => {
+    const games = [
+      { id: 1, isBaseGame: true, copies: [{ statusOwned: true, pricePaid: null }] }, // no price
+      { id: 2, isBaseGame: true, copies: [{ statusOwned: false, pricePaid: 10 }] },   // not owned
+      { id: 3, isBaseGame: false, copies: [{ statusOwned: true, pricePaid: 10 }] },   // not base game
+    ];
+    const plays = [
+      ...Array.from({ length: 20 }, (_, i) => play(dayN(i), 30, '10:00:00', 1)),
+      ...Array.from({ length: 20 }, (_, i) => play(dayN(i), 30, '11:00:00', 2)),
+      ...Array.from({ length: 20 }, (_, i) => play(dayN(i), 30, '12:00:00', 3)),
+    ];
+
+    expect(getValueClubAchievements(games, plays)).toEqual([]);
   });
 });
