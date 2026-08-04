@@ -7,7 +7,8 @@ import {
   getMilestoneAchievements,
   getIndexAchievements,
   getValueClubAchievements,
-  getIndividualAchievements,
+  getBuddyAchievements,
+  getSoloAchievements,
 } from './achievements.js';
 import {
   calculateHourHIndex,
@@ -375,21 +376,21 @@ describe('getValueClubAchievements', () => {
   });
 });
 
-describe('getIndividualAchievements', () => {
+describe('getBuddyAchievements', () => {
   const SELF = 3;
   const ANON = 1;
 
   test('returns empty array for no plays', () => {
-    expect(getIndividualAchievements([], SELF, ANON)).toEqual([]);
+    expect(getBuddyAchievements([], SELF, ANON)).toEqual([]);
   });
 
   test('emits an hours achievement when 100 hours with a person is reached', () => {
     // 6000 minutes = 100 hours with player 10, on game 5
-    const result = getIndividualAchievements([play('2024-01-01', 6000, '12:00:00', 5, [SELF, 10])], SELF, ANON);
+    const result = getBuddyAchievements([play('2024-01-01', 6000, '12:00:00', 5, [SELF, 10])], SELF, ANON);
 
     expect(result).toEqual([
       {
-        type: AchievementType.INDIVIDUAL,
+        type: AchievementType.BUDDY,
         timestamp: '2024-01-01 12:00:00',
         gameId: 5,
         playerId: 10,
@@ -400,33 +401,83 @@ describe('getIndividualAchievements', () => {
   });
 
   test('excludes self and anonymous players', () => {
-    const result = getIndividualAchievements([play('2024-01-01', 6000, '12:00:00', 5, [SELF, ANON])], SELF, ANON);
+    const result = getBuddyAchievements([play('2024-01-01', 6000, '12:00:00', 5, [SELF, ANON])], SELF, ANON);
     expect(result).toEqual([]);
   });
 
   test('emits multiple hours thresholds crossed in one play', () => {
     // 15000 minutes = 250 hours with player 10 -> 100 and 200
-    const result = getIndividualAchievements([play('2024-01-01', 15000, '12:00:00', 5, [SELF, 10])], SELF, ANON)
+    const result = getBuddyAchievements([play('2024-01-01', 15000, '12:00:00', 5, [SELF, 10])], SELF, ANON)
       .filter(a => a.metric === Metric.HOURS);
     expect(result.map(a => a.threshold)).toEqual([100, 200]);
   });
 
   test('emits a sessions achievement on the 100th unique day with a person', () => {
     const plays = Array.from({ length: 100 }, (_, i) => play(dayN(i), 1, '12:00:00', 5, [SELF, 10]));
-    const result = getIndividualAchievements(plays, SELF, ANON).filter(a => a.metric === Metric.SESSIONS);
+    const result = getBuddyAchievements(plays, SELF, ANON).filter(a => a.metric === Metric.SESSIONS);
     expect(result.map(a => a.threshold)).toEqual([100]);
   });
 
   test('emits a plays achievement on the 250th play with a person', () => {
     const plays = Array.from({ length: 250 }, (_, i) => play(dayN(i), 1, '12:00:00', 5, [SELF, 10]));
-    const result = getIndividualAchievements(plays, SELF, ANON).filter(a => a.metric === Metric.PLAYS);
+    const result = getBuddyAchievements(plays, SELF, ANON).filter(a => a.metric === Metric.PLAYS);
     expect(result.map(a => a.threshold)).toEqual([250]);
   });
 
   test('tracks each person independently', () => {
     // One 100-hour play with two people -> each reaches 100 hours
-    const result = getIndividualAchievements([play('2024-01-01', 6000, '12:00:00', 5, [SELF, 10, 11])], SELF, ANON)
+    const result = getBuddyAchievements([play('2024-01-01', 6000, '12:00:00', 5, [SELF, 10, 11])], SELF, ANON)
       .filter(a => a.metric === Metric.HOURS && a.threshold === 100);
     expect(result.map(a => a.playerId).sort()).toEqual([10, 11]);
+  });
+});
+
+describe('getSoloAchievements', () => {
+  const SELF = 3;
+
+  test('returns empty array for no plays', () => {
+    expect(getSoloAchievements([], SELF)).toEqual([]);
+  });
+
+  test('emits an hours achievement when 100 solo hours is reached', () => {
+    // 6000 solo minutes = 100 hours, on game 5
+    const result = getSoloAchievements([play('2024-01-01', 6000, '12:00:00', 5, [SELF])], SELF);
+
+    expect(result).toEqual([
+      {
+        type: AchievementType.SOLO,
+        timestamp: '2024-01-01 12:00:00',
+        gameId: 5,
+        metric: Metric.HOURS,
+        threshold: 100,
+      },
+    ]);
+  });
+
+  test('ignores non-solo plays (multiplayer or another sole player)', () => {
+    const plays = [
+      play('2024-01-01', 6000, '12:00:00', 5, [SELF, 10]), // with someone else
+      play('2024-01-02', 6000, '12:00:00', 5, [10]),       // someone else solo, not you
+    ];
+    expect(getSoloAchievements(plays, SELF)).toEqual([]);
+  });
+
+  test('emits a sessions achievement on the 100th solo day', () => {
+    const plays = Array.from({ length: 100 }, (_, i) => play(dayN(i), 1, '12:00:00', 5, [SELF]));
+    const result = getSoloAchievements(plays, SELF).filter(a => a.metric === Metric.SESSIONS);
+    expect(result.map(a => a.threshold)).toEqual([100]);
+  });
+
+  test('emits a plays achievement on the 250th solo play', () => {
+    const plays = Array.from({ length: 250 }, (_, i) => play(dayN(i), 1, '12:00:00', 5, [SELF]));
+    const result = getSoloAchievements(plays, SELF).filter(a => a.metric === Metric.PLAYS);
+    expect(result.map(a => a.threshold)).toEqual([250]);
+  });
+
+  test('emits multiple hours thresholds crossed in one solo play', () => {
+    // 15000 solo minutes = 250 hours -> 100 and 200
+    const result = getSoloAchievements([play('2024-01-01', 15000, '12:00:00', 5, [SELF])], SELF)
+      .filter(a => a.metric === Metric.HOURS);
+    expect(result.map(a => a.threshold)).toEqual([100, 200]);
   });
 });

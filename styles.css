@@ -34,7 +34,8 @@
     --color-staircase: #a0682d;
     --color-people: #e84393;
     --color-value: #b8860b;
-    --color-individual: #6c5ce7;
+    --color-buddy: #6c5ce7;
+    --color-solo: #c0392b;
 
     /* Metric colors */
     --color-metric-hours: #27ae60;
@@ -101,7 +102,8 @@
     --color-staircase: #c69c6d;
     --color-people: #fd79a8;
     --color-value: #d4af37;
-    --color-individual: #a29bfe;
+    --color-buddy: #a29bfe;
+    --color-solo: #ff7675;
 
     /* Metric colors */
     --color-metric-hours: #2ecc71;
@@ -2192,8 +2194,12 @@ body.modal-open {
     --achievement-chip-color: var(--color-value);
 }
 
-.achievement-chip--individual {
-    --achievement-chip-color: var(--color-individual);
+.achievement-chip--buddy {
+    --achievement-chip-color: var(--color-buddy);
+}
+
+.achievement-chip--solo {
+    --achievement-chip-color: var(--color-solo);
 }
 
 .achievement-chip--all {

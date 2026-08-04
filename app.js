@@ -4231,12 +4231,20 @@ const ACHIEVEMENT_TYPE_META = {
             return `${gameHtml} reached a ${milestoneName} — ${row.threshold} <span class="metric-name ${row.metric}">${row.metric}</span>`;
         },
     },
-    [AchievementType.INDIVIDUAL]: {
+    [AchievementType.BUDDY]: {
         label: 'Buddies',
         icon: '🤗',
-        chipClass: 'achievement-chip--individual',
+        chipClass: 'achievement-chip--buddy',
         renderText: (row, gameHtml, playerName) => {
             return `Reached ${row.threshold.toLocaleString()} <span class="metric-name ${row.metric}">${row.metric}</span> played with <strong>${escapeHtml(playerName)}</strong> while playing ${gameHtml}`;
+        },
+    },
+    [AchievementType.SOLO]: {
+        label: 'Solo',
+        icon: '🧍',
+        chipClass: 'achievement-chip--solo',
+        renderText: (row, gameHtml) => {
+            return `Reached ${row.threshold.toLocaleString()} solo <span class="metric-name ${row.metric}">${row.metric}</span> while playing ${gameHtml}`;
         },
     },
     [AchievementType.VALUE_CLUB]: {

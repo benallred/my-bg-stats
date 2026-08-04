@@ -26,7 +26,8 @@ const AchievementType = {
   PEOPLE_H_INDEX: 'people-h-index',
   STAIRCASE: 'staircase',
   VALUE_CLUB: 'value-club',
-  INDIVIDUAL: 'individual',
+  BUDDY: 'buddy',
+  SOLO: 'solo',
 };
 
 // Pseudo-metric for the people h-index (which is not a per-game hours/sessions/plays value)
@@ -38,12 +39,14 @@ const SESSION_THRESHOLD_STEP = 100;
 const PLAY_THRESHOLD_STEP = 250;
 
 /**
- * Generate cumulative logging totals across all logged plays:
- * total hours, sessions, and plays crossing round-number thresholds.
- * @param {Array} plays - Array of play objects
+ * Generate cumulative threshold-crossing achievements over a set of plays: total
+ * hours, sessions, and plays crossing round-number thresholds. Shared by the
+ * all-play logging totals and the solo totals (which pass pre-filtered plays).
+ * @param {Array} plays - Array of play objects (already scoped to the desired set)
+ * @param {string} type - AchievementType to tag each emitted row with
  * @returns {Array} Rows of { type, timestamp, gameId, metric, threshold }
  */
-function getCumulativeLoggingTotals(plays) {
+function getCumulativeThresholdCrossings(plays, type) {
   // Sort plays chronologically (oldest first) so thresholds cross in order
   const sortedPlays = [...plays].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 
@@ -62,7 +65,7 @@ function getCumulativeLoggingTotals(plays) {
     const newHours = Math.floor(cumulativeMinutes / 60);
     while (nextHourThreshold <= newHours) {
       achievements.push({
-        type: AchievementType.LOGGING,
+        type,
         timestamp: play.timestamp,
         gameId: play.gameId,
         metric: Metric.HOURS,
@@ -78,7 +81,7 @@ function getCumulativeLoggingTotals(plays) {
     if (newSessions > prevSessions) {
       while (nextSessionThreshold <= newSessions) {
         achievements.push({
-          type: AchievementType.LOGGING,
+          type,
           timestamp: play.timestamp,
           gameId: play.gameId,
           metric: Metric.SESSIONS,
@@ -92,7 +95,7 @@ function getCumulativeLoggingTotals(plays) {
     cumulativePlays++;
     while (nextPlayThreshold <= cumulativePlays) {
       achievements.push({
-        type: AchievementType.LOGGING,
+        type,
         timestamp: play.timestamp,
         gameId: play.gameId,
         metric: Metric.PLAYS,
@@ -103,6 +106,27 @@ function getCumulativeLoggingTotals(plays) {
   }
 
   return achievements;
+}
+
+/**
+ * Generate cumulative logging totals across all logged plays.
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} Rows of { type, timestamp, gameId, metric, threshold }
+ */
+function getCumulativeLoggingTotals(plays) {
+  return getCumulativeThresholdCrossings(plays, AchievementType.LOGGING);
+}
+
+/**
+ * Generate cumulative solo totals: hours, sessions, and plays crossing round-number
+ * thresholds, counting only solo plays (you as the sole player).
+ * @param {Array} plays - Array of play objects
+ * @param {number} selfPlayerId - Player ID representing the user
+ * @returns {Array} Rows of { type, timestamp, gameId, metric, threshold }
+ */
+function getSoloAchievements(plays, selfPlayerId) {
+  const soloPlays = plays.filter(play => play.players.length === 1 && play.players[0] === selfPlayerId);
+  return getCumulativeThresholdCrossings(soloPlays, AchievementType.SOLO);
 }
 
 /**
@@ -314,7 +338,7 @@ function getValueClubAchievements(games, plays) {
 }
 
 /**
- * Generate per-individual achievements: each time the cumulative hours, sessions,
+ * Generate per-buddy achievements: each time the cumulative hours, sessions,
  * or plays you've logged *with* a specific person crosses a round-number threshold
  * (every 100 hours, 100 sessions, 250 plays). Self and anonymous players are
  * excluded. The person is the subject; the game whose play triggered it is the trigger.
@@ -323,7 +347,7 @@ function getValueClubAchievements(games, plays) {
  * @param {number} anonymousPlayerId - Player ID for anonymous players (excluded)
  * @returns {Array} Rows of { type, timestamp, gameId, playerId, metric, threshold }
  */
-function getIndividualAchievements(plays, selfPlayerId, anonymousPlayerId) {
+function getBuddyAchievements(plays, selfPlayerId, anonymousPlayerId) {
   const sortedPlays = [...plays].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 
   // Per-person running totals and the next threshold not yet reached per metric
@@ -351,7 +375,7 @@ function getIndividualAchievements(plays, selfPlayerId, anonymousPlayerId) {
       const hours = Math.floor(progress.totalMinutes / 60);
       while (progress.nextHourThreshold <= hours) {
         achievements.push({
-          type: AchievementType.INDIVIDUAL,
+          type: AchievementType.BUDDY,
           timestamp: play.timestamp,
           gameId: play.gameId,
           playerId,
@@ -367,7 +391,7 @@ function getIndividualAchievements(plays, selfPlayerId, anonymousPlayerId) {
       if (progress.uniqueDates.size > prevSessions) {
         while (progress.nextSessionThreshold <= progress.uniqueDates.size) {
           achievements.push({
-            type: AchievementType.INDIVIDUAL,
+            type: AchievementType.BUDDY,
             timestamp: play.timestamp,
             gameId: play.gameId,
             playerId,
@@ -382,7 +406,7 @@ function getIndividualAchievements(plays, selfPlayerId, anonymousPlayerId) {
       progress.playCount += 1;
       while (progress.nextPlayThreshold <= progress.playCount) {
         achievements.push({
-          type: AchievementType.INDIVIDUAL,
+          type: AchievementType.BUDDY,
           timestamp: play.timestamp,
           gameId: play.gameId,
           playerId,
@@ -406,7 +430,8 @@ const ACHIEVEMENT_GENERATORS = [
   (context) => getMilestoneAchievements(context.games, context.plays),
   (context) => getIndexAchievements(context.games, context.plays, context.selfPlayerId, context.anonymousPlayerId),
   (context) => getValueClubAchievements(context.games, context.plays),
-  (context) => getIndividualAchievements(context.plays, context.selfPlayerId, context.anonymousPlayerId),
+  (context) => getBuddyAchievements(context.plays, context.selfPlayerId, context.anonymousPlayerId),
+  (context) => getSoloAchievements(context.plays, context.selfPlayerId),
 ];
 
 const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2, [PEOPLE_METRIC]: 3 };
@@ -452,5 +477,6 @@ export {
   getMilestoneAchievements,
   getIndexAchievements,
   getValueClubAchievements,
-  getIndividualAchievements,
+  getBuddyAchievements,
+  getSoloAchievements,
 };
