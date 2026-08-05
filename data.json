@@ -14815,12 +14815,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 10,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/VuBqZ1sMaDAVVHF_OEJP4g__thumb/img/EdacXlcFZ06YK0-ZKa0oKwL4VCw=/fit-in/200x150/filters:strip_icc()/pic5988903.jpg",
       "coverUrl": "https://cf.geekdo-images.com/VuBqZ1sMaDAVVHF_OEJP4g__original/img/jGWxczXC_VWZofeAmlO_DkB0hCI=/0x0/filters:format(jpeg)/pic5988903.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 6
     },
     {
       "id": 561,
@@ -18189,6 +18189,146 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:56:00",
+      "durationMin": 2,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:47:28",
+      "durationMin": 8,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:41:16",
+      "durationMin": 6,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:34:45",
+      "durationMin": 6,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:26:49",
+      "durationMin": 8,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:17:55",
+      "durationMin": 9,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:10:57",
+      "durationMin": 6,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:06:39",
+      "durationMin": 4,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 21:02:04",
+      "durationMin": 5,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-04",
+      "timestamp": "2026-08-04 20:55:12",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 626,
       "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
@@ -50543,5 +50683,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-08-03T01:18:04.000Z"
+  "generatedAt": "2026-08-05T03:56:00.000Z"
 }
