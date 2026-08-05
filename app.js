@@ -462,7 +462,7 @@ let yearDataCache = null;
 let isLoadingFromPermalink = false;
 let showAllYearReviewMetrics = false;
 let firstLoggedPlayDate = null;
-const hiddenAchievementTypes = new Set();
+let selectedAchievementType = null;
 let showAllAchievementMetrics = false;
 
 // Assigned in initializeImageModal; renderModals drives the image modal through
@@ -4260,23 +4260,24 @@ const ACHIEVEMENT_TYPE_META = {
 
 /**
  * Apply the current achievement type filter: show/hide rows and reflect each
- * toggle's active state within the given Achievements detail root.
+ * toggle's active state within the given Achievements detail root. The type filter
+ * is single-select — "All" (null) shows everything, or exactly one type is shown.
  */
 function applyAchievementFilters(root) {
     root.querySelectorAll('.achievements-filter-toggle[data-type]').forEach(button => {
-        const active = !hiddenAchievementTypes.has(button.dataset.type);
+        const active = selectedAchievementType === button.dataset.type;
         button.classList.toggle('active', active);
         button.setAttribute('aria-pressed', String(active));
     });
-    // "All" is active only when nothing is hidden
+    // "All" is active when no single type is selected
     const allButton = root.querySelector('.achievements-filter-all');
-    const allActive = hiddenAchievementTypes.size === 0;
+    const allActive = selectedAchievementType === null;
     allButton.classList.toggle('active', allActive);
     allButton.setAttribute('aria-pressed', String(allActive));
 
     const baseMetrics = Object.values(Metric);
     root.querySelectorAll('tr[data-achievement-type]').forEach(row => {
-        const typeHidden = hiddenAchievementTypes.has(row.dataset.achievementType);
+        const typeHidden = selectedAchievementType !== null && row.dataset.achievementType !== selectedAchievementType;
         // Rows with no base metric (e.g. people h-index) always pass the metric filter
         const metricHidden = !showAllAchievementMetrics
             && baseMetrics.includes(row.dataset.metric)
@@ -4359,18 +4360,15 @@ function showAchievementsDetail(container, statsCache) {
     wrapper.querySelectorAll('.achievements-filter-toggle[data-type]').forEach(button => {
         button.addEventListener('click', () => {
             const type = button.dataset.type;
-            if (hiddenAchievementTypes.has(type)) {
-                hiddenAchievementTypes.delete(type);
-            } else {
-                hiddenAchievementTypes.add(type);
-            }
+            // Selecting the already-selected type deselects it, returning to "All"
+            selectedAchievementType = selectedAchievementType === type ? null : type;
             applyAchievementFilters(wrapper);
             updateURL();
         });
     });
 
     wrapper.querySelector('.achievements-filter-all').addEventListener('click', () => {
-        hiddenAchievementTypes.clear();
+        selectedAchievementType = null;
         applyAchievementFilters(wrapper);
         updateURL();
     });
@@ -6025,7 +6023,7 @@ function loadFromPermalink() {
     const sortDirParam = urlParams.get('sortDir');
     const shelfGameParam = urlParams.get('shelfGame');
     const photoParam = urlParams.get('photo');
-    const achievementTypesParam = urlParams.get('achievementTypes');
+    const achievementTypeParam = urlParams.get('achievementType');
     const achievementAllMetricsParam = urlParams.get('achievementAllMetrics');
 
     // Initialize showAllYearReviewMetrics from URL before early return check
@@ -6038,16 +6036,9 @@ function loadFromPermalink() {
         showAllAchievementMetrics = true;
     }
 
-    // Restore the achievements filter: the param lists the selected (visible)
-    // types, so hide every known type that isn't in it. Absent param = all shown.
-    if (achievementTypesParam !== null) {
-        const selectedTypes = new Set(achievementTypesParam.split(',').filter(Boolean));
-        hiddenAchievementTypes.clear();
-        for (const type of Object.keys(ACHIEVEMENT_TYPE_META)) {
-            if (!selectedTypes.has(type)) {
-                hiddenAchievementTypes.add(type);
-            }
-        }
+    // Restore the single selected achievement type filter (absent = "All")
+    if (achievementTypeParam !== null && Object.keys(ACHIEVEMENT_TYPE_META).includes(achievementTypeParam)) {
+        selectedAchievementType = achievementTypeParam;
     }
 
     if (!yearParam && !baseMetricParam && !statParam && !modalParam && !shelfGameParam && !photoParam) {
@@ -6259,12 +6250,9 @@ function updateURL() {
             }
         }
 
-        // For the achievements list, encode the selected (visible) types.
-        // Nothing hidden means all are selected, so no param is needed.
-        if (currentlyOpenStatType === 'achievements' && hiddenAchievementTypes.size > 0) {
-            const selectedTypes = Object.keys(ACHIEVEMENT_TYPE_META)
-                .filter(type => !hiddenAchievementTypes.has(type));
-            params.set('achievementTypes', selectedTypes.join(','));
+        // For the achievements list, encode the single selected type ("All" = none)
+        if (currentlyOpenStatType === 'achievements' && selectedAchievementType !== null) {
+            params.set('achievementType', selectedAchievementType);
         }
 
         // For the achievements list, encode the "show all base metrics" toggle when on
