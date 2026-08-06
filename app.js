@@ -4222,6 +4222,14 @@ const ACHIEVEMENT_TYPE_META = {
             return `Reached ${row.threshold.toLocaleString()} total <span class="metric-name ${row.metric}">${row.metric}</span> logged while playing ${gameHtml}`;
         },
     },
+    [AchievementType.STREAK]: {
+        label: 'Streaks',
+        icon: '🔥',
+        chipClass: 'achievement-chip--streak',
+        renderText: (row) => {
+            return `New longest play streak: ${row.threshold} days in a row (${formatDateWithYear(row.streakStart)} – ${formatDateWithYear(row.streakEnd)})`;
+        },
+    },
     [AchievementType.MILESTONE]: {
         label: 'Milestone',
         icon: '🏅',
@@ -4315,15 +4323,16 @@ function showAchievementsDetail(container, statsCache) {
     const rows = achievements.map(achievement => {
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
         const game = gameById.get(achievement.gameId);
+        const gameHtml = game ? renderGameNameWithThumbnail(game) : '';
         const playerName = playerNameById.get(achievement.playerId);
         return `
-            <tr data-achievement-type="${achievement.type}" data-metric="${achievement.metric}">
+            <tr data-achievement-type="${achievement.type}" data-metric="${achievement.metric || ''}">
                 <td class="achievement-type-col">
                     <span class="achievement-chip ${meta.chipClass}" title="${meta.label}">
                         <span class="achievement-chip__icon">${meta.icon}</span>
                     </span>
                 </td>
-                <td class="achievement-desc">${meta.renderText(achievement, renderGameNameWithThumbnail(game), playerName)}</td>
+                <td class="achievement-desc">${meta.renderText(achievement, gameHtml, playerName)}</td>
                 <td>${formatDateWithWeekdayAndYear(achievement.timestamp)}</td>
             </tr>
         `;
@@ -4468,11 +4477,13 @@ function maybeShowRecentAchievementToasts() {
         const achievement = queue[index];
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
         const game = gameById.get(achievement.gameId);
+        const cover = game ? `<span class="achievement-toast-cover">${renderGameThumbnailOnly(game)}</span>` : '';
+        const gameHtml = game ? `<strong>${game.name}</strong>` : '';
         const progress = queue.length > 1 ? `<span>${index + 1} of ${queue.length}</span>` : '';
         card.innerHTML = `
             <div class="achievement-toast-header">
-                <span class="achievement-toast-cover">${renderGameThumbnailOnly(game)}</span>
-                <div class="achievement-toast-sentence">${meta.renderText(achievement, `<strong>${game.name}</strong>`, playerNameById.get(achievement.playerId))}</div>
+                ${cover}
+                <div class="achievement-toast-sentence">${meta.renderText(achievement, gameHtml, playerNameById.get(achievement.playerId))}</div>
             </div>
             <div class="achievement-toast-actions">
                 <div class="achievement-toast-info">

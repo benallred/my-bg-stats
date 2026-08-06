@@ -28,6 +28,7 @@ const AchievementType = {
   VALUE_CLUB: 'value-club',
   BUDDY: 'buddy',
   SOLO: 'solo',
+  STREAK: 'streak',
 };
 
 // Pseudo-metric for the people h-index (which is not a per-game hours/sessions/plays value)
@@ -127,6 +128,63 @@ function getCumulativeLoggingTotals(plays) {
 function getSoloAchievements(plays, selfPlayerId) {
   const soloPlays = plays.filter(play => play.players.length === 1 && play.players[0] === selfPlayerId);
   return getCumulativeThresholdCrossings(soloPlays, AchievementType.SOLO);
+}
+
+// Number of days since the epoch for a YYYY-MM-DD date (for consecutive-day math).
+function dayNumber(date) {
+  const [year, month, day] = date.split('-').map(Number);
+  return Date.UTC(year, month - 1, day) / 86400000;
+}
+
+/**
+ * Generate play-streak achievements: each time a *completed* streak of consecutive
+ * calendar days with plays sets a new personal record, emit one achievement (at the
+ * streak's end) carrying the streak length and its start/end dates. The current
+ * ongoing streak (no gap after it yet) is not emitted. These have no game and no
+ * metric.
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} Rows of { type, timestamp, threshold, streakStart, streakEnd }
+ */
+function getStreakAchievements(plays) {
+  const dates = [...new Set(plays.map(play => play.date))].sort();
+  if (dates.length === 0) return [];
+
+  // Latest play timestamp per date, so a streak's achievement is stamped at its last play
+  const latestTimestampByDate = new Map();
+  for (const play of plays) {
+    const current = latestTimestampByDate.get(play.date);
+    if (!current || play.timestamp > current) {
+      latestTimestampByDate.set(play.date, play.timestamp);
+    }
+  }
+
+  const achievements = [];
+  let record = 1; // a lone day is the baseline, not a streak
+  let streakStart = dates[0];
+  let streakLength = 1;
+
+  for (let i = 1; i < dates.length; i++) {
+    if (dayNumber(dates[i]) - dayNumber(dates[i - 1]) === 1) {
+      streakLength++;
+    } else {
+      // The streak ending at dates[i - 1] is now complete (a gap follows)
+      if (streakLength > record) {
+        achievements.push({
+          type: AchievementType.STREAK,
+          timestamp: latestTimestampByDate.get(dates[i - 1]),
+          threshold: streakLength,
+          streakStart,
+          streakEnd: dates[i - 1],
+        });
+        record = streakLength;
+      }
+      streakStart = dates[i];
+      streakLength = 1;
+    }
+  }
+
+  // The final streak is still ongoing (no gap yet), so it is intentionally not emitted.
+  return achievements;
 }
 
 /**
@@ -432,9 +490,15 @@ const ACHIEVEMENT_GENERATORS = [
   (context) => getValueClubAchievements(context.games, context.plays),
   (context) => getBuddyAchievements(context.plays, context.selfPlayerId, context.anonymousPlayerId),
   (context) => getSoloAchievements(context.plays, context.selfPlayerId),
+  (context) => getStreakAchievements(context.plays),
 ];
 
 const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2, [PEOPLE_METRIC]: 3 };
+
+// Sort rank for a metric; metric-less rows (e.g. streaks) rank last.
+function metricRank(metric) {
+  return metricOrder[metric] ?? 4;
+}
 
 /**
  * Comparator ordering achievements most-recent first by play timestamp. When a
@@ -449,7 +513,7 @@ function compareAchievements(a, b) {
   if (a.timestamp !== b.timestamp) {
     return b.timestamp.localeCompare(a.timestamp);
   }
-  const orderDiff = metricOrder[a.metric] - metricOrder[b.metric];
+  const orderDiff = metricRank(a.metric) - metricRank(b.metric);
   if (orderDiff !== 0) {
     return orderDiff;
   }
@@ -479,4 +543,5 @@ export {
   getValueClubAchievements,
   getBuddyAchievements,
   getSoloAchievements,
+  getStreakAchievements,
 };

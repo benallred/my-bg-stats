@@ -9,6 +9,7 @@ import {
   getValueClubAchievements,
   getBuddyAchievements,
   getSoloAchievements,
+  getStreakAchievements,
 } from './achievements.js';
 import {
   calculateHourHIndex,
@@ -479,5 +480,83 @@ describe('getSoloAchievements', () => {
     const result = getSoloAchievements([play('2024-01-01', 15000, '12:00:00', 5, [SELF])], SELF)
       .filter(a => a.metric === Metric.HOURS);
     expect(result.map(a => a.threshold)).toEqual([100, 200]);
+  });
+});
+
+describe('getStreakAchievements', () => {
+  test('returns empty array for no plays', () => {
+    expect(getStreakAchievements([])).toEqual([]);
+  });
+
+  test('emits one achievement for a completed record streak, with start/end dates', () => {
+    // 5 consecutive days (a streak), then a gap that completes it
+    const plays = [
+      ...Array.from({ length: 5 }, (_, i) => play(dayN(i), 30)),
+      play(dayN(10), 30),
+    ];
+    const result = getStreakAchievements(plays);
+
+    expect(result).toEqual([
+      {
+        type: AchievementType.STREAK,
+        timestamp: `${dayN(4)} 12:00:00`,
+        threshold: 5,
+        streakStart: dayN(0),
+        streakEnd: dayN(4),
+      },
+    ]);
+  });
+
+  test('only emits when a completed streak beats the previous record', () => {
+    const plays = [
+      // 3-day streak (record: 3)
+      play(dayN(0), 30), play(dayN(1), 30), play(dayN(2), 30),
+      // gap, then 5-day streak (record: 5)
+      play(dayN(5), 30), play(dayN(6), 30), play(dayN(7), 30), play(dayN(8), 30), play(dayN(9), 30),
+      // gap, then 2-day streak (not a record)
+      play(dayN(12), 30), play(dayN(13), 30),
+      // gap, then a lone day to complete the 2-day streak
+      play(dayN(20), 30),
+    ];
+    const result = getStreakAchievements(plays);
+    expect(result.map(a => a.threshold)).toEqual([3, 5]);
+  });
+
+  test('does not emit the ongoing final streak', () => {
+    // Consecutive days with no gap after -> streak still ongoing
+    const plays = Array.from({ length: 5 }, (_, i) => play(dayN(i), 30));
+    expect(getStreakAchievements(plays)).toEqual([]);
+  });
+
+  test('ignores lone days (a single day is not a streak)', () => {
+    const plays = [play(dayN(0), 30), play(dayN(5), 30), play(dayN(10), 30)];
+    expect(getStreakAchievements(plays)).toEqual([]);
+  });
+
+  test('stamps the streak at its last play and counts a day once', () => {
+    const plays = [
+      play(dayN(0), 30, '09:00:00'),
+      play(dayN(1), 30, '09:00:00'),
+      play(dayN(1), 30, '21:00:00'), // second play on the end day -> latest timestamp
+      play(dayN(5), 30),             // gap completes the 2-day streak
+    ];
+    const result = getStreakAchievements(plays);
+    expect(result).toHaveLength(1);
+    expect(result[0].threshold).toBe(2);
+    expect(result[0].timestamp).toBe(`${dayN(1)} 21:00:00`);
+  });
+
+  test('sorts deterministically against a metric achievement at the same timestamp', () => {
+    // Day 4 has a 100-hour-crossing play that also ends a 5-day streak (via the day-10 gap)
+    const plays = [
+      play(dayN(0), 1), play(dayN(1), 1), play(dayN(2), 1), play(dayN(3), 1),
+      play(dayN(4), 6000), // crosses the 100th logging hour here
+      play(dayN(10), 1),   // gap completes the streak
+    ];
+    const result = getAchievements({ games: [], plays });
+    const sameTs = result.filter(a => a.timestamp === `${dayN(4)} 12:00:00`);
+
+    // metric-bearing logging row ranks before the metric-less streak row
+    expect(sameTs.map(a => a.type)).toEqual([AchievementType.LOGGING, AchievementType.STREAK]);
   });
 });
