@@ -30,6 +30,8 @@ const AchievementType = {
   SOLO: 'solo',
   STREAK: 'streak',
   UNIQUE_GAMES: 'unique-games',
+  LONGEST_RUN: 'longest-run',
+  LONGEST_SESSION: 'longest-session',
 };
 
 // Cumulative thresholds for logging totals, solo, and buddy crossings
@@ -463,6 +465,82 @@ function getUniqueGamesAchievements(plays) {
 }
 
 // ---------------------------------------------------------------------------
+// Longest play / longest session (duration records)
+// ---------------------------------------------------------------------------
+
+/**
+ * From units of { value, timestamp, ... }, return those that set a new all-time
+ * high in `value` as they occur (ordered by timestamp) — i.e. the record progression.
+ * @param {Array} units - Objects carrying a numeric `value` and a `timestamp`
+ * @returns {Array} The subset (in timestamp order) where `value` beat all before it
+ */
+function maxRecordProgression(units) {
+  const records = [];
+  let max = 0;
+  for (const unit of [...units].sort((a, b) => a.timestamp.localeCompare(b.timestamp))) {
+    if (unit.value > max) {
+      records.push(unit);
+      max = unit.value;
+    }
+  }
+  return records;
+}
+
+/**
+ * Generate longest-run achievements: each time the combined duration of a single
+ * game on a single day sets a new record. All plays of that game that day count, so
+ * many short plays add up. The game is the subject; playCount notes how many plays.
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} Rows of { type, timestamp, gameId, threshold, playCount }
+ */
+function getLongestRunAchievements(plays) {
+  // Combine all plays of the same game on the same day
+  const byGameDay = new Map();
+  for (const play of plays) {
+    const key = `${play.gameId}|${play.date}`;
+    if (!byGameDay.has(key)) {
+      byGameDay.set(key, { gameId: play.gameId, value: 0, playCount: 0, timestamp: '' });
+    }
+    const unit = byGameDay.get(key);
+    unit.value += play.durationMin;
+    unit.playCount += 1;
+    if (play.timestamp > unit.timestamp) unit.timestamp = play.timestamp;
+  }
+
+  return maxRecordProgression([...byGameDay.values()]).map(unit => ({
+    type: AchievementType.LONGEST_RUN,
+    timestamp: unit.timestamp,
+    gameId: unit.gameId,
+    threshold: unit.value,
+    playCount: unit.playCount,
+  }));
+}
+
+/**
+ * Generate longest-session achievements: each time the total time played in a single
+ * day (across all games) sets a new record. Has no game and no metric.
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} Rows of { type, timestamp, threshold }
+ */
+function getLongestSessionAchievements(plays) {
+  const byDate = new Map();
+  for (const play of plays) {
+    if (!byDate.has(play.date)) {
+      byDate.set(play.date, { value: 0, timestamp: '' });
+    }
+    const unit = byDate.get(play.date);
+    unit.value += play.durationMin;
+    if (play.timestamp > unit.timestamp) unit.timestamp = play.timestamp;
+  }
+
+  return maxRecordProgression([...byDate.values()]).map(unit => ({
+    type: AchievementType.LONGEST_SESSION,
+    timestamp: unit.timestamp,
+    threshold: unit.value,
+  }));
+}
+
+// ---------------------------------------------------------------------------
 // Aggregation: run every generator and order the combined list
 // ---------------------------------------------------------------------------
 
@@ -479,6 +557,8 @@ const ACHIEVEMENT_GENERATORS = [
   (context) => getIndexAchievements(context.games, context.plays, context.selfPlayerId, context.anonymousPlayerId),
   (context) => getStreakAchievements(context.plays),
   (context) => getUniqueGamesAchievements(context.plays),
+  (context) => getLongestRunAchievements(context.plays),
+  (context) => getLongestSessionAchievements(context.plays),
 ];
 
 const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2, [PEOPLE_METRIC]: 3 };
@@ -533,4 +613,6 @@ export {
   getIndexAchievements,
   getStreakAchievements,
   getUniqueGamesAchievements,
+  getLongestRunAchievements,
+  getLongestSessionAchievements,
 };

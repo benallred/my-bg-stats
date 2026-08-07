@@ -88,7 +88,7 @@ import {
   getAchievements,
 } from './stats.js';
 
-import { escapeHtml, formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithWeekdayAndYear, formatDateWithYear, formatLargeNumber, renderRatingHexagon } from './formatting.js';
+import { escapeHtml, formatApproximateHours, formatCostLabel, formatDateShort, formatDateWithWeekday, formatDateWithWeekdayAndYear, formatDateWithYear, formatDurationHM, formatLargeNumber, renderRatingHexagon } from './formatting.js';
 import { tableColumnConfigs, getDefaultSort, sortTableData, createSortableHeaderHtml } from './table-sorting.js';
 
 /**
@@ -4236,6 +4236,23 @@ const ACHIEVEMENT_TYPE_META = {
         chipClass: 'achievement-chip--streak',
         renderText: (row) => {
             return `New longest play streak: ${row.threshold} days in a row (${formatDateWithYear(row.streakStart)} – ${formatDateWithYear(row.streakEnd)})`;
+        },
+    },
+    [AchievementType.LONGEST_RUN]: {
+        label: 'Longest Run',
+        icon: '⏱️',
+        chipClass: 'achievement-chip--longest-run',
+        renderText: (row, gameHtml) => {
+            const plays = row.playCount > 1 ? ` over ${row.playCount} plays` : '';
+            return `${gameHtml} set your longest run — ${formatDurationHM(row.threshold)}${plays}`;
+        },
+    },
+    [AchievementType.LONGEST_SESSION]: {
+        label: 'Longest Session',
+        icon: '⏳',
+        chipClass: 'achievement-chip--longest-session',
+        renderText: (row) => {
+            return `New longest session: ${formatDurationHM(row.threshold)} of play in a day`;
         },
     },
     [AchievementType.MILESTONE]: {

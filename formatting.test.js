@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import {
   formatApproximateHours,
+  formatDurationHM,
   formatCostLabel,
   formatDateShort,
   formatDateWithWeekday,
@@ -37,6 +38,19 @@ describe('formatApproximateHours', () => {
   test('handles large values', () => {
     expect(formatApproximateHours(600)).toBe('more than 10'); // exactly 10 hours
     expect(formatApproximateHours(630)).toBe('almost 11'); // 10.5 hours
+  });
+});
+
+describe('formatDurationHM', () => {
+  test('formats hours and minutes', () => {
+    expect(formatDurationHM(200)).toBe('3h 20m');
+    expect(formatDurationHM(180)).toBe('3h');
+    expect(formatDurationHM(45)).toBe('45m');
+  });
+
+  test('returns "0" for zero or nullish', () => {
+    expect(formatDurationHM(0)).toBe('0');
+    expect(formatDurationHM(null)).toBe('0');
   });
 });
 

@@ -11,6 +11,8 @@ import {
   getSoloAchievements,
   getStreakAchievements,
   getUniqueGamesAchievements,
+  getLongestRunAchievements,
+  getLongestSessionAchievements,
 } from './achievements.js';
 import {
   calculateHourHIndex,
@@ -159,7 +161,7 @@ describe('getAchievements', () => {
     const plays = [...prior, play(finalDay, 6000, '20:00:00')];
 
     const result = getAchievements({ games: [], plays });
-    const sameTs = result.filter(a => a.timestamp === `${finalDay} 20:00:00`);
+    const sameTs = result.filter(a => a.timestamp === `${finalDay} 20:00:00` && a.type === AchievementType.LOGGING);
 
     // hours before plays (sessions threshold 100 already passed earlier, not on this play)
     expect(sameTs.map(a => a.metric)).toEqual([Metric.HOURS, Metric.PLAYS]);
@@ -556,7 +558,9 @@ describe('getStreakAchievements', () => {
       play(dayN(10), 1),   // gap completes the streak
     ];
     const result = getAchievements({ games: [], plays });
-    const sameTs = result.filter(a => a.timestamp === `${dayN(4)} 12:00:00`);
+    const sameTs = result.filter(a =>
+      a.timestamp === `${dayN(4)} 12:00:00` &&
+      (a.type === AchievementType.LOGGING || a.type === AchievementType.STREAK));
 
     // metric-bearing logging row ranks before the metric-less streak row
     expect(sameTs.map(a => a.type)).toEqual([AchievementType.LOGGING, AchievementType.STREAK]);
@@ -610,5 +614,72 @@ describe('getUniqueGamesAchievements', () => {
     expect(result).toHaveLength(1);
     expect(result[0].gameId).toBe(999);
     expect(result[0].timestamp).toBe(`${dayN(25)} 12:00:00`);
+  });
+});
+
+describe('getLongestRunAchievements', () => {
+  test('returns empty array for no plays', () => {
+    expect(getLongestRunAchievements([])).toEqual([]);
+  });
+
+  test('combines same-game same-day plays and records the play count', () => {
+    const plays = [
+      play(dayN(0), 30, '20:00:00', 1), // later play first
+      play(dayN(0), 30, '09:00:00', 1), // earlier play second -> latest timestamp stays 20:00
+    ];
+    const result = getLongestRunAchievements(plays);
+
+    expect(result).toEqual([
+      {
+        type: AchievementType.LONGEST_RUN,
+        timestamp: `${dayN(0)} 20:00:00`,
+        gameId: 1,
+        threshold: 60,
+        playCount: 2,
+      },
+    ]);
+  });
+
+  test('emits only when a game-day beats the previous record', () => {
+    const plays = [
+      play(dayN(0), 50, '10:00:00', 2), // game-day 50 (record)
+      play(dayN(1), 100, '10:00:00', 1), // game-day 100 (record)
+      play(dayN(2), 40, '10:00:00', 3), // 40 < 100, no record
+    ];
+    const result = getLongestRunAchievements(plays);
+    expect(result.map(a => a.threshold)).toEqual([50, 100]);
+    expect(result.map(a => a.gameId)).toEqual([2, 1]);
+  });
+
+  test('treats different games on the same day as separate records', () => {
+    const plays = [
+      play(dayN(0), 50, '10:00:00', 1),
+      play(dayN(0), 100, '20:00:00', 2), // different game, same day
+    ];
+    const result = getLongestRunAchievements(plays);
+    expect(result.map(a => a.threshold)).toEqual([50, 100]);
+  });
+});
+
+describe('getLongestSessionAchievements', () => {
+  test('returns empty array for no plays', () => {
+    expect(getLongestSessionAchievements([])).toEqual([]);
+  });
+
+  test('totals all games in a day and emits on new records', () => {
+    const plays = [
+      play(dayN(0), 30, '18:00:00', 1), // later play first
+      play(dayN(0), 30, '10:00:00', 2), // earlier play second -> latest timestamp stays 18:00; day 0 total = 60 (record)
+      play(dayN(1), 120, '10:00:00', 1), // day 1 total = 120 (record)
+      play(dayN(2), 45, '10:00:00', 1), // day 2 total = 45, no record
+    ];
+    const result = getLongestSessionAchievements(plays);
+
+    expect(result.map(a => a.threshold)).toEqual([60, 120]);
+    expect(result[0]).toEqual({
+      type: AchievementType.LONGEST_SESSION,
+      timestamp: `${dayN(0)} 18:00:00`,
+      threshold: 60,
+    });
   });
 });

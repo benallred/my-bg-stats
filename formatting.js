@@ -18,6 +18,19 @@ export function formatApproximateHours(minutes) {
 }
 
 /**
+ * Format a minute count as "Xh Ym" (or "Xh" / "Ym"). Returns "0" for zero/nullish.
+ * @param {number} minutes - Duration in minutes
+ * @returns {string} Formatted duration string
+ */
+export function formatDurationHM(minutes) {
+    if (!minutes) return '0';
+    const hrs = Math.floor(minutes / 60);
+    const mins = Math.round(minutes % 60);
+    if (hrs === 0) return `${mins}m`;
+    return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
+}
+
+/**
  * Format a YYYY-MM-DD date string as "Aug 11"
  * @param {string} dateString - Date in YYYY-MM-DD format
  * @returns {string} Formatted date string or '-' if invalid

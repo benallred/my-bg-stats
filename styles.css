@@ -38,6 +38,8 @@
     --color-solo: #c0392b;
     --color-streak: #e84118;
     --color-unique-games: #0097a7;
+    --color-longest-run: #2980b9;
+    --color-longest-session: #1e8449;
 
     /* Metric colors */
     --color-metric-hours: #27ae60;
@@ -108,6 +110,8 @@
     --color-solo: #ff7675;
     --color-streak: #ff7043;
     --color-unique-games: #4dd0e1;
+    --color-longest-run: #5dade2;
+    --color-longest-session: #52be80;
 
     /* Metric colors */
     --color-metric-hours: #2ecc71;
@@ -2212,6 +2216,14 @@ body.modal-open {
 
 .achievement-chip--unique-games {
     --achievement-chip-color: var(--color-unique-games);
+}
+
+.achievement-chip--longest-run {
+    --achievement-chip-color: var(--color-longest-run);
+}
+
+.achievement-chip--longest-session {
+    --achievement-chip-color: var(--color-longest-session);
 }
 
 .achievement-chip--all {
