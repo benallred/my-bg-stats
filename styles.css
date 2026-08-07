@@ -29,17 +29,18 @@
     --color-success: #27ae60;
     --color-error: #e74c3c;
     --color-warning: #ffc107;
-    --color-milestone: #9b59b6;
-    --color-hindex: #16a085;
-    --color-staircase: #a0682d;
-    --color-people: #e84393;
-    --color-value: #b8860b;
-    --color-buddy: #6c5ce7;
-    --color-solo: #c0392b;
-    --color-streak: #e84118;
-    --color-unique-games: #0097a7;
-    --color-longest-run: #2980b9;
-    --color-longest-session: #1e8449;
+    --color-logging: #7d9b1f;
+    --color-milestone: #bf8e00;
+    --color-hindex: #2a78d6;
+    --color-staircase: #9c6b3f;
+    --color-people: #d94f97;
+    --color-value: #178a3a;
+    --color-buddy: #5b5bd6;
+    --color-solo: #d43a54;
+    --color-streak: #e8602e;
+    --color-unique-games: #9b3fc0;
+    --color-longest-run: #12a186;
+    --color-longest-session: #0e93b5;
 
     /* Metric colors */
     --color-metric-hours: #27ae60;
@@ -101,17 +102,18 @@
     --color-success: #2ecc71;
     --color-error: #e74c3c;
     --color-warning: #f39c12;
-    --color-milestone: #b07cc6;
-    --color-hindex: #1abc9c;
-    --color-staircase: #c69c6d;
-    --color-people: #fd79a8;
-    --color-value: #d4af37;
-    --color-buddy: #a29bfe;
-    --color-solo: #ff7675;
-    --color-streak: #ff7043;
-    --color-unique-games: #4dd0e1;
-    --color-longest-run: #5dade2;
-    --color-longest-session: #52be80;
+    --color-logging: #a6c23e;
+    --color-milestone: #e6b21f;
+    --color-hindex: #3987e5;
+    --color-staircase: #cf9a5a;
+    --color-people: #f07bb5;
+    --color-value: #33b35c;
+    --color-buddy: #8f8aec;
+    --color-solo: #f0697e;
+    --color-streak: #ff7a4d;
+    --color-unique-games: #c074e0;
+    --color-longest-run: #22c3a3;
+    --color-longest-session: #40c0da;
 
     /* Metric colors */
     --color-metric-hours: #2ecc71;
@@ -2179,7 +2181,7 @@ body.modal-open {
 }
 
 .achievement-chip--logging {
-    --achievement-chip-color: var(--color-warning);
+    --achievement-chip-color: var(--color-logging);
 }
 
 .achievement-chip--milestone {

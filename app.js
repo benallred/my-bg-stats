@@ -4282,7 +4282,7 @@ const ACHIEVEMENT_TYPE_META = {
     },
     [AchievementType.VALUE_CLUB]: {
         label: 'Value Club',
-        icon: '💰',
+        icon: '🏷️',
         chipClass: 'achievement-chip--value-club',
         renderText: (row, gameHtml) => {
             const unit = { hours: 'hour', sessions: 'session', plays: 'play' }[row.metric];
