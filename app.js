@@ -4504,16 +4504,21 @@ function maybeShowRecentAchievementToasts() {
                 </div>
             </div>
         `;
-        card.querySelector('.achievement-toast-yea').addEventListener('click', () => {
-            ackAchievement(achievementAckKey(queue[index]));
+        // Advance to the next achievement, or close when the queue is exhausted
+        const advance = () => {
             index++;
             if (index >= queue.length) {
                 close();
             } else {
                 renderCurrent();
             }
+        };
+        card.querySelector('.achievement-toast-yea').addEventListener('click', () => {
+            ackAchievement(achievementAckKey(queue[index]));
+            advance();
         });
-        card.querySelector('.achievement-toast-later').addEventListener('click', close);
+        // "Later" skips just this one (no ack), so it shows again next load
+        card.querySelector('.achievement-toast-later').addEventListener('click', advance);
     };
 
     // Clicks inside the card must not dismiss the walkthrough or open the game modal
