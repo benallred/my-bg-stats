@@ -4292,22 +4292,11 @@ const ACHIEVEMENT_TYPE_META = {
 };
 
 /**
- * Apply the current achievement type filter: show/hide rows and reflect each
- * toggle's active state within the given Achievements detail root. The type filter
- * is single-select — "All" (null) shows everything, or exactly one type is shown.
+ * Apply the current achievement filters (single selected type + the metric toggle):
+ * show/hide rows within the given Achievements detail root. `selectedAchievementType`
+ * of null ("All") shows every type.
  */
 function applyAchievementFilters(root) {
-    root.querySelectorAll('.achievements-filter-toggle[data-type]').forEach(button => {
-        const active = selectedAchievementType === button.dataset.type;
-        button.classList.toggle('active', active);
-        button.setAttribute('aria-pressed', String(active));
-    });
-    // "All" is active when no single type is selected
-    const allButton = root.querySelector('.achievements-filter-all');
-    const allActive = selectedAchievementType === null;
-    allButton.classList.toggle('active', allActive);
-    allButton.setAttribute('aria-pressed', String(allActive));
-
     const baseMetrics = Object.values(Metric);
     root.querySelectorAll('tr[data-achievement-type]').forEach(row => {
         const typeHidden = selectedAchievementType !== null && row.dataset.achievementType !== selectedAchievementType;
@@ -4320,8 +4309,8 @@ function applyAchievementFilters(root) {
 }
 
 /**
- * Show the all-time Achievements running list (most recent first), with a filter
- * bar above the table for toggling visibility of each achievement type.
+ * Show the all-time Achievements running list (most recent first), with a type
+ * dropdown and a "show all base metrics" toggle above the table.
  */
 function showAchievementsDetail(container, statsCache) {
     const achievements = statsCache.achievements;
@@ -4334,16 +4323,15 @@ function showAchievementsDetail(container, statsCache) {
     const gameById = new Map(gameData.games.map(g => [g.id, g]));
     const playerNameById = new Map(gameData.players.map(p => [p.playerId, p.name]));
 
-    // Filter toggles for every achievement type, in meta declaration order
-    const filterButtons = Object.keys(ACHIEVEMENT_TYPE_META).map(type => {
-        const meta = ACHIEVEMENT_TYPE_META[type];
-        return `
-            <button type="button" class="achievements-filter-toggle" data-type="${type}">
-                <span class="achievement-chip ${meta.chipClass}"><span class="achievement-chip__icon">${meta.icon}</span></span>
-                <span class="achievements-filter-label">${meta.label}</span>
-            </button>
-        `;
-    }).join('');
+    // Filter options for every achievement type (plus "All"), in meta declaration order
+    const filterOptions = [
+        `<option value=""${selectedAchievementType === null ? ' selected' : ''}>🏆 All</option>`,
+        ...Object.keys(ACHIEVEMENT_TYPE_META).map(type => {
+            const meta = ACHIEVEMENT_TYPE_META[type];
+            const selected = selectedAchievementType === type ? ' selected' : '';
+            return `<option value="${type}"${selected}>${meta.icon} ${meta.label}</option>`;
+        }),
+    ].join('');
 
     const rows = achievements.map(achievement => {
         const meta = ACHIEVEMENT_TYPE_META[achievement.type];
@@ -4365,19 +4353,17 @@ function showAchievementsDetail(container, statsCache) {
 
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
-        <div class="achievements-toggle">
-            <label class="toggle-switch">
-                <input type="checkbox" id="achievements-show-all-metrics" ${showAllAchievementMetrics ? 'checked' : ''}>
-                <span class="toggle-slider"></span>
-            </label>
-            <span class="toggle-label">Show all base metrics</span>
-        </div>
-        <div class="achievements-filter">
-            <button type="button" class="achievements-filter-toggle achievements-filter-all" data-filter-all>
-                <span class="achievement-chip achievement-chip--all"><span class="achievement-chip__icon">🏆</span></span>
-                <span class="achievements-filter-label">All</span>
-            </button>
-            ${filterButtons}
+        <div class="achievements-controls">
+            <div class="achievements-toggle">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="achievements-show-all-metrics" ${showAllAchievementMetrics ? 'checked' : ''}>
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Show all base metrics</span>
+            </div>
+            <select id="achievements-type-filter" class="achievements-filter-select">
+                ${filterOptions}
+            </select>
         </div>
         <table class="breakdown-table achievements-table">
             <thead>
@@ -4391,18 +4377,8 @@ function showAchievementsDetail(container, statsCache) {
         </table>
     `;
 
-    wrapper.querySelectorAll('.achievements-filter-toggle[data-type]').forEach(button => {
-        button.addEventListener('click', () => {
-            const type = button.dataset.type;
-            // Selecting the already-selected type deselects it, returning to "All"
-            selectedAchievementType = selectedAchievementType === type ? null : type;
-            applyAchievementFilters(wrapper);
-            updateURL();
-        });
-    });
-
-    wrapper.querySelector('.achievements-filter-all').addEventListener('click', () => {
-        selectedAchievementType = null;
+    wrapper.querySelector('#achievements-type-filter').addEventListener('change', (e) => {
+        selectedAchievementType = e.target.value || null;
         applyAchievementFilters(wrapper);
         updateURL();
     });

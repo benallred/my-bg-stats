@@ -2226,10 +2226,6 @@ body.modal-open {
     --achievement-chip-color: var(--color-longest-session);
 }
 
-.achievement-chip--all {
-    --achievement-chip-color: var(--text-muted);
-}
-
 /* Shrink the type column to just fit the icon chip. */
 .achievement-type-col {
     width: 1%;
@@ -2237,52 +2233,39 @@ body.modal-open {
     text-align: center;
 }
 
-/* Achievements "show all base metrics" toggle */
+/* Achievements controls row: "show all base metrics" toggle + type dropdown */
+.achievements-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
 .achievements-toggle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 1rem;
 }
 
-/* Achievement type filter bar */
-.achievements-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.achievements-filter-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.25rem 0.7rem 0.25rem 0.3rem;
-    border: 1px solid var(--border-primary);
-    border-radius: 999px;
+.achievements-filter-select {
+    padding: 0.35rem 0.75rem;
+    border: 2px solid var(--border-primary);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
     background: var(--bg-card);
     color: var(--text-primary);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: opacity 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    transition: border-color var(--transition-border), background-color var(--transition-theme), color var(--transition-theme);
 }
 
-.achievements-filter-toggle:not(.active) {
-    opacity: 0.4;
-    background: transparent;
+.achievements-filter-select:hover {
+    border-color: var(--color-primary);
 }
 
-.achievements-filter-toggle .achievement-chip {
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
-.achievements-filter-toggle .achievement-chip__icon {
-    font-size: 0.85rem;
-}
-
-.achievements-filter-label {
-    white-space: nowrap;
+.achievements-filter-select:focus {
+    outline: none;
+    border-color: var(--color-primary-dark);
 }
 
 /* Flow the triggering game's thumbnail inline with the achievement sentence. */
