@@ -4222,6 +4222,14 @@ const ACHIEVEMENT_TYPE_META = {
             return `Reached ${row.threshold.toLocaleString()} total <span class="metric-name ${row.metric}">${row.metric}</span> logged while playing ${gameHtml}`;
         },
     },
+    [AchievementType.UNIQUE_GAMES]: {
+        label: 'Unique Games',
+        icon: '🎲',
+        chipClass: 'achievement-chip--unique-games',
+        renderText: (row, gameHtml) => {
+            return `Reached ${row.threshold} unique games played while playing ${gameHtml}`;
+        },
+    },
     [AchievementType.STREAK]: {
         label: 'Streaks',
         icon: '🔥',
@@ -4492,7 +4500,7 @@ function maybeShowRecentAchievementToasts() {
                 </div>
                 <div class="achievement-toast-buttons">
                     <button type="button" class="achievement-toast-later">Later</button>
-                    <button type="button" class="achievement-toast-yea">Yea! 🎉</button>
+                    <button type="button" class="achievement-toast-yea">Yay! 🎉</button>
                 </div>
             </div>
         `;

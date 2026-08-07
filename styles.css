@@ -37,6 +37,7 @@
     --color-buddy: #6c5ce7;
     --color-solo: #c0392b;
     --color-streak: #e84118;
+    --color-unique-games: #0097a7;
 
     /* Metric colors */
     --color-metric-hours: #27ae60;
@@ -106,6 +107,7 @@
     --color-buddy: #a29bfe;
     --color-solo: #ff7675;
     --color-streak: #ff7043;
+    --color-unique-games: #4dd0e1;
 
     /* Metric colors */
     --color-metric-hours: #2ecc71;
@@ -2206,6 +2208,10 @@ body.modal-open {
 
 .achievement-chip--streak {
     --achievement-chip-color: var(--color-streak);
+}
+
+.achievement-chip--unique-games {
+    --achievement-chip-color: var(--color-unique-games);
 }
 
 .achievement-chip--all {

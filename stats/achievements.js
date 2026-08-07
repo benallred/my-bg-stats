@@ -29,7 +29,11 @@ const AchievementType = {
   BUDDY: 'buddy',
   SOLO: 'solo',
   STREAK: 'streak',
+  UNIQUE_GAMES: 'unique-games',
 };
+
+// Threshold step for the unique-games-played count
+const UNIQUE_GAMES_THRESHOLD_STEP = 25;
 
 // Pseudo-metric for the people h-index (which is not a per-game hours/sessions/plays value)
 const PEOPLE_METRIC = 'people';
@@ -184,6 +188,38 @@ function getStreakAchievements(plays) {
   }
 
   // The final streak is still ongoing (no gap yet), so it is intentionally not emitted.
+  return achievements;
+}
+
+/**
+ * Generate unique-games-played achievements: each time the running count of distinct
+ * games you've played crosses a round-number threshold (every 25). The triggering
+ * game is the newly played game that reached the count. Has no metric.
+ * @param {Array} plays - Array of play objects
+ * @returns {Array} Rows of { type, timestamp, gameId, threshold }
+ */
+function getUniqueGamesAchievements(plays) {
+  const sortedPlays = [...plays].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+
+  const seenGameIds = new Set();
+  const achievements = [];
+  let nextThreshold = UNIQUE_GAMES_THRESHOLD_STEP;
+
+  for (const play of sortedPlays) {
+    if (seenGameIds.has(play.gameId)) continue;
+    seenGameIds.add(play.gameId);
+
+    while (nextThreshold <= seenGameIds.size) {
+      achievements.push({
+        type: AchievementType.UNIQUE_GAMES,
+        timestamp: play.timestamp,
+        gameId: play.gameId,
+        threshold: nextThreshold,
+      });
+      nextThreshold += UNIQUE_GAMES_THRESHOLD_STEP;
+    }
+  }
+
   return achievements;
 }
 
@@ -491,6 +527,7 @@ const ACHIEVEMENT_GENERATORS = [
   (context) => getBuddyAchievements(context.plays, context.selfPlayerId, context.anonymousPlayerId),
   (context) => getSoloAchievements(context.plays, context.selfPlayerId),
   (context) => getStreakAchievements(context.plays),
+  (context) => getUniqueGamesAchievements(context.plays),
 ];
 
 const metricOrder = { [Metric.HOURS]: 0, [Metric.SESSIONS]: 1, [Metric.PLAYS]: 2, [PEOPLE_METRIC]: 3 };
@@ -544,4 +581,5 @@ export {
   getBuddyAchievements,
   getSoloAchievements,
   getStreakAchievements,
+  getUniqueGamesAchievements,
 };

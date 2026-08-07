@@ -10,6 +10,7 @@ import {
   getBuddyAchievements,
   getSoloAchievements,
   getStreakAchievements,
+  getUniqueGamesAchievements,
 } from './achievements.js';
 import {
   calculateHourHIndex,
@@ -558,5 +559,55 @@ describe('getStreakAchievements', () => {
 
     // metric-bearing logging row ranks before the metric-less streak row
     expect(sameTs.map(a => a.type)).toEqual([AchievementType.LOGGING, AchievementType.STREAK]);
+  });
+});
+
+describe('getUniqueGamesAchievements', () => {
+  test('returns empty array for no plays', () => {
+    expect(getUniqueGamesAchievements([])).toEqual([]);
+  });
+
+  test('emits when the 25th unique game is played, tagged with that game', () => {
+    const plays = Array.from({ length: 25 }, (_, i) => play(dayN(i), 30, '12:00:00', i + 1));
+    const result = getUniqueGamesAchievements(plays);
+
+    expect(result).toEqual([
+      {
+        type: AchievementType.UNIQUE_GAMES,
+        timestamp: `${dayN(24)} 12:00:00`,
+        gameId: 25,
+        threshold: 25,
+      },
+    ]);
+  });
+
+  test('emits every 25 unique games', () => {
+    const plays = Array.from({ length: 50 }, (_, i) => play(dayN(i), 30, '12:00:00', i + 1));
+    const result = getUniqueGamesAchievements(plays);
+
+    expect(result.map(a => a.threshold)).toEqual([25, 50]);
+    expect(result.map(a => a.gameId)).toEqual([25, 50]);
+  });
+
+  test('counts each game once regardless of replays', () => {
+    const plays = [
+      ...Array.from({ length: 24 }, (_, i) => play(dayN(i), 30, '12:00:00', i + 1)),
+      play(dayN(24), 30, '12:00:00', 1), // replay of an already-seen game
+      play(dayN(25), 30, '12:00:00', 1), // and again
+    ];
+    expect(getUniqueGamesAchievements(plays)).toEqual([]); // still only 24 unique
+  });
+
+  test('the triggering game is the new game that reached the count', () => {
+    const plays = [
+      ...Array.from({ length: 24 }, (_, i) => play(dayN(i), 30, '12:00:00', i + 1)),
+      play(dayN(24), 30, '12:00:00', 1),   // replay, still 24 unique
+      play(dayN(25), 30, '12:00:00', 999), // 25th unique game
+    ];
+    const result = getUniqueGamesAchievements(plays);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].gameId).toBe(999);
+    expect(result[0].timestamp).toBe(`${dayN(25)} 12:00:00`);
   });
 });
