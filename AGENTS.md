@@ -235,6 +235,17 @@ const stats = {
 };
 ```
 
+## New Feature & Stat Integration
+
+Every new feature or stat must consider representation in **both** of these surfaces:
+
+1. **Year in Review** — the per-year retrospective (shown when a specific year is selected).
+2. **Achievements** — the all-time running list (shown on the All Time filter).
+
+If the user has not specified how (or whether) the new feature/stat should appear in each, **prompt them** — separately for Year in Review and for Achievements. The decision must be explicit, never skipped silently: not every stat belongs in both (or either), but that should be a deliberate choice.
+
+When a stat is added to Year in Review, also follow "Year in Review Summary Updates" below.
+
 ## Year in Review Summary Updates
 
 When adding new details or stats to the Year in Review feature, always ask the user if and how they want the Summary section updated to reflect the new information.
