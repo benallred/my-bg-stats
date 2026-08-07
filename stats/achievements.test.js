@@ -534,11 +534,12 @@ describe('getStreakAchievements', () => {
     expect(getStreakAchievements(plays)).toEqual([]);
   });
 
-  test('stamps the streak at its last play and counts a day once', () => {
+  test('stamps the streak at its latest play regardless of play order', () => {
     const plays = [
-      play(dayN(0), 30, '09:00:00'),
-      play(dayN(1), 30, '09:00:00'),
-      play(dayN(1), 30, '21:00:00'), // second play on the end day -> latest timestamp
+      play(dayN(0), 30, '12:00:00'),
+      play(dayN(1), 30, '12:00:00'), // end day, first seen
+      play(dayN(1), 30, '21:00:00'), // later timestamp -> becomes the latest
+      play(dayN(1), 30, '09:00:00'), // earlier timestamp out of order -> does not replace
       play(dayN(5), 30),             // gap completes the 2-day streak
     ];
     const result = getStreakAchievements(plays);
