@@ -32,7 +32,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Trick-taking"
+      ],
       "copies": [
         {
           "copyId": "12b18d88-a516-4461-bb17-1d7e229aa1e0",
@@ -61,7 +63,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Drafting"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -250,7 +254,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "cf8ff776-e71b-4c0a-8f0b-c8f5b428ef14",
@@ -530,7 +536,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Push Your Luck"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1696,6 +1704,7 @@
       "isNonReplayable": false,
       "tags": [
         "Classic",
+        "Deduction",
         "Two Player"
       ],
       "copies": [
@@ -1833,7 +1842,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1881,7 +1892,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [],
       "playCount": 8,
       "uniquePlayDays": 2,
@@ -2762,7 +2775,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Polyomino"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3053,7 +3068,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deckbuilder"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3073,7 +3090,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Classic"
+        "Classic",
+        "Deduction"
       ],
       "copies": [
         {
@@ -3438,7 +3456,7 @@
       "name": "Coup",
       "bggId": 131357,
       "year": 2012,
-      "rating": null,
+      "rating": 7,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -3868,7 +3886,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Push Your Luck"
+      ],
       "copies": [
         {
           "copyId": "d7ae51eb-0031-4269-83bb-acbc9d4312fa",
@@ -3984,7 +4004,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "aaf98b32-bd17-4cad-a658-d6ce4070f1e1",
@@ -4312,7 +4334,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deckbuilder"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -4393,7 +4417,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Drafting"
+      ],
       "copies": [
         {
           "copyId": "bf1aaa52-c7ee-406f-bac7-d68de436686d",
@@ -4665,7 +4691,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deckbuilder"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -5030,7 +5058,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Push Your Luck"
       ],
       "copies": [
         {
@@ -5599,7 +5628,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Push Your Luck"
       ],
       "copies": [
         {
@@ -5630,7 +5660,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Push Your Luck"
       ],
       "copies": [
         {
@@ -6797,7 +6828,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "f0a23772-60dc-4f65-9642-6608c92f2099",
@@ -6884,7 +6917,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "0e576faf-646e-4712-ba29-84d900281239",
@@ -7125,7 +7160,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Drafting"
       ],
       "copies": [
         {
@@ -7653,7 +7689,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deckbuilder"
+      ],
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -9094,7 +9132,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deckbuilder"
+      ],
       "copies": [
         {
           "copyId": "44dca3a5-7ea2-44d3-a3fa-654ed956fea6",
@@ -9367,7 +9407,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Polyomino"
+      ],
       "copies": [
         {
           "copyId": "6c069b45-fcbe-4fe3-85c5-edab9e54b1ff",
@@ -9398,6 +9440,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deckbuilder",
+        "Push Your Luck",
         "Solo"
       ],
       "copies": [
@@ -9857,7 +9900,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Polyomino"
+      ],
       "copies": [
         {
           "copyId": "99ffe0a0-5f64-4189-9dba-6e182412f8bb",
@@ -10041,7 +10086,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "583211f1-6412-4f3b-a524-d8feb52179c4",
@@ -10053,12 +10100,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__small/img/7rgnYRe9NpOSpixs0FXmEGkKfxU=/fit-in/200x150/filters:strip_icc()/pic8307047.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__original/img/pY5DDByB6SA60PwWuuzWgFG2soc=/0x0/filters:format(jpeg)/pic8307047.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 20
+      "typicalPlayTimeMinutes": 28.5
     },
     {
       "id": 598,
@@ -10071,6 +10118,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Deduction",
         "Two Player"
       ],
       "copies": [
@@ -10251,7 +10299,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Push Your Luck"
       ],
       "copies": [
         {
@@ -10372,6 +10421,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Polyomino",
         "Two Player"
       ],
       "copies": [
@@ -10402,7 +10452,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Push Your Luck"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -10826,6 +10878,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Drafting",
         "Two Player"
       ],
       "copies": [
@@ -12156,6 +12209,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Trick-taking",
         "Two Player"
       ],
       "copies": [
@@ -12215,7 +12269,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Abstract"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -12234,7 +12290,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "7c42ec1b-7c05-454f-a922-5102a19373f6",
@@ -12845,7 +12903,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Trick-taking"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -13012,6 +13072,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Drafting",
         "Two Player"
       ],
       "copies": [
@@ -13755,6 +13816,7 @@
       "tags": [
         "Abstract",
         "Classic",
+        "Deduction",
         "Two Player"
       ],
       "copies": [
@@ -13785,7 +13847,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Push Your Luck"
+      ],
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -13895,7 +13959,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Drafting"
+      ],
       "copies": [
         {
           "copyId": "c5633e4d-b5c3-4632-9591-968a5cb1cc97",
@@ -13999,8 +14065,8 @@
       ],
       "playCount": 0,
       "uniquePlayDays": 0,
-      "thumbnailUrl": null,
-      "coverUrl": null,
+      "thumbnailUrl": "https://cf.geekdo-images.com/1Zq6B7YRCWRG0X5u_UGMlw__previewthumb/img/VWC1qrZuuHibLgkghP4TEhUHlvw=/fit-in/300x320/filters:strip_icc()/pic9711510.png",
+      "coverUrl": "https://cf.geekdo-images.com/1Zq6B7YRCWRG0X5u_UGMlw__original/img/-0fBE-aDJW8hXCu7mu8at7STCLA=/0x0/filters:format(png)/pic9711510.png",
       "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
@@ -14014,7 +14080,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Drafting"
+      ],
       "copies": [
         {
           "copyId": "ecdc432e-8d47-457e-8d24-23aebd52d69f",
@@ -14159,12 +14227,14 @@
       "name": "Sushi Go!",
       "bggId": 133473,
       "year": 2013,
-      "rating": null,
+      "rating": 8,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Drafting"
+      ],
       "copies": [
         {
           "copyId": "e461f937-74fb-40c4-8589-a7cb953f0041",
@@ -14197,7 +14267,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Drafting"
+      ],
       "copies": [
         {
           "copyId": "4f7c504a-4b69-4886-b1a3-08cd2692bc51",
@@ -14803,7 +14875,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Trick-taking"
+      ],
       "copies": [
         {
           "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
@@ -14846,12 +14920,14 @@
       "name": "The Crew: The Quest for Planet Nine",
       "bggId": 284083,
       "year": 2019,
-      "rating": null,
+      "rating": 8,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Trick-taking"
+      ],
       "copies": [
         {
           "copyId": "88f3096e-8640-4541-9017-4862cac5e6ae",
@@ -14965,7 +15041,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Trick-taking"
+      ],
       "copies": [
         {
           "copyId": "97dc3524-f43a-4b0e-9fab-d2f7d12a68bf",
@@ -15086,7 +15164,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Polyomino"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -15512,7 +15592,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deckbuilder"
+      ],
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -15862,7 +15944,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Push Your Luck"
+      ],
       "copies": [
         {
           "copyId": "a2688f74-a069-44dd-92ca-0df90a963690",
@@ -16154,7 +16238,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
-      "isNonReplayable": false,
+      "isNonReplayable": true,
       "tags": [],
       "copies": [
         {
@@ -16183,7 +16267,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
-      "isNonReplayable": false,
+      "isNonReplayable": true,
       "tags": [],
       "copies": [
         {
@@ -16299,7 +16383,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
-      "isNonReplayable": false,
+      "isNonReplayable": true,
       "tags": [],
       "copies": [
         {
@@ -16328,7 +16412,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
-      "isNonReplayable": false,
+      "isNonReplayable": true,
       "tags": [],
       "copies": [
         {
@@ -16473,7 +16557,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
-      "isNonReplayable": false,
+      "isNonReplayable": true,
       "tags": [],
       "copies": [
         {
@@ -16531,7 +16615,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
-      "isNonReplayable": false,
+      "isNonReplayable": true,
       "tags": [],
       "copies": [
         {
@@ -16717,7 +16801,7 @@
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
-      "isNonReplayable": false,
+      "isNonReplayable": true,
       "tags": [],
       "copies": [],
       "playCount": 1,
@@ -16980,6 +17064,7 @@
       "isNonReplayable": false,
       "tags": [
         "Abstract",
+        "Drafting",
         "Two Player"
       ],
       "copies": [
@@ -17360,7 +17445,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "421b0985-ace6-44dc-8f8a-7ef2291c0463",
@@ -17389,7 +17476,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Polyomino"
+      ],
       "copies": [
         {
           "copyId": "6a959275-a6b0-4013-bfff-6a037e21d0b7",
@@ -17844,7 +17933,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Push Your Luck"
       ],
       "copies": [
         {
@@ -17992,7 +18082,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Deduction"
+      ],
       "copies": [
         {
           "copyId": "d19abe4f-3ef7-490e-9bb7-60e509a0fc67",
@@ -18139,7 +18231,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Push Your Luck"
+      ],
       "copies": [
         {
           "copyId": "d3908b9f-1a47-4f2a-887d-a7a0a6ec0412",
@@ -18189,6 +18283,19 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 616,
+      "copyId": "583211f1-6412-4f3b-a524-d8feb52179c4",
+      "date": "2026-08-12",
+      "timestamp": "2026-08-12 21:02:37",
+      "durationMin": 37,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 153,
       "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
@@ -50934,5 +51041,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-08-12T03:33:16.000Z"
+  "generatedAt": "2026-08-13T03:02:37.000Z"
 }
