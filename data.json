@@ -268,12 +268,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/Mo2apZXThsIU0vIWNeDV4A__small/img/gT5Oz7I5uoGil6ELuaqVXn0zqrs=/fit-in/200x150/filters:strip_icc()/pic9014143.png",
       "coverUrl": "https://cf.geekdo-images.com/Mo2apZXThsIU0vIWNeDV4A__original/img/jtI6TzSVlvCAqMcHn9UAvMYiUtg=/0x0/filters:format(png)/pic9014143.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 32
+      "typicalPlayTimeMinutes": 31.5
     },
     {
       "id": 323,
@@ -285,7 +285,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 2,
@@ -305,7 +307,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Party Game"
       ],
       "copies": [
         {
@@ -517,7 +520,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -537,6 +542,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Party Game",
         "Push Your Luck"
       ],
       "copies": [],
@@ -2268,7 +2274,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3011,7 +3019,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3150,7 +3160,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 6,
       "uniquePlayDays": 3,
@@ -3171,7 +3183,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -3653,12 +3667,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 2,
-      "uniquePlayDays": 2,
+      "playCount": 3,
+      "uniquePlayDays": 3,
       "thumbnailUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__small/img/SRpAFFgh4mpyvCqzq8kc3B6_7F4=/fit-in/200x150/filters:strip_icc()/pic9171780.png",
       "coverUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__original/img/9ai5WpyU0jn1cCwAiRaGIQy-VqQ=/0x0/filters:format(png)/pic9171780.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 59
+      "typicalPlayTimeMinutes": 44
     },
     {
       "id": 4,
@@ -4018,12 +4032,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 2,
-      "uniquePlayDays": 2,
+      "playCount": 3,
+      "uniquePlayDays": 3,
       "thumbnailUrl": "https://cf.geekdo-images.com/bb7tVh1li4_3sNNhlKJ1xw__small/img/KZUKK-9fG6VGBXgImM8It0g5O-Y=/fit-in/200x150/filters:strip_icc()/pic8688119.png",
       "coverUrl": "https://cf.geekdo-images.com/bb7tVh1li4_3sNNhlKJ1xw__original/img/2iPud3zi_vpUp_ufR_NTX3TIzto=/0x0/filters:format(png)/pic8688119.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 27
+      "typicalPlayTimeMinutes": 28
     },
     {
       "id": 223,
@@ -4059,7 +4073,8 @@
         413,
         414,
         466,
-        468
+        468,
+        630
       ],
       "typicalPlayTimeMinutes": 44
     },
@@ -4089,6 +4104,35 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/p2AffonSuYOAnxCm7KGzCQ__thumb/img/yEHVy2b1zkDZUhlflpmxF5UY53Q=/fit-in/200x150/filters:strip_icc()/pic6560851.png",
       "coverUrl": "https://cf.geekdo-images.com/p2AffonSuYOAnxCm7KGzCQ__original/img/8nret2QbaYDLOeJf-qjv2LbNgz0=/0x0/filters:format(png)/pic6560851.png",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 630,
+      "name": "Disney Villainous: Come, We Fly!",
+      "bggId": 463955,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "bc720356-6b77-43b8-8ceb-d7bc32a66334",
+          "versionName": null,
+          "acquisitionDate": null,
+          "statusOwned": false,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/ig9NMbfgKPzGT5KElcOoPw__small/img/1Q3Yz1TPj2jq--dIjfkqT9nidss=/fit-in/200x150/filters:strip_icc()/pic9653447.png",
+      "coverUrl": "https://cf.geekdo-images.com/ig9NMbfgKPzGT5KElcOoPw__original/img/zUO1Qmgv6z-xetq4zFK9pvFx14Q=/0x0/filters:format(png)/pic9653447.png",
       "expansionIds": null,
       "typicalPlayTimeMinutes": null
     },
@@ -4305,7 +4349,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "13b77fb0-4905-41c1-90ac-2d65987d8c78",
@@ -5629,6 +5675,7 @@
       "isNonReplayable": false,
       "tags": [
         "Outside",
+        "Party Game",
         "Push Your Luck"
       ],
       "copies": [
@@ -6507,7 +6554,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 7,
       "uniquePlayDays": 3,
@@ -7659,7 +7708,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Party Game"
       ],
       "copies": [
         {
@@ -7817,7 +7867,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Party Game"
       ],
       "copies": [
         {
@@ -7878,7 +7929,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -8638,7 +8691,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "da88eb92-19ef-449e-b3e2-e226864dd785",
@@ -9964,7 +10019,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
@@ -9993,7 +10050,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "8bd6f531-23a9-462b-a74f-88720879dcdb",
@@ -10100,12 +10159,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 2,
-      "uniquePlayDays": 2,
+      "playCount": 3,
+      "uniquePlayDays": 3,
       "thumbnailUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__small/img/7rgnYRe9NpOSpixs0FXmEGkKfxU=/fit-in/200x150/filters:strip_icc()/pic8307047.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__original/img/pY5DDByB6SA60PwWuuzWgFG2soc=/0x0/filters:format(jpeg)/pic8307047.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 28.5
+      "typicalPlayTimeMinutes": 23
     },
     {
       "id": 598,
@@ -10300,6 +10359,7 @@
       "isNonReplayable": false,
       "tags": [
         "Outside",
+        "Party Game",
         "Push Your Luck"
       ],
       "copies": [
@@ -10453,6 +10513,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Party Game",
         "Push Your Luck"
       ],
       "copies": [],
@@ -12119,7 +12180,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "7127ce77-45aa-4bbe-b7af-31d3b851f6b2",
@@ -12322,7 +12385,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Party Game"
       ],
       "copies": [
         {
@@ -12806,7 +12870,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "8ed0c570-7e7d-45f1-86c3-ec7f028bcfde",
@@ -14416,7 +14482,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -14889,8 +14957,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 24,
-      "uniquePlayDays": 2,
+      "playCount": 29,
+      "uniquePlayDays": 3,
       "thumbnailUrl": "https://cf.geekdo-images.com/VuBqZ1sMaDAVVHF_OEJP4g__thumb/img/EdacXlcFZ06YK0-ZKa0oKwL4VCw=/fit-in/200x150/filters:strip_icc()/pic5988903.jpg",
       "coverUrl": "https://cf.geekdo-images.com/VuBqZ1sMaDAVVHF_OEJP4g__original/img/jGWxczXC_VWZofeAmlO_DkB0hCI=/0x0/filters:format(jpeg)/pic5988903.jpg",
       "expansionIds": [],
@@ -14959,7 +15027,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "9a4e8c94-11ae-4c42-8376-c15b01eaf72e",
@@ -15020,7 +15090,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 5,
       "uniquePlayDays": 4,
@@ -15671,7 +15743,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -16035,12 +16109,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 13,
-      "uniquePlayDays": 6,
+      "playCount": 14,
+      "uniquePlayDays": 7,
       "thumbnailUrl": "https://cf.geekdo-images.com/M9jtWLtj5lpSbQEhCNIbDw__thumb/img/MKU_1ZhLNuS59Ib8aMVeRBvCyXk=/fit-in/200x150/filters:strip_icc()/pic6107847.jpg",
       "coverUrl": "https://cf.geekdo-images.com/M9jtWLtj5lpSbQEhCNIbDw__original/img/HUSWiCnh3drXue50bFvaSXnR3Go=/0x0/filters:format(jpeg)/pic6107847.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 125
+      "typicalPlayTimeMinutes": 133.5
     },
     {
       "id": 346,
@@ -16676,7 +16750,8 @@
       "isNonReplayable": false,
       "tags": [
         "Classic",
-        "Outside"
+        "Outside",
+        "Party Game"
       ],
       "copies": [
         {
@@ -16715,7 +16790,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "0bf327a9-2968-4608-9b00-2d4c0ce58c73",
@@ -16744,7 +16821,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "d72c30a9-9c39-4971-ab4d-429b2e36c91c",
@@ -16773,7 +16852,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "841c2f4c-97fe-4d1a-9f88-3e99e042f177",
@@ -17358,7 +17439,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "892389fc-b0e4-44b6-8889-35ad23e9461a",
@@ -17632,7 +17715,8 @@
       "isNonReplayable": false,
       "tags": [
         "Classic",
-        "Outside"
+        "Outside",
+        "Party Game"
       ],
       "copies": [
         {
@@ -18245,12 +18329,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/nsTlpzyPeulRD8ua9o8sHw__small/img/Rf0U9MOrz59mfu4cNflOYy6GN9I=/fit-in/200x150/filters:strip_icc()/pic7906949.jpg",
       "coverUrl": "https://cf.geekdo-images.com/nsTlpzyPeulRD8ua9o8sHw__original/img/ifKV7GEHF5U6zvQN5Gq4R2W8Qbw=/0x0/filters:format(jpeg)/pic7906949.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 22
+      "typicalPlayTimeMinutes": 21
     },
     {
       "id": 453,
@@ -18262,7 +18346,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Party Game"
+      ],
       "copies": [
         {
           "copyId": "0b6a5b7e-20a9-46c7-9b9d-0dda0a78b7d8",
@@ -18283,6 +18369,159 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-22",
+      "timestamp": "2026-08-22 21:46:30",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-22",
+      "timestamp": "2026-08-22 21:41:02",
+      "durationMin": 5,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-22",
+      "timestamp": "2026-08-22 21:40:45",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-22",
+      "timestamp": "2026-08-22 21:36:45",
+      "durationMin": 4,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-08-22",
+      "timestamp": "2026-08-22 21:20:09",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 616,
+      "copyId": "583211f1-6412-4f3b-a524-d8feb52179c4",
+      "date": "2026-08-22",
+      "timestamp": "2026-08-22 20:53:36",
+      "durationMin": 23,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 613,
+      "copyId": "aaf98b32-bd17-4cad-a658-d6ce4070f1e1",
+      "date": "2026-08-20",
+      "timestamp": "2026-08-20 21:10:21",
+      "durationMin": 28,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 614,
+      "copyId": "cf8ff776-e71b-4c0a-8f0b-c8f5b428ef14",
+      "date": "2026-08-16",
+      "timestamp": "2026-08-16 19:43:37",
+      "durationMin": 31,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 626,
+      "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
+      "date": "2026-08-16",
+      "timestamp": "2026-08-16 18:47:42",
+      "durationMin": 44,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 615,
+      "copyId": "d3908b9f-1a47-4f2a-887d-a7a0a6ec0412",
+      "date": "2026-08-14",
+      "timestamp": "2026-08-14 21:16:04",
+      "durationMin": 20,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 312,
+      "copyId": null,
+      "date": "2026-08-13",
+      "timestamp": "2026-08-13 17:57:21",
+      "durationMin": 195,
+      "durationEstimated": false,
+      "players": [
+        3,
+        12,
+        13
+      ],
+      "locationId": 3
+    },
     {
       "gameId": 616,
       "copyId": "583211f1-6412-4f3b-a524-d8feb52179c4",
@@ -51041,5 +51280,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-08-13T03:02:37.000Z"
+  "generatedAt": "2026-08-23T03:46:30.000Z"
 }
