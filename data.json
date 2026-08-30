@@ -33,6 +33,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Teams",
         "Trick-taking"
       ],
       "copies": [
@@ -583,6 +584,35 @@
       "typicalPlayTimeMinutes": null
     },
     {
+      "id": 631,
+      "name": "Baseball Highlights 2045: Green Monstah Promo Card",
+      "bggId": 431012,
+      "year": 2024,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "dba8f299-e3f9-49e4-80ae-3973fec04750",
+          "versionName": "English edition",
+          "acquisitionDate": "2024-03-26",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/iMZS9568OlGbUi4RnRHtSg__small/img/ulSOJcFyLS-8D65j7ghjuqKatKo=/fit-in/200x150/filters:strip_icc()/pic8492839.png",
+      "coverUrl": "https://cf.geekdo-images.com/iMZS9568OlGbUi4RnRHtSg__original/img/jaOz16xciKJlzgA5oeRntda-jW8=/0x0/filters:format(png)/pic8492839.png",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 297,
       "name": "Baseball Highlights: 2045",
       "bggId": 151022,
@@ -645,7 +675,9 @@
         293,
         295,
         296,
-        304
+        304,
+        631,
+        632
       ],
       "typicalPlayTimeMinutes": 80
     },
@@ -675,6 +707,35 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/3tJfHyhTHGejZKy7BzTEHw__thumb/img/UHE_apm4UAcT_poxz2VTsUBy5Ms=/fit-in/200x150/filters:strip_icc()/pic3795769.jpg",
       "coverUrl": "https://cf.geekdo-images.com/3tJfHyhTHGejZKy7BzTEHw__original/img/-LIQ6Zg9xs0HWDWsuVuO1MIp1gw=/0x0/filters:format(jpeg)/pic3795769.jpg",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 632,
+      "name": "Baseball Highlights: 2045 – All-Star Expansion",
+      "bggId": 426946,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "67f8f714-b9d4-41c0-ba26-3e7aa6955a96",
+          "versionName": "English edition",
+          "acquisitionDate": "2024-03-26",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/f8y-75I-QC8a9_qAL2Q4lg__small/img/q6uNbwadURIDmZpnw_sH5iBo0As=/fit-in/200x150/filters:strip_icc()/pic8367928.png",
+      "coverUrl": "https://cf.geekdo-images.com/f8y-75I-QC8a9_qAL2Q4lg__original/img/-sWxyjlFXM4G_TFee7-NjRyH-HY=/0x0/filters:format(png)/pic8367928.png",
       "expansionIds": null,
       "typicalPlayTimeMinutes": null
     },
@@ -724,7 +785,7 @@
       "copies": [
         {
           "copyId": "3ffae14e-1a98-4b1d-b7ce-b3311472a6d3",
-          "versionName": null,
+          "versionName": "English edition",
           "acquisitionDate": "2024-03-26",
           "statusOwned": true,
           "pricePaid": 65.76,
@@ -1741,7 +1802,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1760,7 +1823,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -1849,7 +1914,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deduction"
+        "Deduction",
+        "Teams"
       ],
       "copies": [],
       "playCount": 1,
@@ -3161,7 +3227,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Teams"
       ],
       "copies": [],
       "playCount": 6,
@@ -3184,7 +3251,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Teams"
       ],
       "copies": [],
       "playCount": 0,
@@ -3684,7 +3752,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [
         {
           "copyId": "4d1303da-9c48-4b19-9969-43efa8d8f130",
@@ -3713,7 +3783,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [
         {
           "copyId": "9f6d0147-981c-47df-9b43-e784131d2a52",
@@ -5034,7 +5106,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [],
       "playCount": 5,
       "uniquePlayDays": 4,
@@ -7789,7 +7863,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [
         {
           "copyId": "803b66d4-a153-4bcb-8d65-d051ebf3df5f",
@@ -10128,12 +10204,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 7,
-      "uniquePlayDays": 6,
+      "playCount": 8,
+      "uniquePlayDays": 7,
       "thumbnailUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__small/img/Q3W4poMS4btD-HZLervgqbSCtmE=/fit-in/200x150/filters:strip_icc()/pic7070194.jpg",
       "coverUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__original/img/oRsIxp72iv58128KFdqvjG6Gz64=/0x0/filters:format(jpeg)/pic7070194.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 27
+      "typicalPlayTimeMinutes": 26
     },
     {
       "id": 616,
@@ -10495,12 +10571,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 8,
-      "uniquePlayDays": 8,
+      "playCount": 9,
+      "uniquePlayDays": 9,
       "thumbnailUrl": "https://cf.geekdo-images.com/wLW7pFn0--20lEizEz5p3A__thumb/img/P49TUiytgjmRAtKsfO7Y3yU_xic=/fit-in/200x150/filters:strip_icc()/pic2270442.jpg",
       "coverUrl": "https://cf.geekdo-images.com/wLW7pFn0--20lEizEz5p3A__original/img/B1j7R-slq8wxgC71Sg1F7S1s7Kg=/0x0/filters:format(jpeg)/pic2270442.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 35.5
+      "typicalPlayTimeMinutes": 37
     },
     {
       "id": 315,
@@ -12354,7 +12430,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deduction"
+        "Deduction",
+        "Teams"
       ],
       "copies": [
         {
@@ -12645,7 +12722,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [],
       "playCount": 0,
       "uniquePlayDays": 0,
@@ -13515,7 +13594,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Teams"
+      ],
       "copies": [
         {
           "copyId": "4d75b063-8c7f-4dd2-b751-3deace540790",
@@ -14100,12 +14181,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
+      "playCount": 5,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/pTqrDgvCYTb4ASKBve0I8Q__thumb/img/fxijlggs-W2--HOBeiMByMVt2Ys=/fit-in/200x150/filters:strip_icc()/pic3247729.jpg",
       "coverUrl": "https://cf.geekdo-images.com/pTqrDgvCYTb4ASKBve0I8Q__original/img/BLX1EtGZDwX65S08-97ifJd-T9g=/0x0/filters:format(jpeg)/pic3247729.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 75
+      "typicalPlayTimeMinutes": 69
     },
     {
       "id": 623,
@@ -15114,6 +15195,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Teams",
         "Trick-taking"
       ],
       "copies": [
@@ -17716,7 +17798,8 @@
       "tags": [
         "Classic",
         "Outside",
-        "Party Game"
+        "Party Game",
+        "Teams"
       ],
       "copies": [
         {
@@ -18167,7 +18250,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deduction"
+        "Deduction",
+        "Teams"
       ],
       "copies": [
         {
@@ -18369,6 +18453,44 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 503,
+      "copyId": "a0729369-268f-40f2-b81c-e124f0d8bf1b",
+      "date": "2026-08-29",
+      "timestamp": "2026-08-29 19:50:44",
+      "durationMin": 69,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-08-23",
+      "timestamp": "2026-08-23 19:45:04",
+      "durationMin": 19,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 449,
+      "copyId": "86084cca-a484-45ba-b038-c819bde5af70",
+      "date": "2026-08-23",
+      "timestamp": "2026-08-23 16:16:24",
+      "durationMin": 49,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 153,
       "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
@@ -51280,5 +51402,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-08-23T03:46:30.000Z"
+  "generatedAt": "2026-08-30T01:50:44.000Z"
 }
