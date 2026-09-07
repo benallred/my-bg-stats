@@ -13,7 +13,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -236,7 +238,10 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative",
+        "Tile Placement"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -459,7 +464,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Social Deduction"
+      ],
       "copies": [
         {
           "copyId": "2621bd83-eaa3-421a-b75d-95f05be2d986",
@@ -1739,6 +1746,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Tile Placement",
         "Two Player"
       ],
       "copies": [
@@ -1803,7 +1811,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Teams"
+        "Cooperative",
+        "Teams",
+        "Tile Placement"
       ],
       "copies": [],
       "playCount": 1,
@@ -1824,7 +1834,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Teams"
+        "Cooperative",
+        "Teams",
+        "Tile Placement"
       ],
       "copies": [],
       "playCount": 1,
@@ -1914,7 +1926,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deduction",
+        "Social Deduction",
         "Teams"
       ],
       "copies": [],
@@ -1935,7 +1947,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Dexterity"
+      ],
       "copies": [
         {
           "copyId": "447e3f5f-9263-4239-9170-f24fea39eb9a",
@@ -1965,6 +1979,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deduction"
       ],
       "copies": [],
@@ -1985,7 +2000,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "060cbd12-859c-426e-92fc-e213074a7217",
@@ -2014,7 +2031,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Religious Themed"
+      ],
       "copies": [
         {
           "copyId": "d526a314-5556-40ca-a3d7-43f5ce27fef5",
@@ -2043,7 +2062,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Religious Themed"
+      ],
       "copies": [
         {
           "copyId": "3d4da575-37cf-4568-b02e-a87f8a7cc30f",
@@ -2421,7 +2442,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "e556cb21-7e09-49dc-adbd-9ef558cec2e9",
@@ -2540,7 +2563,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Tile Placement"
+      ],
       "copies": [
         {
           "copyId": "6b53db09-cf32-4ee5-ab1b-cc702ba160e1",
@@ -2870,7 +2895,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "abb4d931-3081-4542-9224-86f991abaa6d",
@@ -3543,7 +3570,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Social Deduction"
+      ],
       "copies": [
         {
           "copyId": "0fa7a4f4-948f-4e43-b31b-14ee530b73ca",
@@ -3723,7 +3752,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": true,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
@@ -3735,12 +3766,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 3,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__small/img/SRpAFFgh4mpyvCqzq8kc3B6_7F4=/fit-in/200x150/filters:strip_icc()/pic9171780.png",
       "coverUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__original/img/9ai5WpyU0jn1cCwAiRaGIQy-VqQ=/0x0/filters:format(png)/pic9171780.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 44
+      "typicalPlayTimeMinutes": 45
     },
     {
       "id": 4,
@@ -3753,6 +3784,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dexterity",
         "Teams"
       ],
       "copies": [
@@ -3784,6 +3816,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Social Deduction",
         "Teams"
       ],
       "copies": [
@@ -4354,6 +4387,35 @@
       "typicalPlayTimeMinutes": null
     },
     {
+      "id": 633,
+      "name": "Disney Villainous: Success at Any Cost",
+      "bggId": 463956,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "d7de93cb-d1fe-42b2-9f4e-f3a1fda22312",
+          "versionName": null,
+          "acquisitionDate": null,
+          "statusOwned": false,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/vBjn8ZJnbfPJg-6mAGrWNQ__small/img/Lu99J1z7eLqN8oongHi7LPwpw04=/fit-in/200x150/filters:strip_icc()/pic9415460.png",
+      "coverUrl": "https://cf.geekdo-images.com/vBjn8ZJnbfPJg-6mAGrWNQ__original/img/nRrC1XZKU2iNzz0o7GksEcHFu1E=/0x0/filters:format(png)/pic9415460.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 468,
       "name": "Disney Villainous: Sugar and Spite",
       "bggId": 411003,
@@ -4506,7 +4568,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Dexterity"
+      ],
       "copies": [
         {
           "copyId": "b04a013b-0e70-4ea3-945e-c934c63b87cc",
@@ -5107,6 +5171,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Social Deduction",
         "Teams"
       ],
       "copies": [],
@@ -6060,7 +6125,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "77944502-00b4-487f-bf9c-8e903089ab98",
@@ -6089,7 +6156,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "4f1bf6d6-471c-4fa8-bffc-7972da1f6703",
@@ -6118,7 +6187,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "4d60e988-0de5-48e8-86f6-fce437b6bcf0",
@@ -6178,7 +6249,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "0530575b-817d-47b1-ba3f-0d26460859ad",
@@ -6446,7 +6519,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Dexterity"
+      ],
       "copies": [
         {
           "copyId": "c013dcfe-0dc7-4637-a859-a742f3e44b4b",
@@ -6649,7 +6724,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "c84b126d-d8cf-4271-a185-d2208ae44d30",
@@ -6710,6 +6787,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Tile Placement",
         "Two Player"
       ],
       "copies": [
@@ -7011,7 +7089,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Religious Themed"
+      ],
       "copies": [
         {
           "copyId": "e4ae1bde-0fbd-481e-8b29-2726be220f9c",
@@ -7041,6 +7121,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deduction"
       ],
       "copies": [
@@ -7101,6 +7182,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deckbuilder"
       ],
       "copies": [
@@ -7377,7 +7459,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "5a6eac49-ef20-4b1d-a0da-86480fab89a6",
@@ -7459,6 +7543,7 @@
       "tags": [
         "Abstract",
         "Outside",
+        "Tile Placement",
         "Two Player"
       ],
       "copies": [
@@ -7943,6 +8028,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Outside",
         "Party Game"
       ],
@@ -7957,12 +8043,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 2,
+      "playCount": 9,
+      "uniquePlayDays": 3,
       "thumbnailUrl": "https://cf.geekdo-images.com/CaGsrg17dVTXSP_7sjbm9w__small/img/8ETGKUTLt4EU-wmmPZwoIcNmPxk=/fit-in/200x150/filters:strip_icc()/pic8381709.png",
       "coverUrl": "https://cf.geekdo-images.com/CaGsrg17dVTXSP_7sjbm9w__original/img/ihUpUOGP4Pms1ukM5GitbCeFni8=/0x0/filters:format(png)/pic8381709.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 19
+      "typicalPlayTimeMinutes": 3
     },
     {
       "id": 438,
@@ -8006,6 +8092,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dexterity",
         "Party Game"
       ],
       "copies": [],
@@ -8360,7 +8447,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
@@ -8390,6 +8479,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dexterity",
         "Two Player"
       ],
       "copies": [
@@ -8452,7 +8542,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Dexterity"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -8652,7 +8744,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Dexterity"
+      ],
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 1,
@@ -8967,7 +9061,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "7769b7b9-c37f-4cb8-b4f4-e85aa1096ef4",
@@ -9086,7 +9182,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "aefd4b8a-2b74-4917-b716-5c3b44786d23",
@@ -9205,7 +9303,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "d442d4bc-4c18-4bed-b931-c53a8ef854a7",
@@ -9234,7 +9334,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "fb301501-7a5c-47cb-ab58-214116646c21",
@@ -9264,6 +9366,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deckbuilder"
       ],
       "copies": [
@@ -10466,7 +10569,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": true,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "6b35b1cd-70c8-43fa-b770-09b0873c22f2",
@@ -10495,7 +10600,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": true,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "c9dd5c94-fe65-420b-b090-9eff6377fa60",
@@ -10670,7 +10777,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "7123fbff-2834-4eee-9ca9-15b1b7ed42e9",
@@ -10747,7 +10856,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Religious Themed"
+      ],
       "copies": [
         {
           "copyId": "db634ef2-6921-415b-a9da-a70e40defde3",
@@ -10836,7 +10947,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "9ec24544-de26-4af7-9320-3996174113cc",
@@ -11077,7 +11190,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Religious Themed"
+      ],
       "copies": [
         {
           "copyId": "bc2a018d-31b0-4474-a692-1437d68deeb0",
@@ -11370,6 +11485,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Solo"
       ],
       "copies": [
@@ -11383,8 +11499,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 7,
-      "uniquePlayDays": 7,
+      "playCount": 8,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/DnP80GbML1Xog6EetWb9fA__thumb/img/391B_HelHCACrnGcgTgbrboHpWA=/fit-in/200x150/filters:strip_icc()/pic6138366.jpg",
       "coverUrl": "https://cf.geekdo-images.com/DnP80GbML1Xog6EetWb9fA__original/img/LdzWRfdzbbhkObNdL7R8Y2pezuw=/0x0/filters:format(jpeg)/pic6138366.jpg",
       "expansionIds": [
@@ -11423,7 +11539,7 @@
         401,
         524
       ],
-      "typicalPlayTimeMinutes": 65
+      "typicalPlayTimeMinutes": 74
     },
     {
       "id": 384,
@@ -12287,7 +12403,10 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Social Deduction",
+        "Tile Placement"
+      ],
       "copies": [
         {
           "copyId": "b700bb61-c78a-4889-8b56-58fb48f4bd20",
@@ -12348,6 +12467,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Trick-taking",
         "Two Player"
       ],
@@ -12512,7 +12632,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "b1a97c11-3127-4c9a-8b62-8430335172b9",
@@ -12693,7 +12815,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Tile Placement"
+      ],
       "copies": [
         {
           "copyId": "7f660ca2-fa95-4a0d-81b9-c35520490af7",
@@ -12723,6 +12847,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Social Deduction",
         "Teams"
       ],
       "copies": [],
@@ -12744,6 +12869,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deckbuilder"
       ],
       "copies": [
@@ -12830,13 +12956,14 @@
       "id": 480,
       "name": "Shards of Infinity: Saga Collection",
       "bggId": 393871,
-      "year": 2024,
+      "year": 2025,
       "rating": 9,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deckbuilder"
       ],
       "copies": [
@@ -12950,6 +13077,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Party Game"
       ],
       "copies": [
@@ -13089,6 +13217,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deckbuilder"
       ],
       "copies": [
@@ -13375,7 +13504,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "891d2253-2249-42f3-8551-cb4cdc2385ec",
@@ -13404,7 +13535,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -13716,7 +13849,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "591aa4ef-8340-4909-b6a0-2a578954c5ce",
@@ -13869,7 +14004,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Tile Placement"
+      ],
       "copies": [
         {
           "copyId": "cbf2cffc-615b-4c4c-b31a-947c8626e103",
@@ -14015,7 +14152,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "5e26c3b0-b701-40f6-90e2-8b8a8702f17e",
@@ -14107,7 +14246,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Drafting"
+        "Drafting",
+        "Tile Placement"
       ],
       "copies": [
         {
@@ -14167,8 +14307,10 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deckbuilder",
-        "Solo"
+        "Solo",
+        "Teams"
       ],
       "copies": [
         {
@@ -14445,7 +14587,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Tile Placement"
+      ],
       "copies": [
         {
           "copyId": "5ca602ca-1eaa-4c13-b86f-8f3df8e9c484",
@@ -14867,7 +15011,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Religious Themed"
+      ],
       "copies": [
         {
           "copyId": "e45c9513-b47e-47e4-b4ca-22a799e23e5c",
@@ -14896,7 +15042,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -15025,6 +15173,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Trick-taking"
       ],
       "copies": [
@@ -15075,6 +15224,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Trick-taking"
       ],
       "copies": [
@@ -15109,6 +15259,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dexterity",
         "Party Game"
       ],
       "copies": [
@@ -15451,7 +15602,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -15846,7 +15999,10 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative",
+        "Social Deduction"
+      ],
       "copies": [
         {
           "copyId": "ccc69eed-ba0f-46c1-bd44-5607660055ee",
@@ -15904,7 +16060,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Tile Placement"
+      ],
       "copies": [
         {
           "copyId": "fee88055-5196-42f1-857b-fc65d4f97b79",
@@ -16160,7 +16318,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -16179,7 +16339,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [
         {
           "copyId": "5334f887-41e5-4190-8a73-d289c02a8c22",
@@ -16208,7 +16370,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Tile Placement"
+      ],
       "copies": [],
       "playCount": 4,
       "uniquePlayDays": 2,
@@ -16305,6 +16469,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Outside"
       ],
       "copies": [
@@ -17442,7 +17607,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Cooperative"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -17492,7 +17659,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Religious Themed"
+      ],
       "copies": [
         {
           "copyId": "74ac12ff-9798-4e45-8a2c-6cbe759f64c6",
@@ -17611,6 +17780,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Cooperative",
         "Deduction"
       ],
       "copies": [
@@ -18453,6 +18623,118 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 626,
+      "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
+      "date": "2026-09-06",
+      "timestamp": "2026-09-06 18:46:59",
+      "durationMin": 46,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-09-03",
+      "timestamp": "2026-09-03 12:59:26",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        3,
+        116,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-09-03",
+      "timestamp": "2026-09-03 12:59:11",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        3,
+        116,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-09-03",
+      "timestamp": "2026-09-03 12:58:55",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        3,
+        116,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-09-03",
+      "timestamp": "2026-09-03 12:58:44",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        3,
+        116,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-09-03",
+      "timestamp": "2026-09-03 12:58:25",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        3,
+        116,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 620,
+      "copyId": "443403a8-409a-4f9c-ab0e-eebda3105988",
+      "date": "2026-09-03",
+      "timestamp": "2026-09-03 12:56:36",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        3,
+        116,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 362,
+      "copyId": "95897d51-56d8-4b7c-b2d8-60019054bfdb",
+      "date": "2026-08-30",
+      "timestamp": "2026-08-30 13:50:59",
+      "durationMin": 235,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 503,
       "copyId": "a0729369-268f-40f2-b81c-e124f0d8bf1b",
@@ -51402,5 +51684,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-08-30T01:50:44.000Z"
+  "generatedAt": "2026-09-07T00:46:59.000Z"
 }
