@@ -4809,7 +4809,7 @@
       "id": 588,
       "name": "Dragons of Etchinstone: Siege",
       "bggId": 443422,
-      "year": 2025,
+      "year": 2026,
       "rating": null,
       "isBaseGame": false,
       "isExpansion": true,
@@ -6326,12 +6326,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__small/img/Bjg_3ovfjRqjGtYEaEj6107UGWY=/fit-in/200x150/filters:strip_icc()/pic1513328.jpg",
       "coverUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__original/img/_tiZYJMEc26kgt7uNF6IM8A-8As=/0x0/filters:format(jpeg)/pic1513328.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 45.5
     },
     {
       "id": 360,
@@ -13258,7 +13258,7 @@
           "versionName": "English edition",
           "acquisitionDate": "2024-12-28",
           "statusOwned": true,
-          "pricePaid": 46.31,
+          "pricePaid": 94.89,
           "currency": "USD",
           "publicComment": null
         }
@@ -13272,6 +13272,35 @@
         566
       ],
       "typicalPlayTimeMinutes": 161
+    },
+    {
+      "id": 634,
+      "name": "Small-Time Heroes: Spirit & Spells",
+      "bggId": 462616,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "0a288bb0-bf76-41ce-817b-494992c2c145",
+          "versionName": "English first edition",
+          "acquisitionDate": "2026-01-20",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/0lUuR8Kd_S003Fdw7pTzQQ__small/img/cXfxr9WTIZHeNj7iAZ604etzB8E=/fit-in/200x150/filters:strip_icc()/pic9344782.png",
+      "coverUrl": "https://cf.geekdo-images.com/0lUuR8Kd_S003Fdw7pTzQQ__original/img/mYdJpTkLGcYvpYn63ZM3hXaPZh0=/0x0/filters:format(png)/pic9344782.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 565,
@@ -15914,7 +15943,7 @@
       "id": 358,
       "name": "The Sherlock Files: Demo Deck – Whereabouts Unknown",
       "bggId": 266446,
-      "year": 2021,
+      "year": 2018,
       "rating": null,
       "isBaseGame": true,
       "isExpansion": false,
@@ -18623,6 +18652,30 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 621,
+      "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
+      "date": "2026-09-11",
+      "timestamp": "2026-09-11 21:11:06",
+      "durationMin": 22,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 621,
+      "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
+      "date": "2026-09-10",
+      "timestamp": "2026-09-10 21:12:42",
+      "durationMin": 69,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 626,
       "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
@@ -51684,5 +51737,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-09-07T00:46:59.000Z"
+  "generatedAt": "2026-09-12T03:11:06.000Z"
 }
