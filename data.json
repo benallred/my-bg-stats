@@ -3999,7 +3999,7 @@
       "id": 84,
       "name": "Dead Man's Draw: Captain Carcass",
       "bggId": 149155,
-      "year": 2015,
+      "year": 2014,
       "rating": null,
       "isBaseGame": true,
       "isExpansion": false,
@@ -6781,7 +6781,7 @@
       "name": "Glasgow",
       "bggId": 301716,
       "year": 2020,
-      "rating": null,
+      "rating": 7,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -6801,12 +6801,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 3,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/jf8tzy1AGz0hXF4_tre32A__thumb/img/FnYsm9_z8Q2LwC-2ZpSGr_1zyKY=/fit-in/200x150/filters:strip_icc()/pic5413002.jpg",
       "coverUrl": "https://cf.geekdo-images.com/jf8tzy1AGz0hXF4_tre32A__original/img/-cPQmUylzHCkpMRh3FBDMrQbh4E=/0x0/filters:format(jpeg)/pic5413002.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 44
+      "typicalPlayTimeMinutes": 42.5
     },
     {
       "id": 14,
@@ -18060,7 +18060,7 @@
       "id": 583,
       "name": "Zoo King: 2025 Promo Card Pack",
       "bggId": 437349,
-      "year": 2026,
+      "year": 2025,
       "rating": null,
       "isBaseGame": false,
       "isExpansion": true,
@@ -18652,6 +18652,19 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 495,
+      "copyId": "d4ef1bce-7282-4559-9a44-5e138265ff9d",
+      "date": "2026-09-12",
+      "timestamp": "2026-09-12 20:17:06",
+      "durationMin": 41,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 621,
       "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
@@ -51737,5 +51750,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-09-12T03:11:06.000Z"
+  "generatedAt": "2026-09-13T02:17:06.000Z"
 }
