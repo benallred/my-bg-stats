@@ -14,7 +14,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Speed"
       ],
       "copies": [],
       "playCount": 2,
@@ -243,12 +244,12 @@
         "Tile Placement"
       ],
       "copies": [],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/KcE2t-zmo-p-POO8fPTUmA__thumb/img/Atmy64jQdwgenpROZdR35HLdM5A=/fit-in/200x150/filters:strip_icc()/pic5674430.png",
       "coverUrl": "https://cf.geekdo-images.com/KcE2t-zmo-p-POO8fPTUmA__original/img/C6HMgkML2-KMopI_T4ZfbvvgIJM=/0x0/filters:format(png)/pic5674430.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 28
+      "typicalPlayTimeMinutes": 32
     },
     {
       "id": 614,
@@ -1886,7 +1887,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Speed"
       ],
       "copies": [
         {
@@ -1948,7 +1950,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Dexterity"
+        "Dexterity",
+        "Speed"
       ],
       "copies": [
         {
@@ -4569,7 +4572,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Dexterity"
+        "Dexterity",
+        "Speed"
       ],
       "copies": [
         {
@@ -4954,7 +4958,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Speed"
+      ],
       "copies": [
         {
           "copyId": "7ad18423-bb0a-4303-a8e0-0e3b821ae0f0",
@@ -6326,12 +6332,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 2,
-      "uniquePlayDays": 2,
+      "playCount": 4,
+      "uniquePlayDays": 3,
       "thumbnailUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__small/img/Bjg_3ovfjRqjGtYEaEj6107UGWY=/fit-in/200x150/filters:strip_icc()/pic1513328.jpg",
       "coverUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__original/img/_tiZYJMEc26kgt7uNF6IM8A-8As=/0x0/filters:format(jpeg)/pic1513328.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 45.5
+      "typicalPlayTimeMinutes": 24
     },
     {
       "id": 360,
@@ -7460,7 +7466,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Speed"
       ],
       "copies": [
         {
@@ -8448,7 +8455,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Speed"
       ],
       "copies": [
         {
@@ -8480,6 +8488,7 @@
       "isNonReplayable": false,
       "tags": [
         "Dexterity",
+        "Speed",
         "Two Player"
       ],
       "copies": [
@@ -8645,6 +8654,66 @@
       "typicalPlayTimeMinutes": null
     },
     {
+      "id": 640,
+      "name": "Logic & Lore",
+      "bggId": 410238,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "3b4f6289-2b1f-4efe-a521-8d3597b9f8bb",
+          "versionName": null,
+          "acquisitionDate": "2026-02-16",
+          "statusOwned": true,
+          "pricePaid": 44,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/lrHAQv_mccR-gulDoHxaJA__small/img/zKAq5l0g8qGZgy0kIVmzK4FgUEA=/fit-in/200x150/filters:strip_icc()/pic8003054.png",
+      "coverUrl": "https://cf.geekdo-images.com/lrHAQv_mccR-gulDoHxaJA__original/img/YciAtUa8J2DkWhR8hYFi9nlNrHk=/0x0/filters:format(png)/pic8003054.png",
+      "expansionIds": [
+        638
+      ],
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 638,
+      "name": "Logic & Lore: Variance",
+      "bggId": 464052,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "ae5c5f58-9da0-4f9b-8ab6-51add20ffcaf",
+          "versionName": "English Edition",
+          "acquisitionDate": "2026-02-16",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/6-vUxs1CE_HlVR-z2Ui8Fg__small/img/7wvD7pfdV6yE7dZRKKVn532eHYY=/fit-in/200x150/filters:strip_icc()/pic9408846.png",
+      "coverUrl": "https://cf.geekdo-images.com/6-vUxs1CE_HlVR-z2Ui8Fg__original/img/2uYRiR4ztsh_M_fSn7GBdcKMGwc=/0x0/filters:format(png)/pic9408846.png",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 128,
       "name": "Loop Inc.",
       "bggId": 163027,
@@ -8745,7 +8814,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Dexterity"
+        "Dexterity",
+        "Speed"
       ],
       "copies": [],
       "playCount": 3,
@@ -9062,7 +9132,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Speed"
       ],
       "copies": [
         {
@@ -9079,6 +9150,35 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/mVC1JCvb488GJFhNF1idsA__thumb/img/Bx9UJsNZV8eF7kebFJlFoCqvtUw=/fit-in/200x150/filters:strip_icc()/pic2256875.png",
       "coverUrl": "https://cf.geekdo-images.com/mVC1JCvb488GJFhNF1idsA__original/img/G1UroUSm25FSY7LQXpPu6f6--20=/0x0/filters:format(png)/pic2256875.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 641,
+      "name": "Micro Hero: Achilles",
+      "bggId": 468524,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "079564d4-ab64-4293-9e42-448a1386693c",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-04-07",
+          "statusOwned": true,
+          "pricePaid": 9.07,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/O9oOWac1RAYqkYKI1e4uOg__small/img/Ulh5feox2FdKLs5kc35eVYKVhQo=/fit-in/200x150/filters:strip_icc()/pic9515719.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/O9oOWac1RAYqkYKI1e4uOg__original/img/7ADfHvLODUBr1ZQXyh7s2ZKHgxg=/0x0/filters:format(jpeg)/pic9515719.jpg",
       "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
@@ -9113,6 +9213,35 @@
       "coverUrl": "https://cf.geekdo-images.com/mSEGtI0XkNe9qk-fsOfCEg__original/img/lumQXHf71GlAQxAud-s6O3nYx48=/0x0/filters:format(jpeg)/pic8584556.jpg",
       "expansionIds": [],
       "typicalPlayTimeMinutes": 19
+    },
+    {
+      "id": 639,
+      "name": "Micro Hero: Ulysses",
+      "bggId": 465364,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "a697727b-1e17-4d24-8876-53bddcd007d0",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-04-07",
+          "statusOwned": true,
+          "pricePaid": 9.07,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/DpeZK8l3bKWoLvABVIkl1A__small/img/X5cpm4Ja4xqwxPOvxPs7ZGTPmKU=/fit-in/200x150/filters:strip_icc()/pic9445557.png",
+      "coverUrl": "https://cf.geekdo-images.com/DpeZK8l3bKWoLvABVIkl1A__original/img/AqU9AaLYGvncIZG1NvNyZPZQ1kk=/0x0/filters:format(png)/pic9445557.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 27,
@@ -10212,8 +10341,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 24,
-      "uniquePlayDays": 12,
+      "playCount": 26,
+      "uniquePlayDays": 13,
       "thumbnailUrl": "https://cf.geekdo-images.com/2DyxMVASynw87LRULZuyqA__thumb/img/yIUSMoN8O5FeDZjXa4vreKj5Ogw=/fit-in/200x150/filters:strip_icc()/pic4657706.jpg",
       "coverUrl": "https://cf.geekdo-images.com/2DyxMVASynw87LRULZuyqA__original/img/IHLuH9f5dB6jJn74cdVdMixAUKg=/0x0/filters:format(jpeg)/pic4657706.jpg",
       "expansionIds": [],
@@ -10307,12 +10436,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 8,
-      "uniquePlayDays": 7,
+      "playCount": 9,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__small/img/Q3W4poMS4btD-HZLervgqbSCtmE=/fit-in/200x150/filters:strip_icc()/pic7070194.jpg",
       "coverUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__original/img/oRsIxp72iv58128KFdqvjG6Gz64=/0x0/filters:format(jpeg)/pic7070194.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 26
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 616,
@@ -12373,7 +12502,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Speed"
       ],
       "copies": [
         {
@@ -14034,6 +14164,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Speed",
         "Tile Placement"
       ],
       "copies": [
@@ -15334,8 +15465,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 11,
-      "uniquePlayDays": 10,
+      "playCount": 12,
+      "uniquePlayDays": 11,
       "thumbnailUrl": "https://cf.geekdo-images.com/bn4PzmubJyyZmo-sHO6i8Q__thumb/img/UTnuNns9SCYEuU74MCqS2naqTwY=/fit-in/200x150/filters:strip_icc()/pic5980577.png",
       "coverUrl": "https://cf.geekdo-images.com/bn4PzmubJyyZmo-sHO6i8Q__original/img/rWTynOnpmyXWsIQGxtBgbXY0pC8=/0x0/filters:format(png)/pic5980577.png",
       "expansionIds": [],
@@ -15519,7 +15650,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Speed"
+      ],
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -17720,7 +17853,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Speed"
       ],
       "copies": [
         {
@@ -17860,9 +17994,70 @@
       "coverUrl": "https://cf.geekdo-images.com/GGi5aUL1dVQIrytxgXow4g__original/img/ZpVBZXZhs1plAi5s4M7Db3YwBLc=/0x0/filters:format(png)/pic7604558.png",
       "expansionIds": [
         502,
-        553
+        553,
+        635,
+        636,
+        637
       ],
       "typicalPlayTimeMinutes": 122
+    },
+    {
+      "id": 635,
+      "name": "World Wonders: Bighorn Medicine Wheel Promo",
+      "bggId": 455303,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "240d2d35-1b38-4801-8227-22d7db388f20",
+          "versionName": null,
+          "acquisitionDate": "2026-09-14",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/21LwTgydsqIK4wwKWi7o-A__small/img/QhE9o2uRa0_FabP6XBMNE6B7nFs=/fit-in/200x150/filters:strip_icc()/pic9169932.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/21LwTgydsqIK4wwKWi7o-A__original/img/nhndRT4G5wdAfbxdYDgKFsw5GHQ=/0x0/filters:format(jpeg)/pic9169932.jpg",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 636,
+      "name": "World Wonders: Cristo Redentor Promo Pack",
+      "bggId": 422261,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "2dd6e885-4890-46e6-bb2b-d9d66e430400",
+          "versionName": null,
+          "acquisitionDate": "2026-09-14",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/SwJjoJiwljWkYNS0Qc8B-w__small/img/2MvrUcyTd27CWIvD_6RwH79GiK0=/fit-in/200x150/filters:strip_icc()/pic8958298.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/SwJjoJiwljWkYNS0Qc8B-w__original/img/bEedfDGxlznRT0to3ZYK0sO5xIM=/0x0/filters:format(jpeg)/pic8958298.jpg",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 553,
@@ -17890,6 +18085,35 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/i9_mrdk9EVqX7tRXSzwStw__thumb/img/Psd6yuulqOcHYN0zlhAYUzkEgkc=/fit-in/200x150/filters:strip_icc()/pic8661113.png",
       "coverUrl": "https://cf.geekdo-images.com/i9_mrdk9EVqX7tRXSzwStw__original/img/9sZJLv--HQRJ2M_1n8snyCpXFto=/0x0/filters:format(png)/pic8661113.png",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 637,
+      "name": "World Wonders: Mont-Saint-Michel Promo",
+      "bggId": 454413,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "58acb3f2-c3f9-408f-99b7-74bd22f78654",
+          "versionName": null,
+          "acquisitionDate": "2026-09-14",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/WcABg67T0RwwbEatOFGFVA__small/img/sf01Ll5vl6-jEbdin_QJzca0PCU=/fit-in/200x150/filters:strip_icc()/pic9168604.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/WcABg67T0RwwbEatOFGFVA__original/img/l5Gozsoiw7yvdH0zWtR1rJ1DLCg=/0x0/filters:format(jpeg)/pic9168604.jpg",
       "expansionIds": null,
       "typicalPlayTimeMinutes": null
     },
@@ -18360,7 +18584,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Speed"
       ],
       "copies": [
         {
@@ -18630,7 +18855,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Speed"
       ],
       "copies": [
         {
@@ -18652,6 +18878,98 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 70,
+      "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
+      "date": "2026-09-19",
+      "timestamp": "2026-09-19 21:29:30",
+      "durationMin": 6,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 70,
+      "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
+      "date": "2026-09-19",
+      "timestamp": "2026-09-19 21:22:12",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 497,
+      "copyId": "8c2b2483-90af-4679-9e51-494233f9f538",
+      "date": "2026-09-17",
+      "timestamp": "2026-09-17 12:08:30",
+      "durationMin": 25,
+      "durationEstimated": false,
+      "players": [
+        74,
+        3
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-09-16",
+      "timestamp": "2026-09-16 20:12:51",
+      "durationMin": 16,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 551,
+      "copyId": null,
+      "date": "2026-09-16",
+      "timestamp": "2026-09-16 13:10:32",
+      "durationMin": 36,
+      "durationEstimated": false,
+      "players": [
+        3,
+        78,
+        117
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 621,
+      "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
+      "date": "2026-09-13",
+      "timestamp": "2026-09-13 14:59:45",
+      "durationMin": 19,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 621,
+      "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
+      "date": "2026-09-13",
+      "timestamp": "2026-09-13 14:33:57",
+      "durationMin": 26,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 495,
       "copyId": "d4ef1bce-7282-4559-9a44-5e138265ff9d",
@@ -51694,6 +52012,10 @@
     {
       "playerId": 116,
       "name": "Jon Turner"
+    },
+    {
+      "playerId": 117,
+      "name": "Nick Mahe"
     }
   ],
   "locations": [
@@ -51750,5 +52072,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-09-13T02:17:06.000Z"
+  "generatedAt": "2026-09-20T03:29:30.000Z"
 }
