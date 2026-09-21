@@ -3864,8 +3864,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 28,
-      "uniquePlayDays": 27,
+      "playCount": 29,
+      "uniquePlayDays": 28,
       "thumbnailUrl": "https://cf.geekdo-images.com/mK2jITNJ3vgNWKbliMpErQ__thumb/img/irnxGy1_lItTKz8J_4OjgwB7oGA=/fit-in/200x150/filters:strip_icc()/pic2772192.jpg",
       "coverUrl": "https://cf.geekdo-images.com/mK2jITNJ3vgNWKbliMpErQ__original/img/Klr6u2U7Qq7VkfftF6B2zVeza6E=/0x0/filters:format(jpeg)/pic2772192.jpg",
       "expansionIds": [
@@ -6332,12 +6332,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 3,
+      "playCount": 5,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__small/img/Bjg_3ovfjRqjGtYEaEj6107UGWY=/fit-in/200x150/filters:strip_icc()/pic1513328.jpg",
       "coverUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__original/img/_tiZYJMEc26kgt7uNF6IM8A-8As=/0x0/filters:format(jpeg)/pic1513328.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 24
+      "typicalPlayTimeMinutes": 26
     },
     {
       "id": 360,
@@ -10467,12 +10467,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 3,
-      "uniquePlayDays": 3,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__small/img/7rgnYRe9NpOSpixs0FXmEGkKfxU=/fit-in/200x150/filters:strip_icc()/pic8307047.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__original/img/pY5DDByB6SA60PwWuuzWgFG2soc=/0x0/filters:format(jpeg)/pic8307047.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 23
+      "typicalPlayTimeMinutes": 24
     },
     {
       "id": 598,
@@ -15776,6 +15776,35 @@
       "typicalPlayTimeMinutes": 160
     },
     {
+      "id": 642,
+      "name": "The Lord of the Rings: The Confrontation",
+      "bggId": 18833,
+      "year": 2005,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "3861a674-d216-414b-a89b-681cfbdd6a42",
+          "versionName": "English Ultimate edition",
+          "acquisitionDate": "2025-07-15",
+          "statusOwned": true,
+          "pricePaid": 149.36,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/i5cEvhnKYPzJOXCcKFfMPQ__small/img/78VSNRD26mtfJ52HaqCjHSWPtR8=/fit-in/200x150/filters:strip_icc()/pic8933169.png",
+      "coverUrl": "https://cf.geekdo-images.com/i5cEvhnKYPzJOXCcKFfMPQ__original/img/Swgaf_llgvkHu4npTa2OUEk95SU=/0x0/filters:format(png)/pic8933169.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 75,
       "name": "The Lord of the Rings: The Fellowship of the Ring Deck-Building Game",
       "bggId": 127127,
@@ -18878,6 +18907,44 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 20,
+      "copyId": "6ddc48ac-b293-4473-bd3b-be4c88ab240a",
+      "date": "2026-09-20",
+      "timestamp": "2026-09-20 20:03:56",
+      "durationMin": 21,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 621,
+      "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
+      "date": "2026-09-20",
+      "timestamp": "2026-09-20 19:26:46",
+      "durationMin": 30,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 616,
+      "copyId": "583211f1-6412-4f3b-a524-d8feb52179c4",
+      "date": "2026-09-20",
+      "timestamp": "2026-09-20 16:21:54",
+      "durationMin": 25,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 70,
       "copyId": "b72d476f-9248-4d76-a691-c94dabec8570",
@@ -52072,5 +52139,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-09-20T03:29:30.000Z"
+  "generatedAt": "2026-09-21T02:03:56.000Z"
 }
