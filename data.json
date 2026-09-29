@@ -2035,7 +2035,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Religious Themed"
+        "Religious Themed",
+        "War"
       ],
       "copies": [
         {
@@ -2878,7 +2879,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Polyomino"
+        "Polyomino",
+        "Smurf-and-Write"
       ],
       "copies": [],
       "playCount": 1,
@@ -2930,7 +2932,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Outside"
+        "Outside",
+        "Smurf-and-Write"
       ],
       "copies": [
         {
@@ -4989,7 +4992,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Smurf-and-Write"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -8152,7 +8157,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player"
+        "Two Player",
+        "War"
       ],
       "copies": [
         {
@@ -8424,7 +8430,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player"
+        "Two Player",
+        "War"
       ],
       "copies": [
         {
@@ -8854,7 +8861,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Smurf-and-Write"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -10870,12 +10879,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
+      "playCount": 5,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/jvHGs95ShI8VEhDBdxKs6w__thumb/img/mjMr9BgjDUiz1ITatBLPOMe-QOw=/fit-in/200x150/filters:strip_icc()/pic7621070.png",
       "coverUrl": "https://cf.geekdo-images.com/jvHGs95ShI8VEhDBdxKs6w__original/img/xzQGx7DR_4w0co_tte0KhCqZqcA=/0x0/filters:format(png)/pic7621070.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 46.5
+      "typicalPlayTimeMinutes": 48
     },
     {
       "id": 458,
@@ -11046,7 +11055,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player"
+        "Two Player",
+        "War"
       ],
       "copies": [
         {
@@ -12612,12 +12622,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 10,
-      "uniquePlayDays": 7,
+      "playCount": 11,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/WdYRHQ_ILHTV_ECMGF27Gw__thumb/img/y8Hlu0-CQDQAO6d6zM8YJ3dVevI=/fit-in/200x150/filters:strip_icc()/pic7267575.jpg",
       "coverUrl": "https://cf.geekdo-images.com/WdYRHQ_ILHTV_ECMGF27Gw__original/img/i9rMBmWzjVl2Aep-xUqWg4u0ADA=/0x0/filters:format(jpeg)/pic7267575.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 32.5
+      "typicalPlayTimeMinutes": 34
     },
     {
       "id": 165,
@@ -13825,7 +13835,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player"
+        "Two Player",
+        "War"
       ],
       "copies": [
         {
@@ -13918,7 +13929,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player"
+        "Two Player",
+        "War"
       ],
       "copies": [
         {
@@ -16611,7 +16623,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Smurf-and-Write"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -17552,7 +17566,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Smurf-and-Write"
+      ],
       "copies": [
         {
           "copyId": "b4cfafb0-a01c-4973-a0da-7632b6557381",
@@ -17576,7 +17592,7 @@
       "name": "War Chest",
       "bggId": 249259,
       "year": 2018,
-      "rating": null,
+      "rating": 9.5,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -17594,11 +17610,11 @@
           "statusOwned": true,
           "pricePaid": 63.87,
           "currency": "USD",
-          "publicComment": null
+          "publicComment": "Drops half a point due to the need every game to consult the rules for an interaction between two units."
         }
       ],
-      "playCount": 17,
-      "uniquePlayDays": 16,
+      "playCount": 18,
+      "uniquePlayDays": 17,
       "thumbnailUrl": "https://cf.geekdo-images.com/BryJNSSDbCohXeaJPx3tpw__thumb/img/5fmJlAM307xX3zozMnStTuWYphI=/fit-in/200x150/filters:strip_icc()/pic4232048.png",
       "coverUrl": "https://cf.geekdo-images.com/BryJNSSDbCohXeaJPx3tpw__original/img/pgmg83e1lUqNo7FTLdscWNDwlPE=/0x0/filters:format(png)/pic4232048.png",
       "expansionIds": [
@@ -17607,7 +17623,7 @@
         463,
         464
       ],
-      "typicalPlayTimeMinutes": 44
+      "typicalPlayTimeMinutes": 44.5
     },
     {
       "id": 463,
@@ -17851,7 +17867,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Religious Themed"
+        "Religious Themed",
+        "War"
       ],
       "copies": [
         {
@@ -18907,6 +18924,48 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 431,
+      "copyId": null,
+      "date": "2026-09-27",
+      "timestamp": "2026-09-27 18:02:34",
+      "durationMin": 99,
+      "durationEstimated": false,
+      "players": [
+        118,
+        3,
+        89,
+        35,
+        11
+      ],
+      "locationId": 7
+    },
+    {
+      "gameId": 243,
+      "copyId": "d81dae06-2a2d-4570-8639-8edee196df21",
+      "date": "2026-09-26",
+      "timestamp": "2026-09-26 13:26:41",
+      "durationMin": 58,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 535,
+      "copyId": "ed8b10d2-26b5-48ad-a244-5be8fecdac40",
+      "date": "2026-09-25",
+      "timestamp": "2026-09-25 20:42:13",
+      "durationMin": 36,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 20,
       "copyId": "6ddc48ac-b293-4473-bd3b-be4c88ab240a",
@@ -52083,6 +52142,10 @@
     {
       "playerId": 117,
       "name": "Nick Mahe"
+    },
+    {
+      "playerId": 118,
+      "name": "Becky"
     }
   ],
   "locations": [
@@ -52139,5 +52202,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-09-21T02:03:56.000Z"
+  "generatedAt": "2026-09-28T00:02:34.000Z"
 }
