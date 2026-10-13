@@ -2042,7 +2042,7 @@
       "isNonReplayable": false,
       "tags": [
         "Religious Themed",
-        "War"
+        "Replaces:War"
       ],
       "copies": [
         {
@@ -2909,7 +2909,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Dragon"
       ],
       "copies": [
         {
@@ -3189,7 +3190,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Dragon"
       ],
       "copies": [],
       "playCount": 1,
@@ -3859,13 +3861,14 @@
       "name": "Dale of Merchants",
       "bggId": 176165,
       "year": 2015,
-      "rating": null,
+      "rating": 10,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Set Collection"
       ],
       "copies": [
         {
@@ -4620,7 +4623,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Drafting"
+        "Dinosaur",
+        "Drafting",
+        "Set Collection"
       ],
       "copies": [
         {
@@ -4713,7 +4718,8 @@
       "isNonReplayable": false,
       "tags": [
         "Area Control",
-        "Dice"
+        "Dice",
+        "Dragon"
       ],
       "copies": [
         {
@@ -4775,6 +4781,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dragon",
         "Outside",
         "Solo"
       ],
@@ -4868,7 +4875,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Dice"
+        "Dice",
+        "Dragon",
+        "Replaces:Phase 10"
       ],
       "copies": [
         {
@@ -5146,6 +5155,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Set Collection",
         "Worker Placement"
       ],
       "copies": [
@@ -5251,7 +5261,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Set Collection"
+      ],
       "copies": [
         {
           "copyId": "f85b784f-3f55-418c-991b-6863469dd955",
@@ -6856,7 +6868,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Set Collection"
+      ],
       "copies": [
         {
           "copyId": "6cfa8391-9894-43af-b55a-682b5016509d",
@@ -7190,7 +7204,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Dinosaur"
+      ],
       "copies": [
         {
           "copyId": "7360926a-0071-4bbf-bd29-bbe2d1558a43",
@@ -7221,7 +7237,8 @@
       "isNonReplayable": false,
       "tags": [
         "Cooperative",
-        "Deckbuilder"
+        "Deckbuilder",
+        "Dragon"
       ],
       "copies": [
         {
@@ -8102,6 +8119,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Set Collection",
         "Two Player"
       ],
       "copies": [
@@ -8186,8 +8204,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player",
-        "War"
+        "Dinosaur",
+        "Replaces:War",
+        "Two Player"
       ],
       "copies": [
         {
@@ -8461,8 +8480,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player",
-        "War"
+        "Two Player"
       ],
       "copies": [
         {
@@ -9556,12 +9574,12 @@
           "publicComment": "Fiddliness of training track drops this half a point."
         }
       ],
-      "playCount": 7,
-      "uniquePlayDays": 7,
+      "playCount": 8,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/Fr_k9-uU3hEUnw_3s-UnZQ__thumb/img/YLbnyONFWmI-9bu5J30aZke7BjI=/fit-in/200x150/filters:strip_icc()/pic8290518.png",
       "coverUrl": "https://cf.geekdo-images.com/Fr_k9-uU3hEUnw_3s-UnZQ__original/img/XhMQVwHzTcQPTS_2cjIn_NdZJwM=/0x0/filters:format(png)/pic8290518.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 73
+      "typicalPlayTimeMinutes": 72
     },
     {
       "id": 542,
@@ -9850,6 +9868,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deckbuilder",
+        "Dragon",
         "Push Your Luck",
         "Solo"
       ],
@@ -10483,12 +10502,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 9,
-      "uniquePlayDays": 8,
+      "playCount": 10,
+      "uniquePlayDays": 9,
       "thumbnailUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__small/img/Q3W4poMS4btD-HZLervgqbSCtmE=/fit-in/200x150/filters:strip_icc()/pic7070194.jpg",
       "coverUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__original/img/oRsIxp72iv58128KFdqvjG6Gz64=/0x0/filters:format(jpeg)/pic7070194.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 26
     },
     {
       "id": 616,
@@ -10899,7 +10918,8 @@
       "isNonReplayable": false,
       "tags": [
         "Classic",
-        "Outside"
+        "Outside",
+        "Set Collection"
       ],
       "copies": [
         {
@@ -11074,7 +11094,7 @@
       "copies": [
         {
           "copyId": "1d30d8c4-287e-4b4c-852d-f066cbfefef4",
-          "versionName": null,
+          "versionName": "English second edition, fourth printing",
           "acquisitionDate": "2026-05-18",
           "statusOwned": true,
           "pricePaid": 29.97,
@@ -11086,7 +11106,38 @@
       "uniquePlayDays": 0,
       "thumbnailUrl": "https://cf.geekdo-images.com/-DOqixs8uwKUvvWPKI4f9w__small/img/xLs-ldTPwaADbvzkOpF0sgWzwck=/fit-in/200x150/filters:strip_icc()/pic5261714.jpg",
       "coverUrl": "https://cf.geekdo-images.com/-DOqixs8uwKUvvWPKI4f9w__original/img/Vh-DCkTPa8OU45LaJdUywwhiYqE=/0x0/filters:format(jpeg)/pic5261714.jpg",
-      "expansionIds": [],
+      "expansionIds": [
+        645
+      ],
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 645,
+      "name": "Race for the Galaxy: New Worlds Promo Cards",
+      "bggId": 242309,
+      "year": 2017,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "2b668b3c-2cde-49b2-8d8f-5112e2718ab3",
+          "versionName": null,
+          "acquisitionDate": "2026-05-18",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/-pj3KJbWq1HF73pq3bu2Sw__small/img/cjipeFhR2QjPNVdQCsWi0Zl_vGo=/fit-in/200x150/filters:strip_icc()/pic3884855.png",
+      "coverUrl": "https://cf.geekdo-images.com/-pj3KJbWq1HF73pq3bu2Sw__original/img/2ySXWxqy00eh-IpCsVsTTaNHFLs=/0x0/filters:format(png)/pic3884855.png",
+      "expansionIds": null,
       "typicalPlayTimeMinutes": null
     },
     {
@@ -11100,9 +11151,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dinosaur",
         "Two Player",
-        "Unique Bidding",
-        "War"
+        "Unique Bidding"
       ],
       "copies": [
         {
@@ -11192,7 +11243,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Dragon"
+      ],
       "copies": [],
       "playCount": 3,
       "uniquePlayDays": 2,
@@ -12829,7 +12882,8 @@
       "isNonReplayable": false,
       "tags": [
         "Cooperative",
-        "Dice"
+        "Dice",
+        "Dragon"
       ],
       "copies": [
         {
@@ -13012,6 +13066,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dragon",
         "Tile Placement"
       ],
       "copies": [
@@ -13895,8 +13950,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Two Player",
-        "War"
+        "Replaces:War",
+        "Two Player"
       ],
       "copies": [
         {
@@ -13992,8 +14047,8 @@
       "isNonReplayable": false,
       "tags": [
         "Area Control",
-        "Two Player",
-        "War"
+        "Replaces:War",
+        "Two Player"
       ],
       "copies": [
         {
@@ -14608,7 +14663,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Drafting"
+        "Drafting",
+        "Set Collection"
       ],
       "copies": [
         {
@@ -14760,7 +14816,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Drafting"
+        "Drafting",
+        "Set Collection"
       ],
       "copies": [
         {
@@ -15589,6 +15646,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "LOTR",
         "Teams",
         "Trick-taking"
       ],
@@ -15621,7 +15679,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "LOTR"
       ],
       "copies": [
         {
@@ -15838,6 +15897,69 @@
       "typicalPlayTimeMinutes": null
     },
     {
+      "id": 643,
+      "name": "The Lord of the Rings: Duel for Middle-earth",
+      "bggId": 421006,
+      "year": 2024,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [
+        "Drafting",
+        "LOTR"
+      ],
+      "copies": [
+        {
+          "copyId": "18489bf6-c6fd-4ab0-a793-f1908c835a23",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-10-06",
+          "statusOwned": true,
+          "pricePaid": 32.96,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 1,
+      "uniquePlayDays": 1,
+      "thumbnailUrl": "https://cf.geekdo-images.com/EybxJlUc9rz7F7HVFLqsdw__small/img/rojFW0-h-bteedVG4aJXG1x7V0o=/fit-in/200x150/filters:strip_icc()/pic8378939.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/EybxJlUc9rz7F7HVFLqsdw__original/img/Ts4M5eOW38r2oTvJmkx0uwNodv4=/0x0/filters:format(jpeg)/pic8378939.jpg",
+      "expansionIds": [
+        644
+      ],
+      "typicalPlayTimeMinutes": 65
+    },
+    {
+      "id": 644,
+      "name": "The Lord of the Rings: Duel for Middle-Earth – Allies",
+      "bggId": 450429,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "18933784-ff28-4a08-83f4-01a5ae6082c9",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-10-06",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/xdCsMywNYuE50SKzuefRsg__small/img/h4ULf147UrLHHN3oCegDM_5-HIo=/fit-in/200x150/filters:strip_icc()/pic9198103.png",
+      "coverUrl": "https://cf.geekdo-images.com/xdCsMywNYuE50SKzuefRsg__original/img/3KTzBByhTxL6Kee-6Xhaf2epfvQ=/0x0/filters:format(png)/pic9198103.png",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 605,
       "name": "The Lord of the Rings: Fate of the Fellowship",
       "bggId": 436217,
@@ -15848,7 +15970,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "LOTR"
       ],
       "copies": [],
       "playCount": 1,
@@ -15868,7 +15991,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "LOTR"
+      ],
       "copies": [
         {
           "copyId": "3861a674-d216-414b-a89b-681cfbdd6a42",
@@ -15898,7 +16023,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "LOTR"
       ],
       "copies": [
         {
@@ -15990,7 +16116,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "LOTR"
       ],
       "copies": [
         {
@@ -16082,7 +16209,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "LOTR"
       ],
       "copies": [
         {
@@ -16535,7 +16663,8 @@
       "isNonReplayable": false,
       "tags": [
         "Dice",
-        "Push Your Luck"
+        "Push Your Luck",
+        "Set Collection"
       ],
       "copies": [
         {
@@ -16595,7 +16724,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Dragon"
       ],
       "copies": [],
       "playCount": 1,
@@ -16647,6 +16777,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Dragon",
         "Tile Placement"
       ],
       "copies": [],
@@ -17943,7 +18074,7 @@
       "isNonReplayable": false,
       "tags": [
         "Religious Themed",
-        "War"
+        "Replaces:War"
       ],
       "copies": [
         {
@@ -18373,7 +18504,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Set Collection"
+      ],
       "copies": [
         {
           "copyId": "ad0d0150-8c3e-43be-b650-0f2e33ea9837",
@@ -18766,7 +18899,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Pokémon"
+      ],
       "copies": [
         {
           "copyId": "fec783cd-e7da-4d1f-9772-86463bcb4df2",
@@ -18887,7 +19022,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Pokémon"
+      ],
       "copies": [
         {
           "copyId": "d119977b-0471-4caf-8946-95f55166f7e7",
@@ -18916,7 +19053,10 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Pokémon",
+        "Set Collection"
+      ],
       "copies": [
         {
           "copyId": "81068284-1428-4718-836d-92afabba1c29",
@@ -18946,6 +19086,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Pokémon",
         "Push Your Luck"
       ],
       "copies": [
@@ -19000,6 +19141,45 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 643,
+      "copyId": "18489bf6-c6fd-4ab0-a793-f1908c835a23",
+      "date": "2026-10-12",
+      "timestamp": "2026-10-12 18:17:12",
+      "durationMin": 65,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 526,
+      "copyId": null,
+      "date": "2026-10-10",
+      "timestamp": "2026-10-10 20:23:31",
+      "durationMin": 65,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-10-09",
+      "timestamp": "2026-10-09 21:00:44",
+      "durationMin": 40,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 621,
       "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
@@ -52514,5 +52694,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-10-07T03:02:33.000Z"
+  "generatedAt": "2026-10-13T00:17:12.000Z"
 }
