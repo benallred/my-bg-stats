@@ -209,6 +209,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Two Player",
         "Worker Placement"
       ],
@@ -2105,6 +2106,7 @@
       "isNonReplayable": false,
       "tags": [
         "Abstract",
+        "Animal",
         "Outside",
         "Two Player"
       ],
@@ -2136,7 +2138,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Animal"
+      ],
       "copies": [
         {
           "copyId": "a80ce5c4-4773-436a-b535-d327589271e5",
@@ -2574,6 +2578,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Tile Placement"
       ],
       "copies": [
@@ -2636,6 +2641,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Dice"
       ],
       "copies": [],
@@ -3129,6 +3135,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Historical Themed",
         "Party Game"
       ],
       "copies": [],
@@ -3149,7 +3156,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -3169,6 +3178,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Dice"
       ],
       "copies": [],
@@ -3772,6 +3782,7 @@
       "isExpandalone": false,
       "isNonReplayable": true,
       "tags": [
+        "Animal",
         "Cooperative"
       ],
       "copies": [
@@ -3867,6 +3878,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Deckbuilder",
         "Set Collection"
       ],
@@ -5155,6 +5167,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Set Collection",
         "Worker Placement"
       ],
@@ -5262,6 +5275,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Replaces:Phase 10",
         "Set Collection"
       ],
       "copies": [
@@ -5294,6 +5308,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deckbuilder",
+        "Historical Themed",
         "Push Your Luck"
       ],
       "copies": [
@@ -5878,8 +5893,8 @@
           "publicComment": "Just Pairs but somehow attracts people better. Maybe it's the slightly different rules."
         }
       ],
-      "playCount": 34,
-      "uniquePlayDays": 27,
+      "playCount": 35,
+      "uniquePlayDays": 28,
       "thumbnailUrl": "https://cf.geekdo-images.com/YrQxEB9Ef0kQorRApzG5vQ__thumb/img/_dNNsSelyw9qUEOIXBRt6PE_1us=/fit-in/200x150/filters:strip_icc()/pic8780246.jpg",
       "coverUrl": "https://cf.geekdo-images.com/YrQxEB9Ef0kQorRApzG5vQ__original/img/hK6k-x_GYfooemrkkRuF0bTvKxE=/0x0/filters:format(jpeg)/pic8780246.jpg",
       "expansionIds": [],
@@ -5991,6 +6006,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Deckbuilder"
       ],
       "copies": [
@@ -6376,12 +6392,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 9,
-      "uniquePlayDays": 7,
+      "playCount": 10,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__small/img/Bjg_3ovfjRqjGtYEaEj6107UGWY=/fit-in/200x150/filters:strip_icc()/pic1513328.jpg",
       "coverUrl": "https://cf.geekdo-images.com/7bBUuYUIyKIBDh_UnNa_Fw__original/img/_tiZYJMEc26kgt7uNF6IM8A-8As=/0x0/filters:format(jpeg)/pic1513328.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 26
+      "typicalPlayTimeMinutes": 28
     },
     {
       "id": 360,
@@ -7598,6 +7614,7 @@
       "isNonReplayable": false,
       "tags": [
         "Abstract",
+        "Animal",
         "Outside",
         "Tile Placement",
         "Two Player"
@@ -7957,7 +7974,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Historical Themed"
       ],
       "copies": [],
       "playCount": 0,
@@ -7977,7 +7995,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed"
+      ],
       "copies": [
         {
           "copyId": "6af9f663-cce5-48f2-8d85-ea501fb02ccd",
@@ -9044,7 +9064,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Animal"
+      ],
       "copies": [
         {
           "copyId": "43fc3a47-2a1f-49fc-8136-40be97639538",
@@ -9226,7 +9248,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed"
+      ],
       "copies": [
         {
           "copyId": "079564d4-ab64-4293-9e42-448a1386693c",
@@ -9257,6 +9281,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deckbuilder",
+        "Historical Themed",
         "Solo"
       ],
       "copies": [
@@ -9287,7 +9312,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed"
+      ],
       "copies": [
         {
           "copyId": "a697727b-1e17-4d24-8876-53bddcd007d0",
@@ -9713,6 +9740,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deckbuilder",
+        "Historical Themed",
         "Two Player"
       ],
       "copies": [
@@ -10330,6 +10358,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Polyomino"
       ],
       "copies": [
@@ -10456,6 +10485,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Two Player"
       ],
       "copies": [
@@ -10488,6 +10518,7 @@
       "isNonReplayable": false,
       "tags": [
         "Abstract",
+        "Animal",
         "Outside",
         "Two Player"
       ],
@@ -10535,12 +10566,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
+      "playCount": 5,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__small/img/7rgnYRe9NpOSpixs0FXmEGkKfxU=/fit-in/200x150/filters:strip_icc()/pic8307047.jpg",
       "coverUrl": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__original/img/pY5DDByB6SA60PwWuuzWgFG2soc=/0x0/filters:format(jpeg)/pic8307047.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 24
+      "typicalPlayTimeMinutes": 25
     },
     {
       "id": 598,
@@ -11038,7 +11069,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -12707,7 +12740,7 @@
       "name": "Sail",
       "bggId": 377470,
       "year": 2023,
-      "rating": null,
+      "rating": 6.5,
       "isBaseGame": true,
       "isExpansion": false,
       "isExpandalone": false,
@@ -12725,11 +12758,11 @@
           "statusOwned": true,
           "pricePaid": 9.97,
           "currency": "USD",
-          "publicComment": null
+          "publicComment": "Minus half a point for the fiddliness of setup (and how easy it is to mess up the board). Minus a full point for lack of a scenario generator - once you finish scenario 5, are you done? How can we keep playing without doing the same thing over and over?"
         }
       ],
-      "playCount": 11,
-      "uniquePlayDays": 8,
+      "playCount": 13,
+      "uniquePlayDays": 9,
       "thumbnailUrl": "https://cf.geekdo-images.com/WdYRHQ_ILHTV_ECMGF27Gw__thumb/img/y8Hlu0-CQDQAO6d6zM8YJ3dVevI=/fit-in/200x150/filters:strip_icc()/pic7267575.jpg",
       "coverUrl": "https://cf.geekdo-images.com/WdYRHQ_ILHTV_ECMGF27Gw__original/img/i9rMBmWzjVl2Aep-xUqWg4u0ADA=/0x0/filters:format(jpeg)/pic7267575.jpg",
       "expansionIds": [],
@@ -12746,7 +12779,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cards as Currency"
+        "Cards as Currency",
+        "Historical Themed"
       ],
       "copies": [
         {
@@ -13329,7 +13363,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Cooperative",
+        "Historical Themed",
         "Party Game"
       ],
       "copies": [
@@ -15487,8 +15523,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 29,
-      "uniquePlayDays": 3,
+      "playCount": 36,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/VuBqZ1sMaDAVVHF_OEJP4g__thumb/img/EdacXlcFZ06YK0-ZKa0oKwL4VCw=/fit-in/200x150/filters:strip_icc()/pic5988903.jpg",
       "coverUrl": "https://cf.geekdo-images.com/VuBqZ1sMaDAVVHF_OEJP4g__original/img/jGWxczXC_VWZofeAmlO_DkB0hCI=/0x0/filters:format(jpeg)/pic5988903.jpg",
       "expansionIds": [],
@@ -15772,6 +15808,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Polyomino"
       ],
       "copies": [],
@@ -15921,14 +15958,14 @@
           "publicComment": null
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/EybxJlUc9rz7F7HVFLqsdw__small/img/rojFW0-h-bteedVG4aJXG1x7V0o=/fit-in/200x150/filters:strip_icc()/pic8378939.jpg",
       "coverUrl": "https://cf.geekdo-images.com/EybxJlUc9rz7F7HVFLqsdw__original/img/Ts4M5eOW38r2oTvJmkx0uwNodv4=/0x0/filters:format(jpeg)/pic8378939.jpg",
       "expansionIds": [
         644
       ],
-      "typicalPlayTimeMinutes": 65
+      "typicalPlayTimeMinutes": 44
     },
     {
       "id": 644,
@@ -16552,7 +16589,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed"
+      ],
       "copies": [],
       "playCount": 2,
       "uniquePlayDays": 1,
@@ -16603,7 +16642,10 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed",
+        "Trick-taking"
+      ],
       "copies": [
         {
           "copyId": "8b757673-906e-4e57-9b03-124e520ddbdb",
@@ -16632,7 +16674,10 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Historical Themed",
+        "Trick-taking"
+      ],
       "copies": [
         {
           "copyId": "5bc57f36-f7a8-4a4e-bf45-2304ab534042",
@@ -16662,6 +16707,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Dice",
         "Push Your Luck",
         "Set Collection"
@@ -16911,6 +16957,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Historical Themed",
         "Two Player"
       ],
       "copies": [
@@ -17540,7 +17587,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": true,
-      "tags": [],
+      "tags": [
+        "Animal"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -17560,7 +17609,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Historical Themed"
       ],
       "copies": [
         {
@@ -18195,6 +18245,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Cooperative",
         "Deduction"
       ],
@@ -18227,6 +18278,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Historical Themed",
         "Polyomino"
       ],
       "copies": [
@@ -18505,6 +18557,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Set Collection"
       ],
       "copies": [
@@ -18777,6 +18830,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Animal",
         "Dice",
         "Outside",
         "Push Your Luck"
@@ -19141,6 +19195,209 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 643,
+      "copyId": "18489bf6-c6fd-4ab0-a793-f1908c835a23",
+      "date": "2026-10-20",
+      "timestamp": "2026-10-20 20:05:15",
+      "durationMin": 40,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 540,
+      "copyId": "4e225667-a3da-4383-9061-bbaf3f5a8501",
+      "date": "2026-10-20",
+      "timestamp": "2026-10-20 12:49:35",
+      "durationMin": 17,
+      "durationEstimated": false,
+      "players": [
+        119,
+        12,
+        70,
+        3
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 535,
+      "copyId": "ed8b10d2-26b5-48ad-a244-5be8fecdac40",
+      "date": "2026-10-19",
+      "timestamp": "2026-10-19 20:48:15",
+      "durationMin": 14,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 535,
+      "copyId": "ed8b10d2-26b5-48ad-a244-5be8fecdac40",
+      "date": "2026-10-19",
+      "timestamp": "2026-10-19 20:12:57",
+      "durationMin": 35,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 621,
+      "copyId": "c17dc470-43ed-4b96-b0ff-4645bf013a06",
+      "date": "2026-10-18",
+      "timestamp": "2026-10-18 15:54:38",
+      "durationMin": 41,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-10-17",
+      "timestamp": "2026-10-17 20:41:20",
+      "durationMin": 8,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-10-17",
+      "timestamp": "2026-10-17 20:33:44",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-10-17",
+      "timestamp": "2026-10-17 20:26:42",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-10-17",
+      "timestamp": "2026-10-17 20:22:18",
+      "durationMin": 2,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-10-17",
+      "timestamp": "2026-10-17 20:19:32",
+      "durationMin": 5,
+      "durationEstimated": true,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-10-17",
+      "timestamp": "2026-10-17 20:15:29",
+      "durationMin": 2,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 153,
+      "copyId": "054fabc5-18a9-45fd-a6a8-bc33b3c2537f",
+      "date": "2026-10-17",
+      "timestamp": "2026-10-17 20:08:03",
+      "durationMin": 3,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 643,
+      "copyId": "18489bf6-c6fd-4ab0-a793-f1908c835a23",
+      "date": "2026-10-16",
+      "timestamp": "2026-10-16 20:37:12",
+      "durationMin": 48,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 616,
+      "copyId": "583211f1-6412-4f3b-a524-d8feb52179c4",
+      "date": "2026-10-14",
+      "timestamp": "2026-10-14 20:30:04",
+      "durationMin": 26,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 643,
+      "copyId": "18489bf6-c6fd-4ab0-a793-f1908c835a23",
+      "date": "2026-10-14",
+      "timestamp": "2026-10-14 18:48:25",
+      "durationMin": 26,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 643,
       "copyId": "18489bf6-c6fd-4ab0-a793-f1908c835a23",
@@ -52638,6 +52895,10 @@
     {
       "playerId": 118,
       "name": "Becky"
+    },
+    {
+      "playerId": 119,
+      "name": "Daniel Larsen"
     }
   ],
   "locations": [
@@ -52694,5 +52955,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-10-13T00:17:12.000Z"
+  "generatedAt": "2026-10-21T02:05:15.000Z"
 }
