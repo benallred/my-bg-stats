@@ -265,6 +265,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deduction",
+        "Korean",
         "Replaces:Battleship",
         "Two Player"
       ],
@@ -1895,6 +1896,7 @@
       "isNonReplayable": false,
       "tags": [
         "Outside",
+        "Shedding",
         "Speed"
       ],
       "copies": [
@@ -2579,6 +2581,7 @@
       "isNonReplayable": false,
       "tags": [
         "Animal",
+        "Korean",
         "Tile Placement"
       ],
       "copies": [
@@ -3783,7 +3786,8 @@
       "isNonReplayable": true,
       "tags": [
         "Animal",
-        "Cooperative"
+        "Cooperative",
+        "Legacy"
       ],
       "copies": [
         {
@@ -4157,6 +4161,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deduction",
+        "Korean",
         "Replaces:Battleship",
         "Two Player"
       ],
@@ -6885,7 +6890,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Set Collection"
+        "Set Collection",
+        "Unique Bidding"
       ],
       "copies": [
         {
@@ -7254,7 +7260,8 @@
       "tags": [
         "Cooperative",
         "Deckbuilder",
-        "Dragon"
+        "Dragon",
+        "Harry Potter"
       ],
       "copies": [
         {
@@ -7289,6 +7296,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deckbuilder",
+        "Harry Potter",
         "Two Player"
       ],
       "copies": [
@@ -7437,7 +7445,8 @@
       "isNonReplayable": false,
       "tags": [
         "Deckbuilder",
-        "Drafting"
+        "Drafting",
+        "Programming"
       ],
       "copies": [
         {
@@ -8500,6 +8509,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Programming",
         "Two Player"
       ],
       "copies": [
@@ -8628,7 +8638,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Dexterity"
+        "Dexterity",
+        "Shedding"
       ],
       "copies": [],
       "playCount": 1,
@@ -9374,7 +9385,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Minecraft"
+      ],
       "copies": [
         {
           "copyId": "4e7f05d3-72f5-4088-9283-703c4c88241f",
@@ -9404,7 +9417,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Minecraft"
       ],
       "copies": [
         {
@@ -9434,7 +9448,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Minecraft"
+      ],
       "copies": [
         {
           "copyId": "cd75e591-fcab-4472-ab46-22d01cac0bf0",
@@ -9525,7 +9541,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Minecraft"
       ],
       "copies": [
         {
@@ -9556,7 +9573,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Minecraft"
       ],
       "copies": [
         {
@@ -9864,6 +9882,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Legacy",
         "Polyomino"
       ],
       "copies": [
@@ -10552,6 +10571,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deduction",
+        "Korean",
         "Replaces:Battleship",
         "Two Player"
       ],
@@ -10585,6 +10605,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deduction",
+        "Korean",
         "Replaces:Battleship",
         "Two Player"
       ],
@@ -10799,7 +10820,8 @@
       "isExpandalone": false,
       "isNonReplayable": true,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Legacy"
       ],
       "copies": [
         {
@@ -10830,7 +10852,8 @@
       "isExpandalone": false,
       "isNonReplayable": true,
       "tags": [
-        "Cooperative"
+        "Cooperative",
+        "Legacy"
       ],
       "copies": [
         {
@@ -10893,6 +10916,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Korean",
         "Polyomino",
         "Two Player"
       ],
@@ -10950,7 +10974,8 @@
       "tags": [
         "Classic",
         "Outside",
-        "Set Collection"
+        "Set Collection",
+        "Shedding"
       ],
       "copies": [
         {
@@ -12610,7 +12635,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Programming"
+      ],
       "copies": [],
       "playCount": 1,
       "uniquePlayDays": 1,
@@ -12865,7 +12892,8 @@
       "isNonReplayable": false,
       "tags": [
         "Outside",
-        "Party Game"
+        "Party Game",
+        "Shedding"
       ],
       "copies": [
         {
@@ -13434,7 +13462,8 @@
       "isNonReplayable": false,
       "tags": [
         "Classic",
-        "Outside"
+        "Outside",
+        "Shedding"
       ],
       "copies": [
         {
@@ -14331,6 +14360,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Programming",
         "Speed",
         "Tile Placement"
       ],
@@ -15628,6 +15658,7 @@
       "isNonReplayable": false,
       "tags": [
         "Outside",
+        "Shedding",
         "Two Player"
       ],
       "copies": [
@@ -15659,7 +15690,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Shedding"
       ],
       "copies": [],
       "playCount": 5,
@@ -17455,7 +17487,8 @@
       "tags": [
         "Classic",
         "Outside",
-        "Party Game"
+        "Party Game",
+        "Shedding"
       ],
       "copies": [
         {
@@ -17495,7 +17528,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Shedding"
       ],
       "copies": [
         {
@@ -17526,7 +17560,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Party Game",
+        "Shedding"
       ],
       "copies": [
         {
@@ -17557,7 +17592,9 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Party Game"
+        "Minecraft",
+        "Party Game",
+        "Shedding"
       ],
       "copies": [
         {
@@ -18524,6 +18561,7 @@
       "isNonReplayable": false,
       "tags": [
         "Classic",
+        "Korean",
         "Outside",
         "Party Game",
         "Teams"
@@ -18832,6 +18870,7 @@
       "tags": [
         "Animal",
         "Dice",
+        "Korean",
         "Outside",
         "Push Your Luck"
       ],
@@ -18863,7 +18902,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Korean"
+      ],
       "copies": [
         {
           "copyId": "8325a908-0f34-470d-9066-94f0bc0a8c2c",
@@ -18893,6 +18934,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Korean",
         "Outside",
         "Speed"
       ],
@@ -18924,7 +18966,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Korean"
+      ],
       "copies": [
         {
           "copyId": "999488b8-a091-47e6-a8b9-a4aa6d6b1499",
@@ -18954,6 +18998,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Korean",
         "Pokémon"
       ],
       "copies": [
@@ -18986,6 +19031,7 @@
       "isNonReplayable": false,
       "tags": [
         "Deduction",
+        "Korean",
         "Teams"
       ],
       "copies": [
@@ -19016,7 +19062,9 @@
       "isExpansion": false,
       "isExpandalone": false,
       "isNonReplayable": false,
-      "tags": [],
+      "tags": [
+        "Korean"
+      ],
       "copies": [
         {
           "copyId": "a6be0f96-3efb-41f3-a649-107364c91b99",
@@ -19046,7 +19094,8 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "Deckbuilder"
+        "Deckbuilder",
+        "Korean"
       ],
       "copies": [
         {
@@ -19077,6 +19126,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Korean",
         "Pokémon"
       ],
       "copies": [
@@ -19108,6 +19158,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Korean",
         "Pokémon",
         "Set Collection"
       ],
@@ -19140,6 +19191,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Korean",
         "Pokémon",
         "Push Your Luck"
       ],
@@ -19172,6 +19224,7 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
+        "Korean",
         "Party Game",
         "Speed"
       ],
