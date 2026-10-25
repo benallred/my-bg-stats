@@ -3832,8 +3832,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 29,
-      "uniquePlayDays": 21,
+      "playCount": 31,
+      "uniquePlayDays": 22,
       "thumbnailUrl": "https://cf.geekdo-images.com/7ejbxsn-UtLl3ehamuAEdw__thumb/img/AX0pNTuAzpUfxlvtwirM6zAK4ws=/fit-in/200x150/filters:strip_icc()/pic79413.jpg",
       "coverUrl": "https://cf.geekdo-images.com/7ejbxsn-UtLl3ehamuAEdw__original/img/HJOZG6y87_skppfIqX-voRlhNxE=/0x0/filters:format(jpeg)/pic79413.jpg",
       "expansionIds": [],
@@ -8555,8 +8555,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 28,
-      "uniquePlayDays": 14,
+      "playCount": 31,
+      "uniquePlayDays": 15,
       "thumbnailUrl": "https://cf.geekdo-images.com/TIEYwnIRV6kvAEnFkYe2OA__thumb/img/ysbEGf4Z0tNnYPSnGOH8tw5sa8Y=/fit-in/200x150/filters:strip_icc()/pic6858706.png",
       "coverUrl": "https://cf.geekdo-images.com/TIEYwnIRV6kvAEnFkYe2OA__original/img/F_I7FrEWXrTcl-3fYOgC4OZcryQ=/0x0/filters:format(png)/pic6858706.png",
       "expansionIds": [],
@@ -8588,8 +8588,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 12,
-      "uniquePlayDays": 5,
+      "playCount": 16,
+      "uniquePlayDays": 6,
       "thumbnailUrl": "https://cf.geekdo-images.com/oPNuEm_dR987BKoYEF9zGQ__thumb/img/JeO68IlD-DGB8zg2ozB-3MmpN2s=/fit-in/200x150/filters:strip_icc()/pic7414566.png",
       "coverUrl": "https://cf.geekdo-images.com/oPNuEm_dR987BKoYEF9zGQ__original/img/ZNqEkLMKkrIPxRduZWmWC6VBgoY=/0x0/filters:format(png)/pic7414566.png",
       "expansionIds": [],
@@ -9835,12 +9835,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 5,
-      "uniquePlayDays": 4,
+      "playCount": 6,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/KDrRxEKQMmHyM0QQ2ONX4Q__small/img/EusjojuWYxwkxaP7eAnaBn1QzLg=/fit-in/200x150/filters:strip_icc()/pic8638247.jpg",
       "coverUrl": "https://cf.geekdo-images.com/KDrRxEKQMmHyM0QQ2ONX4Q__original/img/XD-aeaMShk-TN_n0n6O9kbczxNY=/0x0/filters:format(jpeg)/pic8638247.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 63
+      "typicalPlayTimeMinutes": 65
     },
     {
       "id": 66,
@@ -19248,6 +19248,140 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 510,
+      "copyId": null,
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 20:50:46",
+      "durationMin": 5,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 510,
+      "copyId": null,
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 20:42:16",
+      "durationMin": 6,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 510,
+      "copyId": null,
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 20:29:53",
+      "durationMin": 4,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 510,
+      "copyId": null,
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 20:23:44",
+      "durationMin": 6,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 607,
+      "copyId": "39d2fd99-92e2-4ffd-8d17-e7ac90940aa7",
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 15:40:45",
+      "durationMin": 101,
+      "durationEstimated": false,
+      "players": [
+        3,
+        12,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 494,
+      "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 15:09:04",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        3,
+        121,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 494,
+      "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 15:08:44",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        3,
+        121,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 494,
+      "copyId": "4f1dd2c8-177e-406c-9d8f-d2291e8f8b0a",
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 14:54:09",
+      "durationMin": 7,
+      "durationEstimated": false,
+      "players": [
+        3,
+        121,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 4,
+      "copyId": "4d1303da-9c48-4b19-9969-43efa8d8f130",
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 11:53:07",
+      "durationMin": 30,
+      "durationEstimated": false,
+      "players": [
+        3,
+        120
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 4,
+      "copyId": "4d1303da-9c48-4b19-9969-43efa8d8f130",
+      "date": "2026-10-23",
+      "timestamp": "2026-10-23 11:34:53",
+      "durationMin": 16,
+      "durationEstimated": false,
+      "players": [
+        3,
+        13
+      ],
+      "locationId": 5
+    },
     {
       "gameId": 643,
       "copyId": "18489bf6-c6fd-4ab0-a793-f1908c835a23",
@@ -52952,6 +53086,14 @@
     {
       "playerId": 119,
       "name": "Daniel Larsen"
+    },
+    {
+      "playerId": 120,
+      "name": "Sandy Bostic"
+    },
+    {
+      "playerId": 121,
+      "name": "Curtis Gibby"
     }
   ],
   "locations": [
@@ -53008,5 +53150,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-10-21T02:05:15.000Z"
+  "generatedAt": "2026-10-24T02:50:46.000Z"
 }
