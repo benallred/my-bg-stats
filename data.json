@@ -3800,12 +3800,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 4,
+      "playCount": 5,
+      "uniquePlayDays": 5,
       "thumbnailUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__small/img/SRpAFFgh4mpyvCqzq8kc3B6_7F4=/fit-in/200x150/filters:strip_icc()/pic9171780.png",
       "coverUrl": "https://cf.geekdo-images.com/tQn8UU3A_zsi730zNQyNzA__original/img/9ai5WpyU0jn1cCwAiRaGIQy-VqQ=/0x0/filters:format(png)/pic9171780.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 45
+      "typicalPlayTimeMinutes": 44
     },
     {
       "id": 4,
@@ -4200,7 +4200,7 @@
           "versionName": null,
           "acquisitionDate": "2020-12-03",
           "statusOwned": true,
-          "pricePaid": 141.25,
+          "pricePaid": 164.88,
           "currency": "USD",
           "publicComment": null
         }
@@ -4439,9 +4439,9 @@
       "copies": [
         {
           "copyId": "d7de93cb-d1fe-42b2-9f4e-f3a1fda22312",
-          "versionName": null,
-          "acquisitionDate": null,
-          "statusOwned": false,
+          "versionName": "English Target edition",
+          "acquisitionDate": "2026-10-17",
+          "statusOwned": true,
           "pricePaid": null,
           "currency": null,
           "publicComment": null
@@ -4481,6 +4481,35 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/zLLrkvUXpOvA_5Uvc8e2UQ__thumb/img/3dprq9yqSnOFQyvZNukbpfUEzUg=/fit-in/200x150/filters:strip_icc()/pic7949384.png",
       "coverUrl": "https://cf.geekdo-images.com/zLLrkvUXpOvA_5Uvc8e2UQ__original/img/_uxrza4OYL_OJF7uQ7PveYohPLo=/0x0/filters:format(png)/pic7949384.png",
       "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 647,
+      "name": "Disney Villainous: Treacherous Tides",
+      "bggId": 447298,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "a5b2dec9-2c8a-4976-965d-4e5c9530e740",
+          "versionName": "English edition",
+          "acquisitionDate": "2025-11-25",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/Ah_RwCGHtPROEl3V8ya44A__small/img/Kqek2c7gdF5XnJkeR9cjTfuBmSE=/fit-in/200x150/filters:strip_icc()/pic8906683.png",
+      "coverUrl": "https://cf.geekdo-images.com/Ah_RwCGHtPROEl3V8ya44A__original/img/4drq42PLwoFUz-BDcHOGT8VwqAk=/0x0/filters:format(png)/pic8906683.png",
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -9337,12 +9366,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 1,
+      "uniquePlayDays": 1,
       "thumbnailUrl": "https://cf.geekdo-images.com/DpeZK8l3bKWoLvABVIkl1A__small/img/X5cpm4Ja4xqwxPOvxPs7ZGTPmKU=/fit-in/200x150/filters:strip_icc()/pic9445557.png",
       "coverUrl": "https://cf.geekdo-images.com/DpeZK8l3bKWoLvABVIkl1A__original/img/AqU9AaLYGvncIZG1NvNyZPZQ1kk=/0x0/filters:format(png)/pic9445557.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 92
     },
     {
       "id": 27,
@@ -13894,6 +13923,35 @@
       "typicalPlayTimeMinutes": 28
     },
     {
+      "id": 646,
+      "name": "Star Wars Villainous: Cold Tactics",
+      "bggId": 447381,
+      "year": 2025,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "3396b7ca-0715-40ef-9108-dabc61e11637",
+          "versionName": "English Target edition",
+          "acquisitionDate": "2025-11-25",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/ZjeosVewAdw7WX7ydz8HfQ__small/img/1EuRRdcK1hPRFHI8o7grMG-Yf1Y=/fit-in/200x150/filters:strip_icc()/pic8909116.png",
+      "coverUrl": "https://cf.geekdo-images.com/ZjeosVewAdw7WX7ydz8HfQ__original/img/x1kSu_9xr2BG4EF3mMpPROTmTDE=/0x0/filters:format(png)/pic8909116.png",
+      "expansionIds": [],
+      "typicalPlayTimeMinutes": null
+    },
+    {
       "id": 509,
       "name": "Star Wars Villainous: Power of the Dark Side",
       "bggId": 358800,
@@ -13910,7 +13968,7 @@
           "versionName": "English edition",
           "acquisitionDate": "2024-12-02",
           "statusOwned": true,
-          "pricePaid": 26.6,
+          "pricePaid": 39.48,
           "currency": "USD",
           "publicComment": null
         }
@@ -15327,14 +15385,14 @@
           "publicComment": null
         }
       ],
-      "playCount": 30,
-      "uniquePlayDays": 26,
+      "playCount": 31,
+      "uniquePlayDays": 27,
       "thumbnailUrl": "https://cf.geekdo-images.com/tcupSjoLMn9sKbnGxQU9Kg__thumb/img/aQGuKmGqMS8WWfWA280XJJ2jiI4=/fit-in/200x150/filters:strip_icc()/pic6326925.jpg",
       "coverUrl": "https://cf.geekdo-images.com/tcupSjoLMn9sKbnGxQU9Kg__original/img/1y5pSKExuTjPExQzWf99e_xbwPM=/0x0/filters:format(jpeg)/pic6326925.jpg",
       "expansionIds": [
         423
       ],
-      "typicalPlayTimeMinutes": 35
+      "typicalPlayTimeMinutes": 34
     },
     {
       "id": 423,
@@ -16172,6 +16230,35 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/zh14YHDTswfYgLj8zz-Mhw__thumb/img/zfGre0klww2iwr_ZPzK7sfN0CWM=/fit-in/200x150/filters:strip_icc()/pic2263364.png",
       "coverUrl": "https://cf.geekdo-images.com/zh14YHDTswfYgLj8zz-Mhw__original/img/nIYadYmNm2Sl6YmjcXSCshhSW1I=/0x0/filters:format(png)/pic2263364.png",
       "expansionIds": null,
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 648,
+      "name": "The Lord of the Rings: The King's Gambit",
+      "bggId": 467694,
+      "year": 2027,
+      "rating": null,
+      "isBaseGame": true,
+      "isExpansion": false,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "copies": [
+        {
+          "copyId": "56029a2f-d6c1-4c43-8265-c65127347807",
+          "versionName": null,
+          "acquisitionDate": "2026-10-19",
+          "statusOwned": false,
+          "pricePaid": 10.35,
+          "currency": "USD",
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/Oys-FI2abuOyZwJ8uQGWdw__small/img/oAB-09ALRxzLSCRWEZBbxS0m4ik=/fit-in/200x150/filters:strip_icc()/pic9488951.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/Oys-FI2abuOyZwJ8uQGWdw__original/img/gQDlTaE1IifUjJKkunSHYgNfSFg=/0x0/filters:format(jpeg)/pic9488951.jpg",
+      "expansionIds": [],
       "typicalPlayTimeMinutes": null
     },
     {
@@ -19248,6 +19335,47 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 639,
+      "copyId": "a697727b-1e17-4d24-8876-53bddcd007d0",
+      "date": "2026-10-28",
+      "timestamp": "2026-10-28 21:47:34",
+      "durationMin": 92,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 626,
+      "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
+      "date": "2026-10-25",
+      "timestamp": "2026-10-25 20:03:29",
+      "durationMin": 40,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 121,
+      "copyId": "b3875ea6-6001-4b8f-b7a8-699321acc7d9",
+      "date": "2026-10-25",
+      "timestamp": "2026-10-25 14:00:35",
+      "durationMin": 24,
+      "durationEstimated": false,
+      "players": [
+        3,
+        4
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 510,
       "copyId": null,
@@ -53150,5 +53278,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-10-24T02:50:46.000Z"
+  "generatedAt": "2026-10-29T03:47:34.000Z"
 }
