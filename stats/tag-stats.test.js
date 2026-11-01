@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { getTopGamesByTag } from './tag-stats.js';
+import { getTopGamesByTag, groupTagsByNamespace } from './tag-stats.js';
 import { Metric } from './constants.js';
 
 describe('getTopGamesByTag', () => {
@@ -138,5 +138,103 @@ describe('getTopGamesByTag', () => {
   test('returns an empty array when no base games have tags', () => {
     const result = getTopGamesByTag([{ id: 1, name: 'X', rating: 5, isBaseGame: true, tags: [] }], [], Metric.PLAYS);
     expect(result).toEqual([]);
+  });
+});
+
+describe('groupTagsByNamespace', () => {
+  const list = (tag) => ({ tag, games: [{ game: { id: 1, name: 'Alpha' }, rating: 8, metricValue: 2 }] });
+
+  test('puts unprefixed tags in a Categories section ahead of namespaced ones', () => {
+    const result = groupTagsByNamespace([list('Replaces:War'), list('Cooperative')]);
+
+    expect(result.map(s => s.heading)).toEqual(['Categories', 'Replaces']);
+    expect(result[0].namespace).toBeNull();
+    expect(result[1].namespace).toBe('Replaces');
+  });
+
+  test('titles unprefixed tags as "Top 10 <tag> games"', () => {
+    const result = groupTagsByNamespace([list('Cooperative')]);
+
+    expect(result[0].lists[0]).toMatchObject({
+      tag: 'Cooperative',
+      value: 'Cooperative',
+      title: { prefix: 'Top 10 ', tag: 'Cooperative', suffix: ' games' },
+    });
+  });
+
+  test('pluralizes a tag ending in "game" instead of repeating the word', () => {
+    const result = groupTagsByNamespace([list('Party Game')]);
+
+    expect(result[0].lists[0].title).toEqual({
+      prefix: 'Top 10 ',
+      tag: 'Party Games',
+      suffix: '',
+    });
+  });
+
+  test('leaves a tag already ending in "games" alone', () => {
+    const result = groupTagsByNamespace([list('Dexterity Games')]);
+
+    expect(result[0].lists[0].title).toEqual({
+      prefix: 'Top 10 ',
+      tag: 'Dexterity Games',
+      suffix: '',
+    });
+  });
+
+  test('phrases the Replaces namespace as a replacement list', () => {
+    const result = groupTagsByNamespace([list('Replaces:Phase 10')]);
+
+    expect(result[0].lists[0]).toMatchObject({
+      tag: 'Replaces:Phase 10',
+      value: 'Phase 10',
+      title: { prefix: 'Top 10 games that replace ', tag: 'Phase 10', suffix: '' },
+    });
+  });
+
+  test('trims whitespace around the namespace separator', () => {
+    const result = groupTagsByNamespace([list('Replaces: Phase 10')]);
+
+    expect(result[0].heading).toBe('Replaces');
+    expect(result[0].lists[0].title.tag).toBe('Phase 10');
+  });
+
+  test('keeps every list for a namespace in one section, in arrival order', () => {
+    const result = groupTagsByNamespace([list('Replaces:Battleship'), list('Replaces:War')]);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].lists.map(l => l.value)).toEqual(['Battleship', 'War']);
+  });
+
+  test('falls back to the prefix as heading for an unregistered namespace', () => {
+    const result = groupTagsByNamespace([list('Theme:Dragon')]);
+
+    expect(result[0].heading).toBe('Theme');
+    expect(result[0].lists[0].title).toEqual({
+      prefix: 'Top 10 ',
+      tag: 'Dragon',
+      suffix: ' games',
+    });
+  });
+
+  test('sorts unregistered namespaces alphabetically after registered ones', () => {
+    const result = groupTagsByNamespace([
+      list('Theme:Dragon'),
+      list('Mechanic:Drafting'),
+      list('Replaces:War'),
+    ]);
+
+    expect(result.map(s => s.heading)).toEqual(['Replaces', 'Mechanic', 'Theme']);
+  });
+
+  test('carries the ranked games through untouched', () => {
+    const tagGroups = [list('Cooperative')];
+    const result = groupTagsByNamespace(tagGroups);
+
+    expect(result[0].lists[0].games).toBe(tagGroups[0].games);
+  });
+
+  test('returns an empty array when there are no tag groups', () => {
+    expect(groupTagsByNamespace([])).toEqual([]);
   });
 });

@@ -84,6 +84,7 @@ import {
   calculateCostPerMetric,
   getGameRankings,
   getTopGamesByTag,
+  groupTagsByNamespace,
   AchievementType,
   getAchievements,
 } from './stats.js';
@@ -464,6 +465,8 @@ let showAllYearReviewMetrics = false;
 let firstLoggedPlayDate = null;
 let selectedAchievementType = null;
 let showAllAchievementMetrics = false;
+let expandedTopTenTag = null;
+let showAllTopTenGames = false;
 
 // Assigned in initializeImageModal; renderModals drives the image modal through
 // this handle because its state (zoom, gallery index) is encapsulated there.
@@ -644,9 +647,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Setup event listeners
         setupEventListeners();
 
-        // Generate per-tag Top 10 cards (attach their own click handlers)
-        renderTopTenCards();
-
         // Setup sticky header
         setupStickyHeader();
 
@@ -718,7 +718,6 @@ function setupYearFilter() {
         updateHeaderScrollMargin();
         updateSectionVisibility();
         updateAllStats();
-        renderTopTenCards();
 
         // Only close sections if not loading from permalink
         if (!isLoadingFromPermalink) {
@@ -736,7 +735,8 @@ function setupYearFilter() {
                 'fives',
                 'dimes',
                 'quarters',
-                'centuries'
+                'centuries',
+                'top-tens'
             ];
 
             // Close detail section if:
@@ -787,7 +787,7 @@ function setupBaseMetricFilter() {
         statsCache.twoFiftyClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.TWO_FIFTY, currentYear);
         statsCache.oneDollarClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.ONE_DOLLAR, currentYear);
         statsCache.fiftyCentClubData = getValueClubGames(gameData.games, gameData.plays, currentBaseMetric, ValueClub.FIFTY_CENTS, currentYear);
-        statsCache.topGamesByTag = getTopGamesByTag(gameData.games, gameData.plays, currentBaseMetric, currentYear);
+        statsCache.topTenSections = groupTagsByNamespace(getTopGamesByTag(gameData.games, gameData.plays, currentBaseMetric, currentYear));
         updateCostAnalysisStats();
         updateValueClubsStats();
         updateSocialLocationStats();
@@ -822,9 +822,9 @@ function setupBaseMetricFilter() {
                 showDetailSection('played-rating');
             }
 
-            // Refresh Top 10 tag detail section if open (metric-aware column)
-            if (currentlyOpenStatType?.startsWith('top-ten:')) {
-                showDetailSection(currentlyOpenStatType);
+            // Refresh Top 10's detail section if open (metric-aware values)
+            if (currentlyOpenStatType === 'top-tens') {
+                showDetailSection('top-tens');
             }
 
             // Update year-review filter if open and toggle is not checked
@@ -934,8 +934,8 @@ function updateAllStats() {
         // Rating stats
         playedRatingData: getPlayedRatingBreakdown(gameData.games, gameData.plays, currentYear),
         collectionRatingData: getCollectionRatingBreakdown(gameData.games, currentYear),
-        // Top 10's by tag (rating-ranked, metric column respects the year filter)
-        topGamesByTag: getTopGamesByTag(gameData.games, gameData.plays, currentBaseMetric, currentYear),
+        // Top 10's by tag (rating-ranked, metric value respects the year filter)
+        topTenSections: groupTagsByNamespace(getTopGamesByTag(gameData.games, gameData.plays, currentBaseMetric, currentYear)),
         // Cost Analysis stats (hidden)
         totalCostData: getTotalCost(gameData.games, currentYear),
         costPerMetricData: getCostPerMetricStats(gameData.games, gameData.plays, currentBaseMetric, currentYear),
@@ -1082,6 +1082,7 @@ function updateAllStats() {
     updateSocialLocationStats();
     updateCollectionRatingStats();
     updatePlayedRatingStats();
+    updateTopTensStats();
     updateDiagnosticsSection();
     updateCostAnalysisStats();
     updateValueClubsStats();
@@ -1467,6 +1468,18 @@ function updatePlayedRatingStats() {
     } else {
         gamesRatedContainer.style.display = 'none';
     }
+}
+
+/**
+ * Update the Top 10's card. Pre-logging years have no plays, so no tag has a
+ * list and the card hides itself.
+ */
+function updateTopTensStats() {
+    const card = document.getElementById('top-tens');
+    const listCount = statsCache.topTenSections.reduce((total, section) => total + section.lists.length, 0);
+
+    card.style.display = listCount === 0 ? 'none' : '';
+    card.querySelector('.widget__value').textContent = listCount;
 }
 
 /**
@@ -2533,6 +2546,17 @@ const statDetailHandlers = {
             showPlayedRatingBreakdown(detailContent);
         }
     },
+    'top-tens': {
+        getTitle: (currentYear) => {
+            const yearText = currentYear
+                ? `<span style="white-space: nowrap">(${currentYear})</span>`
+                : '<span style="white-space: nowrap">(All Time)</span>';
+            return `Top 10's ${yearText}`;
+        },
+        render: (detailContent, statsCache) => {
+            showTopTensDetail(detailContent, statsCache);
+        },
+    },
     'year-review': {
         getTitle: (currentYear) => {
             const generatedDate = new Date(gameData.generatedAt);
@@ -2796,22 +2820,7 @@ function showDetailSection(statType) {
     detailStatSummary.style.display = 'none';
 
     // Get handler for this stat type
-    let handler = statDetailHandlers[statType];
-
-    // Per-tag Top 10 stats are resolved dynamically since tags come from data
-    if (!handler && statType.startsWith('top-ten:')) {
-        const tag = statType.slice('top-ten:'.length);
-        const exists = (statsCache.topGamesByTag || []).some(g => g.tag === tag);
-        if (!exists) {
-            // Tag has no games in the current filter (e.g. year changed) — close instead
-            closeDetailSection();
-            return;
-        }
-        handler = {
-            getTitle: (currentYear) => topTenTagTitle(tag, currentYear),
-            render: (detailContent) => showTopTenTagBreakdown(detailContent, tag),
-        };
-    }
+    const handler = statDetailHandlers[statType];
 
     if (!handler) {
         console.error(`No handler found for stat type: ${statType}`);
@@ -4524,109 +4533,182 @@ function maybeShowRecentAchievementToasts() {
     document.body.appendChild(overlay);
 }
 
-/**
- * Show collection rating breakdown by game
- */
-/**
- * Build the detail title for a single tag's Top 10.
- */
-function topTenTagTitle(tag, currentYear) {
-    const yearText = currentYear
-        ? `<span style="white-space: nowrap">(${currentYear})</span>`
-        : '<span style="white-space: nowrap">(All Time)</span>';
-    return `Top 10 ${escapeHtml(tag)} ${yearText}`;
+const TOP_TEN_LIST_SIZE = 10;
+const TOP_TEN_SHOW_FEWER_LABEL = 'Show top 10 only';
+
+function formatTopTenMetricValue(value) {
+    const label = value === 1
+        ? { hours: 'hour', sessions: 'session', plays: 'play' }[currentBaseMetric]
+        : currentBaseMetric;
+    const formatted = currentBaseMetric === Metric.HOURS ? value.toFixed(1) : value;
+    return `${formatted} ${label}`;
 }
 
 /**
- * Show a single tag's ranked table: base games sorted by rating descending.
- * The first 10 rows are highlighted like h-index contributors.
+ * Build the clickable row and its hidden ranked list for one Top 10.
+ * Games past the tenth are rendered but hidden until "Show all" is clicked.
  */
-function showTopTenTagBreakdown(container, tag) {
-    const group = (statsCache.topGamesByTag || []).find(g => g.tag === tag);
+function renderTopTenListRows(list) {
+    const isExpanded = list.tag === expandedTopTenTag;
+    const gameCount = list.games.length;
+    const hasOverflow = gameCount > TOP_TEN_LIST_SIZE;
+    const showingAll = hasOverflow && isExpanded && showAllTopTenGames;
+    const showAllLabel = `Show all ${gameCount}`;
 
-    if (!group || group.games.length === 0) {
-        container.innerHTML = '<p>No games to rank for this tag.</p>';
-        return;
-    }
-
-    const metricHeaders = {
-        hours: 'Hours',
-        sessions: 'Sessions',
-        plays: 'Plays',
-    };
-    const metricHeader = metricHeaders[currentBaseMetric] || 'Hours';
-
-    const formatMetricValue = (value) =>
-        currentBaseMetric === Metric.HOURS ? value.toFixed(1) : value;
-
-    const rows = group.games.map((item, index) => {
+    const items = list.games.map((item, index) => {
         const rank = index + 1;
-        const highlightClass = rank <= 10 ? ' class="top-ten-highlight"' : '';
+        const overflowClass = rank > TOP_TEN_LIST_SIZE ? ' top-tens-game-item--overflow' : '';
         return `
-            <tr${highlightClass}>
-                <td>${rank}</td>
-                <td>${renderGameNameWithThumbnail(item.game)}</td>
-                <td>${renderRatingHexagon(item.rating)}</td>
-                <td>${formatMetricValue(item.metricValue)}</td>
-            </tr>
+            <div class="top-tens-game-item${overflowClass}">
+                <span class="top-tens-game-rank">${rank}</span>
+                <span class="top-tens-game-name">${renderGameNameWithThumbnail(item.game)}</span>
+                <span class="top-tens-game-rating">${renderRatingHexagon(item.rating)}</span>
+                <span class="top-tens-game-value">${formatTopTenMetricValue(item.metricValue)}</span>
+            </div>
         `;
     }).join('');
 
-    const table = document.createElement('table');
-    table.className = 'breakdown-table';
-    table.innerHTML = `
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Game</th>
-                <th>Rating</th>
-                <th>${metricHeader}</th>
-            </tr>
-        </thead>
-        <tbody>${rows}</tbody>
+    const showAllButton = hasOverflow
+        ? `<button type="button" class="top-tens-show-all" data-show-all-label="${showAllLabel}">${showingAll ? TOP_TEN_SHOW_FEWER_LABEL : showAllLabel}</button>`
+        : '';
+
+    const { prefix, tag, suffix } = list.title;
+    const titleHtml = `${escapeHtml(prefix)}<span class="top-tens-tag">${escapeHtml(tag)}</span>${escapeHtml(suffix)}`;
+
+    return `
+        <tr class="top-tens-row" data-tag="${escapeHtml(list.tag)}">
+            <td class="top-tens-title">
+                <span class="top-tens-expand-icon">${isExpanded ? '▼' : '▶'}</span>
+                ${titleHtml}
+            </td>
+            <td class="top-tens-count">${gameCount} game${gameCount === 1 ? '' : 's'}</td>
+        </tr>
+        <tr class="top-tens-expanded-content"${isExpanded ? '' : ' style="display: none;"'}>
+            <td colspan="2">
+                <div class="top-tens-list${showingAll ? ' top-tens-list--full' : ''}">
+                    ${items}
+                    ${showAllButton}
+                </div>
+            </td>
+        </tr>
     `;
-    container.appendChild(table);
+}
+
+function renderTopTenShowAll(listElement, showAll) {
+    listElement.classList.toggle('top-tens-list--full', showAll);
+
+    const button = listElement.querySelector('.top-tens-show-all');
+    button.textContent = showAll ? TOP_TEN_SHOW_FEWER_LABEL : button.dataset.showAllLabel;
 }
 
 /**
- * Render one dashboard stat card per tag under the "Top 10's" group.
- * Rebuilt whenever the tag set changes (e.g. on year change), so each card
- * carries its own click handler rather than relying on the one-time setup.
+ * Bring an opened Top 10 into view inside the scrolling detail pane.
+ *
+ * `alignToTop` puts the list's header row at the top of the pane. Otherwise the
+ * pane scrolls the least amount that brings the whole ten-game list into view,
+ * falling back to the header row at the top when the list is taller than the
+ * pane.
  */
-function renderTopTenCards() {
-    const label = document.getElementById('top-tens-section');
-    if (!label) return;
+function scrollTopTenIntoView(row, { alignToTop }) {
+    const pane = document.getElementById('detail-content');
+    const paneTop = pane.getBoundingClientRect().top;
+    const listTop = pane.scrollTop + (row.getBoundingClientRect().top - paneTop);
+    const listBottom = pane.scrollTop + (row.nextElementSibling.getBoundingClientRect().bottom - paneTop);
 
-    // Remove previously generated cards
-    document.querySelectorAll('.top-ten-tag-card').forEach(el => el.remove());
+    const top = alignToTop
+        ? listTop
+        : Math.min(listTop, Math.max(pane.scrollTop, listBottom - pane.clientHeight));
 
-    const groups = statsCache.topGamesByTag || [];
-    label.style.display = groups.length === 0 ? 'none' : '';
-
-    let anchor = label;
-    groups.forEach(({ tag, games }) => {
-        const card = document.createElement('article');
-        card.className = 'widget widget--1x1 clickable top-ten-tag-card';
-        card.dataset.stat = `top-ten:${tag}`;
-        const gameCountLabel = `${games.length} tagged game${games.length === 1 ? '' : 's'}`;
-        card.innerHTML = `
-            <div class="widget__title">Top 10</div>
-            <div class="widget__value">${escapeHtml(tag)}</div>
-            <div class="widget__description">${gameCountLabel}</div>
-        `;
-        card.addEventListener('click', () => {
-            const statType = card.dataset.stat;
-            if (statType === currentlyOpenStatType) {
-                closeDetailSection();
-            } else {
-                showDetailSection(statType);
-            }
-        });
-        anchor.after(card);
-        anchor = card;
-    });
+    pane.scrollTo({ top, behavior: 'smooth' });
 }
 
+/**
+ * Open one Top 10 and close any other. Only one is open at a time, and it
+ * always opens at ten games, so `topTen` and `topTenShowAll` together name
+ * exactly what is on screen.
+ */
+function toggleTopTenList(detailDiv, tag) {
+    expandedTopTenTag = tag === expandedTopTenTag ? null : tag;
+
+    const fullList = detailDiv.querySelector('.top-tens-list--full');
+    if (fullList) {
+        renderTopTenShowAll(fullList, false);
+    }
+    showAllTopTenGames = false;
+
+    let expandedRow = null;
+    detailDiv.querySelectorAll('.top-tens-row').forEach(row => {
+        const isExpanded = row.dataset.tag === expandedTopTenTag;
+        if (isExpanded) {
+            expandedRow = row;
+        }
+        row.querySelector('.top-tens-expand-icon').textContent = isExpanded ? '▼' : '▶';
+        row.nextElementSibling.style.display = isExpanded ? 'table-row' : 'none';
+    });
+
+    if (expandedRow) {
+        scrollTopTenIntoView(expandedRow, { alignToTop: false });
+    }
+
+    updateURL();
+}
+
+/**
+ * Show the Top 10's detail: one section per tag namespace, each list a row that
+ * expands to its ranked games.
+ */
+function showTopTensDetail(container, statsCache) {
+    const sections = statsCache.topTenSections;
+
+    if (sections.length === 0) {
+        container.innerHTML = '<p>No tagged games to rank.</p>';
+        return;
+    }
+
+    const detailDiv = document.createElement('div');
+    detailDiv.className = 'top-tens-detail';
+    detailDiv.innerHTML = sections.map(section => `
+        <div class="top-tens-section">
+            <h3 class="top-tens-section-heading">${escapeHtml(section.heading)}</h3>
+            <table class="top-tens-table">
+                <tbody>${section.lists.map(renderTopTenListRows).join('')}</tbody>
+            </table>
+        </div>
+    `).join('');
+
+    detailDiv.querySelectorAll('.top-tens-row').forEach(row => {
+        row.addEventListener('click', () => toggleTopTenList(detailDiv, row.dataset.tag));
+    });
+
+    detailDiv.querySelectorAll('.top-tens-show-all').forEach(button => {
+        button.addEventListener('click', () => {
+            const expandedContent = button.closest('.top-tens-expanded-content');
+
+            showAllTopTenGames = !showAllTopTenGames;
+            renderTopTenShowAll(expandedContent.querySelector('.top-tens-list'), showAllTopTenGames);
+            scrollTopTenIntoView(expandedContent.previousElementSibling, { alignToTop: false });
+            updateURL();
+        });
+    });
+
+    container.appendChild(detailDiv);
+
+    // A permalinked list can sit well below the fold, so bring it to the top.
+    // Deferred because the pane only becomes scrollable once showDetailSection
+    // sets its max-height, which happens after this render returns.
+    if (isLoadingFromPermalink) {
+        const expandedRow = Array.from(detailDiv.querySelectorAll('.top-tens-row'))
+            .find(row => row.dataset.tag === expandedTopTenTag);
+
+        if (expandedRow) {
+            requestAnimationFrame(() => scrollTopTenIntoView(expandedRow, { alignToTop: true }));
+        }
+    }
+}
+
+/**
+ * Show collection rating breakdown by game
+ */
 function showCollectionRatingBreakdown(container) {
     const statType = 'collection-rating';
     const data = statsCache.collectionRatingData;
@@ -6042,6 +6124,8 @@ function loadFromPermalink() {
     const photoParam = urlParams.get('photo');
     const achievementTypeParam = urlParams.get('achievementType');
     const achievementAllMetricsParam = urlParams.get('achievementAllMetrics');
+    const topTenParam = urlParams.get('topTen');
+    const topTenShowAllParam = urlParams.get('topTenShowAll');
 
     // Initialize showAllYearReviewMetrics from URL before early return check
     if (showAllMetricsParam === 'true') {
@@ -6056,6 +6140,15 @@ function loadFromPermalink() {
     // Restore the single selected achievement type filter (absent = "All")
     if (achievementTypeParam !== null && Object.keys(ACHIEVEMENT_TYPE_META).includes(achievementTypeParam)) {
         selectedAchievementType = achievementTypeParam;
+    }
+
+    // Restore the expanded Top 10 list and how much of it is showing
+    if (topTenParam !== null) {
+        expandedTopTenTag = topTenParam;
+    }
+
+    if (topTenShowAllParam === 'true') {
+        showAllTopTenGames = true;
     }
 
     if (!yearParam && !baseMetricParam && !statParam && !modalParam && !shelfGameParam && !photoParam) {
@@ -6275,6 +6368,15 @@ function updateURL() {
         // For the achievements list, encode the "show all base metrics" toggle when on
         if (currentlyOpenStatType === 'achievements' && showAllAchievementMetrics) {
             params.set('achievementAllMetrics', 'true');
+        }
+
+        // For the Top 10's list, encode which list is expanded and how deep
+        if (currentlyOpenStatType === 'top-tens' && expandedTopTenTag !== null) {
+            params.set('topTen', expandedTopTenTag);
+
+            if (showAllTopTenGames) {
+                params.set('topTenShowAll', 'true');
+            }
         }
     }
 

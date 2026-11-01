@@ -27,6 +27,15 @@ Do NOT use the word "milestone" for cumulative totals of hours, sessions, or pla
 - **Milestone**: A per-game play-count tier — fives (5+), dimes (10+), quarters (25+), centuries (100+). See `getMilestones` and the `Milestone` tier collection. "Milestone" refers only to these per-game tiers.
 - **Logging total**: A cumulative all-time (or year) total of a metric crossing a round-number threshold (e.g. logging your 100th hour, 250th play). See `getLoggingTotals` (Year in Review) and `getCumulativeLoggingTotals` (Achievements). Never call these "milestones", and do not call them "logging achievements" (the word "achievement" is reserved for the Achievements feed as a whole; a logging total is one *type* of achievement in it).
 
+### Tag Namespace
+
+A tag name may carry a prefix: `Replaces:Phase 10`, `Data:Expandalone`. Call the prefix a **tag namespace** and the rest the **value** — not "tag type" (BG Stats tag objects already have a `type` field), "tag category", or "tag-tag".
+
+- Namespaces that describe games are registered in `TAG_NAMESPACES` in `stats/tag-stats.js`, which sets each one's section heading in the Top 10's detail and how its list titles read (`Replaces` → "Top 10 games that replace Phase 10").
+- Unprefixed tags fall under `DEFAULT_TAG_NAMESPACE` — heading "Categories", title "Top 10 <tag>".
+- A namespace found in the data with no registry entry falls back to its own prefix as the heading and the default title phrasing, so adding `Theme:` or `Mechanic:` tags in BG Stats works before any code change. Register it to control the wording.
+- `Data:` is a source-data mapping namespace, not a descriptive one. `buildGameTagLookup` in `scripts/transform-game-data.js` strips it, so it never reaches `data.json`.
+
 ## Metric Ordering Convention
 
 When hours, sessions, and plays are used together for any reason, they MUST always appear in this order:
@@ -300,6 +309,18 @@ const exitedShameGames = previousShame.games
     };
   });
 ```
+
+## No Backward Compatibility
+
+Assume every link, permalink parameter, data file, and stored value is current. Do not write code whose only job is to keep an older form working.
+
+**Never add, unless explicitly asked for it:**
+- A redirect or rewrite for a renamed permalink parameter or `stat` value
+- A reader for a previous `data.json` shape
+- An alias for a renamed field, function, or CSS class
+- A fallback for a localStorage key that changed name
+
+Rename or delete the old thing outright and let stale references break. A link that stops working is cheaper than a compatibility path that lives forever.
 
 ## Pre-Commit Requirements
 

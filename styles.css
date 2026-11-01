@@ -831,21 +831,17 @@ table.breakdown-table tbody tr:hover td:nth-child(2) {
     background: var(--bg-table-row-hover);
 }
 
-/* Highlighted breakdown rows: h-index/staircase contributors and Top 10 rows */
-table.breakdown-table tbody tr.h-index-contributor,
-table.breakdown-table tbody tr.top-ten-highlight {
+/* Highlighted breakdown rows: h-index/staircase contributors */
+table.breakdown-table tbody tr.h-index-contributor {
     background: var(--bg-row-highlight);
 }
 
-table.breakdown-table tbody tr.h-index-contributor:nth-child(even),
-table.breakdown-table tbody tr.top-ten-highlight:nth-child(even) {
+table.breakdown-table tbody tr.h-index-contributor:nth-child(even) {
     background: var(--bg-row-highlight-even);
 }
 
 table.breakdown-table tbody tr.h-index-contributor td:first-child,
-table.breakdown-table tbody tr.h-index-contributor td:nth-child(2),
-table.breakdown-table tbody tr.top-ten-highlight td:first-child,
-table.breakdown-table tbody tr.top-ten-highlight td:nth-child(2) {
+table.breakdown-table tbody tr.h-index-contributor td:nth-child(2) {
     background: inherit;
 }
 
@@ -1603,6 +1599,168 @@ footer p {
 
     .year-review-game-value {
         font-size: 0.8rem;
+    }
+}
+
+/* Top 10's detail: one section per tag namespace, each list expandable */
+.top-tens-section {
+    margin-bottom: 1.5rem;
+}
+
+.top-tens-section-heading {
+    color: var(--text-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-primary);
+}
+
+.top-tens-table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+.top-tens-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.top-tens-row {
+    cursor: pointer;
+}
+
+.top-tens-row td {
+    transition: background-color var(--transition-theme), border-color var(--transition-theme);
+}
+
+.top-tens-row:hover td {
+    background-color: var(--bg-table-row-hover);
+    transition: background-color var(--transition-hover) ease;
+}
+
+.top-tens-expand-icon {
+    display: inline-block;
+    width: 1em;
+    margin-right: 0.5rem;
+    font-size: 0.8em;
+}
+
+.top-tens-title {
+    color: var(--text-label);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Brightness and weight, not hue: every accent color already means a metric or a chip */
+.top-tens-tag {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.top-tens-count {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.top-tens-expanded-content td {
+    padding: 0;
+    white-space: normal;
+}
+
+.top-tens-list {
+    padding: 1rem;
+    background-color: var(--bg-table-row-even);
+}
+
+.top-tens-list:not(.top-tens-list--full) .top-tens-game-item--overflow {
+    display: none;
+}
+
+.top-tens-game-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.top-tens-game-item:last-child {
+    border-bottom: none;
+}
+
+.top-tens-game-rank {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 1.5rem;
+    flex-shrink: 0;
+}
+
+.top-tens-game-name {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.top-tens-game-rating {
+    flex-shrink: 0;
+}
+
+.top-tens-game-value {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.top-tens-show-all {
+    margin-top: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    background: none;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color var(--transition-hover) ease;
+}
+
+.top-tens-show-all:hover {
+    background-color: var(--bg-table-row-hover);
+}
+
+@media (max-width: 768px) {
+    .top-tens-section-heading {
+        font-size: 1rem;
+    }
+
+    .top-tens-table td {
+        padding: 0.5rem;
+    }
+
+    .top-tens-title {
+        font-size: 0.9rem;
+        white-space: normal;
+    }
+
+    .top-tens-list {
+        padding: 0.75rem;
+    }
+
+    .top-tens-game-item {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .top-tens-game-name {
+        font-size: 0.85rem;
     }
 }
 

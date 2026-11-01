@@ -1,6 +1,6 @@
 # Roadmap
 
-*Note: Items are numbered for reference only. Order does not represent priority.*
+_Note: Items are numbered for reference only. Order does not represent priority._
 
 1. Year in Review - Ratings: highest rated new-to-me game, average rating of games played
 2. Year in Review - Year-over-year: games with biggest play count increase vs previous year, this year vs last year comparison (plays, unique games, hours with % changes)
@@ -9,3 +9,4 @@
 5. Year in Review - Play distribution: play concentration (% of plays from top 10 games), new vs familiar ratio (plays of new-to-me vs previously played)
 6. Year in Review - Personal records: all-time highs achieved this year, all-time lows achieved this year
 7. Stats - Ratings: distribution (rating distribution visualization with separate views for owned games and played games)
+8. Put `Data` namespace tags under diagnostics
