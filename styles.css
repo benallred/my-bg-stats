@@ -1602,7 +1602,8 @@ footer p {
     }
 }
 
-/* Top 10's detail: one section per tag namespace, each list expandable */
+/* Top 10's detail: a wrapping row of tag pills per namespace, over a panel
+   holding the selected tag's ranked list */
 .top-tens-section {
     margin-bottom: 1.5rem;
 }
@@ -1616,42 +1617,38 @@ footer p {
     border-bottom: 2px solid var(--border-primary);
 }
 
-.top-tens-table {
-    width: 100%;
-    max-width: 100%;
-    table-layout: auto;
-    border-collapse: collapse;
+.top-tens-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
-.top-tens-table td {
-    padding: 0.6rem 0.75rem;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.top-tens-row {
-    cursor: pointer;
-}
-
-.top-tens-row td {
-    transition: background-color var(--transition-theme), border-color var(--transition-theme);
-}
-
-.top-tens-row:hover td {
-    background-color: var(--bg-table-row-hover);
-    transition: background-color var(--transition-hover) ease;
-}
-
-.top-tens-expand-icon {
-    display: inline-block;
-    width: 1em;
-    margin-right: 0.5rem;
-    font-size: 0.8em;
-}
-
-.top-tens-title {
+.top-tens-pill {
+    padding: 0.35rem 0.8rem;
+    background: none;
+    border: 1px solid var(--border-primary);
+    border-radius: 999px;
     color: var(--text-label);
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: background-color var(--transition-hover) ease, border-color var(--transition-hover) ease, color var(--transition-hover) ease;
+}
+
+/* Hold every pill at the width its bold selected text needs, so selecting one
+   does not widen it and nudge the pills after it along the row */
+.top-tens-pill::before {
+    content: attr(data-value);
+    display: block;
+    height: 0;
+    overflow: hidden;
+    font-weight: 700;
+    visibility: hidden;
+}
+
+.top-tens-pill:hover {
+    background-color: var(--bg-table-row-hover);
 }
 
 /* Brightness and weight, not hue: every accent color already means a metric or a chip */
@@ -1660,16 +1657,62 @@ footer p {
     font-weight: 700;
 }
 
-.top-tens-count {
+.top-tens-pill--selected {
+    background-color: var(--bg-table-row-hover);
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.top-tens-select {
+    display: none;
+    padding: 0.35rem 0.75rem;
+    border: 2px solid var(--border-primary);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    transition: border-color var(--transition-border), background-color var(--transition-theme), color var(--transition-theme);
+}
+
+.top-tens-select:hover {
+    border-color: var(--color-primary);
+}
+
+.top-tens-select:focus {
+    outline: none;
+    border-color: var(--color-primary-dark);
+}
+
+.top-tens-panel-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-primary);
+}
+
+.top-tens-panel-title {
+    color: var(--text-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.top-tens-panel-count {
     color: var(--text-secondary);
     font-size: 0.85rem;
-    text-align: right;
     white-space: nowrap;
 }
 
-.top-tens-expanded-content td {
-    padding: 0;
-    white-space: normal;
+.top-tens-empty {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 0;
 }
 
 .top-tens-list {
@@ -1736,18 +1779,22 @@ footer p {
     background-color: var(--bg-table-row-hover);
 }
 
+/* A phone-width pane wraps 41 pills into a cloud that fills the screen before
+   any game shows, so the pills give way to one grouped dropdown. Its optgroups
+   carry the namespace headings, so the sections drop out whole. */
 @media (max-width: 768px) {
-    .top-tens-section-heading {
+    .top-tens-section {
+        display: none;
+    }
+
+    .top-tens-select {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .top-tens-panel-title {
         font-size: 1rem;
-    }
-
-    .top-tens-table td {
-        padding: 0.5rem;
-    }
-
-    .top-tens-title {
-        font-size: 0.9rem;
-        white-space: normal;
     }
 
     .top-tens-list {

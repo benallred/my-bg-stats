@@ -465,7 +465,7 @@ let showAllYearReviewMetrics = false;
 let firstLoggedPlayDate = null;
 let selectedAchievementType = null;
 let showAllAchievementMetrics = false;
-let expandedTopTenTag = null;
+let selectedTopTenTag = null;
 let showAllTopTenGames = false;
 
 // Assigned in initializeImageModal; renderModals drives the image modal through
@@ -4545,15 +4545,59 @@ function formatTopTenMetricValue(value) {
 }
 
 /**
- * Build the clickable row and its hidden ranked list for one Top 10.
- * Games past the tenth are rendered but hidden until "Show all" is clicked.
+ * Build the pill that selects one Top 10. The pill carries only the tag's
+ * value — the pane title already says "Top 10's" and the section heading names
+ * the namespace, so anything more repeats itself once per tag.
  */
-function renderTopTenListRows(list) {
-    const isExpanded = list.tag === expandedTopTenTag;
+function renderTopTenPill(list) {
+    const isSelected = list.tag === selectedTopTenTag;
+
+    // data-value feeds the width the stylesheet reserves for the bold selected
+    // state; the text sits tight against the tags so no stray space widens it
+    return `
+        <button type="button" class="top-tens-pill${isSelected ? ' top-tens-pill--selected' : ''}" data-tag="${escapeHtml(list.tag)}" data-value="${escapeHtml(list.value)}" aria-pressed="${isSelected}">${escapeHtml(list.value)}</button>
+    `;
+}
+
+/**
+ * Build the one dropdown that replaces every namespace's pills on narrow
+ * screens, where 41 pills wrap into a cloud that fills the pane before any game
+ * shows. Each namespace becomes an option group, so its heading rides along and
+ * the sections themselves drop out at that width.
+ */
+function renderTopTenSelect(sections) {
+    // A disabled option is skipped when the browser picks a default, so the
+    // placeholder only rests in the closed control if it says it is selected
+    const placeholderSelected = findTopTenList(sections, selectedTopTenTag) === null ? ' selected' : '';
+
+    const groups = sections.map(section => {
+        const options = section.lists.map(list =>
+            `<option value="${escapeHtml(list.tag)}"${list.tag === selectedTopTenTag ? ' selected' : ''}>${escapeHtml(list.value)}</option>`
+        ).join('');
+
+        return `<optgroup label="${escapeHtml(section.heading)}">${options}</optgroup>`;
+    }).join('');
+
+    return `
+        <select class="top-tens-select" aria-label="Top 10 tag">
+            <option value="" disabled hidden${placeholderSelected}>Pick a tag</option>
+            ${groups}
+        </select>
+    `;
+}
+
+/**
+ * Build the ranked list for the selected tag. Games past the tenth are
+ * rendered but hidden until "Show all" is clicked.
+ */
+function renderTopTenPanel(list) {
+    if (list === null) {
+        return '<p class="top-tens-empty">Pick a tag to see its top games.</p>';
+    }
+
     const gameCount = list.games.length;
     const hasOverflow = gameCount > TOP_TEN_LIST_SIZE;
-    const showingAll = hasOverflow && isExpanded && showAllTopTenGames;
-    const showAllLabel = `Show all ${gameCount}`;
+    const showingAll = hasOverflow && showAllTopTenGames;
 
     const items = list.games.map((item, index) => {
         const rank = index + 1;
@@ -4569,93 +4613,97 @@ function renderTopTenListRows(list) {
     }).join('');
 
     const showAllButton = hasOverflow
-        ? `<button type="button" class="top-tens-show-all" data-show-all-label="${showAllLabel}">${showingAll ? TOP_TEN_SHOW_FEWER_LABEL : showAllLabel}</button>`
+        ? `<button type="button" class="top-tens-show-all">${showingAll ? TOP_TEN_SHOW_FEWER_LABEL : `Show all ${gameCount}`}</button>`
         : '';
 
     const { prefix, tag, suffix } = list.title;
     const titleHtml = `${escapeHtml(prefix)}<span class="top-tens-tag">${escapeHtml(tag)}</span>${escapeHtml(suffix)}`;
 
     return `
-        <tr class="top-tens-row" data-tag="${escapeHtml(list.tag)}">
-            <td class="top-tens-title">
-                <span class="top-tens-expand-icon">${isExpanded ? '▼' : '▶'}</span>
-                ${titleHtml}
-            </td>
-            <td class="top-tens-count">${gameCount} game${gameCount === 1 ? '' : 's'}</td>
-        </tr>
-        <tr class="top-tens-expanded-content"${isExpanded ? '' : ' style="display: none;"'}>
-            <td colspan="2">
-                <div class="top-tens-list${showingAll ? ' top-tens-list--full' : ''}">
-                    ${items}
-                    ${showAllButton}
-                </div>
-            </td>
-        </tr>
+        <div class="top-tens-panel-header">
+            <h3 class="top-tens-panel-title">${titleHtml}</h3>
+            <span class="top-tens-panel-count">${gameCount} game${gameCount === 1 ? '' : 's'}</span>
+        </div>
+        <div class="top-tens-list${showingAll ? ' top-tens-list--full' : ''}">
+            ${items}
+            ${showAllButton}
+        </div>
     `;
 }
 
-function renderTopTenShowAll(listElement, showAll) {
-    listElement.classList.toggle('top-tens-list--full', showAll);
-
-    const button = listElement.querySelector('.top-tens-show-all');
-    button.textContent = showAll ? TOP_TEN_SHOW_FEWER_LABEL : button.dataset.showAllLabel;
-}
-
 /**
- * Bring an opened Top 10 into view inside the scrolling detail pane.
- *
- * `alignToTop` puts the list's header row at the top of the pane. Otherwise the
- * pane scrolls the least amount that brings the whole ten-game list into view,
- * falling back to the header row at the top when the list is taller than the
- * pane.
+ * Find a tag's list across all namespace sections. A permalink can name a tag
+ * that is no longer in the data, which reads as nothing selected.
  */
-function scrollTopTenIntoView(row, { alignToTop }) {
-    const pane = document.getElementById('detail-content');
-    const paneTop = pane.getBoundingClientRect().top;
-    const listTop = pane.scrollTop + (row.getBoundingClientRect().top - paneTop);
-    const listBottom = pane.scrollTop + (row.nextElementSibling.getBoundingClientRect().bottom - paneTop);
-
-    const top = alignToTop
-        ? listTop
-        : Math.min(listTop, Math.max(pane.scrollTop, listBottom - pane.clientHeight));
-
-    pane.scrollTo({ top, behavior: 'smooth' });
-}
-
-/**
- * Open one Top 10 and close any other. Only one is open at a time, and it
- * always opens at ten games, so `topTen` and `topTenShowAll` together name
- * exactly what is on screen.
- */
-function toggleTopTenList(detailDiv, tag) {
-    expandedTopTenTag = tag === expandedTopTenTag ? null : tag;
-
-    const fullList = detailDiv.querySelector('.top-tens-list--full');
-    if (fullList) {
-        renderTopTenShowAll(fullList, false);
-    }
-    showAllTopTenGames = false;
-
-    let expandedRow = null;
-    detailDiv.querySelectorAll('.top-tens-row').forEach(row => {
-        const isExpanded = row.dataset.tag === expandedTopTenTag;
-        if (isExpanded) {
-            expandedRow = row;
+function findTopTenList(sections, tag) {
+    for (const section of sections) {
+        const list = section.lists.find(item => item.tag === tag);
+        if (list) {
+            return list;
         }
-        row.querySelector('.top-tens-expand-icon').textContent = isExpanded ? '▼' : '▶';
-        row.nextElementSibling.style.display = isExpanded ? 'table-row' : 'none';
+    }
+
+    return null;
+}
+
+/**
+ * Repaint which pill is selected and the panel beneath the pills. The panel
+ * holds the same spot whatever is selected, so the pills never move.
+ */
+function renderTopTenSelection(detailDiv, sections) {
+    detailDiv.querySelectorAll('.top-tens-pill').forEach(pill => {
+        const isSelected = pill.dataset.tag === selectedTopTenTag;
+        pill.classList.toggle('top-tens-pill--selected', isSelected);
+        pill.setAttribute('aria-pressed', isSelected);
     });
 
-    if (expandedRow) {
-        scrollTopTenIntoView(expandedRow, { alignToTop: false });
+    const select = detailDiv.querySelector('.top-tens-select');
+    select.value = findTopTenList(sections, selectedTopTenTag) ? selectedTopTenTag : '';
+
+    detailDiv.querySelector('.top-tens-panel').innerHTML =
+        renderTopTenPanel(findTopTenList(sections, selectedTopTenTag));
+}
+
+/**
+ * Bring the panel into view when the pills have pushed it past the bottom of
+ * the pane. A narrow pane wraps the pills into enough rows to fill it on their
+ * own, leaving the selected list off screen. Aligns the panel header to the top
+ * of the pane; a pane short enough to show everything clamps this to no scroll.
+ */
+function scrollTopTenPanelIntoView(detailDiv) {
+    const pane = document.getElementById('detail-content');
+    const paneRect = pane.getBoundingClientRect();
+    const headerRect = detailDiv.querySelector('.top-tens-panel-header').getBoundingClientRect();
+
+    if (headerRect.top >= paneRect.top && headerRect.bottom <= paneRect.bottom) {
+        return;
+    }
+
+    pane.scrollTo({ top: pane.scrollTop + (headerRect.top - paneRect.top), behavior: 'smooth' });
+}
+
+/**
+ * Select a tag, or clear the selection when passed null. A fresh selection
+ * always starts at ten games, so `topTen` and `topTenShowAll` together name
+ * exactly what is on screen.
+ */
+function selectTopTenTag(detailDiv, sections, tag) {
+    selectedTopTenTag = tag;
+    showAllTopTenGames = false;
+
+    renderTopTenSelection(detailDiv, sections);
+
+    if (selectedTopTenTag !== null) {
+        scrollTopTenPanelIntoView(detailDiv);
     }
 
     updateURL();
 }
 
 /**
- * Show the Top 10's detail: one section per tag namespace, each list a row that
- * expands to its ranked games.
+ * Show the Top 10's detail: one wrapping row of tag pills per namespace — a
+ * dropdown instead on narrow screens — above a panel holding the selected
+ * tag's ranked games.
  */
 function showTopTensDetail(container, statsCache) {
     const sections = statsCache.topTenSections;
@@ -4667,42 +4715,45 @@ function showTopTensDetail(container, statsCache) {
 
     const detailDiv = document.createElement('div');
     detailDiv.className = 'top-tens-detail';
-    detailDiv.innerHTML = sections.map(section => `
-        <div class="top-tens-section">
-            <h3 class="top-tens-section-heading">${escapeHtml(section.heading)}</h3>
-            <table class="top-tens-table">
-                <tbody>${section.lists.map(renderTopTenListRows).join('')}</tbody>
-            </table>
-        </div>
-    `).join('');
+    detailDiv.innerHTML = `
+        ${renderTopTenSelect(sections)}
+        ${sections.map(section => `
+            <div class="top-tens-section">
+                <h3 class="top-tens-section-heading">${escapeHtml(section.heading)}</h3>
+                <div class="top-tens-pills">${section.lists.map(renderTopTenPill).join('')}</div>
+            </div>
+        `).join('')}
+        <div class="top-tens-panel">${renderTopTenPanel(findTopTenList(sections, selectedTopTenTag))}</div>
+    `;
 
-    detailDiv.querySelectorAll('.top-tens-row').forEach(row => {
-        row.addEventListener('click', () => toggleTopTenList(detailDiv, row.dataset.tag));
+    detailDiv.addEventListener('change', (event) => {
+        if (event.target.closest('.top-tens-select')) {
+            selectTopTenTag(detailDiv, sections, event.target.value);
+        }
     });
 
-    detailDiv.querySelectorAll('.top-tens-show-all').forEach(button => {
-        button.addEventListener('click', () => {
-            const expandedContent = button.closest('.top-tens-expanded-content');
+    // Delegated because the panel's contents are replaced on every selection
+    detailDiv.addEventListener('click', (event) => {
+        const pill = event.target.closest('.top-tens-pill');
+        if (pill) {
+            // Clicking the selected pill clears it
+            selectTopTenTag(detailDiv, sections, pill.dataset.tag === selectedTopTenTag ? null : pill.dataset.tag);
+            return;
+        }
 
+        if (event.target.closest('.top-tens-show-all')) {
             showAllTopTenGames = !showAllTopTenGames;
-            renderTopTenShowAll(expandedContent.querySelector('.top-tens-list'), showAllTopTenGames);
-            scrollTopTenIntoView(expandedContent.previousElementSibling, { alignToTop: false });
+            renderTopTenSelection(detailDiv, sections);
             updateURL();
-        });
+        }
     });
 
     container.appendChild(detailDiv);
 
-    // A permalinked list can sit well below the fold, so bring it to the top.
     // Deferred because the pane only becomes scrollable once showDetailSection
     // sets its max-height, which happens after this render returns.
-    if (isLoadingFromPermalink) {
-        const expandedRow = Array.from(detailDiv.querySelectorAll('.top-tens-row'))
-            .find(row => row.dataset.tag === expandedTopTenTag);
-
-        if (expandedRow) {
-            requestAnimationFrame(() => scrollTopTenIntoView(expandedRow, { alignToTop: true }));
-        }
+    if (isLoadingFromPermalink && findTopTenList(sections, selectedTopTenTag)) {
+        requestAnimationFrame(() => scrollTopTenPanelIntoView(detailDiv));
     }
 }
 
@@ -6142,9 +6193,9 @@ function loadFromPermalink() {
         selectedAchievementType = achievementTypeParam;
     }
 
-    // Restore the expanded Top 10 list and how much of it is showing
+    // Restore the selected Top 10 tag and how much of its list is showing
     if (topTenParam !== null) {
-        expandedTopTenTag = topTenParam;
+        selectedTopTenTag = topTenParam;
     }
 
     if (topTenShowAllParam === 'true') {
@@ -6370,9 +6421,9 @@ function updateURL() {
             params.set('achievementAllMetrics', 'true');
         }
 
-        // For the Top 10's list, encode which list is expanded and how deep
-        if (currentlyOpenStatType === 'top-tens' && expandedTopTenTag !== null) {
-            params.set('topTen', expandedTopTenTag);
+        // For the Top 10's list, encode which tag is selected and how deep
+        if (currentlyOpenStatType === 'top-tens' && selectedTopTenTag !== null) {
+            params.set('topTen', selectedTopTenTag);
 
             if (showAllTopTenGames) {
                 params.set('topTenShowAll', 'true');
