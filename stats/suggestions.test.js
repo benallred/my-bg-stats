@@ -33,24 +33,29 @@ describe('Suggestion Algorithms', () => {
   });
 
   describe('calculateDaysSince', () => {
+    // toISOString would stamp a UTC date, which is tomorrow's once local time
+    // crosses the UTC day boundary, making these counts off by one in the evening
+    const localDateString = (date) => [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+
     test('returns 0 for today', () => {
-      const today = new Date().toISOString().split('T')[0];
-      expect(calculateDaysSince(today)).toBe(0);
+      expect(calculateDaysSince(localDateString(new Date()))).toBe(0);
     });
 
     test('returns positive number for past dates', () => {
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - 10);
-      const pastDateStr = pastDate.toISOString().split('T')[0];
-      expect(calculateDaysSince(pastDateStr)).toBe(10);
+      expect(calculateDaysSince(localDateString(pastDate))).toBe(10);
     });
 
     test('returns correct days for a known past date', () => {
       const daysAgo = 30;
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - daysAgo);
-      const pastDateStr = pastDate.toISOString().split('T')[0];
-      expect(calculateDaysSince(pastDateStr)).toBe(daysAgo);
+      expect(calculateDaysSince(localDateString(pastDate))).toBe(daysAgo);
     });
   });
 

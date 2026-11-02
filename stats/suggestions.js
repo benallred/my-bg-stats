@@ -70,13 +70,21 @@ function formatTotalMetricStat(value, metric) {
 
 /**
  * Helper: Calculate days since a date
+ *
+ * Both ends are local midnight. Handing the string to `new Date` would read it
+ * as UTC midnight and count a day too many once local time crosses the UTC day
+ * boundary — from 5pm onward in Mountain time.
+ *
  * @param {string} dateString - Date in YYYY-MM-DD format
  * @returns {number} Days since the date
  */
 function calculateDaysSince(dateString) {
+  const [year, month, day] = dateString.split('-').map(Number);
   const today = new Date();
-  const date = new Date(dateString);
-  return Math.floor((today - date) / (1000 * 60 * 60 * 24));
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  // Rounded because a DST change leaves 23 or 25 hours between two midnights
+  return Math.round((startOfToday - new Date(year, month - 1, day)) / (1000 * 60 * 60 * 24));
 }
 
 /**
