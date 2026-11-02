@@ -118,6 +118,28 @@ describe('process-data.js transformation logic', () => {
 
       expect(game.tags).toEqual([]);
     });
+
+    test('collects "Data:"-prefixed tags into dataTags, including promoted ones', async () => {
+      const output = await processData(tagsFixture);
+      const game = output.games.find(g => g.name === 'Mixed Tag Game');
+
+      // Data:Expandalone is promoted to isExpandalone but still reported here
+      expect(game.dataTags).toEqual(['Data:Expandalone', 'Data:Same Game']);
+    });
+
+    test('excludes descriptive and promoted non-Data tags from dataTags', async () => {
+      const output = await processData(tagsFixture);
+      const game = output.games.find(g => g.name === 'Tagged Game');
+
+      expect(game.dataTags).toEqual([]);
+    });
+
+    test('returns an empty dataTags array for games with no tags', async () => {
+      const output = await processData(tagsFixture);
+      const game = output.games.find(g => g.name === 'Untagged Game');
+
+      expect(game.dataTags).toEqual([]);
+    });
   });
 
   describe('Copy Metadata Extraction', () => {

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { getTopGamesByTag, groupTagsByNamespace } from './tag-stats.js';
+import { getTopGamesByTag, groupTagsByNamespace, getDataTagGroups } from './tag-stats.js';
 import { Metric } from './constants.js';
 
 describe('getTopGamesByTag', () => {
@@ -236,5 +236,44 @@ describe('groupTagsByNamespace', () => {
 
   test('returns an empty array when there are no tag groups', () => {
     expect(groupTagsByNamespace([])).toEqual([]);
+  });
+});
+
+describe('getDataTagGroups', () => {
+  const games = [
+    { id: 1, name: 'Zulu', isBaseGame: true, dataTags: ['Data:Same Game'] },
+    { id: 2, name: 'Alpha', isBaseGame: true, dataTags: ['Data:Same Game', 'Data:Expandalone'] },
+    { id: 3, name: 'Bravo Expansion', isBaseGame: false, dataTags: ['Data:Expandalone'] },
+    { id: 4, name: 'Charlie', isBaseGame: true, dataTags: [] },
+  ];
+
+  test('groups games by data tag, sorted by tag name', () => {
+    const result = getDataTagGroups(games);
+
+    expect(result.map(g => g.tag)).toEqual(['Data:Expandalone', 'Data:Same Game']);
+  });
+
+  test('strips the namespace prefix into the value', () => {
+    const result = getDataTagGroups(games);
+
+    expect(result.map(g => g.value)).toEqual(['Expandalone', 'Same Game']);
+  });
+
+  test('sorts each group by game name and includes non-base games', () => {
+    const result = getDataTagGroups(games);
+    const expandalone = result.find(g => g.tag === 'Data:Expandalone');
+
+    expect(expandalone.games.map(g => g.name)).toEqual(['Alpha', 'Bravo Expansion']);
+  });
+
+  test('excludes games carrying no data tags', () => {
+    const result = getDataTagGroups(games);
+    const allIds = result.flatMap(g => g.games.map(game => game.id));
+
+    expect(allIds).not.toContain(4);
+  });
+
+  test('returns an empty array when no game carries a data tag', () => {
+    expect(getDataTagGroups([{ id: 1, name: 'Alpha', dataTags: [] }])).toEqual([]);
   });
 });

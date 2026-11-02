@@ -85,6 +85,7 @@ import {
   getGameRankings,
   getTopGamesByTag,
   groupTagsByNamespace,
+  getDataTagGroups,
   AchievementType,
   getAchievements,
 } from './stats.js';
@@ -628,6 +629,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Load data
         await loadData();
 
+        // Add the per-tag diagnostics cards before stats and listeners run
+        renderDataTagCards();
+
         // Initialize modals
         initializeImageModal();
         initializeGameDetailModal();
@@ -919,6 +923,7 @@ function updateAllStats() {
         neverPlayedGames: getOwnedGamesNeverPlayed(gameData.games, gameData.plays, currentYear),
         missingPricePaidGames: getOwnedBaseGamesMissingPricePaid(gameData.games),
         unratedGames: getOwnedBaseGamesWithoutRating(gameData.games, gameData.plays),
+        dataTagGroups: getDataTagGroups(gameData.games),
         suggestedGames: getSuggestedGames(gameData.games, gameData.plays),
         dailySessionStats: getDailySessionStats(gameData.plays, currentYear),
         achievements: getAchievements({
@@ -1483,6 +1488,57 @@ function updateTopTensStats() {
 }
 
 /**
+ * Build the stat type a `Data:` tag's diagnostics card is addressed by, in the
+ * card id, its data-stat attribute, and the permalink.
+ *
+ * @param {string} value - Tag value with the `Data:` prefix stripped
+ * @returns {string} Stat type, e.g. 'data-tag-same-game'
+ */
+function dataTagStatType(value) {
+    const slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return `data-tag-${slug}`;
+}
+
+/**
+ * Add one diagnostics card per `Data:` tag found in the data, after the static
+ * diagnostics cards.
+ *
+ * Runs once at startup rather than on every stat update: showDetailSection
+ * moves the detail section to sit after the card it belongs to, so rebuilding
+ * the cards would strand an open detail.
+ */
+function renderDataTagCards() {
+    let previousCard = document.getElementById('unrated-games');
+
+    getDataTagGroups(gameData.games).forEach(({ tag, value }) => {
+        const statType = dataTagStatType(value);
+        const card = document.createElement('article');
+
+        card.className = 'widget widget--1x1 clickable';
+        card.id = statType;
+        card.dataset.stat = statType;
+        card.dataset.dataTag = tag;
+        card.style.display = 'none';
+        card.innerHTML = `
+            <div class="widget__title">${escapeHtml(tag)}</div>
+            <div class="widget__value">--</div>
+            <div class="widget__description">Games tagged ${escapeHtml(tag)}</div>
+        `;
+
+        previousCard.after(card);
+        previousCard = card;
+
+        statDetailHandlers[statType] = {
+            getTitle: () => escapeHtml(tag),
+            render: (detailContent, statsCache) => {
+                const group = statsCache.dataTagGroups.find(g => g.tag === tag);
+                createGameTable(detailContent, group.games, ['Name', 'Year', 'Acquisition Date'], { column: 'Name', direction: 'asc' });
+            },
+        };
+    });
+}
+
+/**
  * Update diagnostics section visibility and values
  */
 function updateDiagnosticsSection() {
@@ -1491,28 +1547,29 @@ function updateDiagnosticsSection() {
     const neverPlayedCard = document.getElementById('never-played');
     const missingPriceCard = document.getElementById('missing-price-paid');
     const unratedCard = document.getElementById('unrated-games');
+    const dataTagCards = Array.from(document.querySelectorAll('[data-data-tag]'));
+    const allCards = [unknownCard, neverPlayedCard, missingPriceCard, unratedCard, ...dataTagCards];
 
     // Show/hide section based on hidden flag
     if (!isHiddenEnabled()) {
         section.style.display = 'none';
-        unknownCard.style.display = 'none';
-        neverPlayedCard.style.display = 'none';
-        missingPriceCard.style.display = 'none';
-        unratedCard.style.display = 'none';
+        allCards.forEach(card => card.style.display = 'none');
         return;
     }
 
     section.style.display = 'block';
-    unknownCard.style.display = 'flex';
-    neverPlayedCard.style.display = 'flex';
-    missingPriceCard.style.display = 'flex';
-    unratedCard.style.display = 'flex';
+    allCards.forEach(card => card.style.display = 'flex');
 
     // Update card values
     unknownCard.querySelector('.widget__value').textContent = statsCache.unknownGames.length;
     neverPlayedCard.querySelector('.widget__value').textContent = statsCache.neverPlayedGames.length;
     missingPriceCard.querySelector('.widget__value').textContent = statsCache.missingPricePaidGames.length;
     unratedCard.querySelector('.widget__value').textContent = statsCache.unratedGames.length;
+
+    dataTagCards.forEach(card => {
+        const group = statsCache.dataTagGroups.find(g => g.tag === card.dataset.dataTag);
+        card.querySelector('.widget__value').textContent = group.games.length;
+    });
 }
 
 /**

@@ -34,7 +34,7 @@ A tag name may carry a prefix: `Replaces:Phase 10`, `Data:Expandalone`. Call the
 - Namespaces that describe games are registered in `TAG_NAMESPACES` in `stats/tag-stats.js`, which sets each one's section heading in the Top 10's detail and how its list titles read (`Replaces` → "Top 10 games that replace Phase 10").
 - Unprefixed tags fall under `DEFAULT_TAG_NAMESPACE` — heading "Categories", title "Top 10 <tag>".
 - A namespace found in the data with no registry entry falls back to its own prefix as the heading and the default title phrasing, so adding `Theme:` or `Mechanic:` tags in BG Stats works before any code change. Register it to control the wording.
-- `Data:` is a source-data mapping namespace, not a descriptive one. `buildGameTagLookup` in `scripts/transform-game-data.js` strips it, so it never reaches `data.json`.
+- `Data:` is a source-data mapping namespace, not a descriptive one. `buildTagLookups` in `scripts/transform-game-data.js` splits it off into each game's `dataTags` field, so it never reaches `tags` and never appears in the Top 10's. `getDataTagGroups` in `stats/tag-stats.js` groups games by data tag, and `renderDataTagCards` in `app.js` gives each one a Diagnostics card. A tag promoted to a game property (`Data:Expandalone` → `isExpandalone`) still lands in `dataTags` so diagnostics can report on it.
 
 ## Metric Ordering Convention
 

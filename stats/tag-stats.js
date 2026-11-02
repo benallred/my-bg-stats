@@ -1,5 +1,6 @@
 /**
- * Tag statistics - group base games by descriptive tag, ranked by rating
+ * Tag statistics - group base games by descriptive tag ranked by rating, and
+ * group games by source-data mapping tag for diagnostics
  */
 
 import { isPlayInYear, getMetricValueFromPlayData } from './play-helpers.js';
@@ -195,4 +196,35 @@ function getTopGamesByTag(games, plays, metric, year = null) {
   return result;
 }
 
-export { getTopGamesByTag, groupTagsByNamespace };
+/**
+ * Group games by `Data:` tag, one group per tag.
+ *
+ * Data tags map source data rather than describe a game, so they stay out of
+ * the Top 10's and surface as diagnostics instead. Every game carrying the tag
+ * counts, whatever its type.
+ *
+ * @param {Array} games - Array of game objects
+ * @returns {Array} Array of { tag, value, games } sorted by tag name, each group's games sorted by name
+ */
+function getDataTagGroups(games) {
+  const groups = new Map();
+
+  games.forEach(game => {
+    game.dataTags.forEach(tag => {
+      if (!groups.has(tag)) {
+        groups.set(tag, []);
+      }
+      groups.get(tag).push(game);
+    });
+  });
+
+  return Array.from(groups.keys())
+    .sort((a, b) => a.localeCompare(b))
+    .map(tag => ({
+      tag,
+      value: parseTagName(tag).value,
+      games: groups.get(tag).sort((a, b) => a.name.localeCompare(b.name)),
+    }));
+}
+
+export { getTopGamesByTag, groupTagsByNamespace, getDataTagGroups };
