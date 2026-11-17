@@ -2247,8 +2247,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 27,
-      "uniquePlayDays": 23,
+      "playCount": 28,
+      "uniquePlayDays": 24,
       "thumbnailUrl": "https://cf.geekdo-images.com/LPZHyg3KP_JI0x5CRut9lQ__thumb/img/F1jYA7KSf96S5j7zRMD5t35GNb8=/fit-in/200x150/filters:strip_icc()/pic6643190.png",
       "coverUrl": "https://cf.geekdo-images.com/LPZHyg3KP_JI0x5CRut9lQ__original/img/qV7_RqqlgH_Cn_VXt8MLiGKC97U=/0x0/filters:format(png)/pic6643190.png",
       "expansionIds": [],
@@ -3261,12 +3261,12 @@
           "publicComment": "Cardinal Industries Wood Chess Set"
         }
       ],
-      "playCount": 4,
-      "uniquePlayDays": 3,
+      "playCount": 5,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/0-DjGBOko6RV8zg5ejhYIg__thumb/img/kjtoinSrkYV0HZleXMxkJzZwS8k=/fit-in/200x150/filters:strip_icc()/pic260745.jpg",
       "coverUrl": "https://cf.geekdo-images.com/0-DjGBOko6RV8zg5ejhYIg__original/img/0pn_QgMuWaIJb2Q7aZNfORse0_o=/0x0/filters:format(jpeg)/pic260745.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 25
+      "typicalPlayTimeMinutes": 29
     },
     {
       "id": 348,
@@ -4960,12 +4960,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 20,
-      "uniquePlayDays": 11,
+      "playCount": 21,
+      "uniquePlayDays": 12,
       "thumbnailUrl": "https://cf.geekdo-images.com/a93rBWXCZ6QU9NIbTBjlBg__small/img/V1ProyyzfYSl93V4BGUxpGP_crY=/fit-in/200x150/filters:strip_icc()/pic7622768.png",
       "coverUrl": "https://cf.geekdo-images.com/a93rBWXCZ6QU9NIbTBjlBg__original/img/Rhd0kav4hCZnpQJDl48ppM6aE4M=/0x0/filters:format(png)/pic7622768.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 6.5
+      "typicalPlayTimeMinutes": 7
     },
     {
       "id": 355,
@@ -8278,8 +8278,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 74,
-      "uniquePlayDays": 51,
+      "playCount": 76,
+      "uniquePlayDays": 52,
       "thumbnailUrl": "https://cf.geekdo-images.com/4DffKExiPihIf9T_AqkPCQ__thumb/img/0EuD6uQ0lLAb2jtY6YC0EduW7Gw=/fit-in/200x150/filters:strip_icc()/pic1299877.png",
       "coverUrl": "https://cf.geekdo-images.com/4DffKExiPihIf9T_AqkPCQ__original/img/00AgwqL0q6j08AE3CfKOPm1S17c=/0x0/filters:format(png)/pic1299877.png",
       "expansionIds": [
@@ -9485,7 +9485,7 @@
           "versionName": null,
           "acquisitionDate": "2026-02-16",
           "statusOwned": true,
-          "pricePaid": 44,
+          "pricePaid": 56.29,
           "currency": "USD",
           "publicComment": null
         }
@@ -9495,8 +9495,39 @@
       "thumbnailUrl": "https://cf.geekdo-images.com/lrHAQv_mccR-gulDoHxaJA__small/img/zKAq5l0g8qGZgy0kIVmzK4FgUEA=/fit-in/200x150/filters:strip_icc()/pic8003054.png",
       "coverUrl": "https://cf.geekdo-images.com/lrHAQv_mccR-gulDoHxaJA__original/img/YciAtUa8J2DkWhR8hYFi9nlNrHk=/0x0/filters:format(png)/pic8003054.png",
       "expansionIds": [
-        638
+        638,
+        650
       ],
+      "typicalPlayTimeMinutes": null
+    },
+    {
+      "id": 650,
+      "name": "Logic & Lore: Echoes",
+      "bggId": 482665,
+      "year": 2026,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "dataTags": [],
+      "copies": [
+        {
+          "copyId": "64182edf-9551-4269-95af-c66b35b1f68e",
+          "versionName": null,
+          "acquisitionDate": "2026-02-16",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": null,
+      "coverUrl": null,
+      "expansionIds": null,
       "typicalPlayTimeMinutes": null
     },
     {
@@ -10111,12 +10142,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 1,
-      "uniquePlayDays": 1,
+      "playCount": 2,
+      "uniquePlayDays": 2,
       "thumbnailUrl": "https://cf.geekdo-images.com/DpeZK8l3bKWoLvABVIkl1A__small/img/X5cpm4Ja4xqwxPOvxPs7ZGTPmKU=/fit-in/200x150/filters:strip_icc()/pic9445557.png",
       "coverUrl": "https://cf.geekdo-images.com/DpeZK8l3bKWoLvABVIkl1A__original/img/AqU9AaLYGvncIZG1NvNyZPZQ1kk=/0x0/filters:format(png)/pic9445557.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 92
+      "typicalPlayTimeMinutes": 97
     },
     {
       "id": 27,
@@ -11433,12 +11464,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 10,
-      "uniquePlayDays": 9,
+      "playCount": 11,
+      "uniquePlayDays": 10,
       "thumbnailUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__small/img/Q3W4poMS4btD-HZLervgqbSCtmE=/fit-in/200x150/filters:strip_icc()/pic7070194.jpg",
       "coverUrl": "https://cf.geekdo-images.com/GJKuOCy5HGAYgVH_Rei5mA__original/img/oRsIxp72iv58128KFdqvjG6Gz64=/0x0/filters:format(jpeg)/pic7070194.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 26
+      "typicalPlayTimeMinutes": 27
     },
     {
       "id": 616,
@@ -12153,8 +12184,8 @@
           "publicComment": "Dropping half a point because some rules are scattered through the rulebook and hard to find."
         }
       ],
-      "playCount": 18,
-      "uniquePlayDays": 17,
+      "playCount": 19,
+      "uniquePlayDays": 18,
       "thumbnailUrl": "https://cf.geekdo-images.com/-Ro5KFX55FbZBWehBy9LKg__thumb/img/yHZjXqMjgYpXCZZDVQsCJfABYA4=/fit-in/200x150/filters:strip_icc()/pic6974678.jpg",
       "coverUrl": "https://cf.geekdo-images.com/-Ro5KFX55FbZBWehBy9LKg__original/img/17jLBJbMVzZssJLpRh503itz008=/0x0/filters:format(jpeg)/pic6974678.jpg",
       "expansionIds": [],
@@ -13851,7 +13882,7 @@
           "versionName": "English edition",
           "acquisitionDate": "2025-02-28",
           "statusOwned": true,
-          "pricePaid": 9.97,
+          "pricePaid": 17.5,
           "currency": "USD",
           "publicComment": "Minus half a point for the fiddliness of setup (and how easy it is to mess up the board). Minus a full point for lack of a scenario generator - once you finish scenario 5, are you done? How can we keep playing without doing the same thing over and over?"
         }
@@ -13860,8 +13891,40 @@
       "uniquePlayDays": 9,
       "thumbnailUrl": "https://cf.geekdo-images.com/WdYRHQ_ILHTV_ECMGF27Gw__thumb/img/y8Hlu0-CQDQAO6d6zM8YJ3dVevI=/fit-in/200x150/filters:strip_icc()/pic7267575.jpg",
       "coverUrl": "https://cf.geekdo-images.com/WdYRHQ_ILHTV_ECMGF27Gw__original/img/i9rMBmWzjVl2Aep-xUqWg4u0ADA=/0x0/filters:format(jpeg)/pic7267575.jpg",
-      "expansionIds": [],
+      "expansionIds": [
+        649
+      ],
       "typicalPlayTimeMinutes": 34
+    },
+    {
+      "id": 649,
+      "name": "Sail: Seafarers Expansion",
+      "bggId": 393101,
+      "year": 2023,
+      "rating": null,
+      "isBaseGame": false,
+      "isExpansion": true,
+      "isExpandalone": false,
+      "isNonReplayable": false,
+      "tags": [],
+      "dataTags": [],
+      "copies": [
+        {
+          "copyId": "a031077c-ac6d-445d-ac8d-e11486f7f623",
+          "versionName": "English edition",
+          "acquisitionDate": "2026-11-15",
+          "statusOwned": true,
+          "pricePaid": null,
+          "currency": null,
+          "publicComment": null
+        }
+      ],
+      "playCount": 0,
+      "uniquePlayDays": 0,
+      "thumbnailUrl": "https://cf.geekdo-images.com/JCHSww2sYXbXw99Ewcokcg__small/img/BV_ccD1VRSssumJ_ph62JAXOblY=/fit-in/200x150/filters:strip_icc()/pic9085390.jpg",
+      "coverUrl": "https://cf.geekdo-images.com/JCHSww2sYXbXw99Ewcokcg__original/img/Usre6i3oZQS7zclcP9K9eSLmhy8=/0x0/filters:format(jpeg)/pic9085390.jpg",
+      "expansionIds": null,
+      "typicalPlayTimeMinutes": null
     },
     {
       "id": 165,
@@ -14678,12 +14741,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 35,
-      "uniquePlayDays": 30,
+      "playCount": 36,
+      "uniquePlayDays": 31,
       "thumbnailUrl": "https://cf.geekdo-images.com/PQzVclEoOQ_wr4e1V86kxA__thumb/img/cpmsSDagE5RvQ1ERXl-fMJIaUUg=/fit-in/200x150/filters:strip_icc()/pic8157856.png",
       "coverUrl": "https://cf.geekdo-images.com/PQzVclEoOQ_wr4e1V86kxA__original/img/KXOf1hP1cIJQLabKhZulWP-e9wI=/0x0/filters:format(png)/pic8157856.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 76
+      "typicalPlayTimeMinutes": 75.5
     },
     {
       "id": 567,
@@ -16643,14 +16706,14 @@
           "publicComment": null
         }
       ],
-      "playCount": 31,
-      "uniquePlayDays": 27,
+      "playCount": 32,
+      "uniquePlayDays": 28,
       "thumbnailUrl": "https://cf.geekdo-images.com/tcupSjoLMn9sKbnGxQU9Kg__thumb/img/aQGuKmGqMS8WWfWA280XJJ2jiI4=/fit-in/200x150/filters:strip_icc()/pic6326925.jpg",
       "coverUrl": "https://cf.geekdo-images.com/tcupSjoLMn9sKbnGxQU9Kg__original/img/1y5pSKExuTjPExQzWf99e_xbwPM=/0x0/filters:format(jpeg)/pic6326925.jpg",
       "expansionIds": [
         423
       ],
-      "typicalPlayTimeMinutes": 34
+      "typicalPlayTimeMinutes": 35
     },
     {
       "id": 423,
@@ -17019,8 +17082,8 @@
           "publicComment": null
         }
       ],
-      "playCount": 12,
-      "uniquePlayDays": 11,
+      "playCount": 13,
+      "uniquePlayDays": 12,
       "thumbnailUrl": "https://cf.geekdo-images.com/bn4PzmubJyyZmo-sHO6i8Q__thumb/img/UTnuNns9SCYEuU74MCqS2naqTwY=/fit-in/200x150/filters:strip_icc()/pic5980577.png",
       "coverUrl": "https://cf.geekdo-images.com/bn4PzmubJyyZmo-sHO6i8Q__original/img/rWTynOnpmyXWsIQGxtBgbXY0pC8=/0x0/filters:format(png)/pic5980577.png",
       "expansionIds": [],
@@ -17437,9 +17500,14 @@
       "isExpandalone": false,
       "isNonReplayable": false,
       "tags": [
-        "LOTR"
+        "Drafting",
+        "LOTR",
+        "Replaces:Stratego",
+        "Two Player"
       ],
-      "dataTags": [],
+      "dataTags": [
+        "Data:Sleeved"
+      ],
       "copies": [
         {
           "copyId": "3861a674-d216-414b-a89b-681cfbdd6a42",
@@ -17451,12 +17519,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 0,
-      "uniquePlayDays": 0,
+      "playCount": 4,
+      "uniquePlayDays": 4,
       "thumbnailUrl": "https://cf.geekdo-images.com/i5cEvhnKYPzJOXCcKFfMPQ__small/img/78VSNRD26mtfJ52HaqCjHSWPtR8=/fit-in/200x150/filters:strip_icc()/pic8933169.png",
       "coverUrl": "https://cf.geekdo-images.com/i5cEvhnKYPzJOXCcKFfMPQ__original/img/Swgaf_llgvkHu4npTa2OUEk95SU=/0x0/filters:format(png)/pic8933169.png",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": null
+      "typicalPlayTimeMinutes": 41.5
     },
     {
       "id": 75,
@@ -18303,12 +18371,12 @@
           "publicComment": null
         }
       ],
-      "playCount": 14,
-      "uniquePlayDays": 7,
+      "playCount": 16,
+      "uniquePlayDays": 8,
       "thumbnailUrl": "https://cf.geekdo-images.com/M9jtWLtj5lpSbQEhCNIbDw__thumb/img/MKU_1ZhLNuS59Ib8aMVeRBvCyXk=/fit-in/200x150/filters:strip_icc()/pic6107847.jpg",
       "coverUrl": "https://cf.geekdo-images.com/M9jtWLtj5lpSbQEhCNIbDw__original/img/HUSWiCnh3drXue50bFvaSXnR3Go=/0x0/filters:format(jpeg)/pic6107847.jpg",
       "expansionIds": [],
-      "typicalPlayTimeMinutes": 133.5
+      "typicalPlayTimeMinutes": 125.5
     },
     {
       "id": 346,
@@ -20894,6 +20962,229 @@
     }
   ],
   "plays": [
+    {
+      "gameId": 642,
+      "copyId": "3861a674-d216-414b-a89b-681cfbdd6a42",
+      "date": "2026-11-16",
+      "timestamp": "2026-11-16 18:38:46",
+      "durationMin": 54,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 508,
+      "copyId": "58f2dac9-82d5-440e-89b5-6d850cd65f31",
+      "date": "2026-11-15",
+      "timestamp": "2026-11-15 20:34:39",
+      "durationMin": 65,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 642,
+      "copyId": "3861a674-d216-414b-a89b-681cfbdd6a42",
+      "date": "2026-11-15",
+      "timestamp": "2026-11-15 15:08:07",
+      "durationMin": 45,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 642,
+      "copyId": "3861a674-d216-414b-a89b-681cfbdd6a42",
+      "date": "2026-11-14",
+      "timestamp": "2026-11-14 22:26:29",
+      "durationMin": 38,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 642,
+      "copyId": "3861a674-d216-414b-a89b-681cfbdd6a42",
+      "date": "2026-11-12",
+      "timestamp": "2026-11-12 22:18:15",
+      "durationMin": 38,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 289,
+      "copyId": "a93e0de3-f07d-4023-a0fb-b08eac160e38",
+      "date": "2026-11-11",
+      "timestamp": "2026-11-11 20:08:32",
+      "durationMin": 10,
+      "durationEstimated": false,
+      "players": [
+        3,
+        5
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 289,
+      "copyId": "a93e0de3-f07d-4023-a0fb-b08eac160e38",
+      "date": "2026-11-11",
+      "timestamp": "2026-11-11 19:57:03",
+      "durationMin": 9,
+      "durationEstimated": false,
+      "players": [
+        3,
+        5
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 578,
+      "copyId": "3b3b797a-6db5-42b6-9715-87421c25a754",
+      "date": "2026-11-11",
+      "timestamp": "2026-11-11 19:24:17",
+      "durationMin": 10,
+      "durationEstimated": false,
+      "players": [
+        122,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 312,
+      "copyId": null,
+      "date": "2026-11-10",
+      "timestamp": "2026-11-10 19:43:25",
+      "durationMin": 126,
+      "durationEstimated": false,
+      "players": [
+        3,
+        12,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 312,
+      "copyId": null,
+      "date": "2026-11-10",
+      "timestamp": "2026-11-10 16:58:45",
+      "durationMin": 124,
+      "durationEstimated": false,
+      "players": [
+        3,
+        12,
+        13
+      ],
+      "locationId": 5
+    },
+    {
+      "gameId": 627,
+      "copyId": "81b72693-5a3c-453c-9b9e-60bd61ff73cd",
+      "date": "2026-11-09",
+      "timestamp": "2026-11-09 19:59:04",
+      "durationMin": 36,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 639,
+      "copyId": "a697727b-1e17-4d24-8876-53bddcd007d0",
+      "date": "2026-11-08",
+      "timestamp": "2026-11-08 20:40:27",
+      "durationMin": 102,
+      "durationEstimated": false,
+      "players": [
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 342,
+      "copyId": "9540fc66-b73f-40b6-8d02-5bfc53c16ddc",
+      "date": "2026-11-07",
+      "timestamp": "2026-11-07 21:11:33",
+      "durationMin": 29,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 121,
+      "copyId": "b3875ea6-6001-4b8f-b7a8-699321acc7d9",
+      "date": "2026-11-07",
+      "timestamp": "2026-11-07 17:23:43",
+      "durationMin": 45,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 497,
+      "copyId": "8c2b2483-90af-4679-9e51-494233f9f538",
+      "date": "2026-11-05",
+      "timestamp": "2026-11-05 20:37:10",
+      "durationMin": 23,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 285,
+      "copyId": "d74da117-ddfd-4620-b118-ad4cc06727e5",
+      "date": "2026-11-05",
+      "timestamp": "2026-11-05 20:11:05",
+      "durationMin": 13,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
+    {
+      "gameId": 504,
+      "copyId": "3839b299-e746-43b5-8691-6845c56004b5",
+      "date": "2026-11-02",
+      "timestamp": "2026-11-02 20:13:26",
+      "durationMin": 16,
+      "durationEstimated": false,
+      "players": [
+        2,
+        3
+      ],
+      "locationId": 1
+    },
     {
       "gameId": 626,
       "copyId": "1b24907b-d8df-4505-b814-95b7f5ec5b29",
@@ -54824,6 +55115,10 @@
     {
       "playerId": 121,
       "name": "Curtis Gibby"
+    },
+    {
+      "playerId": 122,
+      "name": "Andy Nelson"
     }
   ],
   "locations": [
@@ -54880,5 +55175,5 @@
       "name": "SaltCON"
     }
   ],
-  "generatedAt": "2026-11-02T01:24:04.000Z"
+  "generatedAt": "2026-11-17T01:38:46.000Z"
 }
